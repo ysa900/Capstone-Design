@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class Enemy : Object, IDamageable
+public class Enemy : Object
 {
     // 플레이어 객체
     public Player player;
@@ -13,7 +13,6 @@ public class Enemy : Object, IDamageable
     // enemy 정보
     public int hp;
     public float speed;
-    public int damage;
 
     // enemy가 죽었을 때 EnemyManager에게 알려주기 위한 delegate
     public delegate void OnEnemyWasKilled(Enemy killedEnemy);
@@ -63,21 +62,5 @@ public class Enemy : Object, IDamageable
 
             Destroy(gameObject);
         }
-    }
-
-    // 다른 오브젝트랑 닿으면 실행
-    // 이거 지금 안됨, OnCollisionEnter로 해야될듯, OnTriggerEnter는 통과되고, OnCollision은 통과 안됨
-    private void OnTriggerEnter(Collider other)
-    {
-        IDamageable damageable = other.GetComponent<IDamageable>();
-
-        Debug.Log("dd");
-
-        if (damageable == null)
-        {
-            return;
-        }
-
-        damageable.TakeDamage(gameObject, damage);
     }
 }
