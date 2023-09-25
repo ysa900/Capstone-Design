@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class Enemy : Object
+public class Enemy1 : Object
 {
     // 플레이어 객체
     public Player player;
@@ -16,8 +16,8 @@ public class Enemy : Object
    
 
     // enemy가 죽었을 때 EnemyManager에게 알려주기 위한 delegate
-    public delegate void OnEnemyWasKilled(Enemy killedEnemy);
-    public OnEnemyWasKilled onEnemyWasKilled;
+    public delegate void OnEnemyWasKilled1(Enemy1 killedEnemy);
+    public OnEnemyWasKilled1 onEnemyWasKilled;
 
     // 물리 입력을 받기위한 변수
     public Rigidbody2D rigid;

@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     // 플레이어 정보
     public float speed;
-    public int hp;
+    public float hp;
 
     Rigidbody2D rigid; // 물리 입력을 받기위한 변수
     SpriteRenderer spriteRenderer; // 플레이어 방향을 바꾸기 위해 flipX를 가져오기 위한 변수
@@ -75,20 +75,17 @@ public class Player : MonoBehaviour
         rigid.MovePosition(rigid.position + nextVec);
     }
 
-    // IDamageable의 함수 TakeDamage
-    public void TakeDamage(GameObject causer, float damage)
+    // 플레이어가 무언가와 충돌하면 데미지를 입는다
+    private void OnCollisionStay2D(Collision2D collision)
     {
-        hp = hp - (int)damage;
+        hp -= Time.deltaTime * 10;
 
         if (hp < 0)
         {
             animator.SetBool("Dead", true);
 
-            Debug.Log("플레이어 사망");
-
             onPlayerWasKilled(this);
 
-            Destroy(gameObject);
         }
     }
 }
