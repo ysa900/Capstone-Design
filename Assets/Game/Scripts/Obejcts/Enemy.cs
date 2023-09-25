@@ -13,7 +13,6 @@ public class Enemy : Object
     // enemy 정보
     public int hp;
     public float speed;
-   
 
     // enemy가 죽었을 때 EnemyManager에게 알려주기 위한 delegate
     public delegate void OnEnemyWasKilled(Enemy killedEnemy);
