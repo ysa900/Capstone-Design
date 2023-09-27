@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public class EnemyManager : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class EnemyManager : MonoBehaviour
 
     // Enemy 클래스 객체
     Enemy enemy;
+
+   
 
     // Enemy 프리팹
     public Enemy zombiePrefab1;
@@ -63,6 +66,8 @@ public class EnemyManager : MonoBehaviour
             if (UnityEngine.Random.Range(0, 2) == 0) // Y값에 루트를 하면 항상 양수만 나오니까 랜덤으로 음수값 부여
                 enemy.Y = -enemy.Y;
 
+            enemy.Y += playerY;
+            enemy.X += playerX; 
             enemy.player = player;
 
             enemy.onEnemyWasKilled = OnEnemyWasKilled;
