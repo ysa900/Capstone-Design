@@ -19,11 +19,14 @@ public class Enemy : Object
     public OnEnemyWasKilled onEnemyWasKilled;
 
     // 물리 입력을 받기위한 변수
-    public Rigidbody2D rigid;
+    Rigidbody2D rigid;
+
+    SpriteRenderer spriteRenderer; // 적 방향을 바꾸기 위해 flipX를 가져오기 위한 변수
 
     private void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     private void FixedUpdate()
@@ -44,6 +47,9 @@ public class Enemy : Object
 
         Vector2 direction = playerPosition - myPosition;
         direction = direction.normalized;
+
+        bool isEnemyLookLeft = direction.x < 0;
+        spriteRenderer.flipX = isEnemyLookLeft;
 
         rigid.MovePosition(rigid.position + direction * speed * Time.fixedDeltaTime);
     }

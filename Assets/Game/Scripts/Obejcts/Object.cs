@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Object : MonoBehaviour
 {
-    protected int x;
+    protected float x;
 
-    public int X
+    public float X
     {
         get => x;
         set
@@ -18,9 +18,9 @@ public class Object : MonoBehaviour
         }
     }
 
-    protected int y;
+    protected float y;
 
-    public int Y
+    public float Y
     {
         get => y;
         set

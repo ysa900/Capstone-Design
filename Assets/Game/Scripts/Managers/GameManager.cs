@@ -26,9 +26,11 @@ public class GameManager : MonoBehaviour
     {
         // 클래스 객체들 초기화
         CreatePlayer();
-
         enemyManager = FindAnyObjectByType<EnemyManager>();
-        enemyManager.CreateEnemies(10, player);
+
+        // 몬스터 소환
+        enemyManager.CreateEnemies(100, player, 0, 15.0f);
+        enemyManager.CreateEnemies(100, player, 1, 20.0f);
 
         followCam = FindAnyObjectByType<FollowCam>();
         followCam.player = player;
