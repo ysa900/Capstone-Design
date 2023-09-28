@@ -8,9 +8,12 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance; // GameManager를 instance화
 
-    //게임 시간
+    // 게임 시간
     private float gameTime;
     //private float maxGameTime = 15 * 60f;
+
+    // 적 최대 생성 거리 (최소는 20, EnemyManager에 있음)
+    private float maxEnemySpawnRange = 30;
 
     // Enemy0 스폰 관련 설정
     private float spawnCoolTime0 = 10;
@@ -30,12 +33,16 @@ public class GameManager : MonoBehaviour
     public Player player;
     private EnemyManager enemyManager;
     private FollowCam followCam;
+    private InputManager inputManager;
    
     // GameObject에서 프리팹을 넣어주기 위해 public으로 설정
     public Player playerPrefab;
 
     // GameOver 오브젝트
-    public GameObject gameOver;
+    public GameObject gameOverObject;
+
+    // Pause 오브젝트
+    public GameObject pauseObject;
 
     private void Awake()
     {
@@ -45,16 +52,24 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gameOver.SetActive(false);
+        // 시작 시 비활성화
+        gameOverObject.SetActive(false);
+        pauseObject.SetActive(false);
 
         // 클래스 객체들 초기화
         CreatePlayer();
         enemyManager = FindAnyObjectByType<EnemyManager>();
+        inputManager = FindAnyObjectByType<InputManager>();
+        followCam = FindAnyObjectByType<FollowCam>();
 
         // 몬스터 소환
-        enemyManager.CreateEnemies(100, player, 0, 20.0f);
+        enemyManager.CreateEnemies(100, player, 0, maxEnemySpawnRange);
 
-        followCam = FindAnyObjectByType<FollowCam>();
+        // inputManger Delegate 할당
+        inputManager.onPauseButtonClicked = OnPauseButtonClicked;
+        inputManager.onPlayButtonClicked = onPlayButtonClicked;
+
+        // followCam 플레이어 객체 할당
         followCam.player = player;
     }
 
@@ -95,16 +110,27 @@ public class GameManager : MonoBehaviour
 
         // 소환되어야 할 Enemy를 스폰
         if (is_spawn1ok)
-            enemyManager.CreateEnemies(100, player, 0, 20.0f);
+            enemyManager.CreateEnemies(100, player, 0, maxEnemySpawnRange);
 
         if (is_spawn2ok)
-            enemyManager.CreateEnemies(100, player, 1, 20.0f);
+            enemyManager.CreateEnemies(100, player, 1, maxEnemySpawnRange);
     }
 
     // 플레이어가 죽었을 시 실행됨
     private void OnPlayerHasKilled(Player player)
     {
         isGameOver = true;
-        gameOver.SetActive(true);
+        gameOverObject.SetActive(true);
+    }
+
+    // Pause버튼이 클릭됐을 시 실행됨
+    private void OnPauseButtonClicked()
+    {
+        pauseObject.SetActive(true);
+    }
+
+    private void onPlayButtonClicked()
+    {
+        pauseObject.SetActive(false);
     }
 }

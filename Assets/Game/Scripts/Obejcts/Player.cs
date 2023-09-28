@@ -95,8 +95,5 @@ public class Player : MonoBehaviour
                 rigid.constraints = RigidbodyConstraints2D.FreezeAll;
             }
         }
-            
-
-        
     }
 }

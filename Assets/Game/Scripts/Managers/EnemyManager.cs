@@ -8,6 +8,9 @@ using static UnityEngine.EventSystems.EventTrigger;
 
 public class EnemyManager : MonoBehaviour
 {
+    // 적 최소 생성 거리
+    private float minEnemySpawnRange = 20;
+
     // Enemy들을 담을 리스트
     List<Enemy> enemies;
 
@@ -56,7 +59,7 @@ public class EnemyManager : MonoBehaviour
 
             // 몬스터가 원형으로 소환되게 함
             // x는 랜덤 값을 받고, y = 루트(r^2 - x^2)
-            float randomRadius = UnityEngine.Random.Range(10.0f, maxRadius);
+            float randomRadius = UnityEngine.Random.Range(minEnemySpawnRange, maxRadius);
             enemy.X = UnityEngine.Random.Range(-randomRadius, randomRadius);
             double tmp = Math.Pow(randomRadius, 2) - Math.Pow(enemy.X, 2);
             enemy.Y = (float)Math.Sqrt(tmp);
