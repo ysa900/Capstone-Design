@@ -14,8 +14,6 @@ public class EnemyManager : MonoBehaviour
     // Enemy 클래스 객체
     Enemy enemy;
 
-   
-
     // Enemy 프리팹
     public Enemy zombiePrefab1;
     public Enemy zombiePrefab2;
@@ -69,7 +67,6 @@ public class EnemyManager : MonoBehaviour
             enemy.Y += playerY;
             enemy.X += playerX; 
             enemy.player = player;
-            enemy.name = enemy + i.ToString();
             enemy.onEnemyWasKilled = OnEnemyWasKilled;
 
             //enemies.Add(enemy);

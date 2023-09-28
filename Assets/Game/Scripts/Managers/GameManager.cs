@@ -56,8 +56,6 @@ public class GameManager : MonoBehaviour
         gameTime += Time.deltaTime; // 게임 시간 증가
 
         CalculateEnemySpawnTime(); // 소환할 적을 지정하고 스폰
-
-        
     }
 
     // Player 생성 함수
