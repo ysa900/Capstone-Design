@@ -23,6 +23,9 @@ public class GameManager : MonoBehaviour
     // level 시간 설정
     private float level2Time = 30;
 
+    // GameOver가 됐는지 판별하는 변수
+    private bool isGameOver;
+
     // 사용할 클래스 객체들
     public Player player;
     private EnemyManager enemyManager;
@@ -30,6 +33,9 @@ public class GameManager : MonoBehaviour
    
     // GameObject에서 프리팹을 넣어주기 위해 public으로 설정
     public Player playerPrefab;
+
+    // GameOver 오브젝트
+    public GameObject gameOver;
 
     private void Awake()
     {
@@ -39,6 +45,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameOver.SetActive(false);
+
         // 클래스 객체들 초기화
         CreatePlayer();
         enemyManager = FindAnyObjectByType<EnemyManager>();
@@ -53,9 +61,11 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        gameTime += Time.deltaTime; // 게임 시간 증가
+        if(!isGameOver) {
+            gameTime += Time.deltaTime; // 게임 시간 증가
 
-        CalculateEnemySpawnTime(); // 소환할 적을 지정하고 스폰
+            CalculateEnemySpawnTime(); // 소환할 적을 지정하고 스폰
+        }
     }
 
     // Player 생성 함수
@@ -94,6 +104,7 @@ public class GameManager : MonoBehaviour
     // 플레이어가 죽었을 시 실행됨
     private void OnPlayerHasKilled(Player player)
     {
-        //
+        isGameOver = true;
+        gameOver.SetActive(true);
     }
 }

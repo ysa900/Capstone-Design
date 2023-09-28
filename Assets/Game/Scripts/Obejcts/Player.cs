@@ -13,6 +13,8 @@ public class Player : MonoBehaviour
     public float speed;
     public float hp;
 
+    private bool isPlayerDead;
+
     Rigidbody2D rigid; // 물리 입력을 받기위한 변수
     SpriteRenderer spriteRenderer; // 플레이어 방향을 바꾸기 위해 flipX를 가져오기 위한 변수
     Animator animator; // 애니메이션 관리를 위한 변수
@@ -78,14 +80,23 @@ public class Player : MonoBehaviour
     // 플레이어가 무언가와 충돌하면 데미지를 입는다
     private void OnCollisionStay2D(Collision2D collision)
     {
-        hp -= Time.deltaTime * 10;
-
-        if (hp < 0)
+        if (!isPlayerDead)
         {
-            animator.SetBool("Dead", true);
+            hp -= Time.deltaTime * 10;
 
-            onPlayerWasKilled(this);
+            if (hp < 0)
+            {
+                isPlayerDead = true;
 
+                animator.SetBool("Dead", true);
+
+                onPlayerWasKilled(this);
+
+                rigid.constraints = RigidbodyConstraints2D.FreezeAll;
+            }
         }
+            
+
+        
     }
 }
