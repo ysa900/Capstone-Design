@@ -10,18 +10,18 @@ public class GameManager : MonoBehaviour
 
     //게임 시간
     private float gameTime;
-    private float maxGameTime = 15 * 60f;
+    //private float maxGameTime = 15 * 60f;
 
-    private bool is_spawnTrigger0= false;
-    private float spawnCoolTime0 = 5;
-    private int num0= 1;
+    // Enemy0 스폰 관련 설정
+    private float spawnCoolTime0 = 10;
+    private int compensationNum0= 1; // 스폰 쿨타임 보정값
 
-    private bool is_spawnTrigger1 = false;
+    // Enemy1 스폰 관련 설정
     private float spawnCoolTime1 = 10;
-    private int num1 = 1;
+    private int compensationNum1 = 1; // 스폰 쿨타임 보정값
 
-    private float level2Time = 6f;
-    private bool isLevel2TimeOver = false;
+    // level 시간 설정
+    private float level2Time = 30;
 
     // 사용할 클래스 객체들
     public Player player;
@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
         enemyManager = FindAnyObjectByType<EnemyManager>();
 
         // 몬스터 소환
-        enemyManager.CreateEnemies(100, player, 0, 15.0f);
+        enemyManager.CreateEnemies(100, player, 0, 20.0f);
 
         followCam = FindAnyObjectByType<FollowCam>();
         followCam.player = player;
@@ -53,39 +53,44 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        gameTime += Time.deltaTime;
- 
-     
-        isLevel2TimeOver = gameTime > level2Time;
+        gameTime += Time.deltaTime; // 게임 시간 증가
 
-        is_spawnTrigger0 = gameTime > spawnCoolTime0 * num0;
-        is_spawnTrigger1 = gameTime > spawnCoolTime1 * num1;
+        CalculateEnemySpawnTime(); // 소환할 적을 지정하고 스폰
 
-        is_spawnTrigger0 = is_spawnTrigger0 && !isLevel2TimeOver;
-        is_spawnTrigger1 = is_spawnTrigger1 && isLevel2TimeOver;
-
-
-        if (is_spawnTrigger0)
-        {
-            enemyManager.CreateEnemies(100, player, 0, 15.0f);
-            is_spawnTrigger0 = false;
-            num0++;
-            
-        }
         
-        if(is_spawnTrigger1)
-        {
-            enemyManager.CreateEnemies(100, player, 1, 20.0f);
-            is_spawnTrigger1 = false;
-            num1++;
-        }
-
     }
 
     // Player 생성 함수
     private void CreatePlayer(){
         player = Instantiate(playerPrefab);
         player.onPlayerWasKilled = OnPlayerHasKilled;
+    }
+
+    // Enemy 스폰 시간을 계산해 소환할 적을 지정하는 함수
+    private void CalculateEnemySpawnTime()
+    {
+        bool isLevel2TimeOver = gameTime >= level2Time; // level2가 되야 할 시간이 지났나 판별
+
+        // Enemy0, 1의 스폰 쿨타임이 지났나 판별
+        bool is_spawnCoolTimeOver0 = gameTime > spawnCoolTime0 * compensationNum0;
+        bool is_spawnCoolTimeOver1 = gameTime > spawnCoolTime1 * compensationNum1;
+
+        // 쿨타임이 찰 때마다 쿨타임을 보정
+        if (is_spawnCoolTimeOver0)
+            compensationNum0++;
+
+        if (is_spawnCoolTimeOver1)
+            compensationNum1++;
+
+        bool is_spawn1ok = is_spawnCoolTimeOver0 && !isLevel2TimeOver;
+        bool is_spawn2ok = is_spawnCoolTimeOver1 && isLevel2TimeOver;
+
+        // 소환되어야 할 Enemy를 스폰
+        if (is_spawn1ok)
+            enemyManager.CreateEnemies(100, player, 0, 20.0f);
+
+        if (is_spawn2ok)
+            enemyManager.CreateEnemies(100, player, 1, 20.0f);
     }
 
     // 플레이어가 죽었을 시 실행됨

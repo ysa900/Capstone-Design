@@ -69,7 +69,7 @@ public class EnemyManager : MonoBehaviour
             enemy.Y += playerY;
             enemy.X += playerX; 
             enemy.player = player;
-
+            enemy.name = enemy + i.ToString();
             enemy.onEnemyWasKilled = OnEnemyWasKilled;
 
             //enemies.Add(enemy);
