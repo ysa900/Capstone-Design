@@ -12,7 +12,7 @@ public class RePositon : MonoBehaviour
         {
             return;
         }
-
+        
         Vector3 playerPosition = GameManager.instance.player.transform.position;
         Vector3 myPosition = transform.position;
         float diffX = Mathf.Abs(playerPosition.x - myPosition.x);
