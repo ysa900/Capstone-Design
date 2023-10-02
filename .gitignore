@@ -7,7 +7,6 @@ Temp/
 UserSettings/
 .vsconfig
 Assembly-CSharp.csproj
-Test1.sln
-Vamm_game.sln
+*.sln
 
 
