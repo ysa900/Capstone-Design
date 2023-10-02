@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
 
     // 적 최대 생성 거리 (최소는 20, EnemyManager에 있음)
     private float maxEnemySpawnRange = 30;
+    private float maxBossSpawnRange = 30;
 
     // Enemy0 스폰 관련 설정
     private float spawnCoolTime0 = 10;
@@ -34,6 +35,7 @@ public class GameManager : MonoBehaviour
     private EnemyManager enemyManager;
     private FollowCam followCam;
     private InputManager inputManager;
+    private BossManager bossManager;    
    
     // GameObject에서 프리팹을 넣어주기 위해 public으로 설정
     public Player playerPrefab;
@@ -61,9 +63,11 @@ public class GameManager : MonoBehaviour
         enemyManager = FindAnyObjectByType<EnemyManager>();
         inputManager = FindAnyObjectByType<InputManager>();
         followCam = FindAnyObjectByType<FollowCam>();
+        bossManager =   FindAnyObjectByType<BossManager>();
 
         // 몬스터 소환
-        enemyManager.CreateEnemies(100, player, 0, maxEnemySpawnRange);
+        enemyManager.CreateEnemies(50, player, 2, maxEnemySpawnRange);
+        bossManager.CreateBoss(player, maxBossSpawnRange);
 
         // inputManger Delegate 할당
         inputManager.onPauseButtonClicked = OnPauseButtonClicked;
@@ -110,10 +114,10 @@ public class GameManager : MonoBehaviour
 
         // 소환되어야 할 Enemy를 스폰
         if (is_spawn1ok)
-            enemyManager.CreateEnemies(100, player, 0, maxEnemySpawnRange);
+            enemyManager.CreateEnemies(50, player, 3, maxEnemySpawnRange);
 
         if (is_spawn2ok)
-            enemyManager.CreateEnemies(100, player, 1, maxEnemySpawnRange);
+            enemyManager.CreateEnemies(50, player, 4, maxEnemySpawnRange);
     }
 
     // 플레이어가 죽었을 시 실행됨
