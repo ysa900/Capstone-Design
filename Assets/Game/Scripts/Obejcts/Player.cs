@@ -23,7 +23,7 @@ public class Player : MonoBehaviour
     public delegate void OnPlayerWasKilled(Player player);
     public OnPlayerWasKilled onPlayerWasKilled;
 
-    void Awake()
+    void Start()
     {
         // 변수 초기화
         rigid = GetComponent<Rigidbody2D>();

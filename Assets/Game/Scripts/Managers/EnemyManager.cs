@@ -22,6 +22,7 @@ public class EnemyManager : MonoBehaviour
     public Enemy zombiePrefab2;
     public Enemy ghoulPrefab;
     public Enemy spitterPrefab;
+    public Enemy summonerPrefab;
 
     // Enemy들을 생성하는 함수
     // enemyType: 0 ~ ? (현재 0 ~ 1), 이게 몬스터 종류 결정
@@ -47,6 +48,11 @@ public class EnemyManager : MonoBehaviour
             case 3:
                 {
                     SetEnemyInfoNSummon(enemyNum, player, spitterPrefab, maxRadius);
+                    break;
+                }
+            case 4:
+                {
+                    SetEnemyInfoNSummon(enemyNum, player, summonerPrefab, maxRadius);
                     break;
                 }
 
