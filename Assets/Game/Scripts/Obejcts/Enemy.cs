@@ -23,10 +23,13 @@ public class Enemy : Object
 
     SpriteRenderer spriteRenderer; // 적 방향을 바꾸기 위해 flipX를 가져오기 위한 변수
 
+    Animator animator; // 애니메이션 관리를 위한 변수
+
     private void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
     }
 
     private void FixedUpdate()
@@ -57,11 +60,17 @@ public class Enemy : Object
     // IDamageable의 함수 TakeDamage
     public void TakeDamage(GameObject causer, float damage)
     {
+        animator.SetBool("Hit", true);
+
         hp = hp - (int)damage;
+
+        animator.SetBool("Hit", false);
 
         if (hp < 0)
         {
             Debug.Log("적군 사망");
+
+            animator.SetBool("Dead", true);
 
             //  대리자 호출
             onEnemyWasKilled(this);

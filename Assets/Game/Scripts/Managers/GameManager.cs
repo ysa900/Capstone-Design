@@ -9,7 +9,8 @@ public class GameManager : MonoBehaviour
     public static GameManager instance; // GameManager를 instance화
 
     // 게임 시간
-    private float gameTime;
+    public float gameTime;
+    
     //private float maxGameTime = 15 * 60f;
 
     // 적 최대 생성 거리 (최소는 20, EnemyManager에 있음)
@@ -63,7 +64,7 @@ public class GameManager : MonoBehaviour
         followCam = FindAnyObjectByType<FollowCam>();
 
         // 몬스터 소환
-        enemyManager.CreateEnemies(100, player, 0, maxEnemySpawnRange);
+        enemyManager.CreateEnemies(100, player, 3, maxEnemySpawnRange);
 
         // inputManger Delegate 할당
         inputManager.onPauseButtonClicked = OnPauseButtonClicked;
@@ -110,10 +111,10 @@ public class GameManager : MonoBehaviour
 
         // 소환되어야 할 Enemy를 스폰
         if (is_spawn1ok)
-            enemyManager.CreateEnemies(100, player, 0, maxEnemySpawnRange);
+            enemyManager.CreateEnemies(100, player, 2, maxEnemySpawnRange);
 
         if (is_spawn2ok)
-            enemyManager.CreateEnemies(100, player, 1, maxEnemySpawnRange);
+            enemyManager.CreateEnemies(100, player, 3, maxEnemySpawnRange);
     }
 
     // 플레이어가 죽었을 시 실행됨

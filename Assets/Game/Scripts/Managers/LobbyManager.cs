@@ -30,7 +30,7 @@ public class LobbyManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // 시작 시 비활성화
+        // 시작 시 캐릭터/능력치 페이지 비활성화
         CharacterPage.SetActive(false);
         AbilityPage.SetActive(false);
 

@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     // 플레이어 정보
     public float speed;
     public float hp;
-
+    public float maxHp = 100; // 최대 hp 100 설정
     private bool isPlayerDead;
 
     Rigidbody2D rigid; // 물리 입력을 받기위한 변수
