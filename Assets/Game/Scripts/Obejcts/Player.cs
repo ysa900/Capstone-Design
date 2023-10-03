@@ -1,6 +1,5 @@
-using System.Collections;
+using NUnit.Framework;
 using System.Collections.Generic;
-using System.ComponentModel;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -13,7 +12,7 @@ public class Player : MonoBehaviour
     public float speed;
     public float hp;
 
-    private bool isPlayerDead;
+    private bool isPlayerDead; // 플레이어가 죽었는지 판별하는 변수
 
     Rigidbody2D rigid; // 물리 입력을 받기위한 변수
     SpriteRenderer spriteRenderer; // 플레이어 방향을 바꾸기 위해 flipX를 가져오기 위한 변수
@@ -34,7 +33,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ReceiveDirectionInput();
+        ReceiveDirectionInput(); // 키보드 방향키 입력을 가져오는 함수
     }
 
     // 물리 연산 프레임마다 호출되는 생명주기 함수
@@ -84,7 +83,7 @@ public class Player : MonoBehaviour
         {
             hp -= Time.deltaTime * 10;
 
-            if (hp < 0)
+            if (hp <= 0)
             {
                 isPlayerDead = true;
 

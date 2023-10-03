@@ -1,8 +1,7 @@
-using System.Collections;
+using NUnit.Framework;
 using System.Collections.Generic;
-using System.ComponentModel;
-using UnityEditor.SceneManagement;
 using UnityEngine;
+using static EnemyManager;
 
 public class GameManager : MonoBehaviour
 {
@@ -29,11 +28,15 @@ public class GameManager : MonoBehaviour
     // GameOver가 됐는지 판별하는 변수
     private bool isGameOver;
 
+    // Enemy들을 담을 리스트
+    private List<Enemy> enemies = new List<Enemy>();
+
     // 사용할 클래스 객체들
     public Player player;
     private EnemyManager enemyManager;
     private FollowCam followCam;
     private InputManager inputManager;
+    private SkillManager skillManager;
    
     // GameObject에서 프리팹을 넣어주기 위해 public으로 설정
     public Player playerPrefab;
@@ -46,12 +49,8 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        instance = this;
-    }
+        instance = this; // GameManager를 인스턴스화
 
-    // Start is called before the first frame update
-    void Start()
-    {
         // 시작 시 비활성화
         gameOverObject.SetActive(false);
         pauseObject.SetActive(false);
@@ -61,9 +60,7 @@ public class GameManager : MonoBehaviour
         enemyManager = FindAnyObjectByType<EnemyManager>();
         inputManager = FindAnyObjectByType<InputManager>();
         followCam = FindAnyObjectByType<FollowCam>();
-
-        // 몬스터 소환
-        enemyManager.CreateEnemies(50, player, 2, maxEnemySpawnRange);
+        skillManager = FindAnyObjectByType<SkillManager>();
 
         // inputManger Delegate 할당
         inputManager.onPauseButtonClicked = OnPauseButtonClicked;
@@ -71,6 +68,17 @@ public class GameManager : MonoBehaviour
 
         // followCam 플레이어 객체 할당
         followCam.player = player;
+
+        // skillManager에 객체 할당
+        skillManager.player = player;
+        skillManager.ChooseStartSkill(0);
+
+        enemyManager.onEnemiesChanged = OnEnemiesChanged; // delegate 할당
+    }
+
+    void Start()
+    {
+        enemyManager.CreateEnemies(50, player, 2, maxEnemySpawnRange); // 몬스터 소환
     }
 
     // Update is called once per frame
@@ -81,6 +89,8 @@ public class GameManager : MonoBehaviour
 
             CalculateEnemySpawnTime(); // 소환할 적을 지정하고 스폰
         }
+
+        skillManager.enemies = enemies;
     }
 
     // Player 생성 함수
@@ -132,5 +142,10 @@ public class GameManager : MonoBehaviour
     private void onPlayButtonClicked()
     {
         pauseObject.SetActive(false);
+    }
+
+    private void OnEnemiesChanged(List<Enemy> enemies)
+    {
+        this.enemies = enemies;
     }
 }

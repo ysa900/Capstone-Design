@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger;
 
@@ -12,7 +9,7 @@ public class EnemyManager : MonoBehaviour
     private float minEnemySpawnRange = 20;
 
     // Enemy들을 담을 리스트
-    List<Enemy> enemies;
+    List<Enemy> enemies = new List<Enemy>();
 
     // Enemy 클래스 객체
     Enemy enemy;
@@ -23,6 +20,10 @@ public class EnemyManager : MonoBehaviour
     public Enemy ghoulPrefab;
     public Enemy spitterPrefab;
     public Enemy summonerPrefab;
+
+    // Enemy들이 생성되었을 때에 GameManager에게 Enemy 리스트를 전달해주기 위한 delegate
+    public delegate void OnEnemiesChanged(List<Enemy> enemies);
+    public OnEnemiesChanged onEnemiesChanged;
 
     // Enemy들을 생성하는 함수
     // enemyType: 0 ~ ? (현재 0 ~ 1), 이게 몬스터 종류 결정
@@ -57,12 +58,15 @@ public class EnemyManager : MonoBehaviour
                 }
 
         }
+
+        onEnemiesChanged(enemies); // GameManager에게 emeies를 전달
     }
 
     // Enemy가 죽었을 때 실행할 것들
     private void OnEnemyWasKilled(Enemy killedEnemy)
     {
-        //
+        enemies.Remove(killedEnemy);
+        onEnemiesChanged(enemies);
     }
 
     // 적 정보를 입력하고 적을 생성하는 함수
@@ -90,7 +94,7 @@ public class EnemyManager : MonoBehaviour
             enemy.player = player;
             enemy.onEnemyWasKilled = OnEnemyWasKilled;
 
-            //enemies.Add(enemy);
+            enemies.Add(enemy);
         }
     }
 }

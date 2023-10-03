@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Enemy : Object
+public class Enemy : Object, IDamageable
 {
     // 플레이어 객체
     public Player player;
@@ -85,10 +80,8 @@ public class Enemy : Object
 
         animator.SetBool("Hit", false);
 
-        if (hp < 0)
+        if (hp <= 0)
         {
-            Debug.Log("적군 사망");
-
             animator.SetBool("Dead", true);
 
             //  대리자 호출
