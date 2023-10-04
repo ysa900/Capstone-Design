@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
 
     // 적 최대 생성 거리 (최소는 20, EnemyManager에 있음)
     private float maxEnemySpawnRange = 30;
+    private float maxBossSpawnRange = 30;
 
     // Enemy0 스폰 관련 설정
     private float spawnCoolTime0 = 10;
@@ -35,6 +36,7 @@ public class GameManager : MonoBehaviour
     private EnemyManager enemyManager;
     private FollowCam followCam;
     private InputManager inputManager;
+    private BossManager bossManager;
    
     // GameObject에서 프리팹을 넣어주기 위해 public으로 설정
     public Player playerPrefab;
@@ -44,6 +46,10 @@ public class GameManager : MonoBehaviour
 
     // Pause 오브젝트
     public GameObject pauseObject;
+
+    public GameObject ExpBar;
+    public GameObject HpBar;
+    public GameObject Timer;
 
     private void Awake()
     {
@@ -56,19 +62,22 @@ public class GameManager : MonoBehaviour
         // 시작 시 비활성화
         gameOverObject.SetActive(false);
         pauseObject.SetActive(false);
+        OnHUDOn();
 
         // 클래스 객체들 초기화
         CreatePlayer();
         enemyManager = FindAnyObjectByType<EnemyManager>();
         inputManager = FindAnyObjectByType<InputManager>();
         followCam = FindAnyObjectByType<FollowCam>();
+        bossManager=FindAnyObjectByType<BossManager>();
 
         // 몬스터 소환
         enemyManager.CreateEnemies(100, player, 3, maxEnemySpawnRange);
+        bossManager.CreateBoss(player, maxBossSpawnRange);
 
         // inputManger Delegate 할당
         inputManager.onPauseButtonClicked = OnPauseButtonClicked;
-        inputManager.onPlayButtonClicked = onPlayButtonClicked;
+        inputManager.onPlayButtonClicked = OnPlayButtonClicked;
 
         // followCam 플레이어 객체 할당
         followCam.player = player;
@@ -122,16 +131,33 @@ public class GameManager : MonoBehaviour
     {
         isGameOver = true;
         gameOverObject.SetActive(true);
+        OnHUDOff();
     }
 
     // Pause버튼이 클릭됐을 시 실행됨
     private void OnPauseButtonClicked()
     {
         pauseObject.SetActive(true);
+        OnHUDOff();
     }
 
-    private void onPlayButtonClicked()
+    private void OnPlayButtonClicked()
     {
         pauseObject.SetActive(false);
+        OnHUDOn();
+    }
+
+    private void OnHUDOn()
+    {
+        ExpBar.SetActive(true);
+        HpBar.SetActive(true);
+        Timer.SetActive(true);
+    }
+
+    private void OnHUDOff()
+    {
+        ExpBar.SetActive(false);
+        HpBar.SetActive(false);
+        Timer.SetActive(false);
     }
 }

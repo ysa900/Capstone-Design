@@ -60,8 +60,7 @@ public class Player : MonoBehaviour
     private void ReceiveDirectionInput()
     {
         // 수평, 수직 방향 입력을 받는다
-        // inputmanager에 기본 설정돼있다
-        // GetAxisRaw를 해야 더욱 명확한 컨트롤 가능
+        // inputmanager에 기본 설정돼있, GetAxisRaw를 해야 더욱 명확한 컨트롤 가능
         inputVec.x = Input.GetAxisRaw("Horizontal");
         inputVec.y = Input.GetAxisRaw("Vertical");
     }
