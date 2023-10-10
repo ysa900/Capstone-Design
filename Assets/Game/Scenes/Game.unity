@@ -49574,7 +49574,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 8.5
+  orthographic size: 7.5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -67361,7 +67361,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  attackRange: 10
   enemies: []
   fireBasicSkillPrefab: {fileID: -5200626758588562622, guid: 4f5aab16534b5d543b90b75837de3cc4, type: 3}
   electricBasicSkillPrefab: {fileID: 3631959774226284466, guid: a30f3ee6b2db5c540af102e95890215c, type: 3}

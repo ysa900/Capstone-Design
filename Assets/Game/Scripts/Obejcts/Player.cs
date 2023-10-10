@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,7 +14,7 @@ public class Player : MonoBehaviour
     public float hp;
 
     private bool isPlayerDead; // 플레이어가 죽었는지 판별하는 변수
-
+    
     Rigidbody2D rigid; // 물리 입력을 받기위한 변수
     SpriteRenderer spriteRenderer; // 플레이어 방향을 바꾸기 위해 flipX를 가져오기 위한 변수
     Animator animator; // 애니메이션 관리를 위한 변수
@@ -95,4 +96,5 @@ public class Player : MonoBehaviour
             }
         }
     }
+
 }

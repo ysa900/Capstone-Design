@@ -100,8 +100,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1caf1724fed026f4399e3719c93a4faf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  enemy: {fileID: 0}
   speed: 5
+  damage: 0
+  isBulletSkill: 0
+  isEnemyOnSkill: 0
 --- !u!95 &947979369887397418
 Animator:
   serializedVersion: 7

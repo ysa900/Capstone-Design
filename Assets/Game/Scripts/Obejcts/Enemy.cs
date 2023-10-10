@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class Enemy : Object, IDamageable
 {
@@ -11,6 +12,8 @@ public class Enemy : Object, IDamageable
     private float colliderOffsetX; // collider의 offset x좌표
     private float colliderOffsetY; // collider의 offset y좌표
 
+    public bool isEnemyLookLeft; // 적이 보고 있는 방향을 알려주는 변수
+
     // enemy가 죽었을 때 EnemyManager에게 알려주기 위한 delegate
     public delegate void OnEnemyWasKilled(Enemy killedEnemy);
     public OnEnemyWasKilled onEnemyWasKilled;
@@ -21,7 +24,7 @@ public class Enemy : Object, IDamageable
 
     Animator animator; // 애니메이션 관리를 위한 변수
 
-    CapsuleCollider2D capsuleCollider; // Collider의 offset을 변경하기 위한 변수
+    public CapsuleCollider2D capsuleCollider; // Collider의 offset을 변경하기 위한 변수
 
     private void Start()
     {
@@ -53,7 +56,7 @@ public class Enemy : Object, IDamageable
         Vector2 direction = playerPosition - myPosition;
         direction = direction.normalized;
 
-        bool isEnemyLookLeft = direction.x < 0;
+        isEnemyLookLeft = direction.x < 0;
         spriteRenderer.flipX = isEnemyLookLeft;
 
         Vector2 colliderOffset; // CapsuleCollider의 offset에 넣을 Vector2
@@ -74,20 +77,29 @@ public class Enemy : Object, IDamageable
     // IDamageable의 함수 TakeDamage
     public void TakeDamage(GameObject causer, float damage)
     {
-        animator.SetBool("Hit", true);
-
         hp = hp - (int)damage;
-
-        animator.SetBool("Hit", false);
 
         if (hp <= 0)
         {
-            animator.SetBool("Dead", true);
-
-            //  대리자 호출
-            onEnemyWasKilled(this);
-
-            Destroy(gameObject);
+            StartCoroutine(Dead());
+            StopCoroutine(Dead());
+        }
+        else
+        {
+            animator.SetTrigger("Hit");
         }
     }
+
+    IEnumerator Dead()
+    {
+        animator.SetBool("Dead", true);
+        onEnemyWasKilled(this); // 대리자 호출
+
+        rigid.constraints = RigidbodyConstraints2D.FreezeAll;
+
+        yield return new WaitForSeconds(0.5f); // 지정한 초 만큼 쉬기
+
+        Destroy(gameObject);
+    }
+
 }

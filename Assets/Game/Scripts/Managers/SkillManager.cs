@@ -8,8 +8,9 @@ public class SkillManager : MonoBehaviour
 {
     public Player player;
 
-    [SerializeField]
-    private float attackRange = 30;
+    private float fireAttackRange = 12.5f;
+    private float electricAttackRange = 12.5f;
+    private float waterAttackRange = 12.5f;
 
     public List<Enemy> enemies; // Enemy들을 담을 리스트
 
@@ -22,13 +23,13 @@ public class SkillManager : MonoBehaviour
 
     // 각 스킬 별 delay 관련 변수
     private float attackDelayTimer_fire;
-    private float attackDelayTime_fire = 2;
+    private float attackDelayTime_fire = 1;
 
     private float attackDelayTimer_electric;
-    private float attackDelayTime_electric = 5;
+    private float attackDelayTime_electric = 1;
 
     private float attackDelayTimer_water;
-    private float attackDelayTime_water = 5;
+    private float attackDelayTime_water = 1;
 
     // 스킬 프리팹들
     public Skill fireBasicSkillPrefab;
@@ -110,16 +111,69 @@ public class SkillManager : MonoBehaviour
     // 공격을 시도하는 함수
     public void TryAttack(int num)
     {
-        Enemy enemy = FindNearestEnemy(); // 가장 가까운 적을 찾는다
-        
-        float distance = Vector2.Distance(enemy.transform.position, player.transform.position);
-
-        bool isInAttackRange = distance <= attackRange; // 적이 사거리 내에 있을때만 공격이 나간다
-
-        if (isInAttackRange)
+        switch (num)
         {
-            CastSkill(enemy, num); // 스킬을 시전
+            case 0:
+                {
+                    // 불 공격은 가장 가까운 적이 사거리 내에 있어야지만 나간다
+                    Enemy enemy = FindNearestEnemy(); // 가장 가까운 적을 찾는다
+
+                    float distance = Vector2.Distance(enemy.transform.position, player.transform.position);
+
+                    bool isInAttackRange = distance <= fireAttackRange; // 적이 사거리 내에 있을때만 공격이 나간다
+
+                    if (isInAttackRange)
+                    {
+                        CastSkill(enemy, num); // 스킬을 시전
+                    }
+                    break; 
+                }
+            case 1:
+                {
+                    // 전기 공격은 사거리 내 랜덤한 적에게 시전된다
+                    Enemy enemy;
+
+                    int breakNum = 0; // while문 탈출을 위한 num
+
+                    while (true)
+                    {
+                        int ranNum = UnityEngine.Random.Range(0, enemies.Count);
+
+                        enemy = enemies[ranNum];
+
+                        float distance = Vector2.Distance(enemy.transform.position, player.transform.position);
+
+                        bool isInAttackRange = distance <= electricAttackRange; // 적이 사거리 내에 있을때만 공격이 나간다
+
+                        if (isInAttackRange)
+                            break;
+
+                        breakNum++;
+                        if (breakNum >= 1000) // 1000회 반복 내에 마땅한 적을 찾지 못했다면 그냥 break;
+                            break;
+                    }
+                    
+                    CastSkill(enemy, num);
+                    break;
+                }
+            case 2:
+                {
+                    // 물 공격은 가장 가까운 적이 사거리 내에 있어야지만 나간다
+                    Enemy enemy = FindNearestEnemy(); // 가장 가까운 적을 찾는다
+
+                    float distance = Vector2.Distance(enemy.transform.position, player.transform.position);
+
+                    bool isInAttackRange = distance <= waterAttackRange; // 적이 사거리 내에 있을때만 공격이 나간다
+
+                    if (isInAttackRange)
+                    {
+                        CastSkill(enemy, num); // 스킬을 시전
+                    }
+                    break;
+                }
+
         }
+        
         
     }
 
@@ -156,6 +210,7 @@ public class SkillManager : MonoBehaviour
                     Vector2 playerPosition = player.transform.position;
                     Vector2 enemyPosition = enemy.transform.position;
 
+                    // 파이퍼볼 방향 보정 (적 바라보게)
                     Vector2 direction = new Vector2(playerPosition.x - enemyPosition.x, playerPosition.y - enemyPosition.y);
                     float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
@@ -168,19 +223,41 @@ public class SkillManager : MonoBehaviour
 
                     skill.enemy = enemy;
 
+                    skill.isBulletSkill = true;
+                    skill.speed = 10;
+                    skill.damage = 10;
+
                     break;
                 }
             case 1:
                 {
                     skill = Instantiate(electricBasicSkillPrefab);
 
+                    Vector2 enemyPosition = enemy.transform.position;
+
+                    // 스킬 위치를 적 실제 위치로 변경
+                    if(enemy.isEnemyLookLeft)
+                        skill.X = enemyPosition.x - enemy.capsuleCollider.size.x * 6;
+                    else
+                        skill.X = enemyPosition.x + enemy.capsuleCollider.size.x * 6;
+                    skill.Y = enemyPosition.y + enemy.capsuleCollider.size.y * 8; 
+
                     skill.enemy = enemy;
+                    skill.damage = 10;
+                    skill.isEnemyOnSkill = true;
+
                     break;
                 }
             case 2:
                 {
                     skill = Instantiate(waterBasicSkillPrefab);
 
+                    Vector2 playerPosition = player.transform.position;
+
+                    skill.X = playerPosition.x + 1f;
+                    skill.Y = playerPosition.y + 1f;
+
+                    skill.damage = 10;
                     skill.enemy = enemy;
                     break;
                 }
