@@ -14,7 +14,9 @@ public class Player : MonoBehaviour
     public float hp;
 
     private bool isPlayerDead; // 플레이어가 죽었는지 판별하는 변수
-    
+
+    public bool isPlayerLookLeft; // 플레이어가 보고 있는 방향을 알려주는 변수
+
     Rigidbody2D rigid; // 물리 입력을 받기위한 변수
     SpriteRenderer spriteRenderer; // 플레이어 방향을 바꾸기 위해 flipX를 가져오기 위한 변수
     Animator animator; // 애니메이션 관리를 위한 변수
@@ -48,11 +50,15 @@ public class Player : MonoBehaviour
     {
         animator.SetFloat("Speed", inputVec.magnitude); // animator의 float타입인 변수 Speed를 inpuVec의 크기만큼으로 설정한다
 
-        bool isPlayerLookLeft = inputVec.x < 0; // 플레이어가 왼쪽을 보고 있으면
+        isPlayerLookLeft = inputVec.x < 0; // 플레이어가 왼쪽을 보고 있으면
 
         if (inputVec.x != 0) // 키를 안눌렀을 때는 실행 안되도록 하기 위해 inputVec.x가 0이 아닌 경우만 실행하게 한다
         {
             spriteRenderer.flipX = isPlayerLookLeft; // 플레이어를 x축으로 뒤집는다
+        }
+        else
+        {
+            isPlayerLookLeft = spriteRenderer.flipX;
         }
     }
 

@@ -10,11 +10,14 @@ public class SkillManager : MonoBehaviour
 
     private float fireAttackRange = 12.5f;
     private float electricAttackRange = 12.5f;
-    private float waterAttackRange = 12.5f;
+    //private float waterAttackRange = 12.5f;
 
     public List<Enemy> enemies; // Enemy들을 담을 리스트
 
-    private Skill skill; // 스킬 클래스 객체
+    // 스킬 클래스 객체들
+    private PlayerAttachSkill playerAttachSkill;
+    private EnemyOnSkill enemyOnSkill;
+    private EnemyTrackingSkill enemyTrackingSkill;
 
     // 플레이어가 해당 스킬을 획득했는지를 판별하는 변수
     private bool isFireSkillSlected;
@@ -23,18 +26,18 @@ public class SkillManager : MonoBehaviour
 
     // 각 스킬 별 delay 관련 변수
     private float attackDelayTimer_fire;
-    private float attackDelayTime_fire = 1;
+    private float attackDelayTime_fire = 1f;
 
     private float attackDelayTimer_electric;
-    private float attackDelayTime_electric = 1;
+    private float attackDelayTime_electric = 1f;
 
     private float attackDelayTimer_water;
-    private float attackDelayTime_water = 1;
+    private float attackDelayTime_water = 1f;
 
     // 스킬 프리팹들
-    public Skill fireBasicSkillPrefab;
-    public Skill electricBasicSkillPrefab;
-    public Skill waterBasicSkillPrefab;
+    public EnemyTrackingSkill fireBasicSkillPrefab;
+    public EnemyOnSkill electricBasicSkillPrefab;
+    public PlayerAttachSkill waterBasicSkillPrefab;
 
     private void Update()
     {
@@ -158,17 +161,10 @@ public class SkillManager : MonoBehaviour
                 }
             case 2:
                 {
-                    // 물 공격은 가장 가까운 적이 사거리 내에 있어야지만 나간다
-                    Enemy enemy = FindNearestEnemy(); // 가장 가까운 적을 찾는다
+                    // 물 스킬은 적에 상관없이 항상 나간다
+                    Enemy enemy = enemies[0]; // 가짜로 일단 줌
+                    CastSkill(enemy, num);
 
-                    float distance = Vector2.Distance(enemy.transform.position, player.transform.position);
-
-                    bool isInAttackRange = distance <= waterAttackRange; // 적이 사거리 내에 있을때만 공격이 나간다
-
-                    if (isInAttackRange)
-                    {
-                        CastSkill(enemy, num); // 스킬을 시전
-                    }
                     break;
                 }
 
@@ -205,7 +201,7 @@ public class SkillManager : MonoBehaviour
         {
             case 0:
                 {
-                    skill = Instantiate(fireBasicSkillPrefab);
+                    enemyTrackingSkill = Instantiate(fireBasicSkillPrefab);
                     
                     Vector2 playerPosition = player.transform.position;
                     Vector2 enemyPosition = enemy.transform.position;
@@ -215,50 +211,48 @@ public class SkillManager : MonoBehaviour
                     float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
                     Quaternion angleAxis = Quaternion.AngleAxis(angle + 90f, Vector3.forward);
-                    Quaternion rotation = Quaternion.Slerp(skill.transform.rotation, angleAxis, 5f);
-                    skill.transform.rotation = rotation;
+                    Quaternion rotation = Quaternion.Slerp(enemyTrackingSkill.transform.rotation, angleAxis, 5f);
+                    enemyTrackingSkill.transform.rotation = rotation;
 
-                    skill.X = playerPosition.x;
-                    skill.Y = playerPosition.y;
+                    enemyTrackingSkill.X = playerPosition.x;
+                    enemyTrackingSkill.Y = playerPosition.y;
 
-                    skill.enemy = enemy;
+                    enemyTrackingSkill.enemy = enemy;
 
-                    skill.isBulletSkill = true;
-                    skill.speed = 10;
-                    skill.damage = 10;
+                    enemyTrackingSkill.speed = 10;
+                    enemyTrackingSkill.damage = 20;
 
                     break;
                 }
             case 1:
                 {
-                    skill = Instantiate(electricBasicSkillPrefab);
+                    enemyOnSkill = Instantiate(electricBasicSkillPrefab);
 
                     Vector2 enemyPosition = enemy.transform.position;
 
                     // 스킬 위치를 적 실제 위치로 변경
                     if(enemy.isEnemyLookLeft)
-                        skill.X = enemyPosition.x - enemy.capsuleCollider.size.x * 6;
+                        enemyOnSkill.X = enemyPosition.x - enemy.capsuleCollider.size.x * 6;
                     else
-                        skill.X = enemyPosition.x + enemy.capsuleCollider.size.x * 6;
-                    skill.Y = enemyPosition.y + enemy.capsuleCollider.size.y * 8; 
+                        enemyOnSkill.X = enemyPosition.x + enemy.capsuleCollider.size.x * 6;
+                    enemyOnSkill.Y = enemyPosition.y + enemy.capsuleCollider.size.y * 8;
 
-                    skill.enemy = enemy;
-                    skill.damage = 10;
-                    skill.isEnemyOnSkill = true;
+                    enemyOnSkill.enemy = enemy;
+                    enemyOnSkill.damage = 10;
 
                     break;
                 }
             case 2:
                 {
-                    skill = Instantiate(waterBasicSkillPrefab);
+                    playerAttachSkill = Instantiate(waterBasicSkillPrefab);
 
-                    Vector2 playerPosition = player.transform.position;
+                    playerAttachSkill.player = player;
 
-                    skill.X = playerPosition.x + 1f;
-                    skill.Y = playerPosition.y + 1f;
+                    playerAttachSkill.X = 999;
+                    playerAttachSkill.Y = 999;
 
-                    skill.damage = 10;
-                    skill.enemy = enemy;
+                    playerAttachSkill.damage = 20;
+                    playerAttachSkill.enemy = enemy;
                     break;
                 }
         }

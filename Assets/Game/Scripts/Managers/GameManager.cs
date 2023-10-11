@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour
         skillManager.player = player;
         skillManager.ChooseStartSkill(0);
         skillManager.ChooseStartSkill(1);
-        //skillManager.ChooseStartSkill(2);
+        skillManager.ChooseStartSkill(2);
 
         enemyManager.onEnemiesChanged = OnEnemiesChanged; // delegate วาด็
     }

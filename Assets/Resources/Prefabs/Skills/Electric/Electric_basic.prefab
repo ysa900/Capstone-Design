@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 2216081615751311537}
   - component: {fileID: 4509779227856494571}
-  - component: {fileID: 3631959774226284466}
   - component: {fileID: 5572848396861307380}
   - component: {fileID: 3816789274483198280}
   - component: {fileID: -7192459276839609349}
+  - component: {fileID: -3618531333995826868}
   m_Layer: 0
   m_Name: Electric_basic
   m_TagString: Untagged
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: 6285513508944015365, guid: 8bf14e6af91d54791b61eb34c0680926, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -88,23 +88,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &3631959774226284466
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3719459856391972471}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1caf1724fed026f4399e3719c93a4faf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemy: {fileID: 0}
-  speed: 5
-  damage: 0
-  isBulletSkill: 0
-  isEnemyOnSkill: 0
 --- !u!95 &5572848396861307380
 Animator:
   serializedVersion: 7
@@ -191,3 +174,19 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 2.3125, y: 5.28125}
   m_Direction: 0
+--- !u!114 &-3618531333995826868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3719459856391972471}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b48512a07722b645809a211e145e830, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemy: {fileID: 0}
+  player: {fileID: 0}
+  speed: 0
+  damage: 0

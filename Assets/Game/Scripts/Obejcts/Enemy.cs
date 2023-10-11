@@ -14,6 +14,8 @@ public class Enemy : Object, IDamageable
 
     public bool isEnemyLookLeft; // 적이 보고 있는 방향을 알려주는 변수
 
+    private bool isDead;
+
     // enemy가 죽었을 때 EnemyManager에게 알려주기 위한 delegate
     public delegate void OnEnemyWasKilled(Enemy killedEnemy);
     public OnEnemyWasKilled onEnemyWasKilled;
@@ -39,12 +41,10 @@ public class Enemy : Object, IDamageable
 
     private void FixedUpdate()
     {
-        if (player == null)
+        if (!isDead)
         {
-            return;
+            MoveToPlayer();
         }
-
-        MoveToPlayer();
     }
 
     // 플레이어 방향으로 이동하는 함수
@@ -95,7 +95,10 @@ public class Enemy : Object, IDamageable
         animator.SetBool("Dead", true);
         onEnemyWasKilled(this); // 대리자 호출
 
+        isDead = true;
+
         rigid.constraints = RigidbodyConstraints2D.FreezeAll;
+        GetComponent<CapsuleCollider2D>().enabled = false;
 
         yield return new WaitForSeconds(0.5f); // 지정한 초 만큼 쉬기
 
