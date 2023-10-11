@@ -83,7 +83,7 @@ public class Player : MonoBehaviour
         {
             hp -= Time.deltaTime * 10;
 
-            if (hp < 0)
+            if (hp <= 0)
             {
                 isPlayerDead = true;
 

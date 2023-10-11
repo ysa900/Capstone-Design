@@ -76,7 +76,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: -3070832648162847404, guid: 468bc6ba239eac7479b34bf39262b8fc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 1
@@ -102,6 +102,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   hp: 30
+  maxHp: 0
   speed: 0.5
 --- !u!70 &4769133878525357221
 CapsuleCollider2D:
@@ -137,8 +138,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.075, y: 0.19}
-  m_Size: {x: 0.17, y: 0.32}
+  m_Offset: {x: -0.1, y: 0.17}
+  m_Size: {x: 0.14, y: 0.31}
   m_Direction: 0
 --- !u!50 &185251017419095182
 Rigidbody2D:

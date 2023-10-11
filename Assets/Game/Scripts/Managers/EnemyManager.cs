@@ -22,6 +22,7 @@ public class EnemyManager : MonoBehaviour
     public Enemy zombiePrefab2;
     public Enemy ghoulPrefab;
     public Enemy spitterPrefab;
+    public Enemy summonerPrefab;
 
     // Enemy들을 생성하는 함수
     // enemyType: 0 ~ ? (현재 0 ~ 1), 이게 몬스터 종류 결정
@@ -49,15 +50,15 @@ public class EnemyManager : MonoBehaviour
                     SetEnemyInfoNSummon(enemyNum, player, spitterPrefab, maxRadius);
                     break;
                 }
+            case 4:
+                {
+                    SetEnemyInfoNSummon(enemyNum, player, summonerPrefab, maxRadius);
+                    break;
+                }
 
         }
     }
 
-    // Enemy가 죽었을 때 실행할 것들
-    private void OnEnemyWasKilled(Enemy killedEnemy)
-    {
-        //
-    }
 
     // 적 정보를 입력하고 적을 생성하는 함수
     private void SetEnemyInfoNSummon(int enemyNum, Player player, Enemy enemyPrefab, float maxRadius)
@@ -86,5 +87,10 @@ public class EnemyManager : MonoBehaviour
 
             //enemies.Add(enemy);
         }
+    }
+    // Enemy가 죽었을 때 실행
+    private void OnEnemyWasKilled(Enemy KilledEnemy)
+    {
+
     }
 }

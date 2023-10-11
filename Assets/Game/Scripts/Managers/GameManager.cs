@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
 
     // Pause 오브젝트
     public GameObject pauseObject;
-
+    // HUD 오브젝트
     public GameObject ExpBar;
     public GameObject HpBar;
     public GameObject Timer;
@@ -72,7 +72,7 @@ public class GameManager : MonoBehaviour
         bossManager=FindAnyObjectByType<BossManager>();
 
         // 몬스터 소환
-        enemyManager.CreateEnemies(100, player, 3, maxEnemySpawnRange);
+        enemyManager.CreateEnemies(100, player, 4, maxEnemySpawnRange);
         bossManager.CreateBoss(player, maxBossSpawnRange);
 
         // inputManger Delegate 할당
@@ -96,13 +96,13 @@ public class GameManager : MonoBehaviour
     // Player 생성 함수
     private void CreatePlayer(){
         player = Instantiate(playerPrefab);
-        player.onPlayerWasKilled = OnPlayerHasKilled;
+        player.onPlayerWasKilled = OnPlayerHasKilled; // 플레이어 사망시
     }
 
     // Enemy 스폰 시간을 계산해 소환할 적을 지정하는 함수
     private void CalculateEnemySpawnTime()
     {
-        bool isLevel2TimeOver = gameTime >= level2Time; // level2가 되야 할 시간이 지났나 판별
+        bool isLevel2TimeOver = gameTime >= level2Time; // level 2가 되야 할 시간이 지났나 판별
 
         // Enemy0, 1의 스폰 쿨타임이 지났나 판별
         bool is_spawnCoolTimeOver0 = gameTime > spawnCoolTime0 * compensationNum0;
@@ -117,13 +117,16 @@ public class GameManager : MonoBehaviour
 
         bool is_spawn1ok = is_spawnCoolTimeOver0 && !isLevel2TimeOver;
         bool is_spawn2ok = is_spawnCoolTimeOver1 && isLevel2TimeOver;
+//        bool is_spawn3ok = is_spawnCoolTimeOver1 && isLevel2TimeOver;
 
         // 소환되어야 할 Enemy를 스폰
-        if (is_spawn1ok)
+        if (is_spawn1ok) // ghoul
             enemyManager.CreateEnemies(100, player, 2, maxEnemySpawnRange);
 
-        if (is_spawn2ok)
+        if (is_spawn2ok) // spitter
             enemyManager.CreateEnemies(100, player, 3, maxEnemySpawnRange);
+//        if (is_spawn3ok) // summoner
+//            enemyManager.CreateEnemies(100, player, 4, maxEnemySpawnRange);
     }
 
     // 플레이어가 죽었을 시 실행됨
