@@ -39,7 +39,7 @@ public class SkillManager : MonoBehaviour
     public EnemyOnSkill electricBasicSkillPrefab;
     public PlayerAttachSkill waterBasicSkillPrefab;
 
-    private void FixedUpdate()
+    private void Update()
     {
         if (isFireSkillSlected)
         {
