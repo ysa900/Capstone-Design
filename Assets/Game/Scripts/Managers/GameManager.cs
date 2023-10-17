@@ -1,7 +1,5 @@
-using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
-using static EnemyManager;
 
 public class GameManager : MonoBehaviour
 {
@@ -71,9 +69,18 @@ public class GameManager : MonoBehaviour
 
         // skillManager에 객체 할당
         skillManager.player = player;
-        skillManager.ChooseStartSkill(0);
-        skillManager.ChooseStartSkill(1);
-        skillManager.ChooseStartSkill(2);
+
+        // skillManager Delegate 할당
+        skillManager.onShiledSkillActivated = OnShieldSkillActivated;
+        skillManager.onShiledSkillUnActivated = OnShieldSkillUnActivated;
+
+        // 스킬 활성화
+        //skillManager.ChooseStartSkill("불", 0);
+        //skillManager.ChooseStartSkill("전기", 0);
+        //skillManager.ChooseStartSkill("물", 0);
+        //skillManager.ChooseStartSkill("불", 1);
+        //skillManager.ChooseStartSkill("전기", 1);
+        skillManager.ChooseStartSkill("물", 1);
 
         enemyManager.onEnemiesChanged = OnEnemiesChanged; // delegate 할당
     }
@@ -149,5 +156,15 @@ public class GameManager : MonoBehaviour
     private void OnEnemiesChanged(List<Enemy> enemies)
     {
         this.enemies = enemies;
+    }
+
+    private void OnShieldSkillActivated()
+    {
+        player.isPlayerShielded = true;
+    }
+
+    private void OnShieldSkillUnActivated()
+    {
+        player.isPlayerShielded = false;
     }
 }

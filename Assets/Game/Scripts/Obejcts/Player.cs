@@ -17,6 +17,8 @@ public class Player : MonoBehaviour
 
     public bool isPlayerLookLeft; // 플레이어가 보고 있는 방향을 알려주는 변수
 
+    public bool isPlayerShielded; // 플레이어가 보호막의 보호를 받고있냐
+
     Rigidbody2D rigid; // 물리 입력을 받기위한 변수
     SpriteRenderer spriteRenderer; // 플레이어 방향을 바꾸기 위해 flipX를 가져오기 위한 변수
     Animator animator; // 애니메이션 관리를 위한 변수
@@ -88,17 +90,20 @@ public class Player : MonoBehaviour
     {
         if (!isPlayerDead)
         {
-            hp -= Time.deltaTime * 10;
+            if(!isPlayerShielded)
+                hp -= Time.deltaTime * 10;
 
-            if (hp <= 0)
+            if (hp <= 0 && !isPlayerDead)
             {
                 isPlayerDead = true;
 
-                animator.SetBool("Dead", true);
+                animator.SetTrigger("Dead");
 
                 onPlayerWasKilled(this);
-
+                
                 rigid.constraints = RigidbodyConstraints2D.FreezeAll;
+                
+                transform.localScale = new Vector3 (1.0f, 1.0f, 1.0f);
             }
         }
     }
