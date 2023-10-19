@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     // 플레이어 정보
     public float speed;
     public float hp;
+    public float maxHp = 100;
 
     private bool isPlayerDead; // 플레이어가 죽었는지 판별하는 변수
 

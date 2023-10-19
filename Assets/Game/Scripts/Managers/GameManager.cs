@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance; // GameManager를 instance화
 
     // 게임 시간
-    private float gameTime;
+    public float gameTime;
     //private float maxGameTime = 15 * 60f;
 
     // 적 최대 생성 거리 (최소는 20, EnemyManager에 있음)
@@ -75,12 +75,12 @@ public class GameManager : MonoBehaviour
         skillManager.onShiledSkillUnActivated = OnShieldSkillUnActivated;
 
         // 스킬 활성화
-        //skillManager.ChooseStartSkill("불", 0);
+        skillManager.ChooseStartSkill("불", 0);
         //skillManager.ChooseStartSkill("전기", 0);
         //skillManager.ChooseStartSkill("물", 0);
-        //skillManager.ChooseStartSkill("불", 1);
+        skillManager.ChooseStartSkill("불", 1);
         //skillManager.ChooseStartSkill("전기", 1);
-        skillManager.ChooseStartSkill("물", 1);
+        //skillManager.ChooseStartSkill("물", 1);
 
         enemyManager.onEnemiesChanged = OnEnemiesChanged; // delegate 할당
     }

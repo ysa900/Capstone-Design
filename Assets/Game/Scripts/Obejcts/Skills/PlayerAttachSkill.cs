@@ -14,6 +14,7 @@ public class PlayerAttachSkill : Skill
     public bool isCircleSkill; // 플레이어 주위를 빙빙 도는 스킬이냐
     public bool isShieldSkill; // Damage가 없는 Shield 스킬이냐
 
+    private float degree = 0f;
     private float tmpX; // Cirle을 계산할 때 0,0을 기준으로 생각한 X
     private float tmpY; // Cirle을 계산할 때 0,0을 기준으로 생각한 X
     private bool isUpSide; // 플레이어를 돌 때 반원 기준으로 위에 있는지 아래 있는지를 판단할 변수
@@ -83,32 +84,17 @@ public class PlayerAttachSkill : Skill
     // 플레이어 주위를 빙빙 도는 스킬
     private void CircleMove()
     {
-        tmpX = X - player.transform.position.x;
-        tmpY = Y - player.transform.position.y;
+        degree += 0.1f;
 
-        if (isUpSide)
+        if (degree >= 180)
         {
-            tmpX += 0.2f;
-
-            if (tmpX >= xPositionNum)
-                isUpSide = false;
+            isUpSide ^= false;
         }
-        else
-        {
-            tmpX -= 0.2f;
-
-            if (tmpX <= -xPositionNum)
-                isUpSide = true;
-        }
-
-        double tmp = Math.Pow(xPositionNum, 2) - Math.Pow(tmpX, 2);
-
-        float tmp2 = (float)Math.Sqrt(tmp);
         
-        if (tmp2.Equals(float.NaN)) { tmpY = 0; } // 오류 방지를 위해 이렇게 작성
-        else { tmpY = tmp2;  }
-        
-        if (!isUpSide) // Y값에 루트를 하면 항상 양수만 나오니까 아래 반원이면 음수값 부여
+        tmpX = (float)Math.Cos(degree) * xPositionNum;
+        tmpY = (float)Math.Sin(degree) * xPositionNum; //이거 잘못쓴거 아님 (xPositionNum이 여기서 반지름 역할)
+
+        if (!isUpSide) // 아래 반원이면 음수값 부여
             tmpY = -tmpY;
 
         X = tmpX + player.transform.position.x;
