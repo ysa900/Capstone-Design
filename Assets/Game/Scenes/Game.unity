@@ -49916,7 +49916,7 @@ GameObject:
   - component: {fileID: 474281430}
   - component: {fileID: 474281429}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: SkillPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -49991,7 +49991,7 @@ GameObject:
   - component: {fileID: 480364808}
   - component: {fileID: 480364807}
   m_Layer: 5
-  m_Name: Image
+  m_Name: CharacterProfile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -50320,6 +50320,11 @@ MonoBehaviour:
   playerPrefab: {fileID: 3621306853304922202, guid: a7f3985b25427964ab0e550dcf041e1a, type: 3}
   gameOverObject: {fileID: 1687149409}
   pauseObject: {fileID: 2008684284}
+  HpBarObject: {fileID: 1957928757}
+  HpStatusObject: {fileID: 1835762174}
+  HpStatusLetteringObject: {fileID: 1636489591}
+  SkillPanelObject: {fileID: 474281427}
+  CharacterProfileObject: {fileID: 480364805}
 --- !u!1 &644353460
 GameObject:
   m_ObjectHideFlags: 0
@@ -68511,8 +68516,8 @@ RectTransform:
   - {fileID: 559314349}
   - {fileID: 1636489592}
   - {fileID: 1835762175}
-  - {fileID: 480364806}
   - {fileID: 474281428}
+  - {fileID: 480364806}
   - {fileID: 466159302}
   - {fileID: 544781575}
   m_Father: {fileID: 0}

@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using static EnemyManager;
 
+// Pause 걸면 이전에는 인게임 속 UI들(피통, 스킬 패널, 프로필)이 안사라져서
+// 사라지게 하려고 gameObject로 선언한거랑
+// OnPauseButtonClicked() ,onPlayButtonClicked() 메소드 수정했음
+
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance; // GameManager를 instance화
@@ -47,7 +51,17 @@ public class GameManager : MonoBehaviour
     // Pause 오브젝트
     public GameObject pauseObject;
 
-  
+    // HpBar
+    public GameObject HpBarObject;
+    // HpStatus
+    public GameObject HpStatusObject;
+    // HpStatusLettering
+    public GameObject HpStatusLetteringObject;
+    // SkillPenel
+    public GameObject SkillPanelObject;
+    // CharacterProfile
+    public GameObject CharacterProfileObject;
+
     private void Awake()
     {
         instance = this; // GameManager를 인스턴스화
@@ -140,11 +154,23 @@ public class GameManager : MonoBehaviour
     private void OnPauseButtonClicked()
     {
         pauseObject.SetActive(true);
+        // UI 비활성화
+        HpBarObject.SetActive(false);
+        HpStatusLetteringObject.SetActive(false);
+        HpStatusObject.SetActive(false);
+        SkillPanelObject.SetActive(false);
+        CharacterProfileObject.SetActive(false);
     }
 
     private void onPlayButtonClicked()
     {
         pauseObject.SetActive(false);
+        // UI 활성화
+        HpBarObject.SetActive(true);
+        HpStatusLetteringObject.SetActive(true);
+        HpStatusObject.SetActive(true);
+        SkillPanelObject.SetActive(true);
+        CharacterProfileObject.SetActive(true);
     }
 
     private void OnEnemiesChanged(List<Enemy> enemies)
