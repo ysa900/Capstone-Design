@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.U2D.Animation;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -12,27 +9,27 @@ public class LobbyManager : MonoBehaviour
     // Character 버튼
     public UnityEngine.UI.Button CharacterButtonObject;
 
-    // Ability 버튼
-    public UnityEngine.UI.Button AbilityButtonObject;
+    // Item 버튼
+    public UnityEngine.UI.Button ItemButtonObject;
 
-    // CharacterPage Back 버튼
-    public UnityEngine.UI.Button CBackButtonObject;
-
-    // AbilityrPage Back 버튼
+    // Character Page Back 버튼
     public UnityEngine.UI.Button ABackButtonObject;
 
-    // 캐릭터 페이지 오브젝트
+    // Item Page Back 버튼
+    public UnityEngine.UI.Button BBackButtonObject;
+
+    // Character Page 오브젝트
     public GameObject CharacterPage;
 
-    // 능력치 페이지 오브젝트
-    public GameObject AbilityPage;
+    // Item Page 오브젝트
+    public GameObject ItemPage;
 
     // Start is called before the first frame update
     void Start()
     {
-        // 시작 시 캐릭터/능력치 페이지 비활성화
+        // 시작 시 비활성화
         CharacterPage.SetActive(false);
-        AbilityPage.SetActive(false);
+        ItemPage.SetActive(false);
 
         // Restart 버튼 눌렀을 때
         UnityEngine.UI.Button gameStartButton = gameStartButtonObject.GetComponent<UnityEngine.UI.Button>();
@@ -42,46 +39,47 @@ public class LobbyManager : MonoBehaviour
         UnityEngine.UI.Button CharacterButton = CharacterButtonObject.GetComponent<UnityEngine.UI.Button>();
         CharacterButton.onClick.AddListener(CharacterButtonClicked);
 
-        // Ability 버튼 눌렀을 때
-        UnityEngine.UI.Button AbilityButton = AbilityButtonObject.GetComponent<UnityEngine.UI.Button>();
+        // Item 버튼 눌렀을 때
+        UnityEngine.UI.Button AbilityButton = ItemButtonObject.GetComponent<UnityEngine.UI.Button>();
         AbilityButton.onClick.AddListener(AbilityButtonClicked);
 
-        // 캐릭터 페이지 뒤로가기 버튼 눌렀을 때
-        UnityEngine.UI.Button CBackButton = CBackButtonObject.GetComponent<UnityEngine.UI.Button>();
+        // Character Page 뒤로가기 버튼 눌렀을 때
+        UnityEngine.UI.Button CBackButton = ABackButtonObject.GetComponent<UnityEngine.UI.Button>();
         CBackButton.onClick.AddListener(CBackButtonClicked);
 
-        // 능력치 페이지 뒤로가기 버튼 눌렀을 때
-        UnityEngine.UI.Button ABackButton = ABackButtonObject.GetComponent<UnityEngine.UI.Button>();
+        // Item Page 뒤로가기 버튼 눌렀을 때
+        UnityEngine.UI.Button ABackButton = BBackButtonObject.GetComponent<UnityEngine.UI.Button>();
         ABackButton.onClick.AddListener(ABackButtonClicked);
     }
 
-    // 게임 시작 버튼 클릭시
+    // GameStart 버튼 클릭시
     private void GameStartButtonClicked()
     {
-        SceneManager.LoadScene("Game");
+        SceneManager.LoadScene("Game"); // Game 씬 불러오기
     }
 
-    // 캐릭터 버튼 클릭시
+    // Character 버튼 클릭시
     private void CharacterButtonClicked()
     {
         CharacterPage.SetActive(true);
     }
 
-    // 캐릭터 페이지 뒤로가기 버튼 클릭시
+    // Item 버튼 클릭시
+    private void AbilityButtonClicked()
+    {
+        ItemPage.SetActive(true);
+    }
+
+    // Character Page 뒤로가기 버튼 클릭시
     private void CBackButtonClicked()
     {
         CharacterPage.SetActive(false);
     }
 
-    // 능력치 버튼 클릭시
-    private void AbilityButtonClicked()
-    {
-        AbilityPage.SetActive(true);
-    }
 
-    // 능력치 페이지 뒤로가기 버튼 클릭시
+    // Item page 뒤로가기 버튼 클릭시
     private void ABackButtonClicked()
     {
-        AbilityPage.SetActive(false);
+        ItemPage.SetActive(false);
     }
 }

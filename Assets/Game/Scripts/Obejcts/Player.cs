@@ -1,6 +1,6 @@
+using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -12,8 +12,11 @@ public class Player : MonoBehaviour
     // 플레이어 정보
     public float speed;
     public float hp;
-    public float maxHp = 100; // 최대 hp 100 설정
-    private bool isPlayerDead;
+    public float maxHp = 100;
+
+    private bool isPlayerDead; // 플레이어가 죽었는지 판별하는 변수
+
+    public bool isPlayerLookLeft; // 플레이어가 보고 있는 방향을 알려주는 변수
 
     Rigidbody2D rigid; // 물리 입력을 받기위한 변수
     SpriteRenderer spriteRenderer; // 플레이어 방향을 바꾸기 위해 flipX를 가져오기 위한 변수
@@ -23,7 +26,7 @@ public class Player : MonoBehaviour
     public delegate void OnPlayerWasKilled(Player player);
     public OnPlayerWasKilled onPlayerWasKilled;
 
-    void Awake()
+    void Start()
     {
         // 변수 초기화
         rigid = GetComponent<Rigidbody2D>();
@@ -34,7 +37,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ReceiveDirectionInput();
+        ReceiveDirectionInput(); // 키보드 방향키 입력을 가져오는 함수
     }
 
     // 물리 연산 프레임마다 호출되는 생명주기 함수
@@ -48,11 +51,15 @@ public class Player : MonoBehaviour
     {
         animator.SetFloat("Speed", inputVec.magnitude); // animator의 float타입인 변수 Speed를 inpuVec의 크기만큼으로 설정한다
 
-        bool isPlayerLookLeft = inputVec.x < 0; // 플레이어가 왼쪽을 보고 있으면
+        isPlayerLookLeft = inputVec.x < 0; // 플레이어가 왼쪽을 보고 있으면
 
         if (inputVec.x != 0) // 키를 안눌렀을 때는 실행 안되도록 하기 위해 inputVec.x가 0이 아닌 경우만 실행하게 한다
         {
             spriteRenderer.flipX = isPlayerLookLeft; // 플레이어를 x축으로 뒤집는다
+        }
+        else
+        {
+            isPlayerLookLeft = spriteRenderer.flipX;
         }
     }
 
@@ -60,7 +67,8 @@ public class Player : MonoBehaviour
     private void ReceiveDirectionInput()
     {
         // 수평, 수직 방향 입력을 받는다
-        // inputmanager에 기본 설정돼있, GetAxisRaw를 해야 더욱 명확한 컨트롤 가능
+        // inputmanager에 기본 설정돼있다
+        // GetAxisRaw를 해야 더욱 명확한 컨트롤 가능
         inputVec.x = Input.GetAxisRaw("Horizontal");
         inputVec.y = Input.GetAxisRaw("Vertical");
     }
@@ -95,4 +103,5 @@ public class Player : MonoBehaviour
             }
         }
     }
+
 }

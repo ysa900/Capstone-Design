@@ -172,9 +172,9 @@ GameObject:
   m_Component:
   - component: {fileID: 109349939218810697}
   - component: {fileID: 1253346671858574077}
-  - component: {fileID: 2638798276583621023}
   - component: {fileID: 7818977613494987131}
   - component: {fileID: 5645827978221573267}
+  - component: {fileID: 3621306853304922202}
   - component: {fileID: 8557957087405267583}
   m_Layer: 0
   m_Name: Mage
@@ -252,22 +252,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &2638798276583621023
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7289612309239362924}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ef3b78ebc65906459c4945c22d60b0c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inputVec: {x: 0, y: 0}
-  speed: 5
-  hp: 100
-  maxHp: 100
 --- !u!50 &7818977613494987131
 Rigidbody2D:
   serializedVersion: 4
@@ -330,8 +314,23 @@ CapsuleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: -0.03}
-  m_Size: {x: 0.2, y: 0.4}
+  m_Size: {x: 0.15, y: 0.325}
   m_Direction: 0
+--- !u!114 &3621306853304922202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7289612309239362924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ef3b78ebc65906459c4945c22d60b0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputVec: {x: 0, y: 0}
+  speed: 5
+  hp: 100
 --- !u!95 &8557957087405267583
 Animator:
   serializedVersion: 7

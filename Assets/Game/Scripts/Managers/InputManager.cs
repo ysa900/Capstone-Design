@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -46,8 +44,8 @@ public class InputManager : MonoBehaviour
         PauseButton.onClick.AddListener(PauseButtonClicked);
 
         // Pause_Restart 버튼 눌렀을 때
-        UnityEngine.UI.Button PRestartButto = PRestartButtonObject.GetComponent<UnityEngine.UI.Button>();
-        PRestartButto.onClick.AddListener(RestartButtonClicked);
+        UnityEngine.UI.Button PRestartButton = PRestartButtonObject.GetComponent<UnityEngine.UI.Button>();
+        PRestartButton.onClick.AddListener(RestartButtonClicked);
 
         // Pause_GoTOLobby 버튼 눌렀을 때
         UnityEngine.UI.Button PGoToLobbyButton = PGoToLobbyButtonObject.GetComponent<UnityEngine.UI.Button>();
