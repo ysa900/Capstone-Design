@@ -13,8 +13,13 @@ public class Player : MonoBehaviour
     public float speed;
     public float hp;
     public float maxHp = 100;
+    public  int Exp;
+    public int level;
+    public int[] nextExp = { 3, 5, 10, 100, 150, 210, 280, 360, 450, 600 };
+    //킬 수
+    public int kill;
 
-    private bool isPlayerDead; // 플레이어가 죽었는지 판별하는 변수
+    public bool isPlayerDead; // 플레이어가 죽었는지 판별하는 변수
 
     public bool isPlayerLookLeft; // 플레이어가 보고 있는 방향을 알려주는 변수
 

@@ -124,7 +124,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   hp: 20
-  speed: 1
+  speed: 2
   isEnemyLookLeft: 0
   capsuleCollider: {fileID: 0}
 --- !u!50 &2406250041084801470

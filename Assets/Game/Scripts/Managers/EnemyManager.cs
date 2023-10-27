@@ -65,6 +65,13 @@ public class EnemyManager : MonoBehaviour
     // Enemy가 죽었을 때 실행할 것들
     private void OnEnemyWasKilled(Enemy killedEnemy)
     {
+        if (!GameManager.instance.player.isPlayerDead)
+        {
+            GameManager.instance.player.kill++;
+            GameManager.instance.GetExp();
+
+        }
+       
         enemies.Remove(killedEnemy);
         onEnemiesChanged(enemies);
     }

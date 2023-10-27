@@ -25,14 +25,18 @@ public class HUD : MonoBehaviour
         switch(type)
         {
             case InfoType.Exp:
-
+                float curExp = GameManager.instance.player.Exp;
+                float maxExp = GameManager.instance.player.nextExp[GameManager.instance.player.level];
+                myHpSlider.value = curExp/maxExp;
+                
                 break;
             case InfoType.Level:
-
+                timeText.text = string.Format("Lv.{0:F0}",GameManager.instance.player.level);
                 break;
 
             case InfoType.Kill:
-
+                timeText.text = string.Format("{0:F0}", GameManager.instance.player.kill);
+                break;
                 break;
 
             case InfoType.Hp:

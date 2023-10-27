@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour
     // Pause 오브젝트
     public GameObject pauseObject;
 
+  
     private void Awake()
     {
         instance = this; // GameManager를 인스턴스화
@@ -72,8 +73,8 @@ public class GameManager : MonoBehaviour
         // skillManager에 객체 할당
         skillManager.player = player;
         skillManager.ChooseStartSkill(0);
-        //skillManager.ChooseStartSkill(1);
-        //skillManager.ChooseStartSkill(2);
+        skillManager.ChooseStartSkill(1);
+        skillManager.ChooseStartSkill(2);
 
         enemyManager.onEnemiesChanged = OnEnemiesChanged; // delegate 할당
     }
@@ -150,4 +151,18 @@ public class GameManager : MonoBehaviour
     {
         this.enemies = enemies;
     }
+
+    //player 경험치 획득 함수
+    public void GetExp()
+    {
+        player.Exp++;
+
+        if(player.Exp == player.nextExp[player.level])
+        {
+            player.level++;
+            player.Exp = 0;
+        }
+
+    }
+
 }
