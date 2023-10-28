@@ -1,9 +1,6 @@
-using NUnit.Framework;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IPlayer
 {
     // 키보드 방향키 입력을 위한 벡터
     public Vector2 inputVec;
@@ -13,7 +10,7 @@ public class Player : MonoBehaviour
     public float speed;
     public float hp;
     public float maxHp = 100;
-    public  int Exp;
+    public int Exp;
     public int level;
     public int[] nextExp = { 3, 5, 10, 100, 150, 210, 280, 360, 450, 600 };
     
@@ -90,6 +87,19 @@ public class Player : MonoBehaviour
 
         // 입력받은 방향으로 플레이어 위치 설정
         rigid.MovePosition(rigid.position + nextVec);
+    }
+
+    //player 경험치 획득 함수
+    public void GetExp(int expAmount)
+    {
+        Exp += expAmount;
+
+        if (Exp == nextExp[level])
+        {
+            level++;
+            Exp = 0;
+        }
+
     }
 
     // 플레이어가 무언가와 충돌하면 데미지를 입는다

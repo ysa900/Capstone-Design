@@ -72,6 +72,9 @@ public class Enemy : Object, IDamageable
         capsuleCollider.offset = colliderOffset; // capsuleCollider에 적용
 
         rigid.MovePosition(rigid.position + direction * speed * Time.fixedDeltaTime); // 플레이어 방향으로 위치 변경
+
+        X = transform.position.x;
+        Y = transform.position.y;
     }
 
     // IDamageable의 함수 TakeDamage

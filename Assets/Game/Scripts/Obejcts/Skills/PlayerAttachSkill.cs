@@ -1,8 +1,5 @@
-﻿using NUnit.Framework.Constraints;
-using System;
-using System.Collections;
+﻿using System;
 using UnityEngine;
-using static PlayerAttachSkill;
 
 public class PlayerAttachSkill : Skill
 {

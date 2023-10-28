@@ -40,9 +40,15 @@ public class GameManager : MonoBehaviour
     private FollowCam followCam;
     private InputManager inputManager;
     private SkillManager skillManager;
-   
+    private EXP exp;
+
     // GameObject에서 프리팹을 넣어주기 위해 public으로 설정
     public Player playerPrefab;
+
+    // EXP 프리팹
+    public EXP expPrefab1;
+    public EXP expPrefab2;
+    public EXP expPrefab3;
 
     // GameOver 오브젝트
     public GameObject gameOverObject;
@@ -91,14 +97,16 @@ public class GameManager : MonoBehaviour
         skillManager.onShiledSkillUnActivated = OnShieldSkillUnActivated;
 
         // 스킬 활성화
-        //skillManager.ChooseStartSkill("불", 0);
+        skillManager.ChooseStartSkill("불", 0);
         //skillManager.ChooseStartSkill("전기", 0);
-        skillManager.ChooseStartSkill("물", 0);
-        //skillManager.ChooseStartSkill("불", 1);
+        //skillManager.ChooseStartSkill("물", 0);
+        skillManager.ChooseStartSkill("불", 1);
         //skillManager.ChooseStartSkill("전기", 1);
-        skillManager.ChooseStartSkill("물", 1);
+        //skillManager.ChooseStartSkill("물", 1);
 
-        enemyManager.onEnemiesChanged = OnEnemiesChanged; // delegate 할당
+        // delegate 할당
+        enemyManager.onEnemiesChanged = OnEnemiesChanged;
+        enemyManager.onEnemyKilled = OnEnemyKilled;
     }
 
     void Start()
@@ -186,19 +194,6 @@ public class GameManager : MonoBehaviour
         this.enemies = enemies;
     }
 
-    //player 경험치 획득 함수
-    public void GetExp()
-    {
-        player.Exp++;
-
-        if(player.Exp == player.nextExp[player.level])
-        {
-            player.level++;
-            player.Exp = 0;
-        }
-
-    }
-
     // 쉴드 켜질 때 delegate에 할당해줄 함수
     private void OnShieldSkillActivated()
     {
@@ -209,6 +204,22 @@ public class GameManager : MonoBehaviour
     private void OnShieldSkillUnActivated()
     {
         player.isPlayerShielded = false;
+    }
+
+    // 적이 죽었을 때 실행하는 함수
+    private void OnEnemyKilled(Enemy killedEnemy)
+    {
+        if (!player.isPlayerDead)
+        {
+            player.kill++;
+        }
+
+        exp = Instantiate(expPrefab1);
+
+        exp.expAmount = 1;
+
+        exp.X = killedEnemy.X;
+        exp.Y = killedEnemy.Y + 1f;
     }
 
 }

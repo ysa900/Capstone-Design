@@ -274,6 +274,9 @@ public class SkillManager : MonoBehaviour
                     playerAttachSkill.xPositionNum = 3f;
                     playerAttachSkill.yPositionNum = 0.2f;
 
+                    playerAttachSkill.X = 999f;
+                    playerAttachSkill.Y = 999f;
+
                     playerAttachSkill.isAttachSkill = true;
 
                     playerAttachSkill.damage = skillDamages[index1, index2];

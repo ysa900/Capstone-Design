@@ -50318,6 +50318,9 @@ MonoBehaviour:
   gameTime: 0
   player: {fileID: 0}
   playerPrefab: {fileID: 3621306853304922202, guid: a7f3985b25427964ab0e550dcf041e1a, type: 3}
+  expPrefab1: {fileID: 4943057121286701193, guid: 5a0ee35ff018e304f8d573f920043e1f, type: 3}
+  expPrefab2: {fileID: 4407068784877236907, guid: a43c7db6f23015d498cb42944a562c30, type: 3}
+  expPrefab3: {fileID: 7329410880910408358, guid: 4c3a92ebeb9f2bd4081f0a711505aa66, type: 3}
   gameOverObject: {fileID: 1687149409}
   pauseObject: {fileID: 2008684284}
   HpBarObject: {fileID: 1957928757}
