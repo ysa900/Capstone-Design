@@ -1,7 +1,6 @@
 using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
-using static EnemyManager;
 
 // Pause 걸면 이전에는 인게임 속 UI들(피통, 스킬 패널, 프로필)이 안사라져서
 // 사라지게 하려고 gameObject로 선언한거랑
@@ -86,9 +85,18 @@ public class GameManager : MonoBehaviour
 
         // skillManager에 객체 할당
         skillManager.player = player;
-        skillManager.ChooseStartSkill(0);
-        skillManager.ChooseStartSkill(1);
-        skillManager.ChooseStartSkill(2);
+
+        // skillManager Delegate 할당
+        skillManager.onShiledSkillActivated = OnShieldSkillActivated;
+        skillManager.onShiledSkillUnActivated = OnShieldSkillUnActivated;
+
+        // 스킬 활성화
+        //skillManager.ChooseStartSkill("불", 0);
+        //skillManager.ChooseStartSkill("전기", 0);
+        skillManager.ChooseStartSkill("물", 0);
+        //skillManager.ChooseStartSkill("불", 1);
+        //skillManager.ChooseStartSkill("전기", 1);
+        skillManager.ChooseStartSkill("물", 1);
 
         enemyManager.onEnemiesChanged = OnEnemiesChanged; // delegate 할당
     }
@@ -189,6 +197,18 @@ public class GameManager : MonoBehaviour
             player.Exp = 0;
         }
 
+    }
+
+    // 쉴드 켜질 때 delegate에 할당해줄 함수
+    private void OnShieldSkillActivated()
+    {
+        player.isPlayerShielded = true;
+    }
+
+    // 쉴드 꺼질 때 delegate에 할당해줄 함수
+    private void OnShieldSkillUnActivated()
+    {
+        player.isPlayerShielded = false;
     }
 
 }

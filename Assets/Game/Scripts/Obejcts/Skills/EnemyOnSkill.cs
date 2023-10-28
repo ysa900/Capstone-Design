@@ -35,7 +35,7 @@ public class EnemyOnSkill : Skill
 
         StartCoroutine(Delay(0.5f));
         StopCoroutine(Delay(0.5f));
-       
+
     }
 
     IEnumerator Delay(float delayTime)

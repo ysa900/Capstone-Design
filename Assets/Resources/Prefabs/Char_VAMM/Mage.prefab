@@ -332,7 +332,6 @@ MonoBehaviour:
   speed: 5
   hp: 100
   maxHp: 100
-  Exp: 0
   isPlayerLookLeft: 0
 --- !u!95 &8557957087405267583
 Animator:

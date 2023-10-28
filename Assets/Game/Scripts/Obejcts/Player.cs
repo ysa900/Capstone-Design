@@ -16,12 +16,15 @@ public class Player : MonoBehaviour
     public  int Exp;
     public int level;
     public int[] nextExp = { 3, 5, 10, 100, 150, 210, 280, 360, 450, 600 };
+    
     //킬 수
     public int kill;
 
     public bool isPlayerDead; // 플레이어가 죽었는지 판별하는 변수
 
     public bool isPlayerLookLeft; // 플레이어가 보고 있는 방향을 알려주는 변수
+
+    public bool isPlayerShielded; // 플레이어가 보호막의 보호를 받고있냐
 
     Rigidbody2D rigid; // 물리 입력을 받기위한 변수
     SpriteRenderer spriteRenderer; // 플레이어 방향을 바꾸기 위해 flipX를 가져오기 위한 변수
@@ -94,7 +97,8 @@ public class Player : MonoBehaviour
     {
         if (!isPlayerDead)
         {
-            hp -= Time.deltaTime * 10;
+            if (!isPlayerShielded)
+                hp -= Time.deltaTime * 10;
 
             if (hp <= 0)
             {
@@ -105,6 +109,8 @@ public class Player : MonoBehaviour
                 onPlayerWasKilled(this);
 
                 rigid.constraints = RigidbodyConstraints2D.FreezeAll;
+
+                transform.localScale = new Vector3(1.0f, 1.0f, 1.0f); // 죽었을 때 나오는 묘비 크기 때문에 크기 조정 해준 것
             }
         }
     }

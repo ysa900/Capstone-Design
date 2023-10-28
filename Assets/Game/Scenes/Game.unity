@@ -67729,6 +67729,9 @@ MonoBehaviour:
   fireBasicSkillPrefab: {fileID: -7424071372996459232, guid: 4f5aab16534b5d543b90b75837de3cc4, type: 3}
   electricBasicSkillPrefab: {fileID: -3618531333995826868, guid: a30f3ee6b2db5c540af102e95890215c, type: 3}
   waterBasicSkillPrefab: {fileID: 99437377000021322, guid: 3772c381276b3ab4aa6590f755c6521d, type: 3}
+  fireNormalSkillPrefab1: {fileID: 2903703863847993547, guid: 9aef766674f0e6148bc3d4baa343e2fb, type: 3}
+  electricNormalSkillPrefab1: {fileID: 8321802461996845402, guid: ce1225d4b4af3da418cea198e24f7b90, type: 3}
+  waterNormalSkillPrefab1: {fileID: 6682502125918302997, guid: 607156135ff587f4e89da21cbc00b368, type: 3}
 --- !u!4 &1452367875
 Transform:
   m_ObjectHideFlags: 0

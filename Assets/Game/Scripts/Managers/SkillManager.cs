@@ -1,7 +1,4 @@
-﻿using NUnit.Framework.Constraints;
-using System.Collections.Generic;
-using System.ComponentModel;
-using Unity.VisualScripting;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class SkillManager : MonoBehaviour
@@ -36,6 +33,16 @@ public class SkillManager : MonoBehaviour
     public EnemyOnSkill electricBasicSkillPrefab;
     public PlayerAttachSkill waterBasicSkillPrefab;
 
+    public PlayerAttachSkill fireNormalSkillPrefab1;
+    public PlayerAttachSkill electricNormalSkillPrefab1;
+    public PlayerAttachSkill waterNormalSkillPrefab1;
+
+    public delegate void OnShiledSkillActivated(); // 쉴드 스킬이 켜 질때
+    public OnShiledSkillActivated onShiledSkillActivated;
+
+    public delegate void OnShiledSkillUnActivated(); // 쉴드 스킬이 꺼 질때
+    public OnShiledSkillUnActivated onShiledSkillUnActivated;
+
     private void Start()
     {
         // 공격 딜레이 초기화
@@ -47,81 +54,58 @@ public class SkillManager : MonoBehaviour
         for (int i = 0; i < 4; i++) { skillDamages[0, i] = 30f; }
         for (int i = 0; i < 4; i++) { skillDamages[1, i] = 10f; }
         for (int i = 0; i < 4; i++) { skillDamages[2, i] = 20f; }
+
+        skillDamages[0, 1] = 10f;
+
+        attackDelayTime[1, 1] = 6f;
+
+        skillDamages[2, 1] = 0f;
+        attackDelayTime[2, 1] = 10f;
     }
 
     private void Update()
     {
-        if (isSkillSlected[0, 0])
+        for (int index1 = 0; index1 < 3; index1++)
         {
-            int index1 = 0;
-            int index2 = 0;
-            bool shouldBeAttack = 0 >= attackDelayTimer[index1, index2]; // 공격 쿨타임이 됐는지 확인
-            if (shouldBeAttack)
+            for (int index2 = 0; index2 < 3; index2++)
             {
-                attackDelayTimer[index1, index2] = attackDelayTime[index1, index2];
-                
-                TryAttack(index1, index2); // 스킬 쿨타임이 다 됐으면 공격을 시도한다
-            }
-            else
-            {
-                attackDelayTimer[index1, index2] -= Time.deltaTime;
-            }
-        }
+                if (isSkillSlected[index1, index2]) // 활성화(선택)된 스킬만 실행
+                {
+                    bool shouldBeAttack = 0 >= attackDelayTimer[index1, index2]; // 공격 쿨타임이 됐는지 확인
+                    if (shouldBeAttack)
+                    {
+                        attackDelayTimer[index1, index2] = attackDelayTime[index1, index2];
 
-        if (isSkillSlected[1, 0])
-        {
-            int index1 = 1;
-            int index2 = 0;
-            bool shouldBeAttack = 0 >= attackDelayTimer[index1, index2]; // 공격 쿨타임이 됐는지 확인
-            if (shouldBeAttack)
-            {
-                attackDelayTimer[index1, index2] = attackDelayTime[index1, index2];
-
-                TryAttack(index1, index2); // 스킬 쿨타임이 다 됐으면 공격을 시도한다
-            }
-            else
-            {
-                attackDelayTimer[index1, index2] -= Time.deltaTime;
-            }
-        }
-
-        if (isSkillSlected[2, 0])
-        {
-            int index1 = 2;
-            int index2 = 0;
-            bool shouldBeAttack = 0 >= attackDelayTimer[index1, index2]; // 공격 쿨타임이 됐는지 확인
-            if (shouldBeAttack)
-            {
-                attackDelayTimer[index1, index2] = attackDelayTime[index1, index2];
-
-                TryAttack(index1, index2); // 스킬 쿨타임이 다 됐으면 공격을 시도한다
-            }
-            else
-            {
-                attackDelayTimer[index1, index2] -= Time.deltaTime;
+                        TryAttack(index1, index2); // 스킬 쿨타임이 다 됐으면 공격을 시도한다
+                    }
+                    else
+                    {
+                        attackDelayTimer[index1, index2] -= Time.deltaTime;
+                    }
+                }
             }
         }
     }
 
     // 시작 스킬을 선택하는 함수
     // num : 스킬 번호 (불 - 0 , 전기 - 1, 물 - 2)
-    public void ChooseStartSkill(int num)
+    public void ChooseStartSkill(string type, int num)
     {
-        switch (num)
+        switch (type)
         {
-            case 0:
+            case "불":
                 {
-                    isSkillSlected[0, 0] = true;
+                    isSkillSlected[0, num] = true;
                     break;
                 }
-            case 1:
+            case "전기":
                 {
-                    isSkillSlected[1, 0] = true;
+                    isSkillSlected[1, num] = true;
                     break;
                 }
-            case 2:
+            case "물":
                 {
-                    isSkillSlected[2, 0] = true;
+                    isSkillSlected[2, num] = true;
                     break;
                 }
         }
@@ -141,20 +125,20 @@ public class SkillManager : MonoBehaviour
                     Vector2 enemyPos = enemy.transform.position;
                     Vector2 playerPos = player.transform.position;
                     float distance = Vector2.Distance(enemyPos, playerPos);
-                    
+
                     bool isInAttackRange = distance <= attackRange; // 적이 사거리 내에 있을때만 공격이 나간다
 
                     if (isInAttackRange)
                     {
                         CastSkill(enemy, index1, index2); // 스킬을 시전
                     }
-                    break; 
+                    break;
                 }
             case (1, 0):
                 {
                     // 전기 공격은 사거리 내 랜덤한 적에게 시전된다
                     Enemy enemy;
-                    
+
                     int breakNum = 0; // while문 탈출을 위한 num
 
                     while (true)
@@ -174,22 +158,41 @@ public class SkillManager : MonoBehaviour
                         if (breakNum >= 1000) // 1000회 반복 내에 마땅한 적을 찾지 못했다면 그냥 break;
                             break;
                     }
-                    
+
                     CastSkill(enemy, index1, index2);
                     break;
                 }
             case (2, 0):
                 {
-                    // 물 스킬은 적에 상관없이 항상 나간다
+                    // 물 기본 스킬은 적에 상관없이 항상 나간다 (플레이어에 붙어다님)
                     Enemy enemy = enemies[0]; // 가짜로 일단 줌
                     CastSkill(enemy, index1, index2);
 
                     break;
                 }
+            case (0, 1):
+                {
+                    // 불 일반1 스킬은 적에 상관없이 항상 나간다 (플레이어에 붙어다님)
+                    Enemy enemy = enemies[0]; // 가짜로 일단 줌
+                    CastSkill(enemy, index1, index2);
+                    break;
+                }
+            case (1, 1):
+                {
+                    // 전기 일반1 스킬은 적에 상관없이 항상 나간다 (플레이어에 붙어다님)
+                    Enemy enemy = enemies[0]; // 가짜로 일단 줌
+                    CastSkill(enemy, index1, index2);
+                    break;
+                }
+            case (2, 1):
+                {
+                    // 물 일반1 스킬은 적에 상관없이 항상 나간다 (플레이어에 붙어다님)
+                    Enemy enemy = enemies[0]; // 가짜로 일단 줌
+                    CastSkill(enemy, index1, index2);
+                    break;
+                }
 
         }
-        
-        
     }
 
     // 가장 가까운 Enemy를 찾는 함수
@@ -217,12 +220,12 @@ public class SkillManager : MonoBehaviour
     // index2 : 스킬 번호 (기본 - 0, 일반 - 1, 2, 3)
     private void CastSkill(Enemy enemy, int index1, int index2)
     {
-        switch(index1, index2)
+        switch (index1, index2)
         {
             case (0, 0):
                 {
                     enemyTrackingSkill = Instantiate(fireBasicSkillPrefab);
-                    
+
                     Vector2 playerPosition = player.transform.position;
                     Vector2 enemyPosition = enemy.transform.position;
 
@@ -240,7 +243,7 @@ public class SkillManager : MonoBehaviour
                     enemyTrackingSkill.enemy = enemy;
 
                     enemyTrackingSkill.speed = 10;
-                    enemyTrackingSkill.damage = skillDamages[0, 0];
+                    enemyTrackingSkill.damage = skillDamages[index1, index2];
 
                     break;
                 }
@@ -251,14 +254,14 @@ public class SkillManager : MonoBehaviour
                     Vector2 enemyPosition = enemy.transform.position;
 
                     // 스킬 위치를 적 실제 위치로 변경
-                    if(enemy.isEnemyLookLeft)
+                    if (enemy.isEnemyLookLeft)
                         enemyOnSkill.X = enemyPosition.x - enemy.capsuleCollider.size.x * 6;
                     else
                         enemyOnSkill.X = enemyPosition.x + enemy.capsuleCollider.size.x * 6;
                     enemyOnSkill.Y = enemyPosition.y + enemy.capsuleCollider.size.y * 8;
 
                     enemyOnSkill.enemy = enemy;
-                    enemyOnSkill.damage = skillDamages[1, 0];
+                    enemyOnSkill.damage = skillDamages[index1, index2];
 
                     break;
                 }
@@ -268,14 +271,72 @@ public class SkillManager : MonoBehaviour
 
                     playerAttachSkill.player = player;
 
-                    playerAttachSkill.X = 999;
-                    playerAttachSkill.Y = 999;
+                    playerAttachSkill.xPositionNum = 3f;
+                    playerAttachSkill.yPositionNum = 0.2f;
 
-                    playerAttachSkill.damage = skillDamages[2, 0];
-                    playerAttachSkill.enemy = enemy;
+                    playerAttachSkill.isAttachSkill = true;
+
+                    playerAttachSkill.damage = skillDamages[index1, index2];
+                    break;
+                }
+            case (0, 1):
+                {
+                    playerAttachSkill = Instantiate(fireNormalSkillPrefab1);
+
+                    playerAttachSkill.player = player;
+
+                    playerAttachSkill.xPositionNum = 0;
+                    playerAttachSkill.yPositionNum = 0.2f;
+
+                    playerAttachSkill.isAttachSkill = true;
+
+                    playerAttachSkill.X = player.transform.position.x;
+                    playerAttachSkill.Y = player.transform.position.y;
+
+                    playerAttachSkill.damage = skillDamages[index1, index2];
+                    break;
+                }
+            case (1, 1):
+                {
+                    playerAttachSkill = Instantiate(electricNormalSkillPrefab1);
+
+                    playerAttachSkill.player = player;
+
+                    playerAttachSkill.X = player.transform.position.x + 3f;
+                    playerAttachSkill.Y = player.transform.position.y;
+
+                    playerAttachSkill.xPositionNum = 3f;
+                    playerAttachSkill.yPositionNum = 0f;
+
+                    playerAttachSkill.isCircleSkill = true;
+
+                    playerAttachSkill.damage = skillDamages[index1, index2];
+                    break;
+                }
+            case (2, 1):
+                {
+                    playerAttachSkill = Instantiate(waterNormalSkillPrefab1);
+
+                    playerAttachSkill.player = player;
+
+                    playerAttachSkill.X = player.transform.position.x;
+                    playerAttachSkill.Y = player.transform.position.y;
+
+                    playerAttachSkill.isShieldSkill = true;
+
+                    playerAttachSkill.damage = skillDamages[index1, index2];
+
+                    playerAttachSkill.onShieldSkillDestroyed = OnShieldSkillDestryed;
+
+                    onShiledSkillActivated();
                     break;
                 }
         }
+    }
+
+    private void OnShieldSkillDestryed()
+    {
+        onShiledSkillUnActivated();
     }
 }
 
