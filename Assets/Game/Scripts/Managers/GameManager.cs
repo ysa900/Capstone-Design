@@ -1,6 +1,9 @@
 using NUnit.Framework;
+using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
+using static Player;
 
 // Pause 걸면 이전에는 인게임 속 UI들(피통, 스킬 패널, 프로필)이 안사라져서
 // 사라지게 하려고 gameObject로 선언한거랑
@@ -40,6 +43,7 @@ public class GameManager : MonoBehaviour
     private FollowCam followCam;
     private InputManager inputManager;
     private SkillManager skillManager;
+    private SkillSelectManager skillSelectManager;
     private EXP exp;
 
     // GameObject에서 프리팹을 넣어주기 위해 public으로 설정
@@ -74,6 +78,7 @@ public class GameManager : MonoBehaviour
         // 시작 시 비활성화
         gameOverObject.SetActive(false);
         pauseObject.SetActive(false);
+        HpBarObject.SetActive(true);
 
         // 클래스 객체들 초기화
         CreatePlayer();
@@ -81,6 +86,7 @@ public class GameManager : MonoBehaviour
         inputManager = FindAnyObjectByType<InputManager>();
         followCam = FindAnyObjectByType<FollowCam>();
         skillManager = FindAnyObjectByType<SkillManager>();
+        skillSelectManager = FindAnyObjectByType<SkillSelectManager>();
 
         // inputManger Delegate 할당
         inputManager.onPauseButtonClicked = OnPauseButtonClicked;
@@ -96,22 +102,21 @@ public class GameManager : MonoBehaviour
         skillManager.onShiledSkillActivated = OnShieldSkillActivated;
         skillManager.onShiledSkillUnActivated = OnShieldSkillUnActivated;
 
-        // 스킬 활성화
-        skillManager.ChooseStartSkill("불", 0);
-        //skillManager.ChooseStartSkill("전기", 0);
-        //skillManager.ChooseStartSkill("물", 0);
-        skillManager.ChooseStartSkill("불", 1);
-        //skillManager.ChooseStartSkill("전기", 1);
-        //skillManager.ChooseStartSkill("물", 1);
 
         // delegate 할당
         enemyManager.onEnemiesChanged = OnEnemiesChanged;
         enemyManager.onEnemyKilled = OnEnemyKilled;
+
+        // delegate 할당
+        skillSelectManager.onSkillSelectObjectDisplayed = OnSkillSelectObjectDisplayed;
+        skillSelectManager.onSkillSelectObjectHided = OnSkillSelectObjectHided;
     }
 
     void Start()
     {
         enemyManager.CreateEnemies(50, player, 2, maxEnemySpawnRange); // 몬스터 소환
+
+        skillSelectManager.ChooseStartSkill(); // 시작 스킬 선택
     }
 
     // Update is called once per frame
@@ -130,6 +135,7 @@ public class GameManager : MonoBehaviour
     private void CreatePlayer(){
         player = Instantiate(playerPrefab);
         player.onPlayerWasKilled = OnPlayerHasKilled;
+        player.onPlayerLevelUP = OnPlayerLevelUP;
     }
 
     // Enemy 스폰 시간을 계산해 소환할 적을 지정하는 함수
@@ -153,10 +159,18 @@ public class GameManager : MonoBehaviour
 
         // 소환되어야 할 Enemy를 스폰
         if (is_spawn1ok)
-            enemyManager.CreateEnemies(50, player, 3, maxEnemySpawnRange);
-
+        {
+            enemyManager.CreateEnemies(20, player, 2, maxEnemySpawnRange);
+            enemyManager.CreateEnemies(40, player, 3, maxEnemySpawnRange);
+        }
+        
         if (is_spawn2ok)
-            enemyManager.CreateEnemies(50, player, 4, maxEnemySpawnRange);
+        {
+            enemyManager.CreateEnemies(20, player, 2, maxEnemySpawnRange);
+            enemyManager.CreateEnemies(30, player, 3, maxEnemySpawnRange);
+            enemyManager.CreateEnemies(40, player, 4, maxEnemySpawnRange);
+        }
+            
     }
 
     // 플레이어가 죽었을 시 실행됨
@@ -222,4 +236,29 @@ public class GameManager : MonoBehaviour
         exp.Y = killedEnemy.Y + 1f;
     }
 
+    // 플레이어가 레벨 업 했을 시 실행
+    private void OnPlayerLevelUP()
+    {
+        skillSelectManager.DisplayLevelupPanel();
+    }
+
+    private void OnSkillSelectObjectDisplayed()
+    {
+        // UI 비활성화
+        HpBarObject.SetActive(false);
+        HpStatusLetteringObject.SetActive(false);
+        HpStatusObject.SetActive(false);
+        SkillPanelObject.SetActive(false);
+        CharacterProfileObject.SetActive(false);
+    }
+
+    private void OnSkillSelectObjectHided()
+    {
+        // UI 활성화
+        HpBarObject.SetActive(true);
+        HpStatusLetteringObject.SetActive(true);
+        HpStatusObject.SetActive(true);
+        SkillPanelObject.SetActive(true);
+        CharacterProfileObject.SetActive(true);
+    }
 }

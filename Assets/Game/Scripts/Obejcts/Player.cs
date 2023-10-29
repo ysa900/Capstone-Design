@@ -12,7 +12,7 @@ public class Player : MonoBehaviour, IPlayer
     public float maxHp = 100;
     public int Exp;
     public int level;
-    public int[] nextExp = { 3, 5, 10, 100, 150, 210, 280, 360, 450, 600 };
+    public int[] nextExp = { 3, 5, 10, 15, 30, 50, 80, 100, 150, 210, 280, 360, 450, 600 };
     
     //킬 수
     public int kill;
@@ -30,6 +30,10 @@ public class Player : MonoBehaviour, IPlayer
     // 플레이어가 죽었을 시 GameManager에게 알려주기 위한 delegate
     public delegate void OnPlayerWasKilled(Player player);
     public OnPlayerWasKilled onPlayerWasKilled;
+
+    // 플레이어가 레벨업 했을 때 GameManager에게 알려주기 위한 delegate
+    public delegate void OnPlayerLevelUP();
+    public OnPlayerLevelUP onPlayerLevelUP;
 
     void Start()
     {
@@ -96,6 +100,8 @@ public class Player : MonoBehaviour, IPlayer
 
         if (Exp == nextExp[level])
         {
+            onPlayerLevelUP(); // delegate 호출
+            
             level++;
             Exp = 0;
         }

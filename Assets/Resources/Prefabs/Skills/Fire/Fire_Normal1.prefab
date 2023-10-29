@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6564916000610080609}
   - component: {fileID: 3750057749521518364}
   m_Layer: 0
-  m_Name: Fire_NormalSkill1
+  m_Name: Fire_Normal1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
