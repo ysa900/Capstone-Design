@@ -250,6 +250,7 @@ public class GameManager : MonoBehaviour
         HpStatusObject.SetActive(false);
         SkillPanelObject.SetActive(false);
         CharacterProfileObject.SetActive(false);
+        inputManager.PauseButtonObject.interactable = false;
     }
 
     private void OnSkillSelectObjectHided()
@@ -260,5 +261,6 @@ public class GameManager : MonoBehaviour
         HpStatusObject.SetActive(true);
         SkillPanelObject.SetActive(true);
         CharacterProfileObject.SetActive(true);
+        inputManager.PauseButtonObject.interactable = true;
     }
 }
