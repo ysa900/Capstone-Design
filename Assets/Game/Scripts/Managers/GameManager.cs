@@ -166,9 +166,9 @@ public class GameManager : MonoBehaviour
         
         if (is_spawn2ok)
         {
-            enemyManager.CreateEnemies(20, player, 2, maxEnemySpawnRange);
-            enemyManager.CreateEnemies(30, player, 3, maxEnemySpawnRange);
-            enemyManager.CreateEnemies(40, player, 4, maxEnemySpawnRange);
+            enemyManager.CreateEnemies(10, player, 2, maxEnemySpawnRange);
+            enemyManager.CreateEnemies(20, player, 3, maxEnemySpawnRange);
+            enemyManager.CreateEnemies(30, player, 4, maxEnemySpawnRange);
         }
             
     }
