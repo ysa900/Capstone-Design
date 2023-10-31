@@ -128,7 +128,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      VNVG_019_0: 4952504024455929672
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

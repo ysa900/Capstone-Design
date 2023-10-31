@@ -76,7 +76,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_Sprite: {fileID: 7359536130901780644, guid: c4e9cbb2c795140bd80644b73ab63045, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -190,3 +190,8 @@ MonoBehaviour:
   player: {fileID: 0}
   speed: 0
   damage: 0
+  xPositionNum: 0
+  yPositionNum: 0
+  isAttachSkill: 0
+  isCircleSkill: 0
+  isShieldSkill: 0

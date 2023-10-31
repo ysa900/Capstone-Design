@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98c4c57438f92744b8c89d082634d100, type: 3}
+  m_Name: Skills
+  m_EditorClassIdentifier: 
+  skillType: 0
+  skillId: 0
+  skillName: FireBall
+  skillDescription: aaa
+  skillicon: {fileID: -3454206663855296814, guid: 932ad7a4b3b6e489caf198803bc034af, type: 3}
+  baseDamage: 20
+  baseCount: 0
+  baseDelay: 0
+  damages:
+  - 0.5
+  - 1
+  - 1.5
+  - 2
+  - 2.5
+  counts: 0000000000000000000000000000000000000000
+  delay:
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  projectile: {fileID: 0}

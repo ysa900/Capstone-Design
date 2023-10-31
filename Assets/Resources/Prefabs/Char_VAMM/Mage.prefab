@@ -331,6 +331,8 @@ MonoBehaviour:
   inputVec: {x: 0, y: 0}
   speed: 5
   hp: 100
+  maxHp: 100
+  isPlayerLookLeft: 0
 --- !u!95 &8557957087405267583
 Animator:
   serializedVersion: 7

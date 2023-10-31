@@ -45,6 +45,8 @@ public class Enemy : Object, IDamageable
         {
             MoveToPlayer();
         }
+
+        DestryIfToFar(); // 플레이어와의 거리가 너무 멀면 죽음
     }
 
     // 플레이어 방향으로 이동하는 함수
@@ -72,6 +74,23 @@ public class Enemy : Object, IDamageable
         capsuleCollider.offset = colliderOffset; // capsuleCollider에 적용
 
         rigid.MovePosition(rigid.position + direction * speed * Time.fixedDeltaTime); // 플레이어 방향으로 위치 변경
+
+        X = transform.position.x;
+        Y = transform.position.y;
+    }
+
+    // 플레이어와의 거리가 너무 멀면 죽는 함수
+    private void DestryIfToFar()
+    {
+        Vector2 playerPosition = player.transform.position;
+        Vector2 myPosition = transform.position;
+
+        Vector2 direction = playerPosition - myPosition;
+
+        bool isToFar = Mathf.Sqrt(Mathf.Pow(direction.x, 2) + Mathf.Pow(direction.y, 2)) > 100f;
+
+        if (isToFar) { Destroy(gameObject); }
+
     }
 
     // IDamageable의 함수 TakeDamage
