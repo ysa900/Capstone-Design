@@ -76,7 +76,11 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
+<<<<<<< Updated upstream:Assets/Resources/Prefabs/Skills/Fire/Fire_NormalSkill1.prefab
   m_SortingOrder: 2
+=======
+  m_SortingOrder: 4
+>>>>>>> Stashed changes:Assets/Resources/Prefabs/Skills/Fire/Fire_Normal1.prefab
   m_Sprite: {fileID: 5147114614322543148, guid: de493f1fa07d4490e83f302469ff8311, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

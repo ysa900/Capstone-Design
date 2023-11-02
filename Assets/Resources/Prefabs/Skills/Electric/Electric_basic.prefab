@@ -76,7 +76,11 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
+<<<<<<< Updated upstream
   m_SortingOrder: 2
+=======
+  m_SortingOrder: 4
+>>>>>>> Stashed changes
   m_Sprite: {fileID: 6285513508944015365, guid: 8bf14e6af91d54791b61eb34c0680926, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SkillManager : MonoBehaviour
@@ -13,11 +14,14 @@ public class SkillManager : MonoBehaviour
     private PlayerAttachSkill playerAttachSkill;
     private EnemyOnSkill enemyOnSkill;
     private EnemyTrackingSkill enemyTrackingSkill;
+    private RandomSkill randomSkill;
+    private GameObject skillObject;
 
     // 스킬 관련 배열들 공통 사항
     // 첫 번째 index - 0: 불, 1: 전기, 2: 물
     // 두 번째 index - 0: 기본 스킬(시작 스킬), 1, 2, 3 : 일반 스킬
 
+<<<<<<< Updated upstream
     // 각 스킬 별 damage를 저장 리스트
     private float[,] skillDamages = new float[3, 4];
 
@@ -27,6 +31,9 @@ public class SkillManager : MonoBehaviour
     // 각 스킬 별 delay 관련 변수 리스트
     private float[,] attackDelayTimer = new float[3, 4];
     private float[,] attackDelayTime = new float[3, 4];
+=======
+    float[] attackDelayTimer = new float[7];
+>>>>>>> Stashed changes
 
     // 스킬 프리팹들
     public EnemyTrackingSkill fireBasicSkillPrefab;
@@ -36,6 +43,10 @@ public class SkillManager : MonoBehaviour
     public PlayerAttachSkill fireNormalSkillPrefab1;
     public PlayerAttachSkill electricNormalSkillPrefab1;
     public PlayerAttachSkill waterNormalSkillPrefab1;
+
+    public RandomSkill fireNormal2MeteorPrefab;
+    public RandomSkill fireNormal2ExplodePrefab;
+    public GameObject fireNormal2ShadowPrefab;
 
     public delegate void OnShiledSkillActivated(); // 쉴드 스킬이 켜 질때
     public OnShiledSkillActivated onShiledSkillActivated;
@@ -87,7 +98,41 @@ public class SkillManager : MonoBehaviour
         }
     }
 
+<<<<<<< Updated upstream
     // 시작 스킬을 선택하는 함수
+=======
+    // skilldata를 초기화
+    private void Init()
+    {
+        for (int i = 0; i < skillData.level.Length; i++)
+        {
+            skillData.level[i] = 0;
+        }
+
+        skillData.Damage[0] = 30;
+        skillData.Damage[1] = 10;
+        skillData.Damage[2] = 20;
+        skillData.Damage[3] = 10;
+        skillData.Damage[4] = 20;
+        skillData.Damage[5] = 0;
+        skillData.Damage[6] = 20;
+
+        skillData.Delay[0] = 0.8f;
+        skillData.Delay[1] = 1;
+        skillData.Delay[2] = 2;
+        skillData.Delay[3] = 3;
+        skillData.Delay[4] = 8;
+        skillData.Delay[5] = 10;
+        skillData.Delay[6] = 2;
+
+        for (int i = 0; i < skillData.skillSelected.Length; i++)
+        {
+            skillData.skillSelected[i] = false;
+        }
+    }
+
+    // 시작 스킬을 선택하는 함수 (개발용)
+>>>>>>> Stashed changes
     // num : 스킬 번호 (불 - 0 , 전기 - 1, 물 - 2)
     public void ChooseStartSkill(string type, int num)
     {
@@ -184,6 +229,7 @@ public class SkillManager : MonoBehaviour
                     CastSkill(enemy, index1, index2);
                     break;
                 }
+<<<<<<< Updated upstream
             case (2, 1):
             {
                 // 물 일반1 스킬은 적에 상관없이 항상 나간다 (플레이어에 붙어다님)
@@ -191,6 +237,15 @@ public class SkillManager : MonoBehaviour
                 CastSkill(enemy, index1, index2);
                 break; 
             }
+=======
+            case 6: 
+                {
+                    // 불 일반2 스킬은 적에 상관없이 항상 나간다 (랜덤 위치에 떨어짐)
+                    Enemy enemy = enemies[0]; // 가짜로 일단 줌
+                    CastSkill(enemy, index);
+                    break;
+                }
+>>>>>>> Stashed changes
 
         }
     }
@@ -328,12 +383,63 @@ public class SkillManager : MonoBehaviour
                     onShiledSkillActivated();
                     break;
                 }
+            case 6:
+                {
+                    randomSkill = Instantiate(fireNormal2MeteorPrefab);
+
+                    float tmpX = player.transform.position.x;
+                    float tmpY = player.transform.position.y;
+
+                    float ranNum = Random.Range(-14f, 10f);
+                    float ranNum2 = Random.Range(-8f, 3f);
+
+                    tmpX += ranNum;
+                    tmpY += ranNum2;
+
+                    randomSkill.impactPonitX = tmpX;
+                    randomSkill.impactPonitY = tmpY;
+
+                    // 메테오 방향 보정 (충돌 지점 바라보게)
+                    Vector2 direction = new Vector2(-5f, -11f);
+                    float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+                    Quaternion angleAxis = Quaternion.AngleAxis(angle + 90f, Vector3.forward);
+                    Quaternion rotation = Quaternion.Slerp(randomSkill.transform.rotation, angleAxis, 5f);
+                    randomSkill.transform.rotation = rotation;
+
+                    randomSkill.X = tmpX + 5f;
+                    randomSkill.Y = tmpY + 11f;
+
+                    randomSkill.player = player;
+                    randomSkill.isMeteor = true;
+
+                    randomSkill.aliveTime = 0.5f;
+                    randomSkill.damage = skillData.Damage[6];
+
+                    randomSkill.fireNormal2ExplodePrefab = fireNormal2ExplodePrefab;
+
+                    StartCoroutine(DisplayNDestroy(tmpX + 1.6f, tmpY + 3)); // 그림자 나타내고 지우기
+                    StopCoroutine(DisplayNDestroy(tmpX + 1.6f, tmpY + 3));
+
+                    break;
+                }
         }
     }
 
     private void OnShieldSkillDestryed()
     {
         onShiledSkillUnActivated();
+    }
+
+    IEnumerator DisplayNDestroy(float x, float y)
+    {
+        skillObject = Instantiate(fireNormal2ShadowPrefab);
+
+        skillObject.transform.position = new Vector2(x, y);
+
+        yield return new WaitForSeconds(0.5f); // 지정한 초 만큼 쉬기
+
+        Destroy(skillObject);
     }
 }
 
