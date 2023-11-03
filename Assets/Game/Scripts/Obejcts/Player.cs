@@ -1,9 +1,6 @@
-using NUnit.Framework;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IPlayer
 {
     // 키보드 방향키 입력을 위한 벡터
     public Vector2 inputVec;
@@ -13,8 +10,14 @@ public class Player : MonoBehaviour
     public float speed;
     public float hp;
     public float maxHp = 100;
+    public int Exp;
+    public int level;
+    public int[] nextExp = { 3, 5, 10, 15, 30, 50, 80, 100, 150, 210, 280, 360, 450, 600 };
+    
+    //킬 수
+    public int kill;
 
-    private bool isPlayerDead; // 플레이어가 죽었는지 판별하는 변수
+    public bool isPlayerDead; // 플레이어가 죽었는지 판별하는 변수
 
     public bool isPlayerLookLeft; // 플레이어가 보고 있는 방향을 알려주는 변수
 
@@ -27,6 +30,10 @@ public class Player : MonoBehaviour
     // 플레이어가 죽었을 시 GameManager에게 알려주기 위한 delegate
     public delegate void OnPlayerWasKilled(Player player);
     public OnPlayerWasKilled onPlayerWasKilled;
+
+    // 플레이어가 레벨업 했을 때 GameManager에게 알려주기 위한 delegate
+    public delegate void OnPlayerLevelUP();
+    public OnPlayerLevelUP onPlayerLevelUP;
 
     void Start()
     {
@@ -86,25 +93,40 @@ public class Player : MonoBehaviour
         rigid.MovePosition(rigid.position + nextVec);
     }
 
+    //player 경험치 획득 함수
+    public void GetExp(int expAmount)
+    {
+        Exp += expAmount;
+
+        if (Exp == nextExp[level])
+        {
+            onPlayerLevelUP(); // delegate 호출
+            
+            level++;
+            Exp = 0;
+        }
+
+    }
+
     // 플레이어가 무언가와 충돌하면 데미지를 입는다
     private void OnCollisionStay2D(Collision2D collision)
     {
         if (!isPlayerDead)
         {
-            if(!isPlayerShielded)
+            if (!isPlayerShielded)
                 hp -= Time.deltaTime * 10;
 
-            if (hp <= 0 && !isPlayerDead)
+            if (hp <= 0)
             {
                 isPlayerDead = true;
 
-                animator.SetTrigger("Dead");
+                animator.SetBool("Dead", true);
 
                 onPlayerWasKilled(this);
-                
+
                 rigid.constraints = RigidbodyConstraints2D.FreezeAll;
-                
-                transform.localScale = new Vector3 (1.0f, 1.0f, 1.0f);
+
+                transform.localScale = new Vector3(1.0f, 1.0f, 1.0f); // 죽었을 때 나오는 묘비 크기 때문에 크기 조정 해준 것
             }
         }
     }

@@ -24,6 +24,10 @@ public class EnemyManager : MonoBehaviour
     public delegate void OnEnemiesChanged(List<Enemy> enemies);
     public OnEnemiesChanged onEnemiesChanged;
 
+    // Enemy가 죽었을 때 GameManager에게 알려주기 위한 delegate
+    public delegate void OnEnemyKilled(Enemy killedEnemy);
+    public OnEnemyKilled onEnemyKilled;
+
     // Enemy들을 생성하는 함수
     // enemyType: 0 ~ ? (현재 0 ~ 1), 이게 몬스터 종류 결정
     public void CreateEnemies(int enemyNum, Player player, int enemyType, float maxRadius)
@@ -64,8 +68,10 @@ public class EnemyManager : MonoBehaviour
     // Enemy가 죽었을 때 실행할 것들
     private void OnEnemyWasKilled(Enemy killedEnemy)
     {
+        onEnemyKilled(killedEnemy); // 킬 수 늘리도록 죽었다고 GameManager에게 알려주기
+        
         enemies.Remove(killedEnemy);
-        onEnemiesChanged(enemies);
+        onEnemiesChanged(enemies); // enmy 배열 업데이트하도록 GameManager에게 알려주기
     }
 
     // 적 정보를 입력하고 적을 생성하는 함수

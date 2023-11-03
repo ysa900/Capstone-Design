@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
-
-public class Skill : Object
+﻿public class Skill : Object
 {
     public Enemy enemy;
     public Player player;

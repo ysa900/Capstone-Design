@@ -55,6 +55,9 @@ public class EnemyTrackingSkill : Skill
     private void MoveToEnemy()
     {
         rigid.MovePosition(rigid.position + direction * speed * Time.fixedDeltaTime); // Enemy 방향으로 위치 변경
+        
+        X = transform.position.x;
+        Y = transform.position.y;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

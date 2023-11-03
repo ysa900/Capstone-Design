@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class InputManager : MonoBehaviour
+public class InputManager: MonoBehaviour
 {
     // GameoVer_GoTOLobby 버튼
     public UnityEngine.UI.Button GVGoToLobbyButtonObject;
@@ -21,7 +21,9 @@ public class InputManager : MonoBehaviour
     // Play 버튼
     public UnityEngine.UI.Button PlayButtonObject;
 
-    // GameManager에게 정보 전달을 하기 위한 Delegate
+
+
+    // GameManager에게 정보 전달을 하기 위한 Delegate들
     public delegate void OnPauseButtonClicked();
     public OnPauseButtonClicked onPauseButtonClicked;
 

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class SkillSelectManager: MonoBehaviour
 {
-    private int skillCount = 7;
+    private int skillCount = 8;
 
     // 스킬 선택 버튼들
     public UnityEngine.UI.Button SkillSelectButton1;
@@ -142,7 +142,7 @@ public class SkillSelectManager: MonoBehaviour
 
         List<int> list = new List<int>(); // 이 리스트의 숫자들 중에서 랜덤으로 뽑는 것
 
-        for (int i = 0; i < skillData.level.Length; i++)
+        for (int i = 0; i < skillCount; i++)
         {
             if (!isSkillMaxLevel[i]) // 만렙인 스킬은 등장 X
                 list.Add(i);
