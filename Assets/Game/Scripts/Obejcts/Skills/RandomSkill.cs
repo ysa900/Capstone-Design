@@ -1,5 +1,6 @@
-﻿using UnityEngine;
-using UnityEngine.UIElements;
+﻿using System;
+using System.Collections;
+using UnityEngine;
 
 public class RandomSkill : Skill
 {
@@ -10,17 +11,28 @@ public class RandomSkill : Skill
 
     private float aliveTimer; // 스킬 생존 시간을 체크할 변수
     public float aliveTime; // 스킬 생존 시간
+    private bool isCoroutineNow; // 현재 코루틴을 실행하고 있는지를 체크할 변수
 
     public bool isMeteor; // 메테오면 날아오는 도중엔 데미지 없어야 하므로 만든 변수
+    public bool isIceSpike; // IceSpike 스킬의 자식 오브젝트 때문에 만든 변수
+    public bool isStaySkill; // 몇초동안 지속되다가 사라지는 스킬이냐
 
     Rigidbody2D rigid; // 물리 입력을 받기위한 변수
     Vector2 direction; // 날아갈 방향
+
+    Animator animator;
+    Animator animator_ground;
 
     public RandomSkill fireNormal2ExplodePrefab;
 
     private void Start()
     {
         rigid = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+        if (isIceSpike)
+        {
+            animator_ground = transform.Find("ground").GetComponent<Animator>();
+        }
     }
 
     private void FixedUpdate()
@@ -40,13 +52,21 @@ public class RandomSkill : Skill
                 explode.aliveTime = 0.5f;
                 explode.damage = damage;
             }
-
-            Destroy(gameObject);
+            if (isStaySkill)
+            {
+                if(!isCoroutineNow)
+                    StartCoroutine(Disappear());
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+            
             return;
         }
         else
         {
-            MoveToimpactPonit();
+            if(isMeteor) { MoveToimpactPonit(); }
         }
 
         aliveTimer += Time.fixedDeltaTime;
@@ -87,5 +107,34 @@ public class RandomSkill : Skill
 
             damageable.TakeDamage(gameObject, damage);
         }
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (!isMeteor && isStaySkill)
+        {
+            IDamageable damageable = collision.GetComponent<IDamageable>();
+
+            if (damageable == null)
+            {
+                return;
+            }
+
+            damageable.TakeDamage(gameObject, damage);
+        }
+    }
+
+    IEnumerator Disappear()
+    {
+        animator.SetTrigger("Finish");
+        animator_ground.SetTrigger("Finish");
+
+        isCoroutineNow = true;
+        
+        yield return new WaitForSeconds(0.2f); // 지정한 초 만큼 쉬기
+        
+        Destroy(gameObject);
+
+        isCoroutineNow = false;
     }
 }

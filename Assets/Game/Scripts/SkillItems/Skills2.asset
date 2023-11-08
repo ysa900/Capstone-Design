@@ -21,10 +21,10 @@ MonoBehaviour:
   - Water Shield
   - Meteor
   - Energy Blast
-  - Meteor
-  - Meteor
-  - Meteor
-  - Meteor
+  - Ice Spike
+  - Alternative Flame
+  - Judgement
+  - Ice Blast
   skillDescription:
   - Cast FireBall to Nearest Enemy
   - Cast Lightning on Random Enemy
@@ -34,22 +34,22 @@ MonoBehaviour:
   - Water Shield Protects Player from Enemy
   - Meteor Falls on Random Point
   - K a m e h a m e h a!!
-  - Meteor Falls on Random Point
-  - Meteor Falls on Random Point
-  - Meteor Falls on Random Point
-  - Meteor Falls on Random Point
-  level: 000000000100000000000000000000000000000000000000000000000100000000000000000000000000000000000000
+  - Ice Spike Rise at Random Point
+  - Flame Changes Alternatively
+  - Lightning Rains Stormy
+  - Case Ice Blast In front of Player
+  level: 000000000100000001000000000000000000000000000000000000000100000000000000000000000000000000000000
   Damage:
   - 30
   - 10
+  - 1
   - 20
-  - 10
-  - 20
+  - 15
   - 0
-  - 20
-  - 20
-  - 20
-  - 20
+  - 30
+  - 2
+  - 1.5
+  - 30
   - 20
   - 20
   Delay:
@@ -60,12 +60,12 @@ MonoBehaviour:
   - 8
   - 10
   - 3
+  - 4
+  - 2
   - 3
-  - 3
-  - 3
-  - 3
-  - 3
-  skillSelected: 000100000000000100000000
+  - 4.5
+  - 6
+  skillSelected: 000101000000000100000000
   skillicon:
   - {fileID: 21300000, guid: 90f5c378a37421e4c900728afc36b321, type: 2}
   - {fileID: 21300000, guid: 83ce16839d132e842a2b72cbf6a4410f, type: 2}
@@ -75,10 +75,10 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 516efd04627540f42838259ea470f42b, type: 2}
   - {fileID: 21300000, guid: f2b882308d3041b489b3542416ebfe5c, type: 2}
   - {fileID: 21300000, guid: 5fbd9a6d8953713438785abb2ed42e1a, type: 2}
-  - {fileID: 21300000, guid: f2b882308d3041b489b3542416ebfe5c, type: 2}
-  - {fileID: 21300000, guid: f2b882308d3041b489b3542416ebfe5c, type: 2}
-  - {fileID: 21300000, guid: f2b882308d3041b489b3542416ebfe5c, type: 2}
-  - {fileID: 21300000, guid: f2b882308d3041b489b3542416ebfe5c, type: 2}
+  - {fileID: 21300000, guid: e541fe5d9f1fffa42902c86789fc11a7, type: 2}
+  - {fileID: 21300000, guid: c4322abfbefec6d46a4283e434dc46cb, type: 2}
+  - {fileID: 21300000, guid: f75bd353d209d174aaa28850a3695f2f, type: 2}
+  - {fileID: 21300000, guid: 13bc06fb4a75341478b0934c02f307b4, type: 2}
   projectile:
   - {fileID: 1876097049369689279, guid: 4f5aab16534b5d543b90b75837de3cc4, type: 3}
   - {fileID: 3719459856391972471, guid: a30f3ee6b2db5c540af102e95890215c, type: 3}

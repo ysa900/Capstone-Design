@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class SkillSelectManager: MonoBehaviour
 {
-    private int skillCount = 8;
+    private int skillCount = 12;
 
     // 스킬 선택 버튼들
     public UnityEngine.UI.Button SkillSelectButton1;

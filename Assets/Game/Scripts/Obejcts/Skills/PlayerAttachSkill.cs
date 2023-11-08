@@ -12,6 +12,7 @@ public class PlayerAttachSkill : Skill
     public bool isCircleSkill; // 플레이어 주위를 빙빙 도는 스킬이냐
     public bool isShieldSkill; // Damage가 없는 Shield 스킬이냐
     public bool isDelaySkill; // 잠깐의 Delay 후 발사되는 스킬이냐
+    public bool isYFlipped; // 스킬을 y축으로 뒤집어야되냐
 
     public bool isStaySkill; // 스킬이 유지되는 동안 계속 데미지가 들어가야되는 스킬이냐
 
@@ -81,23 +82,25 @@ public class PlayerAttachSkill : Skill
 
         if (isDelaySkill)
         {
-            if(delayTimer < delay) // 딜레이가 끝나기전까지는 방향 조정 가능, 이후에는 불가능
+            if (isFlipped)
             {
-                if (isFlipped)
-                {
-                    spriteRenderer.flipX = !player.isPlayerLookLeft;
-                }
-                else
-                {
-                    spriteRenderer.flipX = player.isPlayerLookLeft;
-                }
+                spriteRenderer.flipX = !player.isPlayerLookLeft;
             }
+            else
+            {
+                spriteRenderer.flipX = player.isPlayerLookLeft;
+            }
+            
         }
         else
         {
             if (isFlipped)
             {
                 spriteRenderer.flipX = !player.isPlayerLookLeft;
+            }
+            else if (isYFlipped)
+            {
+                spriteRenderer.flipY = !player.isPlayerLookLeft;
             }
             else
             {
@@ -126,6 +129,26 @@ public class PlayerAttachSkill : Skill
         Y = tmpY + player.transform.position.y;
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        IDamageable damageable = collision.GetComponent<IDamageable>();
+
+        if (damageable == null)
+        {
+            return;
+        }
+
+        if (isDelaySkill)
+        {
+            if (delayTimer >= delay)
+            {
+                damageable.TakeDamage(gameObject, damage);
+            }
+        }
+        else if (!isShieldSkill)
+            damageable.TakeDamage(gameObject, damage);
+    }
+
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (isStaySkill)
@@ -148,26 +171,5 @@ public class PlayerAttachSkill : Skill
                 damageable.TakeDamage(gameObject, damage);
         }
     }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        IDamageable damageable = collision.GetComponent<IDamageable>();
-
-        if (damageable == null)
-        {
-            return;
-        }
-
-        if (isDelaySkill)
-        {
-            if (delayTimer >= delay)
-            {
-                damageable.TakeDamage(gameObject, damage);
-            }
-        }
-        else if (!isShieldSkill)
-            damageable.TakeDamage(gameObject, damage);
-    }
-    
 }
 

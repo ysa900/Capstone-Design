@@ -69967,6 +69967,11 @@ MonoBehaviour:
   fireNormal2ExplodePrefab: {fileID: 4859099823860586685, guid: 2bbedd47b22a3f740ab3a942bc2a039f, type: 3}
   fireNormal2ShadowPrefab: {fileID: 9124107383370398149, guid: adff58463d85b224fa928ca2768eaef6, type: 3}
   electricNormalSkillPrefab2: {fileID: 5073037063245546934, guid: 1cd30b0d5ebd233439adbfba80643266, type: 3}
+  waterNormalSkillPrefab2: {fileID: 2782590012111047386, guid: b84d81b6f156b2f4dac75aef7135da29, type: 3}
+  fireNormalSkillPrefab3_1: {fileID: -6343141511844630435, guid: 87ba2ce188ae8064e9b0fbba9b20d208, type: 3}
+  fireNormalSkillPrefab3_2: {fileID: 4518516078226156872, guid: e10c7ce82083b894b99662222c6662c7, type: 3}
+  electricNormalSkillPrefab3: {fileID: 2157301204777056331, guid: 88968603cec0de5428a062716d4906b6, type: 3}
+  waterNormalSkillPrefab3: {fileID: 1444332819241385628, guid: d2530acac34981c4faab6c24d17cb3cc, type: 3}
 --- !u!4 &1452367875
 Transform:
   m_ObjectHideFlags: 0

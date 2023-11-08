@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using NUnit.Framework.Constraints;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,6 +13,11 @@ public class SkillManager : MonoBehaviour
     public List<Enemy> enemies; // Enemy들을 담을 리스트
 
     public SkillData2 skillData;
+
+    private bool isShadowAlive; // 그림자가 살아있으면 알파값을 조정하기 위함
+    private float alpha = 0;
+
+    private bool isFire3SkillLeftRight; // 불 일반3 스킬은 좌우 / 위아래로 번갈아 나가므로 설정한 변수
 
     // 스킬 클래스 객체들
     private PlayerAttachSkill playerAttachSkill;
@@ -38,6 +45,12 @@ public class SkillManager : MonoBehaviour
     public RandomSkill fireNormal2ExplodePrefab;
     public GameObject fireNormal2ShadowPrefab;
     public PlayerAttachSkill electricNormalSkillPrefab2;
+    public RandomSkill waterNormalSkillPrefab2;
+
+    public PlayerAttachSkill fireNormalSkillPrefab3_1;
+    public PlayerAttachSkill fireNormalSkillPrefab3_2;
+    public RandomSkill electricNormalSkillPrefab3;
+    public PlayerAttachSkill waterNormalSkillPrefab3;
 
     public delegate void OnShiledSkillActivated(); // 쉴드 스킬이 켜 질때
     public OnShiledSkillActivated onShiledSkillActivated;
@@ -69,6 +82,15 @@ public class SkillManager : MonoBehaviour
                 }
             }
         }
+
+        if (isShadowAlive)
+        {
+            if (alpha < 1f)
+                alpha += 0.008f;
+            skillObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, alpha);
+        }
+        else
+            alpha = 0f;
     }
 
     // skilldata를 초기화
@@ -87,6 +109,10 @@ public class SkillManager : MonoBehaviour
         skillData.Damage[5] = 0;
         skillData.Damage[6] = 30;
         skillData.Damage[7] = 2;
+        skillData.Damage[8] = 1.5f;
+        skillData.Damage[9] = 30f;
+        skillData.Damage[10] = 20;
+        skillData.Damage[11] = 20;
 
         skillData.Delay[0] = 0.8f;
         skillData.Delay[1] = 1;
@@ -96,6 +122,10 @@ public class SkillManager : MonoBehaviour
         skillData.Delay[5] = 10;
         skillData.Delay[6] = 3;
         skillData.Delay[7] = 4;
+        skillData.Delay[8] = 2;
+        skillData.Delay[9] = 3;
+        skillData.Delay[10] = 4.5f;
+        skillData.Delay[11] = 6f;
 
         for (int i = 0; i < skillData.skillSelected.Length; i++)
         {
@@ -141,7 +171,7 @@ public class SkillManager : MonoBehaviour
 
                     while (true)
                     {
-                        int ranNum = Random.Range(0, enemies.Count);
+                        int ranNum = UnityEngine.Random.Range(0, enemies.Count);
 
                         enemy = enemies[ranNum];
 
@@ -202,6 +232,34 @@ public class SkillManager : MonoBehaviour
             case 7:
                 {
                     // 전기 일반2 스킬은 적에 상관없이 항상 나간다 (플레이어에 붙어다님)
+                    Enemy enemy = enemies[0]; // 가짜로 일단 줌
+                    CastSkill(enemy, index);
+                    break;
+                }
+            case 8:
+                {
+                    // 물 일반2 스킬은 적에 상관없이 항상 나간다 (랜덤 위치에 떨어짐)
+                    Enemy enemy = enemies[0]; // 가짜로 일단 줌
+                    CastSkill(enemy, index);
+                    break;
+                }
+            case 9:
+                {
+                    // 불 일반3 스킬은 적에 상관없이 항상 나간다 (플레이어에 붙어다님)
+                    Enemy enemy = enemies[0]; // 가짜로 일단 줌
+                    CastSkill(enemy, index);
+                    break;
+                }
+            case 10:
+                {
+                    // 전기 일반3 스킬은 적에 상관없이 항상 나간다 (랜덤 위치에 떨어짐)
+                    Enemy enemy = enemies[0]; // 가짜로 일단 줌
+                    CastSkill(enemy, index);
+                    break;
+                }
+            case 11:
+                {
+                    // 물 일반3 스킬은 적에 상관없이 항상 나간다 (플레이어에 붙어다님)
                     Enemy enemy = enemies[0]; // 가짜로 일단 줌
                     CastSkill(enemy, index);
                     break;
@@ -366,8 +424,8 @@ public class SkillManager : MonoBehaviour
                     float tmpX = player.transform.position.x;
                     float tmpY = player.transform.position.y;
 
-                    float ranNum = Random.Range(-14f, 10f);
-                    float ranNum2 = Random.Range(-8f, 3f);
+                    float ranNum = UnityEngine.Random.Range(-14f, 10f);
+                    float ranNum2 = UnityEngine.Random.Range(-8f, 3f);
 
                     tmpX += ranNum;
                     tmpY += ranNum2;
@@ -376,26 +434,25 @@ public class SkillManager : MonoBehaviour
                     randomSkill.impactPonitY = tmpY;
 
                     // 메테오 방향 보정 (충돌 지점 바라보게)
-                    Vector2 direction = new Vector2(-5f, -11f);
+                    Vector2 direction = new Vector2(-7f, -11f);
                     float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
                     Quaternion angleAxis = Quaternion.AngleAxis(angle + 90f, Vector3.forward);
                     Quaternion rotation = Quaternion.Slerp(randomSkill.transform.rotation, angleAxis, 5f);
                     randomSkill.transform.rotation = rotation;
 
-                    randomSkill.X = tmpX + 5f;
+                    randomSkill.X = tmpX + 7f;
                     randomSkill.Y = tmpY + 11f;
 
                     randomSkill.player = player;
                     randomSkill.isMeteor = true;
 
                     randomSkill.aliveTime = 0.5f;
-                    randomSkill.damage = skillData.Damage[6];
+                    randomSkill.damage = skillData.Damage[index];
 
                     randomSkill.fireNormal2ExplodePrefab = fireNormal2ExplodePrefab;
 
-                    StartCoroutine(DisplayNDestroy(tmpX + 1.6f, tmpY + 3)); // 그림자 나타내고 지우기
-                    StopCoroutine(DisplayNDestroy(tmpX + 1.6f, tmpY + 3));
+                    StartCoroutine(DisplayNDestroy(tmpX + 2.6f, tmpY + 3.4f)); // 그림자 나타내고 지우기
 
                     break;
                 }
@@ -421,6 +478,144 @@ public class SkillManager : MonoBehaviour
                     playerAttachSkill.damage = skillData.Damage[index];
                     break;
                 }
+            case 8:
+                {
+                    randomSkill = Instantiate(waterNormalSkillPrefab2);
+
+                    float tmpX = player.transform.position.x;
+                    float tmpY = player.transform.position.y;
+
+                    float ranNum = UnityEngine.Random.Range(-14f, 14f);
+                    float ranNum2 = UnityEngine.Random.Range(-6f, 6f);
+
+                    tmpX += ranNum;
+                    tmpY += ranNum2;
+
+                    randomSkill.X = tmpX;
+                    randomSkill.Y = tmpY;
+
+                    randomSkill.player = player;
+
+                    randomSkill.isStaySkill = true;
+                    randomSkill.isIceSpike = true;
+
+                    randomSkill.aliveTime = 3f;
+                    randomSkill.damage = skillData.Damage[index];
+                    break;
+                }
+            case 9:
+                {
+                    if (isFire3SkillLeftRight){
+                        for(int i = 0; i < 2; i++)
+                        {
+                            playerAttachSkill = Instantiate(fireNormalSkillPrefab3_2);
+
+                            if(i == 0)
+                            {
+                                playerAttachSkill.X = 999f;
+                                playerAttachSkill.Y = 999f;
+
+                                playerAttachSkill.xPositionNum = -4f;
+                                playerAttachSkill.yPositionNum = 0f;
+
+                                playerAttachSkill.player = player;
+
+                                playerAttachSkill.isAttachSkill = true;
+                                playerAttachSkill.isFlipped = false;
+
+                                playerAttachSkill.aliveTime = 0.8f;
+                                playerAttachSkill.damage = skillData.Damage[index];
+                            }
+                            else
+                            {
+                                playerAttachSkill.X = 999f;
+                                playerAttachSkill.Y = 999f;
+
+                                playerAttachSkill.xPositionNum = 4f;
+                                playerAttachSkill.yPositionNum = 0f;
+
+                                playerAttachSkill.player = player;
+
+                                playerAttachSkill.isAttachSkill = true;
+                                playerAttachSkill.isFlipped = true;
+
+                                playerAttachSkill.aliveTime = 0.8f;
+                                playerAttachSkill.damage = skillData.Damage[index];
+                            }
+                        }
+                        isFire3SkillLeftRight = false;
+                    }
+                    else
+                    {
+                        for(int i = 0; i < 2; i++)
+                        {
+                            playerAttachSkill = Instantiate(fireNormalSkillPrefab3_1);
+
+                            if (i == 0)
+                            {
+                                playerAttachSkill.X = 999f;
+                                playerAttachSkill.Y = 999f;
+
+                                playerAttachSkill.xPositionNum = 0f;
+                                playerAttachSkill.yPositionNum = 1.5f;
+
+                                playerAttachSkill.GetComponent<SpriteRenderer>().flipY = true;
+
+                                playerAttachSkill.player = player;
+
+                                playerAttachSkill.isAttachSkill = true;
+
+                                playerAttachSkill.aliveTime = 1f;
+                                playerAttachSkill.damage = skillData.Damage[index];
+                            }
+                            else
+                            {
+                                playerAttachSkill.X = 999f;
+                                playerAttachSkill.Y = 999f;
+
+                                playerAttachSkill.xPositionNum = 0f;
+                                playerAttachSkill.yPositionNum = -2.5f;
+
+                                playerAttachSkill.player = player;
+
+                                playerAttachSkill.isAttachSkill = true;
+
+                                playerAttachSkill.aliveTime = 1f;
+                                playerAttachSkill.damage = skillData.Damage[index];
+                            }
+                            
+                        }
+                        isFire3SkillLeftRight = true;
+                    }
+
+                    break;
+                }
+            case 10:
+                {
+                    StartCoroutine(SummonWithDelay(index, 10));
+
+                    break;
+                }
+            case 11:
+                {
+                    playerAttachSkill = Instantiate(waterNormalSkillPrefab3);
+
+                    playerAttachSkill.player = player;
+
+                    playerAttachSkill.xPositionNum = 4.5f;
+                    playerAttachSkill.yPositionNum = -0.2f;
+
+                    playerAttachSkill.X = 999f;
+                    playerAttachSkill.Y = 999f;
+
+                    playerAttachSkill.isAttachSkill = true;
+                    playerAttachSkill.isYFlipped = true;
+
+                    playerAttachSkill.aliveTime = 3f;
+
+                    playerAttachSkill.damage = skillData.Damage[index];
+                    break;
+                }
         }
     }
 
@@ -435,9 +630,41 @@ public class SkillManager : MonoBehaviour
 
         skillObject.transform.position = new Vector2(x, y);
 
+        isShadowAlive = true;
+
         yield return new WaitForSeconds(0.5f); // 지정한 초 만큼 쉬기
 
+        isShadowAlive = false;
+
         Destroy(skillObject);
+    }
+
+    IEnumerator SummonWithDelay(int index, int num)
+    {
+        for (int i = 0; i < num; i++)
+        {
+            randomSkill = Instantiate(electricNormalSkillPrefab3);
+
+            float tmpX = player.transform.position.x;
+            float tmpY = player.transform.position.y;
+
+            float ranNum = UnityEngine.Random.Range(-10f, 10f);
+            float ranNum2 = UnityEngine.Random.Range(-5f, 5f);
+
+            tmpX += ranNum;
+            tmpY += ranNum2;
+
+            randomSkill.X = tmpX;
+            randomSkill.Y = tmpY;
+
+            randomSkill.player = player;
+
+            randomSkill.aliveTime = 0.8f;
+            randomSkill.damage = skillData.Damage[index];
+
+            yield return new WaitForSeconds(0.2f); // 지정한 초 만큼 쉬기
+        }
+        
     }
 }
 

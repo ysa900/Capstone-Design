@@ -127,7 +127,7 @@ public class Enemy : Object, IDamageable
 
     IEnumerator Dead()
     {
-        animator.SetBool("Dead", true);
+        animator.SetTrigger("Dead");
         onEnemyWasKilled(this); // 대리자 호출
 
         isDead = true;
