@@ -49,7 +49,14 @@ public class SkillSelectManager: MonoBehaviour
 
     bool ischoosingStartSkill; // 시작 스킬을 고르는 상황이냐
 
-    bool[] isSkillMaxLevel;
+    bool[] isSkillMaxLevel; // 만렙인 스킬은 true, 아니면 false로 저장하는 배열
+
+    int[] selectedSkills = new int[] { -1, -1, -1, -1, -1, -1 }; // 선택된 스킬 번호가 들어갈 배열
+    int selectedSkillsPointer = 0;
+
+    bool isSkillAllSelected; // 스킬이 전부 선택됐는지 판단하는 변수
+
+    bool isSkillAllMax; // 스킬이 전부 만렙인지 판단하는 변수
 
     // GameManager에게 알려주기 위한 delegate들
     public delegate void OnSkillSelectObjectDisplayed();
@@ -57,6 +64,9 @@ public class SkillSelectManager: MonoBehaviour
 
     public delegate void OnSkillSelectObjectHided();
     public OnSkillSelectObjectDisplayed onSkillSelectObjectHided;
+
+    public delegate void OnPlayerHealed();
+    public OnPlayerHealed onPlayerHealed;
 
     private void Awake()
     {
@@ -133,7 +143,7 @@ public class SkillSelectManager: MonoBehaviour
     public void DisplayLevelupPanel()
     {
         Time.timeScale = 0;
-
+        
         onSkillSelectObjectDisplayed();
 
         skillSelectObject.SetActive(true);
@@ -142,10 +152,24 @@ public class SkillSelectManager: MonoBehaviour
 
         List<int> list = new List<int>(); // 이 리스트의 숫자들 중에서 랜덤으로 뽑는 것
 
-        for (int i = 0; i < skillCount; i++)
+        if(selectedSkillsPointer >= 6)
+            isSkillAllSelected = true;
+
+        if (!isSkillAllSelected)
         {
-            if (!isSkillMaxLevel[i]) // 만렙인 스킬은 등장 X
-                list.Add(i);
+            for (int i = 0; i < skillCount; i++)
+            {
+                if (!isSkillMaxLevel[i]) // 만렙인 스킬은 등장 X
+                    list.Add(i);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < selectedSkills.Length; i++)
+            {
+                if (!isSkillMaxLevel[selectedSkills[i]]) // 만렙인 스킬은 등장 X
+                    list.Add(selectedSkills[i]);
+            }
         }
 
         if(list.Count == 2) // 만렙 안찍은 스킬이 2개면 실행
@@ -166,14 +190,18 @@ public class SkillSelectManager: MonoBehaviour
             {
                 SetSkillPanel(i);
             }
-        }else if(list.Count == 1)
+        }else if(list.Count == 1) // 만렙 안찍은 스킬이 1개면 실행
         {
             openSkillObject1.SetActive(false);
             closedSkillObject1.SetActive(true);
 
-            ranNum[0] = list[0];
+            ranNum[1] = list[0];
 
-            SetSkillPanel(0);
+            SetSkillPanel(1);
+        }else if(list.Count == 0) // 스킬 전부 만렙 찍으면 체력 회복하게 함
+        {
+            isSkillAllMax = true;
+            SetSkillPanel(1);
         }
         else
         {
@@ -195,34 +223,52 @@ public class SkillSelectManager: MonoBehaviour
 
     private void SetSkillPanel(int i)
     {
-        icon = skill_Icon[i].GetComponent<Image>();
-        icon.sprite = skillData.skillicon[ranNum[i]];
-
-        string color;
-
-        if (ranNum[i] % 3 == 0) { color = "#FF0000"; }
-        else if (ranNum[i] % 3 == 1) { color = "#79EDFF"; }
-        else { color = "#0000FF"; }
-
-        textName = skill_TextName[i].GetComponent<TextMeshProUGUI>();
-        textName.text = "<color=" + color + ">" + skillData.skillName[ranNum[i]] + "</color>";
-
-        textDescription = skill_TextDescription[i].GetComponent<TextMeshProUGUI>();
-        textDescription.text = "<color=" + color + ">" + skillData.skillDescription[ranNum[i]] + "</color>";
-
-        Image[] img = levelObject[i].GetComponentsInChildren<Image>();
-
-        for (int num = 4 - skillData.level[ranNum[i]]; num >= 0; num--)
+        if (!isSkillAllMax)
         {
-            Color col = img[num].color;
-            col.a = 0.3f;
-            img[num].color = col;
+            icon = skill_Icon[i].GetComponent<Image>();
+            icon.sprite = skillData.skillicon[ranNum[i]];
+
+            string color;
+
+            if (ranNum[i] % 3 == 0) { color = "#FF0000"; }
+            else if (ranNum[i] % 3 == 1) { color = "#79EDFF"; }
+            else { color = "#0000FF"; }
+
+            textName = skill_TextName[i].GetComponent<TextMeshProUGUI>();
+            textName.text = "<color=" + color + ">" + skillData.skillName[ranNum[i]] + "</color>";
+
+            textDescription = skill_TextDescription[i].GetComponent<TextMeshProUGUI>();
+            textDescription.text = "<color=" + color + ">" + skillData.skillDescription[ranNum[i]] + "</color>";
+
+            Image[] img = levelObject[i].GetComponentsInChildren<Image>();
+
+            for (int num = 4; num >= skillData.level[ranNum[i]]; num--)
+            {
+                Color col = img[num].color;
+                col.a = 0.3f;
+                img[num].color = col;
+            }
+            for (int num = 0; num < skillData.level[ranNum[i]]; num++)
+            {
+                Color col = img[num].color;
+                col.a = 1f;
+                img[num].color = col;
+            }
         }
-        for (int num = 0; num < skillData.level[ranNum[i]]; num++)
+        else
         {
-            Color col = img[num].color;
-            col.a = 1f;
-            img[num].color = col;
+            icon = skill_Icon[i].GetComponent<Image>();
+            icon.sprite = skillData.skillicon[12];
+
+            string color = "#FF0000";
+
+            textName = skill_TextName[i].GetComponent<TextMeshProUGUI>();
+            textName.text = "<color=" + color + ">" + skillData.skillName[12] + "</color>";
+
+            textDescription = skill_TextDescription[i].GetComponent<TextMeshProUGUI>();
+            textDescription.text = "<color=" + color + ">" + skillData.skillDescription[12] + "</color>";
+
+            levelObject[i].SetActive(false);
         }
     }
 
@@ -232,6 +278,8 @@ public class SkillSelectManager: MonoBehaviour
         {
             skillData.skillSelected[0] = true;
             skillData.level[0] = 1;
+
+            selectedSkills[selectedSkillsPointer++] = 0;
             ischoosingStartSkill = false;
         }
         else
@@ -240,6 +288,8 @@ public class SkillSelectManager: MonoBehaviour
             {
                 skillData.skillSelected[ranNum[0]] = true;
                 skillData.level[ranNum[0]] = 1;
+
+                selectedSkills[selectedSkillsPointer++] = ranNum[0];
             }
             else
             {
@@ -270,37 +320,48 @@ public class SkillSelectManager: MonoBehaviour
 
     private void SkillSelectButton2Clicked()
     {
-        if (ischoosingStartSkill)
+        if (!isSkillAllMax)
         {
-            skillData.skillSelected[1] = true;
-            skillData.level[1] = 1;
-            ischoosingStartSkill = false;
-        }
-        else
-        {
-            if (!skillData.skillSelected[ranNum[1]])
+            if (ischoosingStartSkill)
             {
-                skillData.skillSelected[ranNum[1]] = true;
-                skillData.level[ranNum[1]] = 1;
+                skillData.skillSelected[1] = true;
+                skillData.level[1] = 1;
+
+                selectedSkills[selectedSkillsPointer++] = 1;
+                ischoosingStartSkill = false;
             }
             else
             {
-                skillData.level[ranNum[1]]++;
-
-                isSkillMaxLevel[ranNum[1]] = skillData.level[ranNum[1]] == 5;
-
-                if (isSkillMaxLevel[ranNum[1]])
+                if (!skillData.skillSelected[ranNum[1]])
                 {
-                    // 만랩 찍으면 많이 쌔짐
-                    skillData.Damage[ranNum[1]] *= 1.5f;
-                    skillData.Delay[ranNum[1]] *= 0.6f;
+                    skillData.skillSelected[ranNum[1]] = true;
+                    skillData.level[ranNum[1]] = 1;
+
+                    selectedSkills[selectedSkillsPointer++] = ranNum[1];
                 }
                 else
                 {
-                    skillData.Damage[ranNum[1]] *= 1.2f;
-                    skillData.Delay[ranNum[1]] *= 0.9f;
+                    skillData.level[ranNum[1]]++;
+
+                    isSkillMaxLevel[ranNum[1]] = skillData.level[ranNum[1]] == 5;
+
+                    if (isSkillMaxLevel[ranNum[1]])
+                    {
+                        // 만랩 찍으면 많이 쌔짐
+                        skillData.Damage[ranNum[1]] *= 1.5f;
+                        skillData.Delay[ranNum[1]] *= 0.6f;
+                    }
+                    else
+                    {
+                        skillData.Damage[ranNum[1]] *= 1.2f;
+                        skillData.Delay[ranNum[1]] *= 0.9f;
+                    }
                 }
             }
+        }
+        else
+        {
+            onPlayerHealed();
         }
 
         skillSelectObject.SetActive(false);
@@ -316,6 +377,8 @@ public class SkillSelectManager: MonoBehaviour
         {
             skillData.skillSelected[2] = true;
             skillData.level[2] = 1;
+
+            selectedSkills[selectedSkillsPointer++] = 2;
             ischoosingStartSkill = false;
         }
         else
@@ -324,6 +387,8 @@ public class SkillSelectManager: MonoBehaviour
             {
                 skillData.skillSelected[ranNum[2]] = true;
                 skillData.level[ranNum[2]] = 1;
+
+                selectedSkills[selectedSkillsPointer++] = ranNum[2];
             }
             else
             {

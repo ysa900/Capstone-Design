@@ -65,7 +65,7 @@ public class SkillManager : MonoBehaviour
 
     private void Update()
     {
-        for(int i = 0; i < skillData.skillName.Length; i++)
+        for(int i = 0; i < skillData.Damage.Length; i++)
         {
             if (skillData.skillSelected[i]) // 활성화(선택)된 스킬만 실행
             {
@@ -112,7 +112,7 @@ public class SkillManager : MonoBehaviour
         skillData.Damage[8] = 1.5f;
         skillData.Damage[9] = 30f;
         skillData.Damage[10] = 20;
-        skillData.Damage[11] = 20;
+        skillData.Damage[11] = 1.5f;
 
         skillData.Delay[0] = 0.8f;
         skillData.Delay[1] = 1;
@@ -609,6 +609,7 @@ public class SkillManager : MonoBehaviour
                     playerAttachSkill.Y = 999f;
 
                     playerAttachSkill.isAttachSkill = true;
+                    playerAttachSkill.isStaySkill = true;
                     playerAttachSkill.isYFlipped = true;
 
                     playerAttachSkill.aliveTime = 3f;

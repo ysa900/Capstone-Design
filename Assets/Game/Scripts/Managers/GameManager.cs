@@ -1,9 +1,5 @@
-using NUnit.Framework;
-using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using UnityEngine;
-using static Player;
 
 // Pause 걸면 이전에는 인게임 속 UI들(피통, 스킬 패널, 프로필)이 안사라져서
 // 사라지게 하려고 gameObject로 선언한거랑
@@ -102,7 +98,6 @@ public class GameManager : MonoBehaviour
         skillManager.onShiledSkillActivated = OnShieldSkillActivated;
         skillManager.onShiledSkillUnActivated = OnShieldSkillUnActivated;
 
-
         // delegate 할당
         enemyManager.onEnemiesChanged = OnEnemiesChanged;
         enemyManager.onEnemyKilled = OnEnemyKilled;
@@ -110,6 +105,7 @@ public class GameManager : MonoBehaviour
         // delegate 할당
         skillSelectManager.onSkillSelectObjectDisplayed = OnSkillSelectObjectDisplayed;
         skillSelectManager.onSkillSelectObjectHided = OnSkillSelectObjectHided;
+        skillSelectManager.onPlayerHealed = OnPlayerHealed;
     }
 
     void Start()
@@ -262,5 +258,11 @@ public class GameManager : MonoBehaviour
         SkillPanelObject.SetActive(true);
         CharacterProfileObject.SetActive(true);
         inputManager.PauseButtonObject.interactable = true;
+    }
+
+    private void OnPlayerHealed()
+    {
+        player.hp += 10;
+        if(player.hp > 100) { player.hp = 100; }
     }
 }

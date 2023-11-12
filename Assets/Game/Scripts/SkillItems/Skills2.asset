@@ -25,6 +25,7 @@ MonoBehaviour:
   - Alternative Flame
   - Judgement
   - Ice Blast
+  - Blood
   skillDescription:
   - Cast FireBall to Nearest Enemy
   - Cast Lightning on Random Enemy
@@ -38,34 +39,35 @@ MonoBehaviour:
   - Flame Changes Alternatively
   - Lightning Rains Stormy
   - Case Ice Blast In front of Player
-  level: 000000000100000001000000000000000000000000000000000000000100000000000000000000000000000000000000
+  - Heal ten Points
+  level: 000000000500000005000000000000000500000000000000000000000500000005000000000000000500000000000000
   Damage:
   - 30
-  - 10
-  - 1
+  - 25.920002
+  - 2.5920002
   - 20
-  - 15
+  - 38.880005
   - 0
   - 30
-  - 2
-  - 1.5
+  - 5.1840005
+  - 3.8880005
   - 30
-  - 20
-  - 20
+  - 51.840004
+  - 1.5
   Delay:
   - 0.8
-  - 1
-  - 2
+  - 0.43739995
+  - 0.8747999
   - 3
-  - 8
+  - 3.4991996
   - 10
   - 3
-  - 4
-  - 2
+  - 1.7495998
+  - 0.8747999
   - 3
-  - 4.5
+  - 1.9682999
   - 6
-  skillSelected: 000101000000000100000000
+  skillSelected: 000101000100000101000100
   skillicon:
   - {fileID: 21300000, guid: 90f5c378a37421e4c900728afc36b321, type: 2}
   - {fileID: 21300000, guid: 83ce16839d132e842a2b72cbf6a4410f, type: 2}
@@ -79,6 +81,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: c4322abfbefec6d46a4283e434dc46cb, type: 2}
   - {fileID: 21300000, guid: f75bd353d209d174aaa28850a3695f2f, type: 2}
   - {fileID: 21300000, guid: 13bc06fb4a75341478b0934c02f307b4, type: 2}
+  - {fileID: 21300000, guid: 7f6251c7985e30447bf8dc271d8dae64, type: 2}
   projectile:
   - {fileID: 1876097049369689279, guid: 4f5aab16534b5d543b90b75837de3cc4, type: 3}
   - {fileID: 3719459856391972471, guid: a30f3ee6b2db5c540af102e95890215c, type: 3}

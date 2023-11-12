@@ -51086,8 +51086,8 @@ MonoBehaviour:
   skillSelectObject: {fileID: 1395605481}
   openSkillObject1: {fileID: 245639225}
   openSkillObject2: {fileID: 1351825947}
-  closedSkillObject1: {fileID: 1118068147}
-  closedSkillObject2: {fileID: 1770698098}
+  closedSkillObject1: {fileID: 1770698098}
+  closedSkillObject2: {fileID: 1118068147}
   levelUpTextObject: {fileID: 29984905}
   skill_Icon:
   - {fileID: 154344100}
