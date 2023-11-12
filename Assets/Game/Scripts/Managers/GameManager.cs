@@ -226,7 +226,7 @@ public class GameManager : MonoBehaviour
 
         exp = Instantiate(expPrefab1);
 
-        exp.expAmount = 1;
+        exp.expAmount = 100;
 
         exp.X = killedEnemy.X;
         exp.Y = killedEnemy.Y + 1f;

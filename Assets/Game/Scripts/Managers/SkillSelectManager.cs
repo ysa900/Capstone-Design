@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -35,8 +37,14 @@ public class SkillSelectManager: MonoBehaviour
     // skill_TextDescription 오브젝트
     public GameObject[] skill_TextDescription = new GameObject[3];
 
-    // skill_TextDescription 오브젝트
+    // level 오브젝트
     public GameObject[] levelObject = new GameObject[3];
+
+    // panel_skill_Icon 오브젝트
+    public GameObject[] panel_skill_Icon = new GameObject[6];
+
+    // panel_skill_LevelText 오브젝트
+    public GameObject[] panel_skill_LevelText = new GameObject[6];
 
     public SkillData2 skillData; // 스킬 데이터
 
@@ -74,6 +82,8 @@ public class SkillSelectManager: MonoBehaviour
 
         closedSkillObject1.SetActive(false);
         closedSkillObject2.SetActive(false);
+
+        for(int i = 0; i < panel_skill_Icon.Length; i++) { panel_skill_Icon[i].SetActive(false); }
     }
 
     private void Start()
@@ -127,13 +137,13 @@ public class SkillSelectManager: MonoBehaviour
 
             for (int num = 4 - skillData.level[i]; num >= 0; num--)
             {
-                Color col = img[num].color;
+                UnityEngine.Color col = img[num].color;
                 col.a = 0.3f;
                 img[num].color = col;
             }
             for (int num = 0; num < skillData.level[i]; num++)
             {
-                Color col = img[num].color;
+                UnityEngine.Color col = img[num].color;
                 col.a = 1f;
                 img[num].color = col;
             }
@@ -179,7 +189,7 @@ public class SkillSelectManager: MonoBehaviour
 
             for (int i = 0; i < 2; i++)
             {
-                int ran = Random.Range(0, list.Count);
+                int ran = UnityEngine.Random.Range(0, list.Count);
 
                 ranNum[i] = list[ran];
 
@@ -207,7 +217,7 @@ public class SkillSelectManager: MonoBehaviour
         {
             for (int i = 0; i < 3; i++)
             {
-                int ran = Random.Range(0, list.Count);
+                int ran = UnityEngine.Random.Range(0, list.Count);
 
                 ranNum[i] = list[ran];
 
@@ -244,13 +254,13 @@ public class SkillSelectManager: MonoBehaviour
 
             for (int num = 4; num >= skillData.level[ranNum[i]]; num--)
             {
-                Color col = img[num].color;
+                UnityEngine.Color col = img[num].color;
                 col.a = 0.3f;
                 img[num].color = col;
             }
             for (int num = 0; num < skillData.level[ranNum[i]]; num++)
             {
-                Color col = img[num].color;
+                UnityEngine.Color col = img[num].color;
                 col.a = 1f;
                 img[num].color = col;
             }
@@ -279,7 +289,16 @@ public class SkillSelectManager: MonoBehaviour
             skillData.skillSelected[0] = true;
             skillData.level[0] = 1;
 
+            icon = panel_skill_Icon[selectedSkillsPointer].GetComponent<Image>();
+            icon.sprite = skillData.skillicon[0];
+
+            textName = panel_skill_LevelText[selectedSkillsPointer].GetComponent<TextMeshProUGUI>();
+            textName.text = "Lv " + skillData.level[0];
+
+            panel_skill_Icon[selectedSkillsPointer].SetActive(true);
+
             selectedSkills[selectedSkillsPointer++] = 0;
+
             ischoosingStartSkill = false;
         }
         else
@@ -289,6 +308,14 @@ public class SkillSelectManager: MonoBehaviour
                 skillData.skillSelected[ranNum[0]] = true;
                 skillData.level[ranNum[0]] = 1;
 
+                icon = panel_skill_Icon[selectedSkillsPointer].GetComponent<Image>();
+                icon.sprite = skillData.skillicon[ranNum[0]];
+
+                textName = panel_skill_LevelText[selectedSkillsPointer].GetComponent<TextMeshProUGUI>();
+                textName.text = "Lv " + skillData.level[ranNum[0]];
+
+                panel_skill_Icon[selectedSkillsPointer].SetActive(true);
+
                 selectedSkills[selectedSkillsPointer++] = ranNum[0];
             }
             else
@@ -296,6 +323,11 @@ public class SkillSelectManager: MonoBehaviour
                 skillData.level[ranNum[0]]++;
 
                 isSkillMaxLevel[ranNum[0]] = skillData.level[ranNum[0]] == 5;
+
+                int index = Array.IndexOf(selectedSkills, ranNum[0]);
+
+                textName = panel_skill_LevelText[index].GetComponent<TextMeshProUGUI>();
+                textName.text = "Lv " + skillData.level[ranNum[0]];
 
                 if (isSkillMaxLevel[ranNum[0]])
                 {
@@ -327,6 +359,14 @@ public class SkillSelectManager: MonoBehaviour
                 skillData.skillSelected[1] = true;
                 skillData.level[1] = 1;
 
+                icon = panel_skill_Icon[selectedSkillsPointer].GetComponent<Image>();
+                icon.sprite = skillData.skillicon[1];
+
+                textName = panel_skill_LevelText[selectedSkillsPointer].GetComponent<TextMeshProUGUI>();
+                textName.text = "Lv " + skillData.level[1];
+
+                panel_skill_Icon[selectedSkillsPointer].SetActive(true);
+
                 selectedSkills[selectedSkillsPointer++] = 1;
                 ischoosingStartSkill = false;
             }
@@ -337,6 +377,14 @@ public class SkillSelectManager: MonoBehaviour
                     skillData.skillSelected[ranNum[1]] = true;
                     skillData.level[ranNum[1]] = 1;
 
+                    icon = panel_skill_Icon[selectedSkillsPointer].GetComponent<Image>();
+                    icon.sprite = skillData.skillicon[ranNum[1]];
+
+                    textName = panel_skill_LevelText[selectedSkillsPointer].GetComponent<TextMeshProUGUI>();
+                    textName.text = "Lv " + skillData.level[ranNum[1]];
+
+                    panel_skill_Icon[selectedSkillsPointer].SetActive(true);
+
                     selectedSkills[selectedSkillsPointer++] = ranNum[1];
                 }
                 else
@@ -344,6 +392,11 @@ public class SkillSelectManager: MonoBehaviour
                     skillData.level[ranNum[1]]++;
 
                     isSkillMaxLevel[ranNum[1]] = skillData.level[ranNum[1]] == 5;
+
+                    int index = Array.IndexOf(selectedSkills, ranNum[1]);
+
+                    textName = panel_skill_LevelText[index].GetComponent<TextMeshProUGUI>();
+                    textName.text = "Lv " + skillData.level[ranNum[1]];
 
                     if (isSkillMaxLevel[ranNum[1]])
                     {
@@ -378,6 +431,14 @@ public class SkillSelectManager: MonoBehaviour
             skillData.skillSelected[2] = true;
             skillData.level[2] = 1;
 
+            icon = panel_skill_Icon[selectedSkillsPointer].GetComponent<Image>();
+            icon.sprite = skillData.skillicon[2];
+
+            textName = panel_skill_LevelText[selectedSkillsPointer].GetComponent<TextMeshProUGUI>();
+            textName.text = "Lv " + skillData.level[2];
+
+            panel_skill_Icon[selectedSkillsPointer].SetActive(true);
+
             selectedSkills[selectedSkillsPointer++] = 2;
             ischoosingStartSkill = false;
         }
@@ -388,6 +449,14 @@ public class SkillSelectManager: MonoBehaviour
                 skillData.skillSelected[ranNum[2]] = true;
                 skillData.level[ranNum[2]] = 1;
 
+                icon = panel_skill_Icon[selectedSkillsPointer].GetComponent<Image>();
+                icon.sprite = skillData.skillicon[ranNum[2]];
+
+                textName = panel_skill_LevelText[selectedSkillsPointer].GetComponent<TextMeshProUGUI>();
+                textName.text = "Lv " + skillData.level[ranNum[2]];
+
+                panel_skill_Icon[selectedSkillsPointer].SetActive(true);
+
                 selectedSkills[selectedSkillsPointer++] = ranNum[2];
             }
             else
@@ -395,6 +464,11 @@ public class SkillSelectManager: MonoBehaviour
                 skillData.level[ranNum[2]]++;
 
                 isSkillMaxLevel[ranNum[2]] = skillData.level[ranNum[2]] == 5;
+
+                int index = Array.IndexOf(selectedSkills, ranNum[2]);
+
+                textName = panel_skill_LevelText[index].GetComponent<TextMeshProUGUI>();
+                textName.text = "Lv " + skillData.level[ranNum[2]];
 
                 if (isSkillMaxLevel[ranNum[2]])
                 {
