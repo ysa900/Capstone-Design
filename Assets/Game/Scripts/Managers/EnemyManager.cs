@@ -72,6 +72,11 @@ public class EnemyManager : MonoBehaviour
         
         enemies.Remove(killedEnemy);
         onEnemiesChanged(enemies); // enmy 배열 업데이트하도록 GameManager에게 알려주기
+
+        if(!GameManager.instance.isGameOver) //  캐릭터 사망하기 전까지만 실행
+        {
+            AudioManager.instance.PlaySfx(AudioManager.Sfx.Dead); // Enemy 사망 시 효과음
+        }
     }
 
     // 적 정보를 입력하고 적을 생성하는 함수

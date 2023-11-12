@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class SkillSelectManager: MonoBehaviour
 {
+    private int skillCount = 8;
+
     // 스킬 선택 버튼들
     public UnityEngine.UI.Button SkillSelectButton1;
     public UnityEngine.UI.Button SkillSelectButton2;
@@ -47,7 +49,7 @@ public class SkillSelectManager: MonoBehaviour
 
     bool ischoosingStartSkill; // 시작 스킬을 고르는 상황이냐
 
-    bool[] isSkillMaxLevel = new bool[6];
+    bool[] isSkillMaxLevel;
 
     // GameManager에게 알려주기 위한 delegate들
     public delegate void OnSkillSelectObjectDisplayed();
@@ -66,17 +68,19 @@ public class SkillSelectManager: MonoBehaviour
 
     private void Start()
     {
-        // 왼쪽 버튼 눌렀을 때
+        // 왼쪽 버튼(1번 스킬) 눌렀을 때
         UnityEngine.UI.Button skillSelectButton1 = SkillSelectButton1.GetComponent<UnityEngine.UI.Button>();
         skillSelectButton1.onClick.AddListener(SkillSelectButton1Clicked);
 
-        // 가운데 버튼 눌렀을 때
+        // 가운데 버튼(2번 스킬) 눌렀을 때
         UnityEngine.UI.Button skillSelectButton2 = SkillSelectButton2.GetComponent<UnityEngine.UI.Button>();
         skillSelectButton2.onClick.AddListener(SkillSelectButton2Clicked);
 
-        // 오른쪽 버튼 눌렀을 때
+        // 오른쪽 버튼(3번 스킬) 눌렀을 때
         UnityEngine.UI.Button skillSelectButton3 = SkillSelectButton3.GetComponent<UnityEngine.UI.Button>();
         skillSelectButton3.onClick.AddListener(SkillSelectButton3Clicked);
+
+        isSkillMaxLevel = new bool[skillCount];
     }
 
     // 시작 스킬 고르기
@@ -134,11 +138,11 @@ public class SkillSelectManager: MonoBehaviour
 
         skillSelectObject.SetActive(true);
 
-        levelUpTextObject.GetComponent<TextMeshProUGUI>().text = "Level UP!";
+        levelUpTextObject.GetComponent<TextMeshProUGUI>().text = "Level UP";
 
         List<int> list = new List<int>(); // 이 리스트의 숫자들 중에서 랜덤으로 뽑는 것
 
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < skillCount; i++)
         {
             if (!isSkillMaxLevel[i]) // 만렙인 스킬은 등장 X
                 list.Add(i);
@@ -256,7 +260,8 @@ public class SkillSelectManager: MonoBehaviour
                 }
             }
         }
-
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Select); // 버튼 선택 시 효과음
+        AudioManager.instance.EffectBGM(false); // AudioFilter 끄기
         skillSelectObject.SetActive(false);
 
         onSkillSelectObjectHided();
@@ -298,7 +303,8 @@ public class SkillSelectManager: MonoBehaviour
                 }
             }
         }
-
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Select); // 버튼 선택 시 효과음
+        AudioManager.instance.EffectBGM(false); // AudioFilter 끄기
         skillSelectObject.SetActive(false);
 
         onSkillSelectObjectHided();
@@ -340,7 +346,8 @@ public class SkillSelectManager: MonoBehaviour
                 }
             }
         }
-        
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Select); // 버튼 선택 시 효과음
+        AudioManager.instance.EffectBGM(false); // AudioFilter 끄기
         skillSelectObject.SetActive(false);
 
         onSkillSelectObjectHided();

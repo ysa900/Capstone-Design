@@ -61,6 +61,7 @@ public class InputManager: MonoBehaviour
     // RestartButton이 눌렀을 때
     private void RestartButtonClicked()
     {
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Select); // 버튼 선택 시 효과음
         SceneManager.LoadScene("Game");
         Time.timeScale = 1;
     }
@@ -68,6 +69,7 @@ public class InputManager: MonoBehaviour
     // goToLobbyButton이 눌렀을 때
     private void goToLobbyButtonClicked()
     {
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Select); // 버튼 선택 시 효과음
         SceneManager.LoadScene("Lobby");
         Time.timeScale = 1;
     }
@@ -75,7 +77,8 @@ public class InputManager: MonoBehaviour
     // PauseButton이 눌렀을 때
     private void PauseButtonClicked()
     {
-        if(Time.timeScale == 0) // Pause 누른 상태에서 한번 더 누르면 Pause 풀리게 하려고
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Select); // 버튼 선택 시 효과음
+        if (Time.timeScale == 0) // Pause 누른 상태에서 한번 더 누르면 Pause 풀리게 하려고
             PlayButtonClicked();
         else
         {
@@ -87,6 +90,7 @@ public class InputManager: MonoBehaviour
     // PlayButton이 눌렀을 때
     private void PlayButtonClicked()
     {
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Select); // 버튼 선택 시 효과음
         Time.timeScale = 1;
         onPlayButtonClicked(); // delegate 호출
     }

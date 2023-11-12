@@ -19,6 +19,12 @@ MonoBehaviour:
   - Explosion
   - Electric Ball
   - Water Shield
+  - Meteor
+  - Energy Blast
+  - Meteor
+  - Meteor
+  - Meteor
+  - Meteor
   skillDescription:
   - Cast FireBall to Nearest Enemy
   - Cast Lightning on Random Enemy
@@ -26,7 +32,13 @@ MonoBehaviour:
   - Fire Explode Around Player
   - Electric Ball Move Around Player
   - Water Shield Protects Player from Enemy
-  level: 000000000000000000000000000000000000000000000000
+  - Meteor Falls on Random Point
+  - K a m e h a m e h a!!
+  - Meteor Falls on Random Point
+  - Meteor Falls on Random Point
+  - Meteor Falls on Random Point
+  - Meteor Falls on Random Point
+  level: 000000000100000000000000000000000000000000000000000000000100000000000000000000000000000000000000
   Damage:
   - 30
   - 10
@@ -34,14 +46,26 @@ MonoBehaviour:
   - 10
   - 20
   - 0
+  - 20
+  - 20
+  - 20
+  - 20
+  - 20
+  - 20
   Delay:
+  - 0.8
   - 1
-  - 1
-  - 1
-  - 1
-  - 6
+  - 2
+  - 3
+  - 8
   - 10
-  skillSelected: 000000000000
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  skillSelected: 000100000000000100000000
   skillicon:
   - {fileID: 21300000, guid: 90f5c378a37421e4c900728afc36b321, type: 2}
   - {fileID: 21300000, guid: 83ce16839d132e842a2b72cbf6a4410f, type: 2}
@@ -49,10 +73,22 @@ MonoBehaviour:
   - {fileID: 21300000, guid: bb170114dfb0b02429d4c6e2d7fd387e, type: 2}
   - {fileID: 21300000, guid: acd12b9e52d962c43b344e34e47a3a02, type: 2}
   - {fileID: 21300000, guid: 516efd04627540f42838259ea470f42b, type: 2}
+  - {fileID: 21300000, guid: f2b882308d3041b489b3542416ebfe5c, type: 2}
+  - {fileID: 21300000, guid: 5fbd9a6d8953713438785abb2ed42e1a, type: 2}
+  - {fileID: 21300000, guid: f2b882308d3041b489b3542416ebfe5c, type: 2}
+  - {fileID: 21300000, guid: f2b882308d3041b489b3542416ebfe5c, type: 2}
+  - {fileID: 21300000, guid: f2b882308d3041b489b3542416ebfe5c, type: 2}
+  - {fileID: 21300000, guid: f2b882308d3041b489b3542416ebfe5c, type: 2}
   projectile:
   - {fileID: 1876097049369689279, guid: 4f5aab16534b5d543b90b75837de3cc4, type: 3}
   - {fileID: 3719459856391972471, guid: a30f3ee6b2db5c540af102e95890215c, type: 3}
   - {fileID: 7156574298850864081, guid: 3772c381276b3ab4aa6590f755c6521d, type: 3}
   - {fileID: 1449370788958344176, guid: 9aef766674f0e6148bc3d4baa343e2fb, type: 3}
   - {fileID: 3708506530452975792, guid: ce1225d4b4af3da418cea198e24f7b90, type: 3}
+  - {fileID: 3178857544331025768, guid: 607156135ff587f4e89da21cbc00b368, type: 3}
+  - {fileID: 3178857544331025768, guid: 607156135ff587f4e89da21cbc00b368, type: 3}
+  - {fileID: 3178857544331025768, guid: 607156135ff587f4e89da21cbc00b368, type: 3}
+  - {fileID: 3178857544331025768, guid: 607156135ff587f4e89da21cbc00b368, type: 3}
+  - {fileID: 3178857544331025768, guid: 607156135ff587f4e89da21cbc00b368, type: 3}
+  - {fileID: 3178857544331025768, guid: 607156135ff587f4e89da21cbc00b368, type: 3}
   - {fileID: 3178857544331025768, guid: 607156135ff587f4e89da21cbc00b368, type: 3}

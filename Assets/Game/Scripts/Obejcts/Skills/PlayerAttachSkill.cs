@@ -8,15 +8,22 @@ public class PlayerAttachSkill : Skill
     public float yPositionNum;
 
     public bool isAttachSkill; // 플레이어 근처에 붙어다니는 스킬이냐
+    public bool isFlipped; // 스킬 프리팹이 뒤집힌 상태냐
     public bool isCircleSkill; // 플레이어 주위를 빙빙 도는 스킬이냐
     public bool isShieldSkill; // Damage가 없는 Shield 스킬이냐
+    public bool isDelaySkill; // 잠깐의 Delay 후 발사되는 스킬이냐
+
+    public bool isStaySkill; // 스킬이 유지되는 동안 계속 데미지가 들어가야되는 스킬이냐
 
     private float degree = 0f;
     private float tmpX; // Cirle을 계산할 때 0,0을 기준으로 생각한 X
     private float tmpY; // Cirle을 계산할 때 0,0을 기준으로 생각한 X
     private bool isUpSide; // 플레이어를 돌 때 반원 기준으로 위에 있는지 아래 있는지를 판단할 변수
 
-    private float aliveTime; // 스킬 생존 시간을 체크할 변수
+    private float delay = 0.45f;
+    private float delayTimer = 0f;
+
+    public float aliveTime; // 스킬 생존 시간을 체크할 변수
     private float aliveTimer; // 스킬 생존 시간
     SpriteRenderer spriteRenderer; // 적 방향을 바꾸기 위해 flipX를 가져오기 위한 변수
 
@@ -26,15 +33,11 @@ public class PlayerAttachSkill : Skill
     private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-
-        if (isCircleSkill) { aliveTimer = 5f; }
-        else if (isAttachSkill) { aliveTimer = 0.5f; }
-        else { aliveTimer = 3f; }
     }
 
     private void FixedUpdate()
     {
-        bool destroySkill = aliveTime > aliveTimer;
+        bool destroySkill = aliveTimer > aliveTime;
 
         if (destroySkill)
         {
@@ -58,7 +61,8 @@ public class PlayerAttachSkill : Skill
             Y = player.transform.position.y;
         }
 
-        aliveTime += Time.fixedDeltaTime;
+        aliveTimer += Time.fixedDeltaTime;
+        delayTimer += Time.fixedDeltaTime;
     }
 
     // 플레이어에 붙어다니는 스킬
@@ -66,16 +70,40 @@ public class PlayerAttachSkill : Skill
     {
         if (player.isPlayerLookLeft)
         {
-            spriteRenderer.flipX = !player.isPlayerLookLeft; // 반대로 하는 이유는 기본 프리팹이 방향이 반대라서 (나중에 일관성있게 바꿀 필요 있음)
-            X = player.gameObject.transform.position.x - xPositionNum;
+            X = player.transform.position.x - xPositionNum;
         }
         else
         {
-            spriteRenderer.flipX = !player.isPlayerLookLeft;
-            X = player.gameObject.transform.position.x + xPositionNum;
+            X = player.transform.position.x + xPositionNum;
         }
 
-        Y = player.gameObject.transform.position.y + yPositionNum;
+        Y = player.transform.position.y + yPositionNum;
+
+        if (isDelaySkill)
+        {
+            if(delayTimer < delay) // 딜레이가 끝나기전까지는 방향 조정 가능, 이후에는 불가능
+            {
+                if (isFlipped)
+                {
+                    spriteRenderer.flipX = !player.isPlayerLookLeft;
+                }
+                else
+                {
+                    spriteRenderer.flipX = player.isPlayerLookLeft;
+                }
+            }
+        }
+        else
+        {
+            if (isFlipped)
+            {
+                spriteRenderer.flipX = !player.isPlayerLookLeft;
+            }
+            else
+            {
+                spriteRenderer.flipX = player.isPlayerLookLeft;
+            }
+        }
     }
 
     // 플레이어 주위를 빙빙 도는 스킬
@@ -98,6 +126,29 @@ public class PlayerAttachSkill : Skill
         Y = tmpY + player.transform.position.y;
     }
 
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (isStaySkill)
+        {
+            IDamageable damageable = collision.GetComponent<IDamageable>();
+
+            if (damageable == null)
+            {
+                return;
+            }
+
+            if (isDelaySkill)
+            {
+                if (delayTimer >= delay)
+                {
+                    damageable.TakeDamage(gameObject, damage);
+                }
+            }
+            else if (!isShieldSkill)
+                damageable.TakeDamage(gameObject, damage);
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         IDamageable damageable = collision.GetComponent<IDamageable>();
@@ -107,8 +158,16 @@ public class PlayerAttachSkill : Skill
             return;
         }
 
-        if (!isShieldSkill)
+        if (isDelaySkill)
+        {
+            if (delayTimer >= delay)
+            {
+                damageable.TakeDamage(gameObject, damage);
+            }
+        }
+        else if (!isShieldSkill)
             damageable.TakeDamage(gameObject, damage);
     }
+    
 }
 

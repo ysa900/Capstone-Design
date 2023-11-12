@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class Enemy : Object, IDamageable
@@ -15,6 +16,9 @@ public class Enemy : Object, IDamageable
     public bool isEnemyLookLeft; // 적이 보고 있는 방향을 알려주는 변수
 
     private bool isDead;
+
+    private float damageDelay = 2f;
+    private float damageDelayTimer = 0;
 
     // enemy가 죽었을 때 EnemyManager에게 알려주기 위한 delegate
     public delegate void OnEnemyWasKilled(Enemy killedEnemy);
@@ -47,6 +51,7 @@ public class Enemy : Object, IDamageable
         }
 
         DestryIfToFar(); // 플레이어와의 거리가 너무 멀면 죽음
+        damageDelayTimer += Time.fixedDeltaTime;
     }
 
     // 플레이어 방향으로 이동하는 함수
@@ -58,7 +63,11 @@ public class Enemy : Object, IDamageable
         Vector2 direction = playerPosition - myPosition;
         direction = direction.normalized;
 
-        isEnemyLookLeft = direction.x < 0;
+        if (Math.Abs(direction.x) >= 0.3f)
+        {
+            isEnemyLookLeft = direction.x < 0;
+        }
+        
         spriteRenderer.flipX = isEnemyLookLeft;
 
         Vector2 colliderOffset; // CapsuleCollider의 offset에 넣을 Vector2
@@ -105,7 +114,14 @@ public class Enemy : Object, IDamageable
         }
         else
         {
-            animator.SetTrigger("Hit");
+            if (damageDelay <= damageDelayTimer)
+            {
+                animator.SetTrigger("Hit");
+            }
+            else
+            {
+                damageDelayTimer = 0;
+            }
         }
     }
 
