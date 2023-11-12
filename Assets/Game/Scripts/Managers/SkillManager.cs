@@ -5,6 +5,7 @@ using UnityEngine;
 public class SkillManager : MonoBehaviour
 {
     public Player player;
+    private GameAudioManager gameAudioManager;
 
     private float attackRange = 12.5f; // 플레이어 공격 사거리
 
@@ -45,14 +46,14 @@ public class SkillManager : MonoBehaviour
     public delegate void OnShiledSkillUnActivated(); // 쉴드 스킬이 꺼 질때
     public OnShiledSkillUnActivated onShiledSkillUnActivated;
 
-    private void Awake()
+    public void Awake()
     {
         Init(); // skillData 초기화
     }
 
     private void Update()
     {
-        for(int i = 0; i < skillData.skillName.Length; i++)
+        for(int i = 0; i < skillData.Damage.Length; i++)
         {
             if (skillData.skillSelected[i]) // 활성화(선택)된 스킬만 실행
             {
@@ -74,6 +75,8 @@ public class SkillManager : MonoBehaviour
     // skilldata를 초기화
     private void Init()
     {
+        gameAudioManager = FindAnyObjectByType<GameAudioManager>();
+
         for (int i = 0; i < skillData.level.Length; i++)
         {
             skillData.level[i] = 0;
@@ -239,7 +242,7 @@ public class SkillManager : MonoBehaviour
             case 0:
                 {
                     enemyTrackingSkill = Instantiate(fireBasicSkillPrefab);
-                    AudioManager.instance.PlaySfx(AudioManager.Sfx.Range); // 스킬 사용 효과음
+                    gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
                     Vector2 playerPosition = player.transform.position;
                     Vector2 enemyPosition = enemy.transform.position;
 
@@ -264,10 +267,10 @@ public class SkillManager : MonoBehaviour
             case 1:
                 {
                     enemyOnSkill = Instantiate(electricBasicSkillPrefab);
-                    AudioManager.instance.PlaySfx(AudioManager.Sfx.Range); // 스킬 사용 효과음
+                    gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
                     Vector2 enemyPosition = enemy.transform.position;
 
-                    // 스킬 위치를 적 실제 위치로 변경
+                    // 스킬 위치를 적 실제 위치로 변경   
                     if (enemy.isEnemyLookLeft)
                         enemyOnSkill.X = enemyPosition.x - enemy.capsuleCollider.size.x * 6;
                     else
@@ -282,7 +285,7 @@ public class SkillManager : MonoBehaviour
             case 2:
                 {
                     playerAttachSkill = Instantiate(waterBasicSkillPrefab);
-                    AudioManager.instance.PlaySfx(AudioManager.Sfx.Range); // 스킬 사용 효과음
+                    gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
                     playerAttachSkill.player = player;
 
                     playerAttachSkill.xPositionNum = 3f;
@@ -304,7 +307,7 @@ public class SkillManager : MonoBehaviour
             case 3:
                 {
                     playerAttachSkill = Instantiate(fireNormalSkillPrefab1);
-                    AudioManager.instance.PlaySfx(AudioManager.Sfx.Range); // 스킬 사용 효과음
+                    gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
                     playerAttachSkill.player = player;
 
                     playerAttachSkill.xPositionNum = 0;
@@ -323,7 +326,7 @@ public class SkillManager : MonoBehaviour
             case 4:
                 {
                     playerAttachSkill = Instantiate(electricNormalSkillPrefab1);
-                    AudioManager.instance.PlaySfx(AudioManager.Sfx.Range); // 스킬 사용 효과음
+                    gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
                     playerAttachSkill.player = player;
 
                     playerAttachSkill.X = player.transform.position.x + 3f;
@@ -342,7 +345,7 @@ public class SkillManager : MonoBehaviour
             case 5:
                 {
                     playerAttachSkill = Instantiate(waterNormalSkillPrefab1);
-                    AudioManager.instance.PlaySfx(AudioManager.Sfx.Range); // 스킬 사용 효과음
+                    gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
                     playerAttachSkill.player = player;
 
                     playerAttachSkill.X = player.transform.position.x;
@@ -362,7 +365,7 @@ public class SkillManager : MonoBehaviour
             case 6:
                 {
                     randomSkill = Instantiate(fireNormal2MeteorPrefab);
-                    AudioManager.instance.PlaySfx(AudioManager.Sfx.Range); // 스킬 사용 효과음
+                    gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
                     float tmpX = player.transform.position.x;
                     float tmpY = player.transform.position.y;
 
@@ -402,7 +405,7 @@ public class SkillManager : MonoBehaviour
             case 7:
                 {
                     playerAttachSkill = Instantiate(electricNormalSkillPrefab2);
-                    AudioManager.instance.PlaySfx(AudioManager.Sfx.Range); // 스킬 사용 효과음
+                    gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
                     playerAttachSkill.player = player;
 
                     playerAttachSkill.xPositionNum = 8.5f;

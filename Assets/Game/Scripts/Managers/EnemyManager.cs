@@ -13,6 +13,8 @@ public class EnemyManager : MonoBehaviour
     // Enemy 클래스 객체
     Enemy enemy;
 
+    private GameAudioManager gameAudioManager;
+
     // Enemy 프리팹
     public Enemy zombiePrefab1;
     public Enemy zombiePrefab2;
@@ -27,6 +29,11 @@ public class EnemyManager : MonoBehaviour
     // Enemy가 죽었을 때 GameManager에게 알려주기 위한 delegate
     public delegate void OnEnemyKilled(Enemy killedEnemy);
     public OnEnemyKilled onEnemyKilled;
+
+    private void Awake()
+    {
+        gameAudioManager = FindAnyObjectByType<GameAudioManager>();
+    }
 
     // Enemy들을 생성하는 함수
     // enemyType: 0 ~ ? (현재 0 ~ 1), 이게 몬스터 종류 결정
@@ -75,7 +82,7 @@ public class EnemyManager : MonoBehaviour
 
         if(!GameManager.instance.isGameOver) //  캐릭터 사망하기 전까지만 실행
         {
-            AudioManager.instance.PlaySfx(AudioManager.Sfx.Dead); // Enemy 사망 시 효과음
+            gameAudioManager.PlaySfx(GameAudioManager.Sfx.Dead); // Enemy 사망 시 효과음
         }
     }
 

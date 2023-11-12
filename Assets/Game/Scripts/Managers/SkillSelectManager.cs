@@ -7,6 +7,8 @@ public class SkillSelectManager: MonoBehaviour
 {
     private int skillCount = 8;
 
+    private GameAudioManager gameAudioManager;
+
     // 스킬 선택 버튼들
     public UnityEngine.UI.Button SkillSelectButton1;
     public UnityEngine.UI.Button SkillSelectButton2;
@@ -60,8 +62,8 @@ public class SkillSelectManager: MonoBehaviour
 
     private void Awake()
     {
+        gameAudioManager = FindAnyObjectByType<GameAudioManager>();
         skillSelectObject.SetActive(false);
-
         closedSkillObject1.SetActive(false);
         closedSkillObject2.SetActive(false);
     }
@@ -260,8 +262,8 @@ public class SkillSelectManager: MonoBehaviour
                 }
             }
         }
-        AudioManager.instance.PlaySfx(AudioManager.Sfx.Select); // 버튼 선택 시 효과음
-        AudioManager.instance.EffectBGM(false); // AudioFilter 끄기
+        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 선택 시 효과음
+        gameAudioManager.EffectBGM(false); // AudioFilter 끄기
         skillSelectObject.SetActive(false);
 
         onSkillSelectObjectHided();
@@ -303,8 +305,8 @@ public class SkillSelectManager: MonoBehaviour
                 }
             }
         }
-        AudioManager.instance.PlaySfx(AudioManager.Sfx.Select); // 버튼 선택 시 효과음
-        AudioManager.instance.EffectBGM(false); // AudioFilter 끄기
+        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 선택 시 효과음
+        gameAudioManager.EffectBGM(false); // AudioFilter 끄기
         skillSelectObject.SetActive(false);
 
         onSkillSelectObjectHided();
@@ -346,8 +348,8 @@ public class SkillSelectManager: MonoBehaviour
                 }
             }
         }
-        AudioManager.instance.PlaySfx(AudioManager.Sfx.Select); // 버튼 선택 시 효과음
-        AudioManager.instance.EffectBGM(false); // AudioFilter 끄기
+        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 선택 시 효과음
+        gameAudioManager.EffectBGM(false); // AudioFilter 끄기
         skillSelectObject.SetActive(false);
 
         onSkillSelectObjectHided();

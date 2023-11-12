@@ -5,9 +5,8 @@ using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 using UnityEngine.Analytics;
 
-public class AudioManager : MonoBehaviour
+public class GameAudioManager : MonoBehaviour
 {
-    public static AudioManager instance; // AudioManager 인스턴스화
 
     // BGM
     [Header("#BGM")]
@@ -29,15 +28,15 @@ public class AudioManager : MonoBehaviour
     private Dictionary<AudioClip, List<float>> soundOneShot = new Dictionary<AudioClip, List<float>>();
     private int MaxDuplicateOneShotAudioClips = 30; // oneshot이 최대 겹처서 재생될수 잇는 수
 
-
-    public enum Sfx { Dead, Hit, LevelUp=3, Lose, Melee, Range=7, Select, Win }
+    public enum Sfx { Dead, Hit, LevelUp=3, Lose, Melee, Range=7, Select, Win, Cast }
 
     private void Awake()
     {
-        instance = this;
         Init();
     }
-    void Init()
+
+
+    private void Init()
     {
         // 배경음 플레이어 초기화
         GameObject bgmObject = new GameObject("BgmPlayer");
@@ -83,7 +82,7 @@ public class AudioManager : MonoBehaviour
     {
         for(int index=0; index<sfxPlayers.Length; index++)
         {
-            int loopIndex=(index+channelIndex) %sfxPlayers.Length;
+            int loopIndex=(index+channelIndex) % sfxPlayers.Length;
 
             if (sfxPlayers[loopIndex].isPlaying)
             {
@@ -104,6 +103,8 @@ public class AudioManager : MonoBehaviour
             break;
         }
     }
+
+
     // 오디오 겹침 현상 해결 위한 코드(메소드)
     void PlayOneShotSound(AudioSource source, AudioClip clip, float volumeScale)
     {

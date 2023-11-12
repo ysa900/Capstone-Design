@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
     // 사용할 클래스 객체들
     public Player player;
     private EnemyManager enemyManager;
+    private GameAudioManager gameAudioManager;
     private FollowCam followCam;
     private InputManager inputManager;
     private SkillManager skillManager;
@@ -86,6 +87,7 @@ public class GameManager : MonoBehaviour
         CreatePlayer();
         enemyManager = FindAnyObjectByType<EnemyManager>();
         inputManager = FindAnyObjectByType<InputManager>();
+        gameAudioManager = FindAnyObjectByType<GameAudioManager>();
         followCam = FindAnyObjectByType<FollowCam>();
         skillManager = FindAnyObjectByType<SkillManager>();
         skillSelectManager = FindAnyObjectByType<SkillSelectManager>();
@@ -116,8 +118,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        AudioManager.instance.PlaySfx(AudioManager.Sfx.Select); // GameStart 선택 효과음
-        AudioManager.instance.PlayBGM(true); // 배경음 시작
+        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // GameStart 선택 효과음
+        gameAudioManager.PlayBGM(true); // 배경음 시작
         enemyManager.CreateEnemies(50, player, 2, maxEnemySpawnRange); // 몬스터 소환
 
         skillSelectManager.ChooseStartSkill(); // 시작 스킬 선택
@@ -189,9 +191,9 @@ public class GameManager : MonoBehaviour
         gameOverObject.SetActive(true);
 
         yield return new WaitForSeconds(0.5f); // 0.5초 이후 시간 차 두기
-        AudioManager.instance.PlaySfx(AudioManager.Sfx.Lose); // 캐릭터 사망 시 효과음
+        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Lose); // 캐릭터 사망 시 효과음
         inputManager.PauseButtonObject.interactable = false; // Pause버튼 비활성화
-        AudioManager.instance.PlayBGM(false); // 배경음 종료
+        gameAudioManager.PlayBGM(false); // 배경음 종료
         Time.timeScale = 0; // 화면 멈추기
     }
 
@@ -199,7 +201,7 @@ public class GameManager : MonoBehaviour
     private void OnPauseButtonClicked()
     {
         pauseObject.SetActive(true);
-        AudioManager.instance.PlaySfx(AudioManager.Sfx.Select); // 버튼 클릭 효과음
+        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 클릭 효과음
 
         // UI 비활성화
         HpBarObject.SetActive(false);
@@ -212,7 +214,7 @@ public class GameManager : MonoBehaviour
     private void onPlayButtonClicked()
     {
         pauseObject.SetActive(false);
-        AudioManager.instance.PlaySfx(AudioManager.Sfx.Select); // 버튼 클릭 효과음
+        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 클릭 효과음
         // UI 활성화
         HpBarObject.SetActive(true);
         HpStatusLetteringObject.SetActive(true);
@@ -257,8 +259,8 @@ public class GameManager : MonoBehaviour
     private void OnPlayerLevelUP()
     {
         skillSelectManager.DisplayLevelupPanel();
-        AudioManager.instance.PlaySfx(AudioManager.Sfx.LevelUp); // 레벨업 시 효과음
-        AudioManager.instance.EffectBGM(true); // AudioFilter 켜기
+        gameAudioManager.PlaySfx(GameAudioManager.Sfx.LevelUp); // 레벨업 시 효과음
+        gameAudioManager.EffectBGM(true); // AudioFilter 켜기
     }
 
     private void OnSkillSelectObjectDisplayed()

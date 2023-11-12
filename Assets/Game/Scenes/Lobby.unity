@@ -5611,15 +5611,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 2126244486}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e59836e448f12748822d94958b509bb, type: 3}
+  m_Script: {fileID: 11500000, guid: 885df13d0cd2e8c4c8057ff53873720d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bgmClip: {fileID: 8300000, guid: 247c3899cf1f9d24c8956580dde222ea, type: 3}
-  bgmVolume: 0.8
+  bgmClip: {fileID: 8300000, guid: 634a3d18acbf59d42885a3d357a7c8c2, type: 3}
+  bgmVolume: 0.7
   sfxClips:
-  - {fileID: 8300000, guid: 4b294d59d2399014daa718b35c9de73b, type: 3}
+  - {fileID: 8300000, guid: e92e7b0aad95fc541bcc6979b3f5e35f, type: 3}
   SfxVolume: 0.2
-  channels: 1
+  channels: 2
 --- !u!1 &2136257933
 GameObject:
   m_ObjectHideFlags: 0
