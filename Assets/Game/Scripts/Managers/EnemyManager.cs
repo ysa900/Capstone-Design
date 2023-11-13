@@ -14,11 +14,11 @@ public class EnemyManager : MonoBehaviour
     Enemy enemy;
 
     // Enemy 프리팹
-    public Enemy zombiePrefab1;
-    public Enemy zombiePrefab2;
+
     public Enemy ghoulPrefab;
     public Enemy spitterPrefab;
     public Enemy summonerPrefab;
+    public Enemy bloodKingPrefab;
 
     // Enemy들이 생성되었을 때에 GameManager에게 Enemy 리스트를 전달해주기 위한 delegate
     public delegate void OnEnemiesChanged(List<Enemy> enemies);
@@ -34,32 +34,27 @@ public class EnemyManager : MonoBehaviour
     {
         switch (enemyType)
         {
+
             case 0:
-                {
-                    SetEnemyInfoNSummon(enemyNum, player, zombiePrefab1, maxRadius);
-                    break;
-                }
-            case 1:
-                {
-                    SetEnemyInfoNSummon(enemyNum, player, zombiePrefab2, maxRadius);
-                    break;
-                }
-            case 2:
                 {
                     SetEnemyInfoNSummon(enemyNum, player, ghoulPrefab, maxRadius);
                     break;
                 }
-            case 3:
+            case 1:
                 {
                     SetEnemyInfoNSummon(enemyNum, player, spitterPrefab, maxRadius);
                     break;
                 }
-            case 4:
+            case 2:
                 {
                     SetEnemyInfoNSummon(enemyNum, player, summonerPrefab, maxRadius);
                     break;
                 }
-
+            case 3:
+                {
+                    SetEnemyInfoNSummon(enemyNum, player, bloodKingPrefab, maxRadius);
+                    break;
+                }
         }
 
         onEnemiesChanged(enemies); // GameManager에게 emeies를 전달

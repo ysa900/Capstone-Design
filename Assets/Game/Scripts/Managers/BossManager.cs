@@ -4,7 +4,7 @@ using UnityEngine;
 public class BossManager : MonoBehaviour
 {
     // 利 弥家 积己 芭府
-    private float minBossSpawnRange = 20;
+    //private float minBossSpawnRange = 20;
 
     Boss boss;
     public Boss bossPrefab;

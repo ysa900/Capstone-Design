@@ -6,28 +6,28 @@ Sprite:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: FireIcon1
+  m_Name: Health Icon
   m_Rect:
     serializedVersion: 2
-    x: 0
-    y: 36
-    width: 18
-    height: 18
-  m_Offset: {x: 0, y: 0}
+    x: 4
+    y: 116
+    width: 6
+    height: 6
+  m_Offset: {x: 0, y: -7}
   m_Border: {x: 0, y: 0, z: 0, w: 0}
-  m_PixelsToUnits: 32
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_PixelsToUnits: 100
+  m_Pivot: {x: 0.5, y: -0.6666667}
   m_Extrude: 1
   m_IsPolygon: 0
   m_AtlasName: 
   m_PackingTag: 
   m_RenderDataKey:
-    932ad7a4b3b6e489caf198803bc034af: 6740439217106087215
+    07a31deda26b8994fad9b93b41030665: -1738512559501138371
   m_AtlasTags: []
   m_SpriteAtlas: {fileID: 0}
   m_RD:
     serializedVersion: 3
-    texture: {fileID: 2800000, guid: 932ad7a4b3b6e489caf198803bc034af, type: 3}
+    texture: {fileID: -8328923581568760697, guid: 07a31deda26b8994fad9b93b41030665, type: 3}
     alphaTexture: {fileID: 0}
     secondaryTextures: []
     m_SubMeshes:
@@ -103,22 +103,22 @@ Sprite:
         format: 10
         dimension: 4
       m_DataSize: 208
-      _typelessdata: 000090be0000903e000000000000903e0000903e00000000000090be000090be000000000000903e000090be00000000000000000000803f0000803f000000000000000000000000000000000000000000000000000000000000803e0000803f0000803f0000000000000000000000000000000000000000000000000000000000000000abaa2a3f0000803f000000000000000000000000000000000000000000000000000000000000803eabaa2a3f0000803f00000000000000000000000000000000000000000000000000000000
+      _typelessdata: 8fc2f5bccdcccc3d000000008fc2f53ccdcccc3d000000008fc2f5bc0ad7233d000000008fc2f53c0ad7233d000000000000803d0000743f0000803f000000000000000000000000000000000000000000000000000000000000203e0000743f0000803f000000000000000000000000000000000000000000000000000000000000803d0000683f0000803f000000000000000000000000000000000000000000000000000000000000203e0000683f0000803f00000000000000000000000000000000000000000000000000000000
     m_Bindpose: []
     textureRect:
       serializedVersion: 2
-      x: 0
-      y: 36
-      width: 18
-      height: 18
+      x: 4
+      y: 116
+      width: 6
+      height: 6
     textureRectOffset: {x: 0, y: 0}
     atlasRectOffset: {x: -1, y: -1}
     settingsRaw: 64
-    uvTransform: {x: 32, y: 9, z: 32, w: 45}
+    uvTransform: {x: 100, y: 7, z: 100, w: 112}
     downscaleMultiplier: 1
   m_AtlasRD:
     serializedVersion: 3
-    texture: {fileID: 2800000, guid: 932ad7a4b3b6e489caf198803bc034af, type: 3}
+    texture: {fileID: -8328923581568760697, guid: 07a31deda26b8994fad9b93b41030665, type: 3}
     alphaTexture: {fileID: 0}
     secondaryTextures: []
     m_SubMeshes:
@@ -194,27 +194,20 @@ Sprite:
         format: 10
         dimension: 4
       m_DataSize: 208
-      _typelessdata: 000090be0000903e000000000000903e0000903e00000000000090be000090be000000000000903e000090be00000000000000000000803f0000803f000000000000000000000000000000000000000000000000000000000000803e0000803f0000803f0000000000000000000000000000000000000000000000000000000000000000abaa2a3f0000803f000000000000000000000000000000000000000000000000000000000000803eabaa2a3f0000803f00000000000000000000000000000000000000000000000000000000
+      _typelessdata: 8fc2f5bccdcccc3d000000008fc2f53ccdcccc3d000000008fc2f5bc0ad7233d000000008fc2f53c0ad7233d000000000000803d0000743f0000803f000000000000000000000000000000000000000000000000000000000000203e0000743f0000803f000000000000000000000000000000000000000000000000000000000000803d0000683f0000803f000000000000000000000000000000000000000000000000000000000000203e0000683f0000803f00000000000000000000000000000000000000000000000000000000
     m_Bindpose: []
     textureRect:
       serializedVersion: 2
-      x: 0
-      y: 36
-      width: 18
-      height: 18
+      x: 4
+      y: 116
+      width: 6
+      height: 6
     textureRectOffset: {x: 0, y: 0}
     atlasRectOffset: {x: -1, y: -1}
     settingsRaw: 64
-    uvTransform: {x: 32, y: 9, z: 32, w: 45}
+    uvTransform: {x: 100, y: 7, z: 100, w: 112}
     downscaleMultiplier: 1
-  m_PhysicsShape:
-  - - {x: -0.15625, y: 0.28125}
-    - {x: -0.1875, y: 0.1875}
-    - {x: -0.1875, y: -0.28125}
-    - {x: 0.1875, y: -0.28125}
-    - {x: 0.21875, y: -0.1875}
-    - {x: 0.21875, y: 0.09375}
-    - {x: -0.03125, y: 0.28125}
+  m_PhysicsShape: []
   m_Bones: []
   m_ScriptableObjects: []
-  m_SpriteID: f2d68bd61c9da8d50800000000000000
+  m_SpriteID: 4871863c6a238ad48bea0a7313b65c8a

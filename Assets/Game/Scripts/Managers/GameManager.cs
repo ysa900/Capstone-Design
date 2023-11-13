@@ -1,9 +1,5 @@
-using NUnit.Framework;
-using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using UnityEngine;
-using static Player;
 
 // Pause 걸면 이전에는 인게임 속 UI들(피통, 스킬 패널, 프로필)이 안사라져서
 // 사라지게 하려고 gameObject로 선언한거랑
@@ -17,19 +13,11 @@ public class GameManager : MonoBehaviour
     public float gameTime;
     //private float maxGameTime = 15 * 60f;
 
+    // 적 스폰 쿨타임
+    public float CoolTime = 0f;
+
     // 적 최대 생성 거리 (최소는 20, EnemyManager에 있음)
     private float maxEnemySpawnRange = 30;
-
-    // Enemy0 스폰 관련 설정
-    private float spawnCoolTime0 = 10;
-    private int compensationNum0= 1; // 스폰 쿨타임 보정값
-
-    // Enemy1 스폰 관련 설정
-    private float spawnCoolTime1 = 10;
-    private int compensationNum1 = 1; // 스폰 쿨타임 보정값
-
-    // level 시간 설정
-    private float level2Time = 30;
 
     // GameOver가 됐는지 판별하는 변수
     private bool isGameOver;
@@ -102,7 +90,6 @@ public class GameManager : MonoBehaviour
         skillManager.onShiledSkillActivated = OnShieldSkillActivated;
         skillManager.onShiledSkillUnActivated = OnShieldSkillUnActivated;
 
-
         // delegate 할당
         enemyManager.onEnemiesChanged = OnEnemiesChanged;
         enemyManager.onEnemyKilled = OnEnemyKilled;
@@ -110,11 +97,12 @@ public class GameManager : MonoBehaviour
         // delegate 할당
         skillSelectManager.onSkillSelectObjectDisplayed = OnSkillSelectObjectDisplayed;
         skillSelectManager.onSkillSelectObjectHided = OnSkillSelectObjectHided;
+        skillSelectManager.onPlayerHealed = OnPlayerHealed;
     }
 
     void Start()
     {
-        enemyManager.CreateEnemies(50, player, 2, maxEnemySpawnRange); // 몬스터 소환
+        enemyManager.CreateEnemies(50, player, 0, maxEnemySpawnRange); // 몬스터 소환
 
         skillSelectManager.ChooseStartSkill(); // 시작 스킬 선택
     }
@@ -124,6 +112,7 @@ public class GameManager : MonoBehaviour
     {
         if(!isGameOver) {
             gameTime += Time.deltaTime; // 게임 시간 증가
+            CoolTime += Time.deltaTime;
 
             CalculateEnemySpawnTime(); // 소환할 적을 지정하고 스폰
         }
@@ -141,36 +130,35 @@ public class GameManager : MonoBehaviour
     // Enemy 스폰 시간을 계산해 소환할 적을 지정하는 함수
     private void CalculateEnemySpawnTime()
     {
-        bool isLevel2TimeOver = gameTime >= level2Time; // level2가 되야 할 시간이 지났나 판별
 
-        // Enemy0, 1의 스폰 쿨타임이 지났나 판별
-        bool is_spawnCoolTimeOver0 = gameTime > spawnCoolTime0 * compensationNum0;
-        bool is_spawnCoolTimeOver1 = gameTime > spawnCoolTime1 * compensationNum1;
-
-        // 쿨타임이 찰 때마다 쿨타임을 보정
-        if (is_spawnCoolTimeOver0)
-            compensationNum0++;
-
-        if (is_spawnCoolTimeOver1)
-            compensationNum1++;
-
-        bool is_spawn1ok = is_spawnCoolTimeOver0 && !isLevel2TimeOver;
-        bool is_spawn2ok = is_spawnCoolTimeOver1 && isLevel2TimeOver;
-
-        // 소환되어야 할 Enemy를 스폰
-        if (is_spawn1ok)
+       
+        if (gameTime <= 10f && CoolTime >= 10f)
         {
-            enemyManager.CreateEnemies(20, player, 2, maxEnemySpawnRange);
-            enemyManager.CreateEnemies(40, player, 3, maxEnemySpawnRange);
+            enemyManager.CreateEnemies(50, player, 0, maxEnemySpawnRange); // Ghoul 몬스터 소환
+            CoolTime = 0f;
+
         }
-        
-        if (is_spawn2ok)
+        else if (gameTime <= 20f && CoolTime >= 10f)
         {
-            enemyManager.CreateEnemies(10, player, 2, maxEnemySpawnRange);
-            enemyManager.CreateEnemies(20, player, 3, maxEnemySpawnRange);
-            enemyManager.CreateEnemies(30, player, 4, maxEnemySpawnRange);
+
+            enemyManager.CreateEnemies(50, player, 1, maxEnemySpawnRange); // Spitter 몬스터 소환
+            CoolTime = 0f;
         }
-            
+        else if (gameTime <= 30f && CoolTime >= 10f)
+        {
+            enemyManager.CreateEnemies(50, player, 2, maxEnemySpawnRange); //Summoner 몬스터 소환
+            CoolTime = 0f;
+        }
+        else if (gameTime <= 45f && CoolTime >= 10f)
+        {
+            enemyManager.CreateEnemies(50, player, 3, maxEnemySpawnRange); //BloodKing 몬스터 소환
+            CoolTime = 0f;
+        }
+        else
+        {
+            // 보스 등장
+        }
+
     }
 
     // 플레이어가 죽었을 시 실행됨
@@ -228,12 +216,43 @@ public class GameManager : MonoBehaviour
             player.kill++;
         }
 
-        exp = Instantiate(expPrefab1);
 
-        exp.expAmount = 1;
+        if (killedEnemy.tag == "Ghoul")
+        {
+            exp = Instantiate(expPrefab1);
 
-        exp.X = killedEnemy.X;
-        exp.Y = killedEnemy.Y + 1f;
+            exp.expAmount = 1;
+
+            exp.X = killedEnemy.X;
+            exp.Y = killedEnemy.Y + 1f;
+        }
+        else if (killedEnemy.tag == "Spitter")
+        {
+            exp = Instantiate(expPrefab2);
+
+            exp.expAmount = 2;
+
+            exp.X = killedEnemy.X;
+            exp.Y = killedEnemy.Y + 1f;
+        }
+        else if (killedEnemy.tag == "Summoner")
+        {
+            exp = Instantiate(expPrefab2);
+
+            exp.expAmount = 3;
+
+            exp.X = killedEnemy.X;
+            exp.Y = killedEnemy.Y + 1f;
+        }
+        else if (killedEnemy.tag == "BloodKing")
+        {
+            exp = Instantiate(expPrefab3);
+
+            exp.expAmount = 4;
+
+            exp.X = killedEnemy.X;
+            exp.Y = killedEnemy.Y + 1f;
+        }
     }
 
     // 플레이어가 레벨 업 했을 시 실행
@@ -262,5 +281,11 @@ public class GameManager : MonoBehaviour
         SkillPanelObject.SetActive(true);
         CharacterProfileObject.SetActive(true);
         inputManager.PauseButtonObject.interactable = true;
+    }
+
+    private void OnPlayerHealed()
+    {
+        player.hp += 10;
+        if(player.hp > 100) { player.hp = 100; }
     }
 }
