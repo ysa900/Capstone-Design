@@ -1,8 +1,10 @@
 using System.Collections;
 using UnityEngine;
 
-public class Boss : Object
+public class Boss : Object, IDamageable
 {
+    int hp = 1000;
+
     public Player player;
 
     float attackDelayTimer = 1f;
@@ -13,9 +15,12 @@ public class Boss : Object
     public delegate void OnBossTryAttack();
     public OnBossTryAttack onBossTryAttack;
 
+    Rigidbody2D rigid; // 물리 입력을 받기위한 변수
+
     private void Start()
     {
         animator = GetComponent<Animator>();
+        rigid = GetComponent<Rigidbody2D>();
     }
 
     private void Update()
@@ -46,5 +51,30 @@ public class Boss : Object
 
         onBossTryAttack();
         animator.SetBool("Shoot", false);
+    }
+
+    // IDamageable의 함수 TakeDamage
+    public void TakeDamage(GameObject causer, float damage)
+    {
+        hp = hp - (int)damage;
+
+        if (hp <= 0)
+        {
+            StartCoroutine(Dead());
+            StopCoroutine(Dead());
+        }
+    }
+
+    IEnumerator Dead()
+    {
+        animator.SetTrigger("Dead");
+        //onBossWasKilled(this); // 대리자 호출
+
+        rigid.constraints = RigidbodyConstraints2D.FreezeAll;
+        GetComponent<CapsuleCollider2D>().enabled = false;
+
+        yield return new WaitForSeconds(0.5f); // 지정한 초 만큼 쉬기
+
+        Destroy(gameObject);
     }
 }

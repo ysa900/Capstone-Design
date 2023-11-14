@@ -13,12 +13,14 @@ public class EnemyManager : MonoBehaviour
     // Enemy 클래스 객체
     Enemy enemy;
 
+    private GameAudioManager gameAudioManager;
+
     // Enemy 프리팹
-    public Enemy zombiePrefab1;
-    public Enemy zombiePrefab2;
+
     public Enemy ghoulPrefab;
     public Enemy spitterPrefab;
     public Enemy summonerPrefab;
+    public Enemy bloodKingPrefab;
 
     // Enemy들이 생성되었을 때에 GameManager에게 Enemy 리스트를 전달해주기 위한 delegate
     public delegate void OnEnemiesChanged(List<Enemy> enemies);
@@ -27,39 +29,38 @@ public class EnemyManager : MonoBehaviour
     // Enemy가 죽었을 때 GameManager에게 알려주기 위한 delegate
     public delegate void OnEnemyKilled(Enemy killedEnemy);
     public OnEnemyKilled onEnemyKilled;
+    private void Awake()
+    {
+        gameAudioManager = FindAnyObjectByType<GameAudioManager>();
+    }
 
-    // Enemy들을 생성하는 함수
-    // enemyType: 0 ~ ? (현재 0 ~ 1), 이게 몬스터 종류 결정
-    public void CreateEnemies(int enemyNum, Player player, int enemyType, float maxRadius)
+        // Enemy들을 생성하는 함수
+        // enemyType: 0 ~ ? (현재 0 ~ 1), 이게 몬스터 종류 결정
+        public void CreateEnemies(int enemyNum, Player player, int enemyType, float maxRadius)
     {
         switch (enemyType)
         {
+
             case 0:
-                {
-                    SetEnemyInfoNSummon(enemyNum, player, zombiePrefab1, maxRadius);
-                    break;
-                }
-            case 1:
-                {
-                    SetEnemyInfoNSummon(enemyNum, player, zombiePrefab2, maxRadius);
-                    break;
-                }
-            case 2:
                 {
                     SetEnemyInfoNSummon(enemyNum, player, ghoulPrefab, maxRadius);
                     break;
                 }
-            case 3:
+            case 1:
                 {
                     SetEnemyInfoNSummon(enemyNum, player, spitterPrefab, maxRadius);
                     break;
                 }
-            case 4:
+            case 2:
                 {
                     SetEnemyInfoNSummon(enemyNum, player, summonerPrefab, maxRadius);
                     break;
                 }
-
+            case 3:
+                {
+                    SetEnemyInfoNSummon(enemyNum, player, bloodKingPrefab, maxRadius);
+                    break;
+                }
         }
 
         onEnemiesChanged(enemies); // GameManager에게 emeies를 전달
@@ -72,6 +73,11 @@ public class EnemyManager : MonoBehaviour
         
         enemies.Remove(killedEnemy);
         onEnemiesChanged(enemies); // enmy 배열 업데이트하도록 GameManager에게 알려주기
+
+        if (!GameManager.instance.isGameOver) //  캐릭터 사망하기 전까지만 실행
+        {
+            gameAudioManager.PlaySfx(GameAudioManager.Sfx.Dead); // Enemy 사망 시 효과음
+        }
     }
 
     // 적 정보를 입력하고 적을 생성하는 함수

@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class EnemyOnSkill : Skill
 {
+    public bool isBossAppear;
+
     private float aliveTime; // 스킬 생존 시간을 체크할 변수
 
     private void Start()
