@@ -38,12 +38,10 @@ public class GameManager : MonoBehaviour
     private SkillManager skillManager;
     private SkillSelectManager skillSelectManager;
     private EXP exp;
-
-    private Boss boss;
+    private BossManager bossManager;
 
     // GameObject에서 프리팹을 넣어주기 위해 public으로 설정
     public Player playerPrefab;
-    public Boss bossPrefab;
 
     // EXP 프리팹
     public EXP expPrefab1;
@@ -84,6 +82,7 @@ public class GameManager : MonoBehaviour
         followCam = FindAnyObjectByType<FollowCam>();
         skillManager = FindAnyObjectByType<SkillManager>();
         skillSelectManager = FindAnyObjectByType<SkillSelectManager>();
+        bossManager = FindAnyObjectByType<BossManager>();
 
         // inputManger Delegate 할당
         inputManager.onPauseButtonClicked = OnPauseButtonClicked;
@@ -167,13 +166,11 @@ public class GameManager : MonoBehaviour
         else if (gameTime >= 60f)
         {
             // 보스 등장
-            boss = Instantiate(bossPrefab);
-            boss.X = player.transform.position.x + 10;
-            boss.Y = player.transform.position.y + 8;
-            boss.player = player;
+            bossManager.player = player;
+            bossManager.CreateBoss();
 
             skillManager.isBossAppear = true;
-            skillManager.boss = boss;
+            skillManager.boss = bossManager.boss;
 
             isBossSpawned = true;
         }

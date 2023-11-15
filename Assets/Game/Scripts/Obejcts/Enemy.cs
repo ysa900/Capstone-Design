@@ -50,10 +50,9 @@ public class Enemy : Object, IDamageable
             MoveToPlayer();
         }
 
-        if(GameManager.instance.gameTime >= 60f)
+        if(GameManager.instance.gameTime >= 60f && !isDead)
         {
             StartCoroutine(Dead());
-            StopCoroutine(Dead());
         }
 
         DestryIfToFar(); // 플레이어와의 거리가 너무 멀면 죽음
@@ -113,10 +112,9 @@ public class Enemy : Object, IDamageable
     {
         hp = hp - (int)damage;
 
-        if (hp <= 0)
+        if (hp <= 0 && !isDead)
         {
             StartCoroutine(Dead());
-            StopCoroutine(Dead());
         }
         else
         {
@@ -133,10 +131,10 @@ public class Enemy : Object, IDamageable
 
     IEnumerator Dead()
     {
+        isDead = true;
+
         animator.SetTrigger("Dead");
         onEnemyWasKilled(this); // 대리자 호출
-
-        isDead = true;
 
         rigid.constraints = RigidbodyConstraints2D.FreezeAll;
         GetComponent<CapsuleCollider2D>().enabled = false;
