@@ -643,10 +643,10 @@ public class SkillManager : MonoBehaviour
 
                     break;
                 }
-            case 10: // ?
+            case 10:
                 {
                     StartCoroutine(CastWithDelay(index, 10));
-
+                    gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
                     break;
                 }
             case 11:

@@ -36,6 +36,13 @@ public class Player : MonoBehaviour, IPlayer
     public delegate void OnPlayerLevelUP();
     public OnPlayerLevelUP onPlayerLevelUP;
 
+    private GameAudioManager gameAudioManager;
+
+    private void Awake()
+    {
+        gameAudioManager = FindAnyObjectByType<GameAudioManager>();
+    }
+
     void Start()
     {
         // 변수 초기화
@@ -124,6 +131,7 @@ public class Player : MonoBehaviour, IPlayer
         {
             if (!isPlayerShielded)
                 hp -= Time.deltaTime * 10;
+                gameAudioManager.PlaySfx(GameAudioManager.Sfx.Melee); // 피격  효과음
 
             if (hp <= 0)
             {
