@@ -40,7 +40,6 @@ public class BossManager : MonoBehaviour
     private void OnBossTryAttack()
     {
         bossBullet = Instantiate(bossBulletPrefab);
-        bossBullet.X = boss.X + 1f;
-        bossBullet.Y = boss.Y - 1.2f;
+    
     }
 }

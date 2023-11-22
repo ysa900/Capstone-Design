@@ -50,7 +50,7 @@ public class SkillManager : MonoBehaviour
     {
         Init(); // skillData 초기화
     }
-
+    
     private void Update()
     {
         for(int i = 0; i < skillData.Damage.Length; i++)
@@ -71,7 +71,7 @@ public class SkillManager : MonoBehaviour
             }
         }
     }
-
+    
     // skilldata를 초기화
     private void Init()
     {
@@ -115,6 +115,7 @@ public class SkillManager : MonoBehaviour
 
     // 공격을 시도하는 함수 (사거리 판단)
     // index : 스킬 종류 (불 - 0 + 3n , 전기 - 1 + 3n, 물 - 2 + 3n)
+    
     public void TryAttack(int index)
     {
         switch (index)
@@ -122,7 +123,7 @@ public class SkillManager : MonoBehaviour
             case 0:
                 {
                     // 불 공격은 가장 가까운 적이 사거리 내에 있어야지만 나간다
-                    Enemy enemy = FindNearestEnemy(); // 가장 가까운 적을 찾는다
+/*                    Enemy enemy = FindNearestEnemy(); // 가장 가까운 적을 찾는다
                     Vector2 enemyPos = enemy.transform.position;
                     Vector2 playerPos = player.transform.position;
                     float distance = Vector2.Distance(enemyPos, playerPos);
@@ -132,13 +133,13 @@ public class SkillManager : MonoBehaviour
                     if (isInAttackRange)
                     {
                         CastSkill(enemy, index); // 스킬을 시전
-                    }
+                    }*/
                     break;
                 }
             case 1:
                 {
                     // 전기 공격은 사거리 내 랜덤한 적에게 시전된다
-                    Enemy enemy;
+                    /*Enemy enemy;
 
                     int breakNum = 0; // while문 탈출을 위한 num
 
@@ -163,56 +164,56 @@ public class SkillManager : MonoBehaviour
                             break;
                     }
 
-                    CastSkill(enemy, index);
+                    CastSkill(enemy, index);*/
                     break;
                 }
             case 2:
                 {
-                    // 물 기본 스킬은 적에 상관없이 항상 나간다 (플레이어에 붙어다님)
+/*                    // 물 기본 스킬은 적에 상관없이 항상 나간다 (플레이어에 붙어다님)
                     Enemy enemy = enemies[0]; // 가짜로 일단 줌
                     CastSkill(enemy, index);
-
+*/
                     break;
                 }
             case 3:
                 {
-                    // 불 일반1 스킬은 적에 상관없이 항상 나간다 (플레이어에 붙어다님)
+/*                    // 불 일반1 스킬은 적에 상관없이 항상 나간다 (플레이어에 붙어다님)
                     Enemy enemy = enemies[0]; // 가짜로 일단 줌
-                    CastSkill(enemy, index);
+                    CastSkill(enemy, index);*/
                     break;
                 }
             case 4:
                 {
-                    // 전기 일반1 스킬은 적에 상관없이 항상 나간다 (플레이어에 붙어다님)
+/*                    // 전기 일반1 스킬은 적에 상관없이 항상 나간다 (플레이어에 붙어다님)
                     Enemy enemy = enemies[0]; // 가짜로 일단 줌
-                    CastSkill(enemy, index);
+                    CastSkill(enemy, index);*/
                     break;
                 }
             case 5:
                 {
-                    // 물 일반1 스킬은 적에 상관없이 항상 나간다 (플레이어에 붙어다님)
+/*                    // 물 일반1 스킬은 적에 상관없이 항상 나간다 (플레이어에 붙어다님)
                     Enemy enemy = enemies[0]; // 가짜로 일단 줌
-                    CastSkill(enemy, index);
+                    CastSkill(enemy, index);*/
                     break;
                 }
             case 6: 
                 {
-                    // 불 일반2 스킬은 적에 상관없이 항상 나간다 (랜덤 위치에 떨어짐)
+/*                    // 불 일반2 스킬은 적에 상관없이 항상 나간다 (랜덤 위치에 떨어짐)
                     Enemy enemy = enemies[0]; // 가짜로 일단 줌
-                    CastSkill(enemy, index);
+                    CastSkill(enemy, index);*/
                     break;
                 }
             case 7:
                 {
-                    // 전기 일반2 스킬은 적에 상관없이 항상 나간다 (플레이어에 붙어다님)
+/*                    // 전기 일반2 스킬은 적에 상관없이 항상 나간다 (플레이어에 붙어다님)
                     Enemy enemy = enemies[0]; // 가짜로 일단 줌
-                    CastSkill(enemy, index);
+                    CastSkill(enemy, index);*/
                     break;
                 }
 
         }
     }
-
+    
     // 가장 가까운 Enemy를 찾는 함수
     public Enemy FindNearestEnemy()
     {
@@ -226,7 +227,7 @@ public class SkillManager : MonoBehaviour
             if (distance <= minDistance)
             {
                 minDistance = distance;
-                nearEnemy = enemies[i];
+/*                nearEnemy = enemies[i];*/
             }
         }
 
@@ -241,7 +242,7 @@ public class SkillManager : MonoBehaviour
         {
             case 0:
                 {
-                    enemyTrackingSkill = Instantiate(fireBasicSkillPrefab);
+                    /*enemyTrackingSkill = Instantiate(fireBasicSkillPrefab);
                     gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
                     Vector2 playerPosition = player.transform.position;
                     Vector2 enemyPosition = enemy.transform.position;
@@ -260,13 +261,13 @@ public class SkillManager : MonoBehaviour
                     enemyTrackingSkill.enemy = enemy;
 
                     enemyTrackingSkill.speed = 10;
-                    enemyTrackingSkill.damage = skillData.Damage[index];
+                    enemyTrackingSkill.damage = skillData.Damage[index];*/
 
                     break;
                 }
             case 1:
                 {
-                    enemyOnSkill = Instantiate(electricBasicSkillPrefab);
+                    /*enemyOnSkill = Instantiate(electricBasicSkillPrefab);
                     gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
                     Vector2 enemyPosition = enemy.transform.position;
 
@@ -279,7 +280,7 @@ public class SkillManager : MonoBehaviour
 
                     enemyOnSkill.enemy = enemy;
                     enemyOnSkill.damage = skillData.Damage[index];
-
+*/
                     break;
                 }
             case 2:

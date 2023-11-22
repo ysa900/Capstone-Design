@@ -120,7 +120,7 @@ public class GameManager : MonoBehaviour
     {
         gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // GameStart 선택 효과음
         gameAudioManager.PlayBGM(true); // 배경음 시작
-        enemyManager.CreateEnemies(50, player, 2, maxEnemySpawnRange); // 몬스터 소환
+       // enemyManager.CreateEnemies(50, player, 2, maxEnemySpawnRange); // 몬스터 소환
 
         skillSelectManager.ChooseStartSkill(); // 시작 스킬 선택
     }
@@ -131,7 +131,7 @@ public class GameManager : MonoBehaviour
         if(!isGameOver) {
             gameTime += Time.deltaTime; // 게임 시간 증가
 
-            CalculateEnemySpawnTime(); // 소환할 적을 지정하고 스폰
+            //CalculateEnemySpawnTime(); // 소환할 적을 지정하고 스폰
         }
 
         skillManager.enemies = enemies;

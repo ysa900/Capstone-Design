@@ -1,50 +1,49 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using Unity.MLAgents;
+using Unity.MLAgents.Actuators;
+using Unity.MLAgents.Sensors;
+using static UnityEngine.GraphicsBuffer;
 
-public class Boss_Bullet : Object
+public class Boss_Bullet : Agent
 {
-    Animator animator;
+    Transform target;
 
-    bool isDead;
-
-    private float aliveTime; // 스킬 생존 시간을 체크할 변수
-
-    private void Start()
+    public override void OnEpisodeBegin()
     {
-        animator = GetComponent<Animator>();
+        transform.position = Vector2.zero;
+        target=GameManager.instance.player.GetComponent<Transform>();
+    }
+    public override void CollectObservations(VectorSensor sensor)
+    {
+        sensor.AddObservation(transform.position);
+        sensor.AddObservation(target.position);
     }
 
-    private void Update()
+    [SerializeField] float speed = 1;
+    Vector2 nextMove;
+    public override void OnActionReceived(ActionBuffers actions)
     {
-        if(!isDead) 
+        nextMove.x = actions.ContinuousActions[0];
+        nextMove.y = actions.ContinuousActions[1];
+
+        transform.Translate(nextMove * Time.deltaTime * speed);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.transform == target)
         {
-            X += 10f * Time.deltaTime;
-
-            if (X >= 5)
-            {
-                bool destroySkill = aliveTime > 0.3f;
-
-                if (destroySkill)
-                {
-                    StartCoroutine(Dead());
-                    StopCoroutine(Dead());
-                    return;
-                }
-
-                aliveTime += Time.deltaTime;
-            }
+            SetReward(+1);
+            Debug.Log("S");
+            EndEpisode();
         }
-    }
-
-    IEnumerator Dead()
-    {
-        animator.SetTrigger("Hit");
-
-        isDead = true;
-
-        yield return new WaitForSeconds(0.35f); // 지정한 초 만큼 쉬기
-
-        Destroy(gameObject);
+        else
+        {
+            SetReward(-1);
+            EndEpisode();
+        }
     }
 }
 
