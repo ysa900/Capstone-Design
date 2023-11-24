@@ -442,6 +442,30 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -2912,7 +2936,124 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      07_rotation_0: 2700655537407622224
+      07_rotation_1: -3772808612148932993
+      07_rotation_10: 130287965362065376
+      07_rotation_100: 5962880653847999238
+      07_rotation_101: -1375895557965141637
+      07_rotation_102: -5490495558358673062
+      07_rotation_103: 6341066840814349244
+      07_rotation_104: -7383281078554057082
+      07_rotation_105: 362566968675567982
+      07_rotation_106: 4987773541423729168
+      07_rotation_107: -6333398979001871468
+      07_rotation_108: -4455914960039878388
+      07_rotation_109: 7569226886342453941
+      07_rotation_11: 482892189498038969
+      07_rotation_110: 6386155325881405607
+      07_rotation_111: -4740220336527063845
+      07_rotation_112: 8231609671888404537
+      07_rotation_113: -1993324678866789975
+      07_rotation_114: 7224155949560462945
+      07_rotation_115: 7583551810096251010
+      07_rotation_116: -6471651079863283519
+      07_rotation_12: 6955168652658697467
+      07_rotation_13: 3414949283156564649
+      07_rotation_14: 4257901608437790266
+      07_rotation_15: 9200393954842181233
+      07_rotation_16: 7304579142133588080
+      07_rotation_17: 845392286020359548
+      07_rotation_18: -3201242858300363871
+      07_rotation_19: -86663683945781140
+      07_rotation_2: 3986264329785007075
+      07_rotation_20: -3521119732698042006
+      07_rotation_21: -4935469460917904616
+      07_rotation_22: -2072450733603955433
+      07_rotation_23: 6330936296870430771
+      07_rotation_24: -8853440532172831170
+      07_rotation_25: -3171659104196273341
+      07_rotation_26: 6601180006195334408
+      07_rotation_27: 5360721651852366966
+      07_rotation_28: -2511189793231256092
+      07_rotation_29: -6253593698854129216
+      07_rotation_3: -8110130819698306033
+      07_rotation_30: -68983860714950302
+      07_rotation_31: 6042125123077642987
+      07_rotation_32: 6228511149759520446
+      07_rotation_33: 1938700897156800633
+      07_rotation_34: -5909751006977855053
+      07_rotation_35: 8136815197949828761
+      07_rotation_36: -686994987414590175
+      07_rotation_37: -2592999062826479429
+      07_rotation_38: -7156990904098172250
+      07_rotation_39: 8012847797320779658
+      07_rotation_4: 6980171060066616081
+      07_rotation_40: 7001215704659344271
+      07_rotation_41: -8556302469328249122
+      07_rotation_42: -7805327629810238984
+      07_rotation_43: 2698190529730863497
+      07_rotation_44: 4761908097359175854
+      07_rotation_45: 873146454821530444
+      07_rotation_46: 5901953912583818169
+      07_rotation_47: -3969866160282277469
+      07_rotation_48: -123072134093143564
+      07_rotation_49: -6229628426092718668
+      07_rotation_5: -1040041979496489702
+      07_rotation_50: 7240250816686265175
+      07_rotation_51: 5908315346205221235
+      07_rotation_52: -5759595429035413760
+      07_rotation_53: -6640470167232541408
+      07_rotation_54: -8787607810034515937
+      07_rotation_55: -1675288529270882097
+      07_rotation_56: 6111996848320515658
+      07_rotation_57: 2761775198092853415
+      07_rotation_58: 6492020695978677805
+      07_rotation_59: 129426107914848459
+      07_rotation_6: 2861856590787152200
+      07_rotation_60: 2694849733168411497
+      07_rotation_61: -7789615117662632712
+      07_rotation_62: -1962284648562497668
+      07_rotation_63: -3549067442886245314
+      07_rotation_64: 2472281894747824853
+      07_rotation_65: -3045047387569865385
+      07_rotation_66: -3121368248068748259
+      07_rotation_67: 247177345398653434
+      07_rotation_68: -7584593359984031434
+      07_rotation_69: -6924764854944441340
+      07_rotation_7: -5772789368873879906
+      07_rotation_70: -7555799856288740046
+      07_rotation_71: 1782023324953990572
+      07_rotation_72: 8691076066572537379
+      07_rotation_73: 1514887443080498631
+      07_rotation_74: -2007378104353777422
+      07_rotation_75: 8297739869049707604
+      07_rotation_76: -2297558060034145729
+      07_rotation_77: -1317906376547132056
+      07_rotation_78: 3665682364942054774
+      07_rotation_79: 8887967245050416137
+      07_rotation_8: -5667812150164664235
+      07_rotation_80: -2919672946325896126
+      07_rotation_81: 7788653922203677906
+      07_rotation_82: 6018494289217664474
+      07_rotation_83: -1826983787786578342
+      07_rotation_84: -801405965161868217
+      07_rotation_85: 5571804547335533034
+      07_rotation_86: -5643094497827259951
+      07_rotation_87: 6425104994892175130
+      07_rotation_88: -7481947324097548759
+      07_rotation_89: -2155737028470842778
+      07_rotation_9: -5326592638476258297
+      07_rotation_90: 4978975535944223246
+      07_rotation_91: 12613688263019413
+      07_rotation_92: 320889669295510786
+      07_rotation_93: 7039681162767956282
+      07_rotation_94: 4295019132809528038
+      07_rotation_95: -8656300360743291641
+      07_rotation_96: -3693692253840648168
+      07_rotation_97: 5667971714737817409
+      07_rotation_98: -3041530699671434530
+      07_rotation_99: 2784958149490585058
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
