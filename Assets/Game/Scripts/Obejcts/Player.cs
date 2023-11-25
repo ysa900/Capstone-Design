@@ -130,9 +130,36 @@ public class Player : MonoBehaviour, IPlayer
         if (!isPlayerDead)
         {
             if (!isPlayerShielded)
-                hp -= Time.deltaTime * 10;
+            {
+                hp -= Time.deltaTime * 5;
                 gameAudioManager.PlaySfx(GameAudioManager.Sfx.Melee); // 피격  효과음
+            }
+            
+            if (hp <= 0)
+            {
+                isPlayerDead = true;
 
+                animator.SetBool("Dead", true);
+
+                onPlayerWasKilled(this);
+
+                rigid.constraints = RigidbodyConstraints2D.FreezeAll;
+
+                transform.localScale = new Vector3(1.0f, 1.0f, 1.0f); // 죽었을 때 나오는 묘비 크기 때문에 크기 조정 해준 것
+            }
+        }
+    }
+
+    public void TakeDamage(float damage)
+    {
+        if (!isPlayerDead)
+        {
+            if (!isPlayerShielded)
+            {
+                hp -= damage;
+                gameAudioManager.PlaySfx(GameAudioManager.Sfx.Melee); // 피격  효과음
+            }
+            
             if (hp <= 0)
             {
                 isPlayerDead = true;

@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Boss_Bullet : Object
 {
+    public float damage = 10f;
     Animator animator;
 
     bool isDead;
@@ -45,6 +46,18 @@ public class Boss_Bullet : Object
         yield return new WaitForSeconds(0.35f); // 지정한 초 만큼 쉬기
 
         Destroy(gameObject);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        IPlayer iPlayer = collision.GetComponent<IPlayer>();
+
+        if (iPlayer == null)
+        {
+            return;
+        }
+
+        iPlayer.TakeDamage(damage);
     }
 }
 

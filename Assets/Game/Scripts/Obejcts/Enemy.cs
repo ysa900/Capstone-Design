@@ -16,6 +16,7 @@ public class Enemy : Object, IDamageable
     public bool isEnemyLookLeft; // 적이 보고 있는 방향을 알려주는 변수
 
     private bool isDead;
+    private bool isTimeOver;
 
     private float damageDelay = 2f;
     private float damageDelayTimer = 0;
@@ -50,7 +51,8 @@ public class Enemy : Object, IDamageable
             MoveToPlayer();
         }
 
-        if(GameManager.instance.gameTime >= 60f && !isDead)
+        isTimeOver = GameManager.instance.gameTime >= 60f;
+        if (isTimeOver && !isDead)
         {
             StartCoroutine(Dead());
         }
@@ -134,8 +136,12 @@ public class Enemy : Object, IDamageable
         isDead = true;
 
         animator.SetTrigger("Dead");
-        onEnemyWasKilled(this); // 대리자 호출
 
+        if (!isTimeOver)
+        {
+            onEnemyWasKilled(this); // 대리자 호출
+        }
+        
         rigid.constraints = RigidbodyConstraints2D.FreezeAll;
         GetComponent<CapsuleCollider2D>().enabled = false;
 

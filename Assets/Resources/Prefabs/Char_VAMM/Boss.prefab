@@ -186,4 +186,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb25e76015637064d9c2df0b2ffdf11b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hp: 10000
+  degreeSpeed: 0.02
   player: {fileID: 0}
+  isBossLookLeft: 0
+  capsuleCollider: {fileID: 0}

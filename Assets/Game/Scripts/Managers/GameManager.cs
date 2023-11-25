@@ -106,7 +106,9 @@ public class GameManager : MonoBehaviour
         skillSelectManager.onSkillSelectObjectDisplayed = OnSkillSelectObjectDisplayed;
         skillSelectManager.onSkillSelectObjectHided = OnSkillSelectObjectHided;
         skillSelectManager.onPlayerHealed = OnPlayerHealed;
-    }
+
+        gameTime = 60f;
+}
 
     void Start()
     {
@@ -114,6 +116,7 @@ public class GameManager : MonoBehaviour
         gameAudioManager.PlayBGM(true); // 배경음 시작
         enemyManager.CreateEnemies(50, player, 0, maxEnemySpawnRange); // 몬스터 소환
         skillSelectManager.ChooseStartSkill(); // 시작 스킬 선택
+
     }
 
     // Update is called once per frame

@@ -69431,6 +69431,7 @@ MonoBehaviour:
   bossPrefab: {fileID: -5412648688130606181, guid: 0c22f765985c5e24b95007b88c4ea986, type: 3}
   player: {fileID: 0}
   bossBulletPrefab: {fileID: 1944315885923239456, guid: b26f9d7dd6e9777479f039153083429d, type: 3}
+  bossLaserPrefab: {fileID: 2732523751204016929, guid: 2a2d1bcd248cdf54684ae75c9eb4af0f, type: 3}
 --- !u!1 &1177041980
 GameObject:
   m_ObjectHideFlags: 0

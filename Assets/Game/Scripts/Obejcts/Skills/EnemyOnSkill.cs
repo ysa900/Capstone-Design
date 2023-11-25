@@ -5,7 +5,7 @@ public class EnemyOnSkill : Skill
 {
     public bool isBossAppear;
 
-    private float aliveTime; // 스킬 생존 시간을 체크할 변수
+    private float aliveTime = 0f; // 스킬 생존 시간을 체크할 변수
 
     private void Start()
     {
@@ -13,6 +13,7 @@ public class EnemyOnSkill : Skill
 
     private void FixedUpdate()
     {
+        /*
         bool destroySkill = aliveTime > 1f || enemy == null;
 
         if (destroySkill)
@@ -21,7 +22,7 @@ public class EnemyOnSkill : Skill
             return;
         }
 
-        aliveTime += Time.fixedDeltaTime;
+        aliveTime += Time.fixedDeltaTime;*/
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -36,13 +37,13 @@ public class EnemyOnSkill : Skill
         damageable.TakeDamage(gameObject, damage);
 
         StartCoroutine(Delay(0.5f));
-        StopCoroutine(Delay(0.5f));
 
     }
 
     IEnumerator Delay(float delayTime)
     {
         yield return new WaitForSeconds(delayTime); // 지정한 초 만큼 쉬기
+        
         Destroy(gameObject);
     }
 }

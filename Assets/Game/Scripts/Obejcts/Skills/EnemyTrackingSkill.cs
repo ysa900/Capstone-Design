@@ -72,6 +72,13 @@ public class EnemyTrackingSkill : Skill
         bossPosition = boss.transform.position;
         myPosition = transform.position;
 
+        // 적 실제 위치로 보정
+        if (boss.isBossLookLeft)
+            bossPosition.x -= boss.capsuleCollider.size.x * 4;
+        else
+            bossPosition.x += boss.capsuleCollider.size.x * 4;
+        bossPosition.y -= boss.capsuleCollider.size.y * 4;
+
         direction = bossPosition - myPosition;
 
         direction = direction.normalized;

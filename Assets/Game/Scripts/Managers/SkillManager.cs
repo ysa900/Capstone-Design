@@ -290,7 +290,7 @@ public class SkillManager : MonoBehaviour
 
                     enemyTrackingSkill.enemy = enemy;
 
-                    enemyTrackingSkill.speed = 10;
+                    enemyTrackingSkill.speed = 20;
                     enemyTrackingSkill.damage = skillData.Damage[index];
 
                     break;
@@ -344,7 +344,7 @@ public class SkillManager : MonoBehaviour
                     enemyTrackingSkill.boss = boss;
                     enemyTrackingSkill.isBossAppear = true;
 
-                    enemyTrackingSkill.speed = 10;
+                    enemyTrackingSkill.speed = 20;
                     enemyTrackingSkill.damage = skillData.Damage[index];
 
                     break;
@@ -355,17 +355,11 @@ public class SkillManager : MonoBehaviour
                     gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                     Vector2 bossPosition = boss.transform.position;
-                    /*
-                    // 스킬 위치를 보스 실제 위치로 변경
-                    if (enemy.isEnemyLookLeft)
-                        enemyOnSkill.X = bossPosition.x - boss.capsuleCollider.size.x * 6;
-                    else
-                        enemyOnSkill.X = bossPosition.x + boss.capsuleCollider.size.x * 6;
-                    enemyOnSkill.Y = bossPosition.y + boss.capsuleCollider.size.y * 8;
-                    */
-                    enemyOnSkill.X = bossPosition.x;
-                    enemyOnSkill.Y = bossPosition.y;
 
+                    // 스킬 위치를 보스 실제 위치로 변경
+                    enemyOnSkill.X = bossPosition.x;
+                    enemyOnSkill.Y = bossPosition.y - boss.capsuleCollider.size.y * 4;
+                    
                     enemyOnSkill.isBossAppear = true;
 
                     enemyOnSkill.damage = skillData.Damage[index];
@@ -387,7 +381,7 @@ public class SkillManager : MonoBehaviour
 
                     playerAttachSkill.player = player;
 
-                    playerAttachSkill.xPositionNum = 3f;
+                    playerAttachSkill.xPositionNum = 4f;
                     playerAttachSkill.yPositionNum = 0.2f;
 
                     playerAttachSkill.X = 999f;
