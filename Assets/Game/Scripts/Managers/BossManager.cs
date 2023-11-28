@@ -1,6 +1,5 @@
-using System;
+using System.Collections;
 using UnityEngine;
-using static Boss;
 
 public class BossManager : MonoBehaviour
 {
@@ -17,6 +16,9 @@ public class BossManager : MonoBehaviour
 
     Boss_Lazer bossLaser;
     public Boss_Lazer bossLaserPrefab;
+
+    Boss_Genesis bossGenesis;
+    public Boss_Genesis bossGenesisPrefab;
 
     private void Start()
     {
@@ -39,6 +41,7 @@ public class BossManager : MonoBehaviour
 
         boss.onBossTryBulletAttack = onBossTryBulletAttack;
         boss.onBossTryLaserAttack = onBossTryLaserAttack;
+        boss.onBossTryGenesisAttack = onBossTryGenesisAttack;
 
         boss.player = player;
     }
@@ -56,5 +59,37 @@ public class BossManager : MonoBehaviour
 
         bossLaser.boss = boss;
         bossLaser.player = player;
+    }
+
+    private void onBossTryGenesisAttack()
+    {
+        CastWithDelay(30);
+    }
+
+    // bossGenesis 스킬 쓸 때 일정 딜레이로 스킬 cast하기 위함
+    private void CastWithDelay(int num)
+    {
+        for (int i = 0; i < num; i++)
+        {
+            bossGenesis = Instantiate(bossGenesisPrefab);
+
+            float tmpX = boss.transform.position.x;
+            float tmpY = boss.transform.position.y;
+
+            float ranNum = UnityEngine.Random.Range(-20f, 20f);
+            float ranNum2 = UnityEngine.Random.Range(-16f, 8f);
+
+            tmpX += ranNum;
+            tmpY += ranNum2;
+
+            bossGenesis.X = tmpX;
+            bossGenesis.Y = tmpY;
+
+            bossGenesis.boss = boss;
+            bossGenesis.player = player;
+
+            bossGenesis.aliveTime = 2.0f;
+        }
+
     }
 }

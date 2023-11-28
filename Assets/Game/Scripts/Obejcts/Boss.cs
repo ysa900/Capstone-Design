@@ -14,16 +14,22 @@ public class Boss : Object, IDamageable
 
     public Player player;
 
-    bool laserSkillshouldBeAttack;
+    // 스킬들이 준비 됐는지
     bool bulletSkillShouldBeAttack;
+    bool laserSkillShouldBeAttack;
+    bool genesisSkillShouldBeAttack;
 
     // 총알(해골) 딜레이
     float bulletAttackDelayTimer = 4f;
     float bulletAttackDelay = 6f;
 
     // 레이저 딜레이
-    float laserAttackDelayTimer = 10f;
+    float laserAttackDelayTimer = 14f;
     float laserAttackDelay = 20f;
+
+    // 제네시스 딜레이
+    float genesisAttackDelayTimer = 15f;
+    float genesisAttackDelay = 30f;
 
     bool isAttackNow; // 공격 중이면 움직이지 않도록 하기 위한 변수
     bool isAttackReady = true; // 공격중엔 다른 공격이 나가지 않도록 하기 위한 변수
@@ -48,11 +54,15 @@ public class Boss : Object, IDamageable
     
     Animator animator;
 
+    // BossManager에게 스킬 사용을 알려주기 위한 Delegate들
     public delegate void OnBossTryBulletAttack();
     public OnBossTryBulletAttack onBossTryBulletAttack;
 
     public delegate void OnBossTryLaserAttack();
     public OnBossTryLaserAttack onBossTryLaserAttack;
+
+    public delegate void OnBossTryGenesisAttack();
+    public OnBossTryLaserAttack onBossTryGenesisAttack;
 
     Rigidbody2D rigid; // 물리 입력을 받기위한 변수
     SpriteRenderer spriteRenderer;
@@ -87,9 +97,9 @@ public class Boss : Object, IDamageable
                 bulletAttackDelayTimer += Time.deltaTime;
             }
 
-            laserSkillshouldBeAttack = laserAttackDelay < laserAttackDelayTimer; // 공격 쿨타임이 됐는지 확인
+            laserSkillShouldBeAttack = laserAttackDelay < laserAttackDelayTimer; // 공격 쿨타임이 됐는지 확인
 
-            if (laserSkillshouldBeAttack && isAttackReady)
+            if (laserSkillShouldBeAttack && isAttackReady)
             {
                 laserAttackDelayTimer = 0;
 
@@ -98,6 +108,19 @@ public class Boss : Object, IDamageable
             else
             {
                 laserAttackDelayTimer += Time.deltaTime;
+            }
+
+            genesisSkillShouldBeAttack = genesisAttackDelay < genesisAttackDelayTimer; // 공격 쿨타임이 됐는지 확인
+
+            if (genesisSkillShouldBeAttack && isAttackReady)
+            {
+                genesisAttackDelayTimer = 0;
+
+                TryAttack(2); // 스킬 쿨타임이 다 됐으면 공격을 시도한다
+            }
+            else
+            {
+                genesisAttackDelayTimer += Time.deltaTime;
             }
 
             damageDelayTimer += Time.deltaTime;
@@ -175,6 +198,9 @@ public class Boss : Object, IDamageable
             case 1:
                 StartCoroutine(CastLaser());
                 break;
+            case 2:
+                StartCoroutine(CastGenesis());
+                break;
         }
     }
 
@@ -215,33 +241,53 @@ public class Boss : Object, IDamageable
         onBossTryBulletAttack();
         animator.SetBool("Shoot", false);
 
-        rigid.constraints = RigidbodyConstraints2D.FreezeRotation; // 좌표 고정은 풀되, 회전은 못하게
-        isAttackNow = false;
-        animator.SetTrigger("Teleport");
-
-        yield return new WaitForSeconds(0.5f); // 지정한 초 만큼 쉬기
-
-        isAttackReady = true;
-        
+        StartCoroutine(TelePort());
     }
 
     IEnumerator CastLaser()
     {
-        
         yield return new WaitForSeconds(1.0f); // 지정한 초 만큼 쉬기
 
         onBossTryLaserAttack();
 
-        yield return new WaitForSeconds(3.0f); // 지정한 초 만큼 쉬기
+        yield return new WaitForSeconds(2.6f); // 지정한 초 만큼 쉬기
+
+        StartCoroutine(TelePort());
+    }
+
+    IEnumerator CastGenesis()
+    {
+        animator.SetTrigger("Genesis");
+        animator.SetBool("Genesis_Stay", true);
+        yield return new WaitForSeconds(1.5f); // 지정한 초 만큼 쉬기
+        
+        onBossTryGenesisAttack();
+
+        yield return new WaitForSeconds(2.5f); // 지정한 초 만큼 쉬기
+        animator.SetBool("Genesis_Stay", false);
+
+        StartCoroutine(TelePort());
+    }
+
+    IEnumerator TelePort()
+    {
+        animator.SetTrigger("Teleport");
+        yield return new WaitForSeconds(0.34f); // 지정한 초 만큼 쉬기
 
         rigid.constraints = RigidbodyConstraints2D.FreezeRotation; // 좌표 고정은 풀되, 회전은 못하게
         isAttackNow = false;
-        animator.SetTrigger("Teleport");
 
-        yield return new WaitForSeconds(0.5f); // 지정한 초 만큼 쉬기
+        yield return new WaitForSeconds(0.02f); // 지정한 초 만큼 쉬기
+
+        isAttackNow = true;
+
+        animator.SetTrigger("Teleport_arrive");
+
+        yield return new WaitForSeconds(0.34f); // 지정한 초 만큼 쉬기
+
+        isAttackNow = false;
 
         isAttackReady = true;
-        
     }
 
     // IDamageable의 함수 TakeDamage
@@ -258,7 +304,10 @@ public class Boss : Object, IDamageable
         {
             if (damageDelay <= damageDelayTimer)
             {
-                animator.SetTrigger("Hit");
+                if(!isAttackNow)
+                {
+                    animator.SetTrigger("Hit");
+                }
 
                 damageDelayTimer = 0;
             }

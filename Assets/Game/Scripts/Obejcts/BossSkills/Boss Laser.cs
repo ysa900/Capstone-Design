@@ -12,7 +12,7 @@ public class Boss_Lazer : Object
     public float aliveTime = 3f; // 스킬 생존 시간을 체크할 변수
     private float aliveTimer; // 스킬 생존 시간 타이머
 
-    private float safeTime = 0.2f; // 플레이어가 피할 수 있게 아주 살짝 데미지 안들어가는 시간
+    private float safeTime = 0.4f; // 플레이어가 피할 수 있게 아주 살짝 데미지 안들어가는 시간
     private float safeTimer; // 데미지 안들어가는 시간 타이머
 
     private void Start()
@@ -86,7 +86,10 @@ public class Boss_Lazer : Object
             return;
         }
 
-        iPlayer.TakeDamage(damage);
+        if (safeTimer >= safeTime)
+        {
+            iPlayer.TakeDamage(damage);
+        }
     }
 }
 

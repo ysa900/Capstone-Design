@@ -108,6 +108,7 @@ public class GameManager : MonoBehaviour
         skillSelectManager.onPlayerHealed = OnPlayerHealed;
 
         gameTime = 60f;
+        //player.isPlayerShielded = true;
 }
 
     void Start()
