@@ -29,6 +29,12 @@ public class GameManager : MonoBehaviour
     // Enemy들을 담을 리스트
     private List<Enemy> enemies = new List<Enemy>();
 
+    // 보스와 싸울 때 맵의 둘레
+    public float bossMap_Top;
+    public float bossMap_Bottom;
+    public float bossMap_Left;
+    public float bossMap_Right;
+
     // 사용할 클래스 객체들
     public Player player;
     private EnemyManager enemyManager;
@@ -107,7 +113,7 @@ public class GameManager : MonoBehaviour
         skillSelectManager.onSkillSelectObjectHided = OnSkillSelectObjectHided;
         skillSelectManager.onPlayerHealed = OnPlayerHealed;
 
-        gameTime = 60f;
+        //gameTime = 60f;
         //player.isPlayerShielded = true;
 }
 
@@ -117,7 +123,6 @@ public class GameManager : MonoBehaviour
         gameAudioManager.PlayBGM(true); // 배경음 시작
         enemyManager.CreateEnemies(50, player, 0, maxEnemySpawnRange); // 몬스터 소환
         skillSelectManager.ChooseStartSkill(); // 시작 스킬 선택
-
     }
 
     // Update is called once per frame
@@ -169,6 +174,12 @@ public class GameManager : MonoBehaviour
         }
         else if (gameTime >= 60f)
         {
+            // 보스 맵 크기 설정
+            bossMap_Top = player.transform.position.y + 20f;
+            bossMap_Bottom = player.transform.position.y - 20f;
+            bossMap_Left = player.transform.position.x - 20f;
+            bossMap_Right = player.transform.position.x + 20f;
+
             // 보스 등장
             bossManager.player = player;
             bossManager.CreateBoss();

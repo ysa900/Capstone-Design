@@ -16754,7 +16754,7 @@ CompositeCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -16762,9 +16762,23 @@ CompositeCollider2D:
   m_GeometryType: 0
   m_GenerationType: 0
   m_EdgeRadius: 0
-  m_ColliderPaths: []
+  m_ColliderPaths:
+  - m_Collider: {fileID: 104196206}
+    m_ColliderPaths:
+    - - X: 200000000
+        Y: 200000000
+      - X: -200000000
+        Y: 200000000
+      - X: -200000000
+        Y: -200000000
+      - X: 200000000
+        Y: -200000000
   m_CompositePaths:
-    m_Paths: []
+    m_Paths:
+    - - {x: 19.999971, y: -20}
+      - {x: 19.999971, y: 20}
+      - {x: -20, y: 19.999971}
+      - {x: -19.999971, y: -20}
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.00005
   m_UseDelaunayMesh: 0
@@ -16801,7 +16815,7 @@ TilemapCollider2D:
     m_Bits: 4294967295
   m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_CompositeOperation: 0
+  m_CompositeOperation: 1
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_MaximumTileChangeCount: 1000
@@ -16988,7 +17002,7 @@ CompositeCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -16996,9 +17010,23 @@ CompositeCollider2D:
   m_GeometryType: 0
   m_GenerationType: 0
   m_EdgeRadius: 0
-  m_ColliderPaths: []
+  m_ColliderPaths:
+  - m_Collider: {fileID: 142677975}
+    m_ColliderPaths:
+    - - X: 200000000
+        Y: 200000000
+      - X: -200000000
+        Y: 200000000
+      - X: -200000000
+        Y: -200000000
+      - X: 200000000
+        Y: -200000000
   m_CompositePaths:
-    m_Paths: []
+    m_Paths:
+    - - {x: 19.999971, y: -20}
+      - {x: 19.999971, y: 20}
+      - {x: -20, y: 19.999971}
+      - {x: -19.999971, y: -20}
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.00005
   m_UseDelaunayMesh: 0
@@ -17035,7 +17063,7 @@ TilemapCollider2D:
     m_Bits: 4294967295
   m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_CompositeOperation: 0
+  m_CompositeOperation: 1
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_MaximumTileChangeCount: 1000
@@ -33272,7 +33300,7 @@ CompositeCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -33280,9 +33308,23 @@ CompositeCollider2D:
   m_GeometryType: 0
   m_GenerationType: 0
   m_EdgeRadius: 0
-  m_ColliderPaths: []
+  m_ColliderPaths:
+  - m_Collider: {fileID: 143361784}
+    m_ColliderPaths:
+    - - X: 200000000
+        Y: 200000000
+      - X: -200000000
+        Y: 200000000
+      - X: -200000000
+        Y: -200000000
+      - X: 200000000
+        Y: -200000000
   m_CompositePaths:
-    m_Paths: []
+    m_Paths:
+    - - {x: 19.999971, y: -20}
+      - {x: 19.999971, y: 20}
+      - {x: -20, y: 19.999971}
+      - {x: -19.999971, y: -20}
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.00005
   m_UseDelaunayMesh: 0
@@ -33319,7 +33361,7 @@ TilemapCollider2D:
     m_Bits: 4294967295
   m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_CompositeOperation: 0
+  m_CompositeOperation: 1
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_MaximumTileChangeCount: 1000
@@ -51780,6 +51822,10 @@ MonoBehaviour:
   gameTime: 0
   CoolTime: 0
   isGameOver: 0
+  bossMap_Top: 0
+  bossMap_Bottom: 0
+  bossMap_Left: 0
+  bossMap_Right: 0
   player: {fileID: 0}
   playerPrefab: {fileID: 3621306853304922202, guid: a7f3985b25427964ab0e550dcf041e1a, type: 3}
   expPrefab1: {fileID: 4943057121286701193, guid: 5a0ee35ff018e304f8d573f920043e1f, type: 3}
@@ -51871,7 +51917,7 @@ CompositeCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -51879,9 +51925,23 @@ CompositeCollider2D:
   m_GeometryType: 0
   m_GenerationType: 0
   m_EdgeRadius: 0
-  m_ColliderPaths: []
+  m_ColliderPaths:
+  - m_Collider: {fileID: 644353464}
+    m_ColliderPaths:
+    - - X: 200000000
+        Y: 200000000
+      - X: -200000000
+        Y: 200000000
+      - X: -200000000
+        Y: -200000000
+      - X: 200000000
+        Y: -200000000
   m_CompositePaths:
-    m_Paths: []
+    m_Paths:
+    - - {x: 19.999971, y: -20}
+      - {x: 19.999971, y: 20}
+      - {x: -20, y: 19.999971}
+      - {x: -19.999971, y: -20}
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.00005
   m_UseDelaunayMesh: 0
@@ -51918,7 +51978,7 @@ TilemapCollider2D:
     m_Bits: 4294967295
   m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_CompositeOperation: 0
+  m_CompositeOperation: 1
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_MaximumTileChangeCount: 1000
@@ -69432,6 +69492,7 @@ MonoBehaviour:
   player: {fileID: 0}
   bossBulletPrefab: {fileID: 1944315885923239456, guid: b26f9d7dd6e9777479f039153083429d, type: 3}
   bossLaserPrefab: {fileID: 2732523751204016929, guid: 2a2d1bcd248cdf54684ae75c9eb4af0f, type: 3}
+  bossGridLaserPrefab: {fileID: 1930705433329540371, guid: 8f5011304ff329b4290bb88df1149bd6, type: 3}
   bossGenesisPrefab: {fileID: 8481769435239011553, guid: 11cd9e812ccf413469944be1258b259f, type: 3}
 --- !u!1 &1177041980
 GameObject:

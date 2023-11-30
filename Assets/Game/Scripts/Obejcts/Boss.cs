@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.ComponentModel;
@@ -9,6 +10,8 @@ public class Boss : Object, IDamageable
 
     [SerializeField]
     int hp;
+    int maxHp = 10000;
+    
     [SerializeField]
     float degreeSpeed;
 
@@ -17,6 +20,7 @@ public class Boss : Object, IDamageable
     // 스킬들이 준비 됐는지
     bool bulletSkillShouldBeAttack;
     bool laserSkillShouldBeAttack;
+    bool gridLaserSkillShouldBeAttack;
     bool genesisSkillShouldBeAttack;
 
     // 총알(해골) 딜레이
@@ -24,11 +28,15 @@ public class Boss : Object, IDamageable
     float bulletAttackDelay = 6f;
 
     // 레이저 딜레이
-    float laserAttackDelayTimer = 14f;
-    float laserAttackDelay = 20f;
+    float laserAttackDelayTimer = 8f;
+    float laserAttackDelay = 15f;
+
+    // 격자 레이저 딜레이
+    float gridLaserAttackDelayTimer = 4f;
+    float gridLaserAttackDelay = 10f;
 
     // 제네시스 딜레이
-    float genesisAttackDelayTimer = 15f;
+    float genesisAttackDelayTimer = 28f;
     float genesisAttackDelay = 30f;
 
     bool isAttackNow; // 공격 중이면 움직이지 않도록 하기 위한 변수
@@ -58,11 +66,14 @@ public class Boss : Object, IDamageable
     public delegate void OnBossTryBulletAttack();
     public OnBossTryBulletAttack onBossTryBulletAttack;
 
-    public delegate void OnBossTryLaserAttack();
+    public delegate void OnBossTryLaserAttack(float num);
     public OnBossTryLaserAttack onBossTryLaserAttack;
 
+    public delegate void OnBossTryGridLaserAttack(float x, float y, bool isRightTop);
+    public OnBossTryGridLaserAttack onBossTryGridLaserAttack;
+
     public delegate void OnBossTryGenesisAttack();
-    public OnBossTryLaserAttack onBossTryGenesisAttack;
+    public OnBossTryGenesisAttack onBossTryGenesisAttack;
 
     Rigidbody2D rigid; // 물리 입력을 받기위한 변수
     SpriteRenderer spriteRenderer;
@@ -77,6 +88,8 @@ public class Boss : Object, IDamageable
 
         colliderOffsetX = capsuleCollider.offset.x; // offset 초기값을 저장
         colliderOffsetY = capsuleCollider.offset.y;
+
+        hp = maxHp;
     }
 
     private void Update()
@@ -85,6 +98,7 @@ public class Boss : Object, IDamageable
         {
             SetBossDirection(); // 보스 방향 설정
 
+            // Bullet 공격
             bulletSkillShouldBeAttack = bulletAttackDelay < bulletAttackDelayTimer; // 공격 쿨타임이 됐는지 확인
             if (bulletSkillShouldBeAttack && isAttackReady)
             {
@@ -97,30 +111,71 @@ public class Boss : Object, IDamageable
                 bulletAttackDelayTimer += Time.deltaTime;
             }
 
-            laserSkillShouldBeAttack = laserAttackDelay < laserAttackDelayTimer; // 공격 쿨타임이 됐는지 확인
-
-            if (laserSkillShouldBeAttack && isAttackReady)
+            if (hp <= maxHp / 100 * 80) // hp가 80프로 미만이면
             {
-                laserAttackDelayTimer = 0;
+                // gridLaser 공격
+                gridLaserSkillShouldBeAttack = gridLaserAttackDelay < gridLaserAttackDelayTimer; // 공격 쿨타임이 됐는지 확인
 
-                TryAttack(1); // 스킬 쿨타임이 다 됐으면 공격을 시도한다
+                if (gridLaserSkillShouldBeAttack && isAttackReady)
+                {
+                    gridLaserAttackDelayTimer = 0;
+
+                    TryAttack(3); // 스킬 쿨타임이 다 됐으면 공격을 시도한다
+                }
+                else
+                {
+                    gridLaserAttackDelayTimer += Time.deltaTime;
+                }
             }
-            else
+
+            if (hp >= maxHp / 100 * 50) // hp가 50% 이상이면
             {
-                laserAttackDelayTimer += Time.deltaTime;
+                // Laser 공격
+                laserSkillShouldBeAttack = laserAttackDelay < laserAttackDelayTimer; // 공격 쿨타임이 됐는지 확인
+
+                if (laserSkillShouldBeAttack && isAttackReady)
+                {
+                    laserAttackDelayTimer = 0;
+
+                    TryAttack(1); // 스킬 쿨타임이 다 됐으면 공격을 시도한다
+                }
+                else
+                {
+                    laserAttackDelayTimer += Time.deltaTime;
+                }
+            }
+            else // hp가 50% 미만이면
+            {
+                // LaserThree 공격
+                laserSkillShouldBeAttack = laserAttackDelay < laserAttackDelayTimer; // 공격 쿨타임이 됐는지 확인
+
+                if (laserSkillShouldBeAttack && isAttackReady)
+                {
+                    laserAttackDelayTimer = 0;
+
+                    TryAttack(2); // 스킬 쿨타임이 다 됐으면 공격을 시도한다
+                }
+                else
+                {
+                    laserAttackDelayTimer += Time.deltaTime;
+                }
             }
 
-            genesisSkillShouldBeAttack = genesisAttackDelay < genesisAttackDelayTimer; // 공격 쿨타임이 됐는지 확인
-
-            if (genesisSkillShouldBeAttack && isAttackReady)
+            if (hp < maxHp / 100 * 30) // hp가 30프로 미만이면
             {
-                genesisAttackDelayTimer = 0;
+                // Genesis 공격
+                genesisSkillShouldBeAttack = genesisAttackDelay < genesisAttackDelayTimer; // 공격 쿨타임이 됐는지 확인
 
-                TryAttack(2); // 스킬 쿨타임이 다 됐으면 공격을 시도한다
-            }
-            else
-            {
-                genesisAttackDelayTimer += Time.deltaTime;
+                if (genesisSkillShouldBeAttack && isAttackReady)
+                {
+                    genesisAttackDelayTimer = 0;
+
+                    TryAttack(4); // 스킬 쿨타임이 다 됐으면 공격을 시도한다
+                }
+                else
+                {
+                    genesisAttackDelayTimer += Time.deltaTime;
+                }
             }
 
             damageDelayTimer += Time.deltaTime;
@@ -193,12 +248,18 @@ public class Boss : Object, IDamageable
         switch (num)
         {
             case 0:
-                StartCoroutine(Shoot());
+                StartCoroutine(CastBullet());
                 break;
             case 1:
                 StartCoroutine(CastLaser());
                 break;
             case 2:
+                StartCoroutine(CastLaserThree());
+                break;
+            case 3:
+                StartCoroutine(CastGridLaser());
+                break;
+            case 4:
                 StartCoroutine(CastGenesis());
                 break;
         }
@@ -233,7 +294,7 @@ public class Boss : Object, IDamageable
         capsuleCollider.offset = colliderOffset; // capsuleCollider에 적용
     }
 
-    IEnumerator Shoot()
+    IEnumerator CastBullet()
     {
         animator.SetBool("Shoot", true);
         yield return new WaitForSeconds(0.3f); // 지정한 초 만큼 쉬기
@@ -246,11 +307,53 @@ public class Boss : Object, IDamageable
 
     IEnumerator CastLaser()
     {
-        yield return new WaitForSeconds(1.0f); // 지정한 초 만큼 쉬기
+        onBossTryLaserAttack(0f);
 
-        onBossTryLaserAttack();
+        yield return new WaitForSeconds(3.2f); // 지정한 초 만큼 쉬기
 
-        yield return new WaitForSeconds(2.6f); // 지정한 초 만큼 쉬기
+        StartCoroutine(TelePort());
+    }
+
+    IEnumerator CastLaserThree()
+    {
+        onBossTryLaserAttack(30f);
+        onBossTryLaserAttack(0f);
+        onBossTryLaserAttack(-30f);
+
+        yield return new WaitForSeconds(3.2f); // 지정한 초 만큼 쉬기
+
+        StartCoroutine(TelePort());
+    }
+
+    IEnumerator CastGridLaser()
+    {
+        animator.SetBool("Shoot", true);
+        yield return new WaitForSeconds(0.3f); // 지정한 초 만큼 쉬기
+
+        float mapTop = GameManager.instance.bossMap_Top;
+        float mapRight = GameManager.instance.bossMap_Right;
+
+        float root2 = 1.414f;
+        float tmpX = mapRight - 40f + root2;
+        float tmpY = mapTop - root2;
+
+        for (int i = 0; i < 7; i++)
+        {
+            onBossTryGridLaserAttack(tmpX, tmpY, true);
+            tmpX += root2 * 4;
+            tmpY -= root2 * 4;
+        }
+
+        tmpX = mapRight - 40f + root2;
+        tmpY = mapTop - 40f + root2;
+        for (int i = 0; i < 7; i++)
+        {
+            onBossTryGridLaserAttack(tmpX, tmpY, false);
+            tmpX += root2 * 4;
+            tmpY += root2 * 4;
+        }
+
+        animator.SetBool("Shoot", false);
 
         StartCoroutine(TelePort());
     }

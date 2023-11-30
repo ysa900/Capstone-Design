@@ -26,6 +26,7 @@ public class Boss_Genesis : Object
     private void Start()
     {
         animator = GetComponent<Animator>();
+        animator.SetBool("Stay", true);
         spriteRenderer_child1 = GetComponentsInChildren<SpriteRenderer>()[0];
         spriteRenderer_child2 = GetComponentsInChildren<SpriteRenderer>()[1];
         spriteRenderer_child3 = GetComponentsInChildren<SpriteRenderer>()[2];

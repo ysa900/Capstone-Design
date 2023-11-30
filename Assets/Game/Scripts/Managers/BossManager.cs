@@ -17,6 +17,9 @@ public class BossManager : MonoBehaviour
     Boss_Lazer bossLaser;
     public Boss_Lazer bossLaserPrefab;
 
+    Boss_Grid_Lazer bossGridLaser;
+    public Boss_Grid_Lazer bossGridLaserPrefab;
+
     Boss_Genesis bossGenesis;
     public Boss_Genesis bossGenesisPrefab;
 
@@ -42,6 +45,7 @@ public class BossManager : MonoBehaviour
         boss.onBossTryBulletAttack = onBossTryBulletAttack;
         boss.onBossTryLaserAttack = onBossTryLaserAttack;
         boss.onBossTryGenesisAttack = onBossTryGenesisAttack;
+        boss.onBossTryGridLaserAttack = onBossTryGridLaserAttack;
 
         boss.player = player;
     }
@@ -53,12 +57,26 @@ public class BossManager : MonoBehaviour
         bossBullet.Y = boss.Y - 1.2f;
     }
 
-    private void onBossTryLaserAttack()
+    private void onBossTryLaserAttack(float num)
     {
         bossLaser = Instantiate(bossLaserPrefab);
 
         bossLaser.boss = boss;
         bossLaser.player = player;
+        bossLaser.laserTurnNum = num;
+    }
+
+    private void onBossTryGridLaserAttack(float x, float y, bool isRightTop)
+    {
+        bossGridLaser = Instantiate(bossGridLaserPrefab);
+
+        bossGridLaser.boss = boss;
+        bossGridLaser.player = player;
+
+        bossGridLaser.X = x;
+        bossGridLaser.Y = y;
+        bossGridLaser.isRightTop = isRightTop;
+        bossGridLaser.isRightBottom = !isRightTop;
     }
 
     private void onBossTryGenesisAttack()

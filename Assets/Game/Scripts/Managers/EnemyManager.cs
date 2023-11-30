@@ -97,7 +97,8 @@ public class EnemyManager : MonoBehaviour
             double tmp = Math.Pow(randomRadius, 2) - Math.Pow(enemy.X, 2);
             enemy.Y = (float)Math.Sqrt(tmp);
 
-            if (UnityEngine.Random.Range(0, 2) == 0) // Y값에 루트를 하면 항상 양수만 나오니까 랜덤으로 음수값 부여
+            if (UnityEngine.Random.Range(0, 2) == 0) // Y값에 루트를 하+
+                                                     // 면 항상 양수만 나오니까 랜덤으로 음수값 부여
                 enemy.Y = -enemy.Y;
 
             enemy.Y += playerY;
