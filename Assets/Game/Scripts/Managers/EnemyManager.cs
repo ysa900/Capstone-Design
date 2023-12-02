@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
-    // 적 최소 생성 거리
-    private float minEnemySpawnRange = 20;
+    private float minEnemySpawnRange = 20; // 적 최소 생성 거리
+
+    private float degree = 0; // 적을 원형으로 소환할 때 각도
 
     // Enemy들을 담을 리스트
     List<Enemy> enemies = new List<Enemy>();
@@ -16,7 +17,6 @@ public class EnemyManager : MonoBehaviour
     private GameAudioManager gameAudioManager;
 
     // Enemy 프리팹
-
     public Enemy ghoulPrefab;
     public Enemy spitterPrefab;
     public Enemy summonerPrefab;
@@ -91,18 +91,20 @@ public class EnemyManager : MonoBehaviour
             float playerY = player.transform.position.y;
 
             // 몬스터가 원형으로 소환되게 함
-            // x는 랜덤 값을 받고, y = 루트(r^2 - x^2)
-            float randomRadius = UnityEngine.Random.Range(minEnemySpawnRange, maxRadius);
-            enemy.X = UnityEngine.Random.Range(-randomRadius, randomRadius);
-            double tmp = Math.Pow(randomRadius, 2) - Math.Pow(enemy.X, 2);
-            enemy.Y = (float)Math.Sqrt(tmp);
+            float radius = UnityEngine.Random.Range(minEnemySpawnRange, maxRadius);
+            degree = UnityEngine.Random.Range(0f, 360f);
 
-            if (UnityEngine.Random.Range(0, 2) == 0) // Y값에 루트를 하+
-                                                     // 면 항상 양수만 나오니까 랜덤으로 음수값 부여
-                enemy.Y = -enemy.Y;
+            float tmpX = (float)Math.Cos(degree) * radius;
+            float tmpY = (float)Math.Sin(degree) * radius;
 
-            enemy.Y += playerY;
-            enemy.X += playerX; 
+            enemy.X = tmpX + playerX;
+            enemy.Y = tmpY + playerY;
+
+            if (degree <= -360)
+            {
+                degree %= -360;
+            }
+
             enemy.player = player;
             enemy.onEnemyWasKilled = OnEnemyWasKilled;
 

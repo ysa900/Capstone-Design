@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger;
 
@@ -111,24 +112,24 @@ public class SkillManager : MonoBehaviour
             skillData.level[i] = 0;
         }
 
-        skillData.Damage[0] = 30;
-        skillData.Damage[1] = 10;
-        skillData.Damage[2] = 1;
-        skillData.Damage[3] = 20;
-        skillData.Damage[4] = 15;
-        skillData.Damage[5] = 0;
-        skillData.Damage[6] = 30;
-        skillData.Damage[7] = 2;
-        skillData.Damage[8] = 1.5f;
-        skillData.Damage[9] = 30f;
-        skillData.Damage[10] = 20;
-        skillData.Damage[11] = 1.5f;
+        skillData.Damage[0] = 30f;
+        skillData.Damage[1] = 20f;
+        skillData.Damage[2] = 2.0f;
+        skillData.Damage[3] = 20f;
+        skillData.Damage[4] = 15f;
+        skillData.Damage[5] = 0f;
+        skillData.Damage[6] = 60f;
+        skillData.Damage[7] = 3.0f;
+        skillData.Damage[8] = 2.0f;
+        skillData.Damage[9] = 40f;
+        skillData.Damage[10] = 40f;
+        skillData.Damage[11] = 2.0f;
 
         skillData.Delay[0] = 0.8f;
         skillData.Delay[1] = 1;
         skillData.Delay[2] = 1.5f;
         skillData.Delay[3] = 3;
-        skillData.Delay[4] = 8;
+        skillData.Delay[4] = 14;
         skillData.Delay[5] = 10;
         skillData.Delay[6] = 3;
         skillData.Delay[7] = 4;
@@ -164,10 +165,11 @@ public class SkillManager : MonoBehaviour
                     {
                         // 불 공격은 가장 가까운 적이 사거리 내에 있어야지만 나간다
                         Enemy enemy = FindNearestEnemy(); // 가장 가까운 적을 찾는다
+                        if (enemy == null) return; // 적이 없으면 공격 X
                         Vector2 enemyPos = enemy.transform.position;
                         Vector2 playerPos = player.transform.position;
                         float distance = Vector2.Distance(enemyPos, playerPos);
-
+                        
                         bool isInAttackRange = distance <= attackRange; // 적이 사거리 내에 있을때만 공격이 나간다
 
                         if (isInAttackRange)
@@ -183,18 +185,19 @@ public class SkillManager : MonoBehaviour
                         Enemy enemy;
 
                         int breakNum = 0; // while문 탈출을 위한 num
+                        bool isInAttackRange = false;
 
                         while (true)
                         {
                             int ranNum = UnityEngine.Random.Range(0, enemies.Count);
 
                             enemy = enemies[ranNum];
-
+                            
                             if (!(enemy == null))
                             {
                                 float distance = Vector2.Distance(enemy.transform.position, player.transform.position);
-
-                                bool isInAttackRange = distance <= attackRange; // 적이 사거리 내에 있을때만 공격이 나간다
+                                
+                                isInAttackRange = distance <= attackRange; // 적이 사거리 내에 있을때만 공격이 나간다
 
                                 if (isInAttackRange)
                                     break;
@@ -204,8 +207,10 @@ public class SkillManager : MonoBehaviour
                             if (breakNum >= 1000) // 1000회 반복 내에 마땅한 적을 찾지 못했다면 그냥 break;
                                 break;
                         }
+                        if (enemy == null) return; // 적이 없으면 공격 X
 
-                        CastSkill(enemy, index);
+                        if(isInAttackRange)
+                            CastSkill(enemy, index);
 
                         break;
                     }
@@ -213,6 +218,7 @@ public class SkillManager : MonoBehaviour
         }
         else
         {
+            if(boss == null) return;
             switch (index)
             {
                 case 0:

@@ -10,9 +10,9 @@ public class GameAudioManager : MonoBehaviour
 
     // BGM
     [Header("#BGM")]
-    public AudioClip bgmClip; // BGM 관련 클립
+    public AudioClip[] bgmClips; // BGM 관련 클립 배열
     public float bgmVolume; // BGM 관련 볼륨
-    AudioSource bgmPlayer; // BGM 관련 오디오소스
+    AudioSource[] bgmPlayers; // BGM 관련 오디오소스
     AudioHighPassFilter bgmEffect;
 
     // SFX(효과음)
@@ -41,11 +41,20 @@ public class GameAudioManager : MonoBehaviour
         // 배경음 플레이어 초기화
         GameObject bgmObject = new GameObject("BgmPlayer");
         bgmObject.transform.parent = transform; // 배경음을 담당하는 자식 오브젝트 생성
-        bgmPlayer =bgmObject.AddComponent<AudioSource>();
-        bgmPlayer.playOnAwake = false; // Game 시작되자마자 켜지지 않게..
-        bgmPlayer.loop = true; // BGM 무한반복
-        bgmPlayer.volume = bgmVolume;
-        bgmPlayer.clip = bgmClip;
+        bgmPlayers = new AudioSource[2];
+
+        bgmPlayers[0] = bgmObject.AddComponent<AudioSource>();
+        bgmPlayers[0].playOnAwake = false; // Game 시작되자마자 켜지지 않게..
+        bgmPlayers[0].loop = true; // BGM 무한반복
+        bgmPlayers[0].volume = bgmVolume;
+        bgmPlayers[0].clip = bgmClips[0];
+
+        bgmPlayers[1] = bgmObject.AddComponent<AudioSource>();
+        bgmPlayers[1].playOnAwake = false; // Game 시작되자마자 켜지지 않게..
+        bgmPlayers[1].loop = true; // BGM 무한반복
+        bgmPlayers[1].volume = bgmVolume;
+        bgmPlayers[1].clip = bgmClips[1];
+
         bgmEffect = Camera.main.GetComponent<AudioHighPassFilter>();
 
         // 효과음 플레이어 초기화
@@ -62,14 +71,14 @@ public class GameAudioManager : MonoBehaviour
         }
     }
 
-    public void PlayBGM(bool isPlay)
+    public void PlayBGM(int num, bool isPlay)
     {
         if (isPlay)
         {
-            bgmPlayer.Play();
+            bgmPlayers[num].Play();
         }
         else {
-            bgmPlayer.Stop();
+            bgmPlayers[num].Stop();
         }
     }
 

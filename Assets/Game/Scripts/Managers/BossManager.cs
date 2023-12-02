@@ -23,6 +23,10 @@ public class BossManager : MonoBehaviour
     Boss_Genesis bossGenesis;
     public Boss_Genesis bossGenesisPrefab;
 
+    // GameManger에게 보스가 죽었다고 알려주기 위한 delegate
+    public delegate void OnBossHasKilled();
+    public OnBossHasKilled onBossHasKilled;
+
     private void Start()
     {
     }
@@ -30,12 +34,7 @@ public class BossManager : MonoBehaviour
     public void CreateBoss()
     {
         SetBossInfoNSummon(bossPrefab);
-
-    }
-
-    private void OnBossWasKilled(Boss killedBoss)
-    {
-        //
+        GameManager.instance.boss = boss;
     }
 
     private void SetBossInfoNSummon(Boss bossPrefab)
@@ -46,8 +45,14 @@ public class BossManager : MonoBehaviour
         boss.onBossTryLaserAttack = onBossTryLaserAttack;
         boss.onBossTryGenesisAttack = onBossTryGenesisAttack;
         boss.onBossTryGridLaserAttack = onBossTryGridLaserAttack;
+        boss.onbossDead = OnbossDead;
 
         boss.player = player;
+    }
+
+    private void OnbossDead()
+    {
+        onBossHasKilled();
     }
 
     private void onBossTryBulletAttack()

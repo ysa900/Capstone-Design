@@ -7,7 +7,8 @@ using UnityEngine.UI;
 
 public class SkillSelectManager: MonoBehaviour
 {
-    private int skillCount = 12;
+    // 현재 고를 수 있는 스킬 번호 (0 ~ 4 레벨: 5번까지 / 5 ~ 9 레벨: 8번까지 / 10레벨 이상 : 11번까지)
+    private int skillCount = 6; // 이건 개수라서 5번까지 나오게 할려면 6개임
     
     private GameAudioManager gameAudioManager;
 
@@ -103,7 +104,7 @@ public class SkillSelectManager: MonoBehaviour
         UnityEngine.UI.Button skillSelectButton3 = SkillSelectButton3.GetComponent<UnityEngine.UI.Button>();
         skillSelectButton3.onClick.AddListener(SkillSelectButton3Clicked);
 
-        isSkillMaxLevel = new bool[skillCount];
+        isSkillMaxLevel = new bool[12];
     }
 
     // 시작 스킬 고르기
@@ -156,7 +157,22 @@ public class SkillSelectManager: MonoBehaviour
     public void DisplayLevelupPanel()
     {
         Time.timeScale = 0;
-        
+
+        int playerLevel = GameManager.instance.player.level;
+
+        if (playerLevel <= 5)
+        {
+            skillCount = 6;
+        }
+        else if(playerLevel <= 10)
+        {
+            skillCount = 9;
+        }
+        else
+        {
+            skillCount = 12;
+        }
+
         onSkillSelectObjectDisplayed();
 
         skillSelectObject.SetActive(true);
@@ -337,6 +353,7 @@ public class SkillSelectManager: MonoBehaviour
                     // 만랩 찍으면 많이 쌔짐
                     skillData.Damage[ranNum[0]] *= 1.5f;
                     skillData.Delay[ranNum[0]] *= 0.6f;
+                    textName.text = "Lv Max";
                 }
                 else
                 {
@@ -407,6 +424,7 @@ public class SkillSelectManager: MonoBehaviour
                         // 만랩 찍으면 많이 쌔짐
                         skillData.Damage[ranNum[1]] *= 1.5f;
                         skillData.Delay[ranNum[1]] *= 0.6f;
+                        textName.text = "Lv Max";
                     }
                     else
                     {
@@ -480,6 +498,7 @@ public class SkillSelectManager: MonoBehaviour
                     // 만랩 찍으면 많이 쌔짐
                     skillData.Damage[ranNum[2]] *= 1.5f;
                     skillData.Delay[ranNum[2]] *= 0.6f;
+                    textName.text = "Lv Max";
                 }
                 else
                 {

@@ -9,6 +9,9 @@ public class InputManager: MonoBehaviour
     // GameoVer_Restart 버튼
     public UnityEngine.UI.Button GVRestartButtonObject;
 
+    // GameClear_GoTOLobby 버튼
+    public UnityEngine.UI.Button GCGoToLobbyButtonObject;
+
     // Pause 버튼
     public UnityEngine.UI.Button PauseButtonObject;
 
@@ -45,6 +48,10 @@ public class InputManager: MonoBehaviour
         // GameoVer_GoTOLobby 버튼 눌렀을 때
         UnityEngine.UI.Button GVGoToLobbyButton = GVGoToLobbyButtonObject.GetComponent<UnityEngine.UI.Button>();
         GVGoToLobbyButton.onClick.AddListener(goToLobbyButtonClicked);
+
+        // GameClear_GoTOLobby 버튼 눌렀을 때
+        UnityEngine.UI.Button GCGoToLobbyButton = GCGoToLobbyButtonObject.GetComponent<UnityEngine.UI.Button>();
+        GCGoToLobbyButton.onClick.AddListener(goToLobbyButtonClicked);
 
         // Pause 버튼 눌렀을 때
         UnityEngine.UI.Button PauseButton = PauseButtonObject.GetComponent<UnityEngine.UI.Button>();

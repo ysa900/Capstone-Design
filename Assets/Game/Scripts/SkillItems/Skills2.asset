@@ -22,7 +22,7 @@ MonoBehaviour:
   - Meteor
   - Energy Blast
   - Ice Spike
-  - Alternative Flame
+  - Twin Flame
   - Judgement
   - Ice Blast
   - Blood
@@ -36,24 +36,24 @@ MonoBehaviour:
   - Meteor Falls on Random Point
   - K a m e h a m e h a!!
   - Ice Spike Rise at Random Point
-  - Flame Changes Alternatively
+  - Two Flame Changes Alternatively
   - Lightning Rains Stormy
   - Case Ice Blast In front of Player
   - Heal ten Points
-  level: 000000000000000001000000000000000000000000000000000000000000000000000000000000000100000001000000
+  level: 010000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000
   Damage:
   - 30
-  - 10
-  - 1
+  - 20
+  - 2
   - 20
   - 15
   - 0
-  - 30
+  - 60
+  - 3
   - 2
-  - 1.5
-  - 30
-  - 20
-  - 1.5
+  - 40
+  - 40
+  - 2
   Delay:
   - 0.8
   - 1
@@ -67,7 +67,7 @@ MonoBehaviour:
   - 3
   - 7.5
   - 8
-  skillSelected: 000001000000000000000101
+  skillSelected: 010000000000000000000001
   skillicon:
   - {fileID: 21300000, guid: 90f5c378a37421e4c900728afc36b321, type: 2}
   - {fileID: 21300000, guid: 83ce16839d132e842a2b72cbf6a4410f, type: 2}

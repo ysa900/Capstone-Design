@@ -80,7 +80,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: -49266856252912819, guid: c7858849fe794454ba9bed1d8d5c74cf, type: 3}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_FlipX: 0
@@ -199,11 +199,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ad35c39e5b83d140a1ac044510300fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  impactPonitX: 0
-  impactPonitY: 0
+  player: {fileID: 0}
+  boss: {fileID: 0}
   aliveTime: 0
   isStaySkill: 0
-  fireNormal2ExplodePrefab: {fileID: 0}
 --- !u!1001 &2003051539940089673
 PrefabInstance:
   m_ObjectHideFlags: 0

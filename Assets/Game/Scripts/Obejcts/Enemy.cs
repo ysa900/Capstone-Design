@@ -51,7 +51,7 @@ public class Enemy : Object, IDamageable
             MoveToPlayer();
         }
 
-        isTimeOver = GameManager.instance.gameTime >= 60f;
+        isTimeOver = GameManager.instance.gameTime >= 60f * 12;
         if (isTimeOver && !isDead)
         {
             StartCoroutine(Dead());
@@ -123,9 +123,6 @@ public class Enemy : Object, IDamageable
             if (damageDelay <= damageDelayTimer)
             {
                 animator.SetTrigger("Hit");
-            }
-            else
-            {
                 damageDelayTimer = 0;
             }
         }

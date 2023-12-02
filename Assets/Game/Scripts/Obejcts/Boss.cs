@@ -9,8 +9,8 @@ public class Boss : Object, IDamageable
     const float Pi = Mathf.PI;
 
     [SerializeField]
-    int hp;
-    int maxHp = 10000;
+    public float hp;
+    public float maxHp = 20000;
     
     [SerializeField]
     float degreeSpeed;
@@ -25,18 +25,18 @@ public class Boss : Object, IDamageable
 
     // 총알(해골) 딜레이
     float bulletAttackDelayTimer = 4f;
-    float bulletAttackDelay = 6f;
+    float bulletAttackDelay = 10f;
 
     // 레이저 딜레이
     float laserAttackDelayTimer = 8f;
     float laserAttackDelay = 15f;
 
     // 격자 레이저 딜레이
-    float gridLaserAttackDelayTimer = 4f;
-    float gridLaserAttackDelay = 10f;
+    float gridLaserAttackDelayTimer = 18f;
+    float gridLaserAttackDelay = 20f;
 
     // 제네시스 딜레이
-    float genesisAttackDelayTimer = 28f;
+    float genesisAttackDelayTimer = 25f;
     float genesisAttackDelay = 30f;
 
     bool isAttackNow; // 공격 중이면 움직이지 않도록 하기 위한 변수
@@ -61,6 +61,10 @@ public class Boss : Object, IDamageable
     private float tmpY; // Cirle을 계산할 때 0,0을 기준으로 생각한 X
     
     Animator animator;
+
+    // BossManager에게 보스가 죽었다고 알려주기 위한 Delegate
+    public delegate void OnBossDead();
+    public OnBossDead onbossDead;
 
     // BossManager에게 스킬 사용을 알려주기 위한 Delegate들
     public delegate void OnBossTryBulletAttack();
@@ -111,7 +115,7 @@ public class Boss : Object, IDamageable
                 bulletAttackDelayTimer += Time.deltaTime;
             }
 
-            if (hp <= maxHp / 100 * 80) // hp가 80프로 미만이면
+            if (hp < maxHp / 100 * 80) // hp가 80프로 미만이면
             {
                 // gridLaser 공격
                 gridLaserSkillShouldBeAttack = gridLaserAttackDelay < gridLaserAttackDelayTimer; // 공격 쿨타임이 됐는지 확인
@@ -307,6 +311,8 @@ public class Boss : Object, IDamageable
 
     IEnumerator CastLaser()
     {
+        yield return new WaitForSeconds(0.75f); // 지정한 초 만큼 쉬기
+
         onBossTryLaserAttack(0f);
 
         yield return new WaitForSeconds(3.2f); // 지정한 초 만큼 쉬기
@@ -316,6 +322,8 @@ public class Boss : Object, IDamageable
 
     IEnumerator CastLaserThree()
     {
+        yield return new WaitForSeconds(1.5f); // 지정한 초 만큼 쉬기
+
         onBossTryLaserAttack(30f);
         onBossTryLaserAttack(0f);
         onBossTryLaserAttack(-30f);
@@ -327,11 +335,11 @@ public class Boss : Object, IDamageable
 
     IEnumerator CastGridLaser()
     {
-        animator.SetBool("Shoot", true);
-        yield return new WaitForSeconds(0.3f); // 지정한 초 만큼 쉬기
+        animator.SetTrigger("Genesis");
+        animator.SetBool("Genesis_Stay", true);
 
-        float mapTop = GameManager.instance.bossMap_Top;
-        float mapRight = GameManager.instance.bossMap_Right;
+        float mapTop = player.transform.position.y + 20;
+        float mapRight = player.transform.position.x + 20;
 
         float root2 = 1.414f;
         float tmpX = mapRight - 40f + root2;
@@ -353,7 +361,9 @@ public class Boss : Object, IDamageable
             tmpY += root2 * 4;
         }
 
-        animator.SetBool("Shoot", false);
+        yield return new WaitForSeconds(1.6f); // 지정한 초 만큼 쉬기
+
+        animator.SetBool("Genesis_Stay", false);
 
         StartCoroutine(TelePort());
     }
@@ -401,7 +411,6 @@ public class Boss : Object, IDamageable
         if (hp <= 0)
         {
             StartCoroutine(Dead());
-            StopCoroutine(Dead());
         }
         else
         {
@@ -430,5 +439,6 @@ public class Boss : Object, IDamageable
         yield return new WaitForSeconds(0.5f); // 지정한 초 만큼 쉬기
 
         Destroy(gameObject);
+        onbossDead();
     }
 }
