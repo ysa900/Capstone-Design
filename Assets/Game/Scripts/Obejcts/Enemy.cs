@@ -50,12 +50,6 @@ public class Enemy : Object, IDamageable
             MoveToPlayer();
         }
 
-        if(GameManager.instance.gameTime >= 60f)
-        {
-            StartCoroutine(Dead());
-            StopCoroutine(Dead());
-        }
-
         DestryIfToFar(); // 플레이어와의 거리가 너무 멀면 죽음
         damageDelayTimer += Time.fixedDeltaTime;
     }

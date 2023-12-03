@@ -144,9 +144,6 @@ public class SkillManager : MonoBehaviour
     // index : 스킬 종류 (불 - 0 + 3n , 전기 - 1 + 3n, 물 - 2 + 3n)
     public void TryAttack(int index)
     {
-      
-
-
         switch (index)
         {
             case 0:
