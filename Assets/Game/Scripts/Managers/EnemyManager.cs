@@ -34,9 +34,9 @@ public class EnemyManager : MonoBehaviour
         gameAudioManager = FindAnyObjectByType<GameAudioManager>();
     }
 
-        // Enemy들을 생성하는 함수
-        // enemyType: 0 ~ ? (현재 0 ~ 1), 이게 몬스터 종류 결정
-        public void CreateEnemies(int enemyNum, Player player, int enemyType, float maxRadius)
+    // Enemy들을 생성하는 함수
+    // enemyType: 0 ~ ? (현재 0 ~ 1), 이게 몬스터 종류 결정
+    public void CreateEnemies(int enemyNum, Player player, int enemyType, float maxRadius)
     {
         switch (enemyType)
         {
@@ -67,17 +67,21 @@ public class EnemyManager : MonoBehaviour
     }
 
     // Enemy가 죽었을 때 실행할 것들
-    private void OnEnemyWasKilled(Enemy killedEnemy)
+    private void OnEnemyWasKilled(Enemy killedEnemy, bool isKilledByPlayer)
     {
-        onEnemyKilled(killedEnemy); // 킬 수 늘리도록 죽었다고 GameManager에게 알려주기
-        
-        enemies.Remove(killedEnemy);
-        onEnemiesChanged(enemies); // enmy 배열 업데이트하도록 GameManager에게 알려주기
-
-        if (!GameManager.instance.isGameOver) //  캐릭터 사망하기 전까지만 실행
+        if (isKilledByPlayer)
         {
-            gameAudioManager.PlaySfx(GameAudioManager.Sfx.Dead); // Enemy 사망 시 효과음
+            onEnemyKilled(killedEnemy); // 킬 수 늘리고, 경험치 떨구도록 GameManager에게 알려주기
+
+            if (!GameManager.instance.isGameOver) //  캐릭터 사망하기 전까지만 실행
+            {
+                gameAudioManager.PlaySfx(GameAudioManager.Sfx.Dead); // Enemy 사망 시 효과음
+            }
         }
+
+        enemies.Remove(killedEnemy);
+
+        onEnemiesChanged(enemies); // enmy 배열 업데이트하도록 GameManager에게 알려주기
     }
 
     // 적 정보를 입력하고 적을 생성하는 함수
