@@ -31,7 +31,11 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
+<<<<<<<< HEAD:Assets/Resources/Prefabs/Boss Skills/Boss Laser.prefab
   m_LocalScale: {x: 2.5, y: 3, z: 1}
+========
+  m_LocalScale: {x: 2, y: 1.5, z: 1}
+>>>>>>>> e620430b655e585d39b91a792643c5a0ee2b90d4:Assets/Resources/Prefabs/Skills/Water&Ice/Water_basic.prefab
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -196,6 +200,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
+<<<<<<<< HEAD:Assets/Resources/Prefabs/Boss Skills/Boss Laser.prefab
   boss: {fileID: 0}
   aliveTime: 2.75
   laserTurnNum: 0
+========
+  speed: 0
+  damage: 0
+  xPositionNum: 0
+  yPositionNum: 0
+  isAttachSkill: 0
+  isFlipped: 0
+  isCircleSkill: 0
+  isShieldSkill: 0
+  isDelaySkill: 0
+  isYFlipped: 0
+  isStaySkill: 0
+  aliveTime: 0
+>>>>>>>> e620430b655e585d39b91a792643c5a0ee2b90d4:Assets/Resources/Prefabs/Skills/Water&Ice/Water_basic.prefab

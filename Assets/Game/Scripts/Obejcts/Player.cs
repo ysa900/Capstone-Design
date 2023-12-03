@@ -54,8 +54,21 @@ public class Player : MonoBehaviour, IPlayer
         int num = 0;
         for (int i = 0; i < nextExp.Length; i++)
         {
-            num += 2;
-            nextExp[i] = num;
+            if(level >= 30)
+            {
+                num += 100;
+                nextExp[i] = num;
+
+
+            }
+            else
+            {
+                num += 10;
+                nextExp[i] = num;
+
+            }
+
+ 
         }
     }
 
