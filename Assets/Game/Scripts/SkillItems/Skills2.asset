@@ -22,7 +22,7 @@ MonoBehaviour:
   - Meteor
   - Energy Blast
   - Ice Spike
-  - Alternative Flame
+  - Twin Flame
   - Judgement
   - Ice Blast
   - Blood
@@ -36,38 +36,38 @@ MonoBehaviour:
   - Meteor Falls on Random Point
   - K a m e h a m e h a!!
   - Ice Spike Rise at Random Point
-  - Flame Changes Alternatively
+  - Two Flame Changes Alternatively
   - Lightning Rains Stormy
   - Case Ice Blast In front of Player
   - Heal ten Points
-  level: 000000000500000005000000000000000500000000000000000000000500000005000000000000000500000000000000
+  level: 010000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000
   Damage:
   - 30
-  - 25.920002
-  - 2.5920002
   - 20
-  - 38.880005
+  - 2
+  - 20
+  - 15
   - 0
-  - 30
-  - 5.1840005
-  - 3.8880005
-  - 30
-  - 51.840004
-  - 1.5
+  - 60
+  - 3
+  - 2
+  - 40
+  - 40
+  - 2
   Delay:
   - 0.8
-  - 0.43739995
-  - 0.8747999
+  - 1
+  - 1.5
   - 3
-  - 3.4991996
+  - 8
   - 10
   - 3
-  - 1.7495998
-  - 0.8747999
+  - 4
+  - 2
   - 3
-  - 1.9682999
-  - 6
-  skillSelected: 000101000100000101000100
+  - 7.5
+  - 8
+  skillSelected: 010000000000000000000001
   skillicon:
   - {fileID: 21300000, guid: 90f5c378a37421e4c900728afc36b321, type: 2}
   - {fileID: 21300000, guid: 83ce16839d132e842a2b72cbf6a4410f, type: 2}
@@ -80,7 +80,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: e541fe5d9f1fffa42902c86789fc11a7, type: 2}
   - {fileID: 21300000, guid: c4322abfbefec6d46a4283e434dc46cb, type: 2}
   - {fileID: 21300000, guid: f75bd353d209d174aaa28850a3695f2f, type: 2}
-  - {fileID: 21300000, guid: 13bc06fb4a75341478b0934c02f307b4, type: 2}
+  - {fileID: 21300000, guid: bef00553c8586ce4f97ab31fad65e9ea, type: 2}
   - {fileID: 21300000, guid: 7f6251c7985e30447bf8dc271d8dae64, type: 2}
   projectile:
   - {fileID: 1876097049369689279, guid: 4f5aab16534b5d543b90b75837de3cc4, type: 3}

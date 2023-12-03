@@ -36,6 +36,13 @@ public class Player : MonoBehaviour, IPlayer
     public delegate void OnPlayerLevelUP();
     public OnPlayerLevelUP onPlayerLevelUP;
 
+    private GameAudioManager gameAudioManager;
+
+    private void Awake()
+    {
+        gameAudioManager = FindAnyObjectByType<GameAudioManager>();
+    }
+
     void Start()
     {
         // 변수 초기화
@@ -47,8 +54,21 @@ public class Player : MonoBehaviour, IPlayer
         int num = 0;
         for (int i = 0; i < nextExp.Length; i++)
         {
-            num += 2;
-            nextExp[i] = num;
+            if(level >= 30)
+            {
+                num += 100;
+                nextExp[i] = num;
+
+
+            }
+            else
+            {
+                num += 10;
+                nextExp[i] = num;
+
+            }
+
+ 
         }
     }
 
@@ -123,8 +143,36 @@ public class Player : MonoBehaviour, IPlayer
         if (!isPlayerDead)
         {
             if (!isPlayerShielded)
-                hp -= Time.deltaTime * 10;
+            {
+                hp -= Time.deltaTime * 5;
+                gameAudioManager.PlaySfx(GameAudioManager.Sfx.Melee); // 피격  효과음
+            }
+            
+            if (hp <= 0)
+            {
+                isPlayerDead = true;
 
+                animator.SetBool("Dead", true);
+
+                onPlayerWasKilled(this);
+
+                rigid.constraints = RigidbodyConstraints2D.FreezeAll;
+
+                transform.localScale = new Vector3(1.0f, 1.0f, 1.0f); // 죽었을 때 나오는 묘비 크기 때문에 크기 조정 해준 것
+            }
+        }
+    }
+
+    public void TakeDamage(float damage)
+    {
+        if (!isPlayerDead)
+        {
+            if (!isPlayerShielded)
+            {
+                hp -= damage;
+                gameAudioManager.PlaySfx(GameAudioManager.Sfx.Melee); // 피격  효과음
+            }
+            
             if (hp <= 0)
             {
                 isPlayerDead = true;

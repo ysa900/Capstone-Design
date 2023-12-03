@@ -329,10 +329,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputVec: {x: 0, y: 0}
-  speed: 5
+  speed: 6
   hp: 100
   maxHp: 100
+  Exp: 0
+  level: 0
+  nextExp: 
+  kill: 0
+  isPlayerDead: 0
   isPlayerLookLeft: 0
+  isPlayerShielded: 0
 --- !u!95 &8557957087405267583
 Animator:
   serializedVersion: 7

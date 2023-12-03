@@ -2,13 +2,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-// 캐릭터 선택 후 뒤로 가기 버튼 누르면 다시 캐릭터 선택창으로 어떻게 보내는지..?
-// 캐릭터 선택창에서 GameStart버튼 On/Off 하는 법...
-// 이거 두개 모르겠어
-
-
 public class LobbyManager : MonoBehaviour
 {
+    private LobbyAudioManager lobbyAudioManager;
+
     // gameStart 버튼
     public UnityEngine.UI.Button gameStartButtonObject;
 
@@ -41,9 +38,14 @@ public class LobbyManager : MonoBehaviour
     public GameObject SelectMage; // Mage
     public GameObject SelectWarrior; // Warrior
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
+        lobbyAudioManager = FindAnyObjectByType<LobbyAudioManager>();
+    }
+
+    private void Start()
+    {
+        lobbyAudioManager.PlayBGM(true);
         // 시작 시 비활성화
         CharacterPage.SetActive(false);
         ItemPage.SetActive(false);
@@ -80,6 +82,8 @@ public class LobbyManager : MonoBehaviour
     // Exit 버튼 클릭시
     private void ExitButtonClicked()
     {
+        lobbyAudioManager.PlaySfx(LobbyAudioManager.Sfx.Select); // 버튼 클릭 시 효과음
+
         // 유니티 에디터에서 게임 플레이 종료 위한 #if 키워드 사용
         #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
@@ -91,6 +95,7 @@ public class LobbyManager : MonoBehaviour
     // Mage 선택시
     private void SelectMageButtonClicked()
     {
+        lobbyAudioManager.PlaySfx(LobbyAudioManager.Sfx.Select); // 버튼 클릭 시 효과음
         CharacterExplainGroup.SetActive(true);
         // GameStart 버튼 활성화 ??
 
@@ -99,33 +104,37 @@ public class LobbyManager : MonoBehaviour
     // GameStart 버튼 클릭시
     private void GameStartButtonClicked()
     {
+        lobbyAudioManager.PlaySfx(LobbyAudioManager.Sfx.Select); // 버튼 클릭 시 효과음
         SceneManager.LoadScene("Game"); // Game 씬 불러오기
     }
 
     // Character 버튼 클릭시
     private void CharacterButtonClicked()
     {
+        lobbyAudioManager.PlaySfx(LobbyAudioManager.Sfx.Select); // 버튼 클릭 시 효과음
         CharacterPage.SetActive(true);
         CharacterExplainGroup.SetActive(false);
         // GameStart 버튼 비활성화 ??
-
     }
 
     // Item 버튼 클릭시
     private void AbilityButtonClicked()
     {
+        lobbyAudioManager.PlaySfx(LobbyAudioManager.Sfx.Select);
         ItemPage.SetActive(true);
     }
 
     // Character Page 뒤로가기 버튼 클릭시
     private void CBackButtonClicked()
     {
+        lobbyAudioManager.PlaySfx(LobbyAudioManager.Sfx.Select); 
         CharacterPage.SetActive(false);
     }
 
     // Item page 뒤로가기 버튼 클릭시
     private void ItemPageBackButtonClicked()
     {
+        lobbyAudioManager.PlaySfx(LobbyAudioManager.Sfx.Select);
         ItemPage.SetActive(false);
     }
 }
