@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
     private SkillSelectManager skillSelectManager;
     private EXP exp;
     private BossManager bossManager;
+    public PoolManager poolManager;
 
     // GameObject에서 프리팹을 넣어주기 위해 public으로 설정
     public Player playerPrefab;
@@ -91,6 +92,7 @@ public class GameManager : MonoBehaviour
         skillManager = FindAnyObjectByType<SkillManager>();
         skillSelectManager = FindAnyObjectByType<SkillSelectManager>();
         bossManager = FindAnyObjectByType<BossManager>();
+        poolManager = FindAnyObjectByType<PoolManager>();
 
         // inputManger Delegate 할당
         inputManager.onPauseButtonClicked = OnPauseButtonClicked;

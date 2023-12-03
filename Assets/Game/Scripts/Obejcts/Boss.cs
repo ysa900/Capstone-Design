@@ -2,6 +2,7 @@ using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.ComponentModel;
+using UnityEditor.EditorTools;
 using UnityEngine;
 
 public class Boss : Object, IDamageable
@@ -24,20 +25,20 @@ public class Boss : Object, IDamageable
     bool genesisSkillShouldBeAttack;
 
     // 총알(해골) 딜레이
-    float bulletAttackDelayTimer = 4f;
-    float bulletAttackDelay = 10f;
+    float bulletAttackDelayTimer = 6f;
+    float bulletAttackDelay = 8f;
 
     // 레이저 딜레이
     float laserAttackDelayTimer = 8f;
-    float laserAttackDelay = 15f;
+    float laserAttackDelay = 1500f;
 
     // 격자 레이저 딜레이
     float gridLaserAttackDelayTimer = 18f;
-    float gridLaserAttackDelay = 20f;
+    float gridLaserAttackDelay = 2000f;
 
     // 제네시스 딜레이
     float genesisAttackDelayTimer = 25f;
-    float genesisAttackDelay = 30f;
+    float genesisAttackDelay = 3000f;
 
     bool isAttackNow; // 공격 중이면 움직이지 않도록 하기 위한 변수
     bool isAttackReady = true; // 공격중엔 다른 공격이 나가지 않도록 하기 위한 변수
@@ -66,6 +67,9 @@ public class Boss : Object, IDamageable
     public delegate void OnBossDead();
     public OnBossDead onbossDead;
 
+
+    Spawner spawn;
+
     // BossManager에게 스킬 사용을 알려주기 위한 Delegate들
     public delegate void OnBossTryBulletAttack();
     public OnBossTryBulletAttack onBossTryBulletAttack;
@@ -92,6 +96,7 @@ public class Boss : Object, IDamageable
 
         colliderOffsetX = capsuleCollider.offset.x; // offset 초기값을 저장
         colliderOffsetY = capsuleCollider.offset.y;
+        spawn = GetComponent<Spawner>();
 
         hp = maxHp;
     }
@@ -300,10 +305,24 @@ public class Boss : Object, IDamageable
 
     IEnumerator CastBullet()
     {
+        animator.SetTrigger("Teleport");
+        yield return new WaitForSeconds(0.34f); // 지정한 초 만큼 쉬기
+
+        if (isBossLookLeft)
+            X += 5f;
+        else
+            X -= 5f;
+
+        animator.SetTrigger("Teleport_arrive");
+
+        yield return new WaitForSeconds(0.34f); // 지정한 초 만큼 쉬기
+        
         animator.SetBool("Shoot", true);
         yield return new WaitForSeconds(0.3f); // 지정한 초 만큼 쉬기
 
+        //GameManager.instance.poolManager.Get(0);
         onBossTryBulletAttack();
+
         animator.SetBool("Shoot", false);
 
         StartCoroutine(TelePort());

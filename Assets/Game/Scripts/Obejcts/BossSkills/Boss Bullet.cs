@@ -28,7 +28,6 @@ public class Boss_Bullet : Object
                 if (destroySkill)
                 {
                     StartCoroutine(Dead());
-                    StopCoroutine(Dead());
                     return;
                 }
 
