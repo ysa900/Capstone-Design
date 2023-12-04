@@ -56,14 +56,14 @@ public class Player : MonoBehaviour, IPlayer
         {
             if(level >= 30)
             {
-                num += 100;
+                num += 0;
                 nextExp[i] = num;
 
 
             }
             else
             {
-                num += 10;
+                num += 0;
                 nextExp[i] = num;
 
             }
