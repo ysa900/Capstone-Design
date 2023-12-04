@@ -1,46 +1,39 @@
-﻿using UnityEngine;
-using System.Collections;
-using Unity.MLAgents;
+﻿using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
+using UnityEngine;
 
-public class Boss_Bullet_ML : Agent, IPullingObject, IDamageableSkill
+public class Boss_Bullet_ML : Agent
 {
-    Player player;
+    public Player_ML player;
+    [SerializeField] Transform target;
+    public GameObject gameObject;
 
-    [SerializeField]
-    float hp = 500;
-
-    public Transform target;
     float damage = 10f;
 
     bool isDead;
     bool isOnLeftSide;
 
-    float aliveTime = 5f;
-    float aliveTimer = 0f;
-
-    Animator animator;
-    SpriteRenderer spriteRenderer;
+    //Animator animator;
 
     public override void OnEpisodeBegin()
     {
         //Init();
+        
+        target = player.GetComponent<Transform>(); 
+        Vector2 pos = gameObject.transform.position;
+
+        target.position = new Vector2(pos.x + UnityEngine.Random.Range(-5f, 5f), pos.y + UnityEngine.Random.Range(-5f, 5f));
+        transform.position = new Vector2(pos.x + UnityEngine.Random.Range(-7f, 7f), pos.y + UnityEngine.Random.Range(-7f, 7f));
+
+
     }
 
-    private void Start()
+
+    /*private void Init()
     {
-        Init();
-    }
-    public void Init()
-    {
-        if(!(GameManager.instance.boss == null))
+        if (!(GameManager.instance.boss == null))
         {
-            isDead = false;
-            aliveTimer = 0f;
-            GetComponent<CapsuleCollider2D>().enabled = true;
-            hp = 500f;
-
             bool isBossLookLeft = GameManager.instance.boss.isBossLookLeft;
 
             float bulletX = GameManager.instance.boss.transform.position.x;
@@ -62,17 +55,20 @@ public class Boss_Bullet_ML : Agent, IPullingObject, IDamageableSkill
             player = GameManager.instance.player;
             target = player.GetComponent<Transform>();
 
-            animator = GetComponent<Animator>();
+            //animator = GetComponent<Animator>();
+            rigid = GetComponent<Rigidbody2D>();
             spriteRenderer = GetComponent<SpriteRenderer>();
-        }
-        
-    }
+        }*//*
+
+    }*/
 
     private void FixedUpdate()
     {
-        if(!isDead)
+
+        if (!isDead)
         {
-            target = player.GetComponent<Transform>();
+
+            target = player.transform;
 
             Vector2 direction = new Vector2(transform.position.x - target.position.x, transform.position.y - target.position.y);
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
@@ -83,26 +79,28 @@ public class Boss_Bullet_ML : Agent, IPullingObject, IDamageableSkill
 
             isOnLeftSide = Mathf.Cos(angle * Mathf.Deg2Rad) < 0; // cos값이 -면 플레이어를 기준으로 왼쪽에 있는 것
 
-            spriteRenderer.flipY = isOnLeftSide;
+            //spriteRenderer.flipY = isOnLeftSide;
 
-            if (aliveTimer > aliveTime)
+   /*         if (aliveTimer > aliveTime)
             {
-                StartCoroutine(Dead());
+               // StartCoroutine(Dead());
             }
-            aliveTimer += Time.fixedDeltaTime;
+            aliveTimer += Time.fixedDeltaTime;*/
         }
-        
+
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        sensor.AddObservation(transform.localPosition);
         sensor.AddObservation(target.localPosition);
-        
+        sensor.AddObservation(transform.localPosition);
+
+
     }
 
     [SerializeField] float speed;
     Vector2 nextMove;
+
     public override void OnActionReceived(ActionBuffers actions)
     {
         nextMove.x = actions.ContinuousActions[0];
@@ -113,44 +111,37 @@ public class Boss_Bullet_ML : Agent, IPullingObject, IDamageableSkill
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        IPlayer iPlayer = other.GetComponent<IPlayer>();
-
-        if (iPlayer == null)
+        if (other.transform == target)
         {
-            return;
+            SetReward(+1);
+            Debug.Log("Success");
+            EndEpisode();
         }
-
-        animator.SetTrigger("Hit");
-        iPlayer.TakeDamage(damage);
-
-        StartCoroutine(Dead());
-    }
-
-    public void TakeDamage(float damage)
-    {
-        if (!isDead)
+        else
         {
-            hp -= damage;
-            
-            if (hp <= 0)
-            {
-                StartCoroutine(Dead());
-            }
+            SetReward(-1);
+            Debug.Log("fail");
+            EndEpisode();
         }
     }
 
-    IEnumerator Dead()
+   /* IEnumerator Dead()
     {
-        animator.SetTrigger("Hit");
+        //animator.SetTrigger("Hit");
 
         isDead = true;
 
+        rigid.constraints = RigidbodyConstraints2D.FreezeAll;
         GetComponent<CapsuleCollider2D>().enabled = false;
 
         yield return new WaitForSeconds(0.35f); // 지정한 초 만큼 쉬기
 
-        gameObject.SetActive(false);
-        //Destroy(gameObject);
+        Destroy(gameObject);
     }
+*/
+
+
+
 }
+
 
