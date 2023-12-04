@@ -49605,8 +49605,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 159581882}
-  - component: {fileID: 159581884}
-  - component: {fileID: 159581883}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -49637,32 +49635,6 @@ Transform:
   - {fileID: 223361689}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &159581883
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 159581881}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d1285de9c2b16b48b5ea6573efe829d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefabs: []
---- !u!114 &159581884
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 159581881}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d1285de9c2b16b48b5ea6573efe829d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefabs: []
 --- !u!1 &163510806
 GameObject:
   m_ObjectHideFlags: 0
@@ -50213,7 +50185,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabs:
-  - {fileID: 1631359398497402109, guid: de9c659ef6987cd4d97a8993c6f85295, type: 3}
+  - {fileID: 1631359398497402109, guid: c7689f2d3c129ce4c8a3f60f82405bdf, type: 3}
 --- !u!1 &231257536
 GameObject:
   m_ObjectHideFlags: 0
@@ -51162,7 +51134,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 11.433333
+  orthographic size: 9
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -52183,6 +52155,7 @@ MonoBehaviour:
   isGameOver: 0
   player: {fileID: 0}
   boss: {fileID: 0}
+  poolManager: {fileID: 0}
   playerPrefab: {fileID: 3621306853304922202, guid: a7f3985b25427964ab0e550dcf041e1a, type: 3}
   expPrefab1: {fileID: 4943057121286701193, guid: 5a0ee35ff018e304f8d573f920043e1f, type: 3}
   expPrefab2: {fileID: 4407068784877236907, guid: a43c7db6f23015d498cb42944a562c30, type: 3}
@@ -70009,8 +69982,8 @@ MonoBehaviour:
   boss: {fileID: 0}
   bossPrefab: {fileID: -5412648688130606181, guid: 0c22f765985c5e24b95007b88c4ea986, type: 3}
   player: {fileID: 0}
-  bossBulletPrefab: {fileID: 3993712466396084629, guid: de9c659ef6987cd4d97a8993c6f85295, type: 3}
-  bossBulletPrefab2: {fileID: -8099673308268057770, guid: b26f9d7dd6e9777479f039153083429d, type: 3}
+  bossBulletPrefab: {fileID: -1771623486371533203, guid: de9c659ef6987cd4d97a8993c6f85295, type: 3}
+  bossBulletPrefab_ML: {fileID: 3993712466396084629, guid: c7689f2d3c129ce4c8a3f60f82405bdf, type: 3}
   bossLaserPrefab: {fileID: 2732523751204016929, guid: 2a2d1bcd248cdf54684ae75c9eb4af0f, type: 3}
   bossGridLaserPrefab: {fileID: 1930705433329540371, guid: 8f5011304ff329b4290bb88df1149bd6, type: 3}
   bossGenesisPrefab: {fileID: 8481769435239011553, guid: 11cd9e812ccf413469944be1258b259f, type: 3}

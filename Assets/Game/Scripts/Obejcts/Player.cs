@@ -63,7 +63,7 @@ public class Player : MonoBehaviour, IPlayer
             }
             else
             {
-                num += 4;
+                num += 5;
                 nextExp[i] = num;
 
             }

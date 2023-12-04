@@ -69,6 +69,14 @@ public class SkillSelectManager: MonoBehaviour
 
     bool isSkillAllMax; // 스킬이 전부 만렙인지 판단하는 변수
 
+    float normalDamageCoefficient = 1.1f;
+    float normalDelayCoefficient = 0.95f;
+    float normalscaleCoefficient = 1.25f;
+
+    float maxDamageCoefficient = 1.3f;
+    float maxDelayCoefficient = 0.8f;
+    float maxscaleCoefficient = 1.5f;
+
     // GameManager에게 알려주기 위한 delegate들
     public delegate void OnSkillSelectObjectDisplayed();
     public OnSkillSelectObjectDisplayed onSkillSelectObjectDisplayed;
@@ -351,22 +359,22 @@ public class SkillSelectManager: MonoBehaviour
                 if (isSkillMaxLevel[ranNum[0]])
                 {
                     // 만랩 찍으면 많이 쌔짐
-                    skillData.Damage[ranNum[0]] *= 1.5f;
-                    skillData.Delay[ranNum[0]] *= 0.6f;
-                    skillData.scale[ranNum[0]] /= 1.5f;
-                    skillData.scale[ranNum[0]] *= 2f;
+                    skillData.Damage[ranNum[0]] *= maxDamageCoefficient;
+                    skillData.Delay[ranNum[0]] *= maxDelayCoefficient;
+                    skillData.scale[ranNum[0]] /= normalscaleCoefficient;
+                    skillData.scale[ranNum[0]] *= maxscaleCoefficient;
                     textName.text = "Lv Max";
                 }
                 else if (skillData.level[ranNum[0]] == 3)
                 {
-                    skillData.Damage[ranNum[0]] *= 1.2f;
-                    skillData.Delay[ranNum[0]] *= 0.9f;
-                    skillData.scale[ranNum[0]] *= 1.5f;
+                    skillData.Damage[ranNum[0]] *= normalDamageCoefficient;
+                    skillData.Delay[ranNum[0]] *= normalDelayCoefficient;
+                    skillData.scale[ranNum[0]] *= normalscaleCoefficient;
                 }
                 else
                 {
-                    skillData.Damage[ranNum[0]] *= 1.2f;
-                    skillData.Delay[ranNum[0]] *= 0.9f;
+                    skillData.Damage[ranNum[0]] *= normalDamageCoefficient;
+                    skillData.Delay[ranNum[0]] *= normalDelayCoefficient;
                 }
             }
         }
@@ -430,22 +438,22 @@ public class SkillSelectManager: MonoBehaviour
                     if (isSkillMaxLevel[ranNum[1]])
                     {
                         // 만랩 찍으면 많이 쌔짐
-                        skillData.Damage[ranNum[1]] *= 1.5f;
-                        skillData.Delay[ranNum[1]] *= 0.6f;
-                        skillData.scale[ranNum[1]] /= 1.5f;
-                        skillData.scale[ranNum[1]] *= 2f;
+                        skillData.Damage[ranNum[1]] *= maxDamageCoefficient;
+                        skillData.Delay[ranNum[1]] *= maxDelayCoefficient;
+                        skillData.scale[ranNum[1]] /= normalscaleCoefficient;
+                        skillData.scale[ranNum[1]] *= maxscaleCoefficient;
                         textName.text = "Lv Max";
                     }
                     else if (skillData.level[ranNum[1]] == 3)
                     {
-                        skillData.Damage[ranNum[1]] *= 1.2f;
-                        skillData.Delay[ranNum[1]] *= 0.9f;
-                        skillData.scale[ranNum[1]] *= 1.5f;
+                        skillData.Damage[ranNum[1]] *= normalDamageCoefficient;
+                        skillData.Delay[ranNum[1]] *= normalDelayCoefficient;
+                        skillData.scale[ranNum[1]] *= normalscaleCoefficient;
                     }
                     else
                     {
-                        skillData.Damage[ranNum[1]] *= 1.2f;
-                        skillData.Delay[ranNum[1]] *= 0.9f;
+                        skillData.Damage[ranNum[1]] *= normalDamageCoefficient;
+                        skillData.Delay[ranNum[1]] *= normalDelayCoefficient;
                     }
                 }
             }
@@ -512,22 +520,22 @@ public class SkillSelectManager: MonoBehaviour
                 if (isSkillMaxLevel[ranNum[2]])
                 {
                     // 만랩 찍으면 많이 쌔짐
-                    skillData.Damage[ranNum[2]] *= 1.5f;
-                    skillData.Delay[ranNum[2]] *= 0.6f;
-                    skillData.scale[ranNum[2]] /= 1.5f;
-                    skillData.scale[ranNum[2]] *= 2f;
+                    skillData.Damage[ranNum[2]] *= maxDamageCoefficient;
+                    skillData.Delay[ranNum[2]] *= maxDelayCoefficient;
+                    skillData.scale[ranNum[2]] /= normalscaleCoefficient;
+                    skillData.scale[ranNum[2]] *= maxscaleCoefficient;
                     textName.text = "Lv Max";
                 }
-                else if(skillData.level[ranNum[2]] == 3)
+                else if (skillData.level[ranNum[2]] == 3)
                 {
-                    skillData.Damage[ranNum[2]] *= 1.2f;
-                    skillData.Delay[ranNum[2]] *= 0.9f;
-                    skillData.scale[ranNum[2]] *= 1.5f;
+                    skillData.Damage[ranNum[2]] *= normalDamageCoefficient;
+                    skillData.Delay[ranNum[2]] *= normalDelayCoefficient;
+                    skillData.scale[ranNum[2]] *= normalscaleCoefficient;
                 }
                 else
                 {
-                    skillData.Damage[ranNum[2]] *= 1.2f;
-                    skillData.Delay[ranNum[2]] *= 0.9f;
+                    skillData.Damage[ranNum[2]] *= normalDamageCoefficient;
+                    skillData.Delay[ranNum[2]] *= normalDelayCoefficient;
                 }
             }
         }

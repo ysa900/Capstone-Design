@@ -285,42 +285,46 @@ public class GameManager : MonoBehaviour
             player.kill++;
         }
 
+        int ranNum = UnityEngine.Random.Range(0, 11);
 
-        if (killedEnemy.tag == "Ghoul")
+        if(ranNum >= 2)
         {
-            exp = Instantiate(expPrefab1);
+            if (killedEnemy.tag == "Ghoul")
+            {
+                exp = Instantiate(expPrefab1);
 
-            exp.expAmount = 1;
+                exp.expAmount = 1;
 
-            exp.X = killedEnemy.X;
-            exp.Y = killedEnemy.Y + 1f;
-        }
-        else if (killedEnemy.tag == "Spitter")
-        {
-            exp = Instantiate(expPrefab2);
+                exp.X = killedEnemy.X;
+                exp.Y = killedEnemy.Y + 1f;
+            }
+            else if (killedEnemy.tag == "Spitter")
+            {
+                exp = Instantiate(expPrefab2);
 
-            exp.expAmount = 2;
+                exp.expAmount = 2;
 
-            exp.X = killedEnemy.X;
-            exp.Y = killedEnemy.Y + 1f;
-        }
-        else if (killedEnemy.tag == "Summoner")
-        {
-            exp = Instantiate(expPrefab2);
+                exp.X = killedEnemy.X;
+                exp.Y = killedEnemy.Y + 1f;
+            }
+            else if (killedEnemy.tag == "Summoner")
+            {
+                exp = Instantiate(expPrefab2);
 
-            exp.expAmount = 3;
+                exp.expAmount = 3;
 
-            exp.X = killedEnemy.X;
-            exp.Y = killedEnemy.Y + 1f;
-        }
-        else if (killedEnemy.tag == "BloodKing")
-        {
-            exp = Instantiate(expPrefab3);
+                exp.X = killedEnemy.X;
+                exp.Y = killedEnemy.Y + 1f;
+            }
+            else if (killedEnemy.tag == "BloodKing")
+            {
+                exp = Instantiate(expPrefab3);
 
-            exp.expAmount = 4;
+                exp.expAmount = 4;
 
-            exp.X = killedEnemy.X;
-            exp.Y = killedEnemy.Y + 1f;
+                exp.X = killedEnemy.X;
+                exp.Y = killedEnemy.Y + 1f;
+            }
         }
     }
 
