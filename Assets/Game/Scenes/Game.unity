@@ -51162,7 +51162,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 12.8
+  orthographic size: 11.433333
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -69138,7 +69138,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: 15.000015}
+  m_AnchoredPosition: {x: 0, y: 15}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &958415953
@@ -70010,6 +70010,7 @@ MonoBehaviour:
   bossPrefab: {fileID: -5412648688130606181, guid: 0c22f765985c5e24b95007b88c4ea986, type: 3}
   player: {fileID: 0}
   bossBulletPrefab: {fileID: 3993712466396084629, guid: de9c659ef6987cd4d97a8993c6f85295, type: 3}
+  bossBulletPrefab2: {fileID: -8099673308268057770, guid: b26f9d7dd6e9777479f039153083429d, type: 3}
   bossLaserPrefab: {fileID: 2732523751204016929, guid: 2a2d1bcd248cdf54684ae75c9eb4af0f, type: 3}
   bossGridLaserPrefab: {fileID: 1930705433329540371, guid: 8f5011304ff329b4290bb88df1149bd6, type: 3}
   bossGenesisPrefab: {fileID: 8481769435239011553, guid: 11cd9e812ccf413469944be1258b259f, type: 3}

@@ -13,6 +13,8 @@ public class BossManager : MonoBehaviour
 
     Boss_Bullet_ML bossBullet;
     public Boss_Bullet_ML bossBulletPrefab;
+    Boss_Bullet bossBullet2;
+    public Boss_Bullet bossBulletPrefab2;
 
     Boss_Lazer bossLaser;
     public Boss_Lazer bossLaserPrefab;
@@ -57,7 +59,7 @@ public class BossManager : MonoBehaviour
 
     private void onBossTryBulletAttack()
     {
-        bossBullet = Instantiate(bossBulletPrefab);
+        bossBullet2 = Instantiate(bossBulletPrefab2);
   
     }
 

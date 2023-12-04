@@ -36,11 +36,11 @@ public class MLManager : MonoBehaviour
             
             boss_Bullet = Instantiate(boss_BulletPrefab);
             boss_Bullets[i] = boss_Bullet;
-            pos2.x -= 2f; pos2.y -= 2f;
-            boss_Bullets[i].transform.position = pos;
+            pos2.x -= 5f; pos2.y -= 5f;
+            boss_Bullets[i].transform.position = pos2;
 
             boss_Bullets[i].player = players[i];
-
+            boss_Bullet.gameObject = gameObjects[i];
         }
 
 

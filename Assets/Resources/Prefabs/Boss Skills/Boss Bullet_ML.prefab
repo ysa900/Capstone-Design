@@ -166,8 +166,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 0
-    NumStackedVectorObservations: 1
+    VectorObservationSize: 2
+    NumStackedVectorObservations: 2
     m_ActionSpec:
       m_NumContinuousActions: 2
       BranchSizes: 
@@ -215,4 +215,5 @@ MonoBehaviour:
   MaxStep: 0
   player: {fileID: 0}
   target: {fileID: 0}
+  gameObject: {fileID: 0}
   speed: 10

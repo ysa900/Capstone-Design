@@ -1,14 +1,13 @@
-﻿using UnityEngine;
-using System.Collections;
-using Unity.MLAgents;
+﻿using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
-using System;
+using UnityEngine;
 
 public class Boss_Bullet_ML : Agent
 {
     public Player_ML player;
-    public Transform target;
+    [SerializeField] Transform target;
+    public GameObject gameObject;
 
     float damage = 10f;
 
@@ -20,9 +19,12 @@ public class Boss_Bullet_ML : Agent
     public override void OnEpisodeBegin()
     {
         //Init();
+        
+        target = player.GetComponent<Transform>(); 
+        Vector2 pos = gameObject.transform.position;
 
-        target = player.GetComponent<Transform>();
-
+        target.position = new Vector2(pos.x + UnityEngine.Random.Range(-5f, 5f), pos.y + UnityEngine.Random.Range(-5f, 5f));
+        transform.position = new Vector2(pos.x + UnityEngine.Random.Range(-7f, 7f), pos.y + UnityEngine.Random.Range(-7f, 7f));
 
 
     }
@@ -90,7 +92,8 @@ public class Boss_Bullet_ML : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
-
+        sensor.AddObservation(target.localPosition);
+        sensor.AddObservation(transform.localPosition);
 
 
     }
