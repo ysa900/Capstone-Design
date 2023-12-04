@@ -17,6 +17,8 @@ public class RandomSkill : Skill
     public bool isIceSpike; // IceSpike 스킬의 자식 오브젝트 때문에 만든 변수
     public bool isStaySkill; // 몇초동안 지속되다가 사라지는 스킬이냐
 
+    public float scale;
+
     Rigidbody2D rigid; // 물리 입력을 받기위한 변수
     Vector2 direction; // 날아갈 방향
 
@@ -51,6 +53,12 @@ public class RandomSkill : Skill
 
                 explode.aliveTime = 0.5f;
                 explode.damage = damage;
+
+                Transform parent = explode.transform.parent;
+
+                explode.transform.parent = null;
+                explode.transform.localScale = new Vector3(scale, scale, 0);
+                explode.transform.parent = parent;
             }
             if (isStaySkill)
             {
@@ -100,12 +108,21 @@ public class RandomSkill : Skill
         {
             IDamageable damageable = collision.GetComponent<IDamageable>();
 
-            if (damageable == null)
+            if (damageable != null)
             {
+                damageable.TakeDamage(gameObject, damage);
+
                 return;
             }
 
-            damageable.TakeDamage(gameObject, damage);
+            IDamageableSkill damageableSkill = collision.GetComponent<IDamageableSkill>();
+
+            if (damageableSkill != null)
+            {
+                damageableSkill.TakeDamage(damage);
+
+                return;
+            }
         }
     }
 
@@ -115,12 +132,21 @@ public class RandomSkill : Skill
         {
             IDamageable damageable = collision.GetComponent<IDamageable>();
 
-            if (damageable == null)
+            if (damageable != null)
             {
+                damageable.TakeDamage(gameObject, damage);
+
                 return;
             }
 
-            damageable.TakeDamage(gameObject, damage);
+            IDamageableSkill damageableSkill = collision.GetComponent<IDamageableSkill>();
+
+            if (damageableSkill != null)
+            {
+                damageableSkill.TakeDamage(damage);
+
+                return;
+            }
         }
     }
 

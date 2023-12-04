@@ -4,9 +4,12 @@ using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 
-public class Boss_Bullet_ML : Agent
+public class Boss_Bullet_ML : Agent, IPullingObject, IDamageableSkill
 {
     Player player;
+
+    [SerializeField]
+    float hp = 500;
 
     public Transform target;
     float damage = 10f;
@@ -14,11 +17,10 @@ public class Boss_Bullet_ML : Agent
     bool isDead;
     bool isOnLeftSide;
 
-    float aliveTime = 10f;
+    float aliveTime = 5f;
     float aliveTimer = 0f;
 
     Animator animator;
-    Rigidbody2D rigid;
     SpriteRenderer spriteRenderer;
 
     public override void OnEpisodeBegin()
@@ -30,10 +32,15 @@ public class Boss_Bullet_ML : Agent
     {
         Init();
     }
-    private void Init()
+    public void Init()
     {
         if(!(GameManager.instance.boss == null))
         {
+            isDead = false;
+            aliveTimer = 0f;
+            GetComponent<CapsuleCollider2D>().enabled = true;
+            hp = 500f;
+
             bool isBossLookLeft = GameManager.instance.boss.isBossLookLeft;
 
             float bulletX = GameManager.instance.boss.transform.position.x;
@@ -56,7 +63,6 @@ public class Boss_Bullet_ML : Agent
             target = player.GetComponent<Transform>();
 
             animator = GetComponent<Animator>();
-            rigid = GetComponent<Rigidbody2D>();
             spriteRenderer = GetComponent<SpriteRenderer>();
         }
         
@@ -120,18 +126,31 @@ public class Boss_Bullet_ML : Agent
         StartCoroutine(Dead());
     }
 
+    public void TakeDamage(float damage)
+    {
+        if (!isDead)
+        {
+            hp -= damage;
+            
+            if (hp <= 0)
+            {
+                StartCoroutine(Dead());
+            }
+        }
+    }
+
     IEnumerator Dead()
     {
         animator.SetTrigger("Hit");
 
         isDead = true;
 
-        rigid.constraints = RigidbodyConstraints2D.FreezeAll;
         GetComponent<CapsuleCollider2D>().enabled = false;
 
         yield return new WaitForSeconds(0.35f); // 지정한 초 만큼 쉬기
 
-        Destroy(gameObject);
+        gameObject.SetActive(false);
+        //Destroy(gameObject);
     }
 }
 

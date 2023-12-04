@@ -11,8 +11,11 @@ public class BossManager : MonoBehaviour
 
     public Player player;
 
-    Boss_Bullet_ML bossBullet;
-    public Boss_Bullet_ML bossBulletPrefab;
+    Boss_Bullet bossBullet;
+    public Boss_Bullet bossBulletPrefab;
+
+    Boss_Bullet_ML bossBullet_ML;
+    public Boss_Bullet_ML bossBulletPrefab_ML;
 
     Boss_Lazer bossLaser;
     public Boss_Lazer bossLaserPrefab;
@@ -29,8 +32,8 @@ public class BossManager : MonoBehaviour
 
     private void Start()
     {
-        bossBullet = Instantiate(bossBulletPrefab); // 모델 적용을 위해 야매로 함
-        Destroy(bossBullet.gameObject);
+        bossBullet_ML = Instantiate(bossBulletPrefab_ML); // 모델 적용을 위해 야매로 함
+        Destroy(bossBullet_ML.gameObject);
     }
 
     public void CreateBoss()
@@ -59,8 +62,8 @@ public class BossManager : MonoBehaviour
 
     private void onBossTryBulletAttack()
     {
-        bossBullet = Instantiate(bossBulletPrefab);
-  
+        //bossBullet = Instantiate(bossBulletPrefab);
+        GameManager.instance.poolManager.Get(0);
     }
 
     private void onBossTryLaserAttack(float num)

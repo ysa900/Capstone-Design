@@ -353,7 +353,15 @@ public class SkillSelectManager: MonoBehaviour
                     // 만랩 찍으면 많이 쌔짐
                     skillData.Damage[ranNum[0]] *= 1.5f;
                     skillData.Delay[ranNum[0]] *= 0.6f;
+                    skillData.scale[ranNum[0]] /= 1.5f;
+                    skillData.scale[ranNum[0]] *= 2f;
                     textName.text = "Lv Max";
+                }
+                else if (skillData.level[ranNum[0]] == 3)
+                {
+                    skillData.Damage[ranNum[0]] *= 1.2f;
+                    skillData.Delay[ranNum[0]] *= 0.9f;
+                    skillData.scale[ranNum[0]] *= 1.5f;
                 }
                 else
                 {
@@ -424,7 +432,15 @@ public class SkillSelectManager: MonoBehaviour
                         // 만랩 찍으면 많이 쌔짐
                         skillData.Damage[ranNum[1]] *= 1.5f;
                         skillData.Delay[ranNum[1]] *= 0.6f;
+                        skillData.scale[ranNum[1]] /= 1.5f;
+                        skillData.scale[ranNum[1]] *= 2f;
                         textName.text = "Lv Max";
+                    }
+                    else if (skillData.level[ranNum[1]] == 3)
+                    {
+                        skillData.Damage[ranNum[1]] *= 1.2f;
+                        skillData.Delay[ranNum[1]] *= 0.9f;
+                        skillData.scale[ranNum[1]] *= 1.5f;
                     }
                     else
                     {
@@ -498,7 +514,15 @@ public class SkillSelectManager: MonoBehaviour
                     // 만랩 찍으면 많이 쌔짐
                     skillData.Damage[ranNum[2]] *= 1.5f;
                     skillData.Delay[ranNum[2]] *= 0.6f;
+                    skillData.scale[ranNum[2]] /= 1.5f;
+                    skillData.scale[ranNum[2]] *= 2f;
                     textName.text = "Lv Max";
+                }
+                else if(skillData.level[ranNum[2]] == 3)
+                {
+                    skillData.Damage[ranNum[2]] *= 1.2f;
+                    skillData.Delay[ranNum[2]] *= 0.9f;
+                    skillData.scale[ranNum[2]] *= 1.5f;
                 }
                 else
                 {

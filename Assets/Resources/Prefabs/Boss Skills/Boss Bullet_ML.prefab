@@ -8,7 +8,6 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-<<<<<<<< HEAD:Assets/Resources/Prefabs/Boss Skills/Boss Bullet_ML.prefab
   - component: {fileID: 3788119873325051337}
   - component: {fileID: 5768425471619979215}
   - component: {fileID: 5321184544661214385}
@@ -17,13 +16,6 @@ GameObject:
   - component: {fileID: 3646346772681791636}
   - component: {fileID: 6140126576143995236}
   - component: {fileID: 3993712466396084629}
-========
-  - component: {fileID: 5337796309160681010}
-  - component: {fileID: 2937863248950833083}
-  - component: {fileID: 8029049351686894153}
-  - component: {fileID: -3655751959249132899}
-  - component: {fileID: -6285297953325344532}
->>>>>>>> 9feea453fe1baa57c9c7b98356ca1ffaa5bda5e6:Assets/Resources/Prefabs/Boss Skills/Boss Bullet.prefab
   m_Layer: 0
   m_Name: Boss Bullet_ML
   m_TagString: Untagged
@@ -181,7 +173,6 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-<<<<<<<< HEAD:Assets/Resources/Prefabs/Boss Skills/Boss Bullet_ML.prefab
   m_Offset: {x: 0.08, y: 0}
   m_Size: {x: 0.4, y: 0.25}
   m_Direction: 1
@@ -207,7 +198,7 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 5022602860645237092, guid: 7d3d793e62d713647a5edf3ba24a92dd, type: 3}
+  m_Model: {fileID: 5022602860645237092, guid: 8a8891b0439ba4947b7503fef721cd86, type: 3}
   m_InferenceDevice: 3
   m_BehaviorType: 0
   m_BehaviorName: Boss_Bullet
@@ -247,8 +238,3 @@ MonoBehaviour:
   MaxStep: 0
   target: {fileID: 109349939218810697, guid: a7f3985b25427964ab0e550dcf041e1a, type: 3}
   speed: 10
-========
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.64, y: 0.64}
-  m_Direction: 0
->>>>>>>> 9feea453fe1baa57c9c7b98356ca1ffaa5bda5e6:Assets/Resources/Prefabs/Boss Skills/Boss Bullet.prefab

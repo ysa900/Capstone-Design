@@ -33,6 +33,10 @@ public class PoolManager : MonoBehaviour
             {
                 // 발견하면 select 변수에 할당
                 select = item;
+                if(select.GetComponent<IPullingObject>() != null)
+                {
+                    select.GetComponent<IPullingObject>().Init();
+                }
                 select.SetActive(true);
                 break;
             }

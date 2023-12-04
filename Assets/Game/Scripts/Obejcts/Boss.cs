@@ -30,15 +30,15 @@ public class Boss : Object, IDamageable
 
     // 레이저 딜레이
     float laserAttackDelayTimer = 8f;
-    float laserAttackDelay = 1500f;
+    float laserAttackDelay = 15f;
 
     // 격자 레이저 딜레이
     float gridLaserAttackDelayTimer = 18f;
-    float gridLaserAttackDelay = 2000f;
+    float gridLaserAttackDelay = 20f;
 
     // 제네시스 딜레이
     float genesisAttackDelayTimer = 25f;
-    float genesisAttackDelay = 3000f;
+    float genesisAttackDelay = 30f;
 
     bool isAttackNow; // 공격 중이면 움직이지 않도록 하기 위한 변수
     bool isAttackReady = true; // 공격중엔 다른 공격이 나가지 않도록 하기 위한 변수

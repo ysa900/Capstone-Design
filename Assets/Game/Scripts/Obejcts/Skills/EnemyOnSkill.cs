@@ -29,15 +29,25 @@ public class EnemyOnSkill : Skill
     {
         IDamageable damageable = collision.GetComponent<IDamageable>();
 
-        if (damageable == null)
+        if (damageable != null)
         {
+            damageable.TakeDamage(gameObject, damage);
+
+            StartCoroutine(Delay(0.5f));
+
             return;
         }
 
-        damageable.TakeDamage(gameObject, damage);
+        IDamageableSkill damageableSkill = collision.GetComponent<IDamageableSkill>();
 
-        StartCoroutine(Delay(0.5f));
+        if (damageableSkill != null)
+        {
+            damageableSkill.TakeDamage(damage);
 
+            StartCoroutine(Delay(0.5f));
+
+            return;
+        }
     }
 
     IEnumerator Delay(float delayTime)

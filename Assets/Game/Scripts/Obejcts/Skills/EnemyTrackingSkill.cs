@@ -106,14 +106,25 @@ public class EnemyTrackingSkill : Skill
     {
         IDamageable damageable = collision.GetComponent<IDamageable>();
 
-        if (damageable == null)
+        if (damageable != null)
         {
+            damageable.TakeDamage(gameObject, damage);
+
+            Destroy(gameObject);
+
             return;
         }
 
-        damageable.TakeDamage(gameObject, damage);
+        IDamageableSkill damageableSkill = collision.GetComponent<IDamageableSkill>();
 
-        Destroy(gameObject);
+        if (damageableSkill != null)
+        {
+            damageableSkill.TakeDamage(damage);
+
+            Destroy(gameObject);
+
+            return;
+        }
     }
 }
 

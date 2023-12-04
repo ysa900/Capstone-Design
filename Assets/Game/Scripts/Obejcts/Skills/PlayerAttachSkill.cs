@@ -129,33 +129,8 @@ public class PlayerAttachSkill : Skill
     {
         IDamageable damageable = collision.GetComponent<IDamageable>();
 
-        if (damageable == null)
+        if (damageable != null)
         {
-            return;
-        }
-
-        if (isDelaySkill)
-        {
-            if (delayTimer >= delay)
-            {
-                damageable.TakeDamage(gameObject, damage);
-            }
-        }
-        else if (!isShieldSkill)
-            damageable.TakeDamage(gameObject, damage);
-    }
-
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (isStaySkill)
-        {
-            IDamageable damageable = collision.GetComponent<IDamageable>();
-
-            if (damageable == null)
-            {
-                return;
-            }
-
             if (isDelaySkill)
             {
                 if (delayTimer >= delay)
@@ -165,6 +140,67 @@ public class PlayerAttachSkill : Skill
             }
             else if (!isShieldSkill)
                 damageable.TakeDamage(gameObject, damage);
+
+            return;
+        }
+
+        IDamageableSkill damageableSkill = collision.GetComponent<IDamageableSkill>();
+
+        if (damageableSkill != null)
+        {
+            if (isDelaySkill)
+            {
+                if (delayTimer >= delay)
+                {
+                    damageableSkill.TakeDamage(damage);
+                }
+            }
+            else if (!isShieldSkill)
+                damageableSkill.TakeDamage(damage);
+
+            return;
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (isStaySkill)
+        {
+            IDamageable damageable = collision.GetComponent<IDamageable>();
+
+            if (damageable != null)
+            {
+                if (isDelaySkill)
+                {
+                    if (delayTimer >= delay)
+                    {
+                        damageable.TakeDamage(gameObject, damage);
+                    }
+                }
+                else if (!isShieldSkill)
+                    damageable.TakeDamage(gameObject, damage);
+
+                return;
+            }
+
+            IDamageableSkill damageableSkill = collision.GetComponent<IDamageableSkill>();
+
+            if (damageableSkill != null)
+            {
+                if (isDelaySkill)
+                {
+                    if (delayTimer >= delay)
+                    {
+                        damageableSkill.TakeDamage(damage);
+                    }
+                }
+                else if (!isShieldSkill)
+                    damageableSkill.TakeDamage(damage);
+
+                return;
+            }
+
+            
         }
     }
 }

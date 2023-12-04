@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
 
     // 게임 시간
     public float gameTime;
-    //private float maxGameTime = 15 * 60f;
+    //private float maxGameTime = 5 * 60f;
 
     // 적 스폰 쿨타임
     private float CoolTime = 2f;
@@ -120,7 +120,7 @@ public class GameManager : MonoBehaviour
         // delegate 할당
         bossManager.onBossHasKilled = OnBossHasKilled;
 
-        gameTime = 60 * 12f;
+        //gameTime = 60 * 12f;
         //player.isPlayerShielded = true;
     }
 
@@ -157,29 +157,29 @@ public class GameManager : MonoBehaviour
     // Enemy 스폰 시간을 계산해 소환할 적을 지정하는 함수
     private void CalculateEnemySpawnTime()
     {
-        if (gameTime <= 60 * 3f && CoolTimer >= CoolTime)
+        if (gameTime <= 60 * 1 && CoolTimer >= CoolTime)
         {
             enemyManager.CreateEnemies(10, player, 0, maxEnemySpawnRange); // Ghoul 몬스터 소환
             CoolTimer = 0f;
         }
-        else if (gameTime <= 60 * 6f && CoolTimer >= CoolTime)
+        else if (gameTime <= 60 * 2 && CoolTimer >= CoolTime)
         {
             enemyManager.CreateEnemies(10, player, 1, maxEnemySpawnRange); // Spitter 몬스터 소환
             CoolTimer = 0f;
         }
-        else if (gameTime <= 60 * 9f && CoolTimer >= CoolTime)
+        else if (gameTime <= 60 * 3 && CoolTimer >= CoolTime)
         {
             enemyManager.CreateEnemies(15, player, 2, maxEnemySpawnRange); //Summoner 몬스터 소환
             CoolTime = 1.5f;
             CoolTimer = 0f;
         }
-        else if (gameTime < 60 * 12f && CoolTimer >= CoolTime)
+        else if (gameTime < 60 * 4 && CoolTimer >= CoolTime)
         {
             enemyManager.CreateEnemies(20, player, 3, maxEnemySpawnRange); //BloodKing 몬스터 소환
             CoolTime = 1f;
             CoolTimer = 0f;
         }
-        else if (gameTime >= 60 * 12f)
+        else if (gameTime >= 60 * 5)
         {
             // 보스 등장
             bossManager.player = player;
