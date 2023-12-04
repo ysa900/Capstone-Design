@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
 
     // 게임 시간
     public float gameTime;
-    //private float maxGameTime = 5 * 60f;
+    public float maxGameTime = 5 * 60f;
 
     // 적 스폰 쿨타임
     private float CoolTime = 2f;
@@ -164,22 +164,37 @@ public class GameManager : MonoBehaviour
         }
         else if (gameTime <= 60 * 2 && CoolTimer >= CoolTime)
         {
+            enemyManager.CreateEnemies(5, player, 0, maxEnemySpawnRange); // Ghoul 몬스터 소환
             enemyManager.CreateEnemies(10, player, 1, maxEnemySpawnRange); // Spitter 몬스터 소환
             CoolTimer = 0f;
         }
         else if (gameTime <= 60 * 3 && CoolTimer >= CoolTime)
         {
-            enemyManager.CreateEnemies(15, player, 2, maxEnemySpawnRange); //Summoner 몬스터 소환
+            enemyManager.CreateEnemies(2, player, 0, maxEnemySpawnRange); // Ghoul 몬스터 소환
+            enemyManager.CreateEnemies(5, player, 1, maxEnemySpawnRange); // Spitter 몬스터 소환
+            enemyManager.CreateEnemies(10, player, 2, maxEnemySpawnRange); //Summoner 몬스터 소환
             CoolTime = 1.5f;
             CoolTimer = 0f;
         }
         else if (gameTime < 60 * 4 && CoolTimer >= CoolTime)
         {
+            enemyManager.CreateEnemies(2, player, 0, maxEnemySpawnRange); // Ghoul 몬스터 소환
+            enemyManager.CreateEnemies(5, player, 1, maxEnemySpawnRange); // Spitter 몬스터 소환
+            enemyManager.CreateEnemies(8, player, 2, maxEnemySpawnRange); //Summoner 몬스터 소환
+            enemyManager.CreateEnemies(15, player, 3, maxEnemySpawnRange); //BloodKing 몬스터 소환
+            CoolTime = 1f;
+            CoolTimer = 0f;
+        }
+        else if (gameTime < 60 * 5 && CoolTimer >= CoolTime)
+        {
+            enemyManager.CreateEnemies(2, player, 0, maxEnemySpawnRange); // Ghoul 몬스터 소환
+            enemyManager.CreateEnemies(5, player, 1, maxEnemySpawnRange); // Spitter 몬스터 소환
+            enemyManager.CreateEnemies(8, player, 2, maxEnemySpawnRange); //Summoner 몬스터 소환
             enemyManager.CreateEnemies(20, player, 3, maxEnemySpawnRange); //BloodKing 몬스터 소환
             CoolTime = 1f;
             CoolTimer = 0f;
         }
-        else if (gameTime >= 60 * 5)
+        else if (gameTime >= maxGameTime)
         {
             // 보스 등장
             bossManager.player = player;

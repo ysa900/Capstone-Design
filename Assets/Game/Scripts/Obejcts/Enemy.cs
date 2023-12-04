@@ -51,7 +51,7 @@ public class Enemy : Object, IDamageable
             MoveToPlayer();
         }
 
-        isTimeOver = GameManager.instance.gameTime >= 60f * 12;
+        isTimeOver = GameManager.instance.gameTime >= GameManager.instance.maxGameTime;
         if (isTimeOver && !isDead)
         {
             StartCoroutine(Dead());

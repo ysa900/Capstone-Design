@@ -410,11 +410,11 @@ public class SkillManager : MonoBehaviour
 
                     if (skillData.level[index] == 5)
                     {
-                        playerAttachSkill.xPositionNum = 8f;
+                        playerAttachSkill.xPositionNum = 4 * 1.5f;
                     }
                     else if (skillData.level[index] >= 3)
                     {
-                        playerAttachSkill.xPositionNum = 6f;
+                        playerAttachSkill.xPositionNum = 4 * 1.25f;
                     }
                     else
                     {
@@ -471,16 +471,17 @@ public class SkillManager : MonoBehaviour
 
                     if (skillData.level[index] == 5)
                     {
-                        playerAttachSkill.xPositionNum = 6f;
+                        playerAttachSkill.xPositionNum = 3 * 1.5f;
                     }
                     else if(skillData.level[index] >= 3)
                     {
-                        playerAttachSkill.xPositionNum = 4.5f;
+                        playerAttachSkill.xPositionNum = 3 * 1.25f;
                     }
                     else
                     {
                         playerAttachSkill.xPositionNum = 3f;
                     }
+
                     playerAttachSkill.yPositionNum = 0f;
 
                     playerAttachSkill.isCircleSkill = true;
@@ -631,11 +632,11 @@ public class SkillManager : MonoBehaviour
 
                                 if (skillData.level[index] == 5)
                                 {
-                                    playerAttachSkill.xPositionNum = -8f;
+                                    playerAttachSkill.xPositionNum = - 4 * 1.5f;
                                 }
                                 else if (skillData.level[index] >= 3)
                                 {
-                                    playerAttachSkill.xPositionNum = -6f;
+                                    playerAttachSkill.xPositionNum = -4 * 1.25f;
                                 }
                                 else
                                 {
@@ -660,11 +661,11 @@ public class SkillManager : MonoBehaviour
 
                                 if (skillData.level[index] == 5)
                                 {
-                                    playerAttachSkill.xPositionNum = 8f;
+                                    playerAttachSkill.xPositionNum = 4 * 1.5f;
                                 }
                                 else if (skillData.level[index] >= 3)
                                 {
-                                    playerAttachSkill.xPositionNum = 6f;
+                                    playerAttachSkill.xPositionNum =  4 * 1.25f;
                                 }
                                 else
                                 {
@@ -700,11 +701,11 @@ public class SkillManager : MonoBehaviour
                                 playerAttachSkill.xPositionNum = 0f;
                                 if (skillData.level[index] == 5)
                                 {
-                                    playerAttachSkill.yPositionNum = 4.5f;
+                                    playerAttachSkill.yPositionNum = 1.5f * 1.5f;
                                 }
                                 else if (skillData.level[index] >= 3)
                                 {
-                                    playerAttachSkill.yPositionNum = 3f;
+                                    playerAttachSkill.yPositionNum = 1.5f * 1.25f;
                                 }
                                 else
                                 {
@@ -730,11 +731,11 @@ public class SkillManager : MonoBehaviour
                                 playerAttachSkill.xPositionNum = 0f;
                                 if (skillData.level[index] == 5)
                                 {
-                                    playerAttachSkill.yPositionNum = -5f;
+                                    playerAttachSkill.yPositionNum = -2.5f * 1.5f;
                                 }
                                 else if (skillData.level[index] >= 3)
                                 {
-                                    playerAttachSkill.yPositionNum = -3.75f;
+                                    playerAttachSkill.yPositionNum = -2.5f * 1.25f;
                                 }
                                 else
                                 {
@@ -773,11 +774,11 @@ public class SkillManager : MonoBehaviour
 
                     if (skillData.level[index] == 5)
                     {
-                        playerAttachSkill.xPositionNum = 9f;
+                        playerAttachSkill.xPositionNum = 4.5f * 1.5f;
                     }
                     else if (skillData.level[index] >= 3)
                     {
-                        playerAttachSkill.xPositionNum = 6.75f;
+                        playerAttachSkill.xPositionNum = 4.5f * 1.25f;
                     }
                     else
                     {

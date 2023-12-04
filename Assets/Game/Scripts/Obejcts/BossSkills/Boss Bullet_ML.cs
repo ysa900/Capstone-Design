@@ -9,7 +9,8 @@ public class Boss_Bullet_ML : Agent, IPullingObject, IDamageableSkill
     Player player;
 
     [SerializeField]
-    float hp = 500;
+    float hp;
+    float Maxhp = 200;
 
     public Transform target;
     float damage = 10f;
@@ -39,7 +40,7 @@ public class Boss_Bullet_ML : Agent, IPullingObject, IDamageableSkill
             isDead = false;
             aliveTimer = 0f;
             GetComponent<CapsuleCollider2D>().enabled = true;
-            hp = 500f;
+            hp = Maxhp;
 
             bool isBossLookLeft = GameManager.instance.boss.isBossLookLeft;
 
