@@ -116,7 +116,7 @@ public class SkillManager : MonoBehaviour
         skillData.Damage[1] = 20f;
         skillData.Damage[2] = 2.0f;
         skillData.Damage[3] = 20f;
-        skillData.Damage[4] = 15f;
+        skillData.Damage[4] = 25f;
         skillData.Damage[5] = 0f;
         skillData.Damage[6] = 60f;
         skillData.Damage[7] = 3.0f;
@@ -142,7 +142,7 @@ public class SkillManager : MonoBehaviour
         skillData.scale[1] = 1f;
         skillData.scale[2] = 2f;
         skillData.scale[3] = 1.5f;
-        skillData.scale[4] = 1f;
+        skillData.scale[4] = 1.5f;
         skillData.scale[5] = 1f;
         skillData.scale[6] = 1.5f;
         skillData.scale[7] = 1f;
@@ -461,36 +461,7 @@ public class SkillManager : MonoBehaviour
                 }
             case 4:
                 {
-                    playerAttachSkill = Instantiate(electricNormalSkillPrefab1);
-                    gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
-
-                    playerAttachSkill.player = player;
-
-                    playerAttachSkill.X = player.transform.position.x + 3f;
-                    playerAttachSkill.Y = player.transform.position.y;
-
-                    if (skillData.level[index] == 5)
-                    {
-                        playerAttachSkill.xPositionNum = 3 * 1.5f;
-                    }
-                    else if(skillData.level[index] >= 3)
-                    {
-                        playerAttachSkill.xPositionNum = 3 * 1.25f;
-                    }
-                    else
-                    {
-                        playerAttachSkill.xPositionNum = 3f;
-                    }
-
-                    playerAttachSkill.yPositionNum = 0f;
-
-                    playerAttachSkill.isCircleSkill = true;
-
-                    playerAttachSkill.aliveTime = 5f;
-
-                    playerAttachSkill.damage = skillData.Damage[index];
-
-                    SetScale(playerAttachSkill.gameObject, index);
+                    CastElectricBall();
                     break;
                 }
             case 5:
@@ -760,7 +731,7 @@ public class SkillManager : MonoBehaviour
                 }
             case 10:
                 {
-                    StartCoroutine(CastWithDelay(index, 10));
+                    StartCoroutine(CastJudgement(index, 10));
 
                     gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
                     break;
@@ -819,6 +790,95 @@ public class SkillManager : MonoBehaviour
         onShiledSkillUnActivated();
     }
 
+    private void CastElectricBall()
+    {
+        float tmpDegree = 0f;
+
+        if (skillData.level[4] == 5)
+        {
+            for(int i = 0; i < 3; i++)
+            {
+                playerAttachSkill = Instantiate(electricNormalSkillPrefab1);
+
+                playerAttachSkill.degree = tmpDegree;
+                tmpDegree -= 120f;
+
+                playerAttachSkill.xPositionNum = 4f;
+                playerAttachSkill.aliveTime = 5f * 1.5f;
+
+
+
+                gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+
+                playerAttachSkill.player = player;
+
+                playerAttachSkill.X = player.transform.position.x + 3f;
+                playerAttachSkill.Y = player.transform.position.y;
+
+                playerAttachSkill.yPositionNum = 0f;
+
+                playerAttachSkill.isCircleSkill = true;
+
+                playerAttachSkill.damage = skillData.Damage[4];
+
+                SetScale(playerAttachSkill.gameObject, 4);
+            }
+        }
+        else if (skillData.level[4] >= 3)
+        {
+            for(int i = 0; i < 2; i++)
+            {
+                playerAttachSkill = Instantiate(electricNormalSkillPrefab1);
+
+                playerAttachSkill.degree = tmpDegree;
+                tmpDegree -= 180f;
+
+                playerAttachSkill.xPositionNum = 3.5f;
+                playerAttachSkill.aliveTime = 5f * 1.25f;
+
+
+                gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+
+                playerAttachSkill.player = player;
+
+                playerAttachSkill.X = player.transform.position.x + 3f;
+                playerAttachSkill.Y = player.transform.position.y;
+
+                playerAttachSkill.yPositionNum = 0f;
+
+                playerAttachSkill.isCircleSkill = true;
+
+                playerAttachSkill.damage = skillData.Damage[4];
+
+                SetScale(playerAttachSkill.gameObject, 4);
+            }
+        }
+        else
+        {
+            playerAttachSkill = Instantiate(electricNormalSkillPrefab1);
+
+            playerAttachSkill.degree = 0f;
+
+            playerAttachSkill.xPositionNum = 3f;
+            playerAttachSkill.aliveTime = 5f;
+
+            gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+
+            playerAttachSkill.player = player;
+
+            playerAttachSkill.X = player.transform.position.x + 3f;
+            playerAttachSkill.Y = player.transform.position.y;
+
+            playerAttachSkill.yPositionNum = 0f;
+
+            playerAttachSkill.isCircleSkill = true;
+
+            playerAttachSkill.damage = skillData.Damage[4];
+
+            SetScale(playerAttachSkill.gameObject, 4);
+        }
+    }
+
     // 메테오 떨어질 때 그림자 오브젝트 생성 후 제거
     IEnumerator DisplayShadowNDestroy(float x, float y)
     {
@@ -838,7 +898,7 @@ public class SkillManager : MonoBehaviour
     }
 
     // Judgment 스킬 쓸 때 일정 딜레이로 스킬 cast하기 위함
-    IEnumerator CastWithDelay(int index, int num)
+    IEnumerator CastJudgement(int index, int num)
     {
         for (int i = 0; i < num; i++)
         {

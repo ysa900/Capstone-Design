@@ -308,10 +308,11 @@ public class Boss : Object, IDamageable
         animator.SetTrigger("Teleport");
         yield return new WaitForSeconds(0.34f); // 지정한 초 만큼 쉬기
 
-        if (isBossLookLeft)
-            X += 5f;
-        else
-            X -= 5f;
+        tmpX = (float)Math.Cos(degree) * (radius + 5);
+        tmpY = (float)Math.Sin(degree) * (radius + 5);
+
+        X = tmpX + player.transform.position.x;
+        Y = tmpY + player.transform.position.y;
 
         animator.SetTrigger("Teleport_arrive");
 
