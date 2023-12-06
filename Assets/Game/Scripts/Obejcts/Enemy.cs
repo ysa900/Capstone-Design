@@ -68,9 +68,8 @@ public class Enemy : Object, IDamageable
         Vector2 myPosition = transform.position;
 
         Vector2 direction = playerPosition - myPosition;
-        direction = direction.normalized;
 
-        if (Math.Abs(direction.x) >= 0.3f)
+        if (Math.Abs(direction.x) >= 2f)
         {
             isEnemyLookLeft = direction.x < 0;
         }
@@ -90,6 +89,7 @@ public class Enemy : Object, IDamageable
         }
         capsuleCollider.offset = colliderOffset; // capsuleCollider에 적용
 
+        direction = direction.normalized;
         rigid.MovePosition(rigid.position + direction * speed * Time.fixedDeltaTime); // 플레이어 방향으로 위치 변경
 
         X = transform.position.x;

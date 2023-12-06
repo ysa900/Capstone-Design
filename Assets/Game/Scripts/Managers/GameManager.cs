@@ -27,6 +27,9 @@ public class GameManager : MonoBehaviour
     // 보스가 이미 스폰 됐는지 판별하는 변수
     private bool isBossSpawned;
 
+    // 적이 너무 많은지(300마리 이상) 판별하는 변수
+    private bool isEnemiesTooMany;
+
     // Enemy들을 담을 리스트
     private List<Enemy> enemies = new List<Enemy>();
 
@@ -120,7 +123,7 @@ public class GameManager : MonoBehaviour
         // delegate 할당
         bossManager.onBossHasKilled = OnBossHasKilled;
 
-        //gameTime = 60 * 12f;
+        //gameTime = 60 * 5f;
         //player.isPlayerShielded = true;
     }
 
@@ -140,7 +143,10 @@ public class GameManager : MonoBehaviour
             CoolTimer += Time.deltaTime;
 
             if(!isBossSpawned) {
-                CalculateEnemySpawnTime(); // 소환할 적을 지정하고 스폰
+                isEnemiesTooMany = enemies.Count > 300;
+                SpawnBoss();
+                if (!isEnemiesTooMany)
+                    CalculateEnemySpawnTimeNSpawn(); // 소환할 적을 지정하고 스폰
             }
         }
 
@@ -155,7 +161,7 @@ public class GameManager : MonoBehaviour
     }
 
     // Enemy 스폰 시간을 계산해 소환할 적을 지정하는 함수
-    private void CalculateEnemySpawnTime()
+    private void CalculateEnemySpawnTimeNSpawn()
     {
         if (gameTime <= 60 * 1 && CoolTimer >= CoolTime)
         {
@@ -194,7 +200,11 @@ public class GameManager : MonoBehaviour
             CoolTime = 1f;
             CoolTimer = 0f;
         }
-        else if (gameTime >= maxGameTime)
+    }
+
+    void SpawnBoss()
+    {
+        if (gameTime >= maxGameTime)
         {
             // 보스 등장
             bossManager.player = player;
@@ -212,7 +222,6 @@ public class GameManager : MonoBehaviour
 
             isBossSpawned = true;
         }
-
     }
 
     // 플레이어가 죽었을 시 실행됨
@@ -302,7 +311,7 @@ public class GameManager : MonoBehaviour
 
         int ranNum = UnityEngine.Random.Range(0, 11);
 
-        if(ranNum >= 2)
+        if(ranNum >= 6)
         {
             if (killedEnemy.tag == "Ghoul")
             {

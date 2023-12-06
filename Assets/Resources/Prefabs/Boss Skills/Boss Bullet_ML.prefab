@@ -236,5 +236,6 @@ MonoBehaviour:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
+  hp: 0
   target: {fileID: 109349939218810697, guid: a7f3985b25427964ab0e550dcf041e1a, type: 3}
   speed: 10
