@@ -50184,8 +50184,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d1285de9c2b16b48b5ea6573efe829d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabs:
-  - {fileID: 1631359398497402109, guid: c7689f2d3c129ce4c8a3f60f82405bdf, type: 3}
+  Enemy_prefabs:
+  - {fileID: 4691429641230944019, guid: 5920a0b6c14ef5342881fd22905e5816, type: 3}
+  - {fileID: 4788991516957631958, guid: e9542daca9865404d9c061c62a9d3302, type: 3}
+  - {fileID: 2361909946878411841, guid: 1bc44c269c2f8094795f41ef3c7b81c5, type: 3}
+  - {fileID: 2216331277548415748, guid: fb0aa5f779142414f90b71fb86c75d7b, type: 3}
 --- !u!1 &231257536
 GameObject:
   m_ObjectHideFlags: 0
@@ -52152,6 +52155,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameTime: 0
+  maxGameTime: 300
   isGameOver: 0
   player: {fileID: 0}
   boss: {fileID: 0}

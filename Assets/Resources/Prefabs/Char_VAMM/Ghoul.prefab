@@ -126,6 +126,8 @@ MonoBehaviour:
   hp: 15
   speed: 1
   isEnemyLookLeft: 0
+  index: 0
+  rigid: {fileID: 0}
   capsuleCollider: {fileID: 0}
 --- !u!70 &5015239979250332249
 CapsuleCollider2D:

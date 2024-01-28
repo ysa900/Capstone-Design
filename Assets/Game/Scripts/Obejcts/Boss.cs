@@ -67,9 +67,6 @@ public class Boss : Object, IDamageable
     public delegate void OnBossDead();
     public OnBossDead onbossDead;
 
-
-    Spawner spawn;
-
     // BossManager에게 스킬 사용을 알려주기 위한 Delegate들
     public delegate void OnBossTryBulletAttack();
     public OnBossTryBulletAttack onBossTryBulletAttack;
@@ -96,7 +93,6 @@ public class Boss : Object, IDamageable
 
         colliderOffsetX = capsuleCollider.offset.x; // offset 초기값을 저장
         colliderOffsetY = capsuleCollider.offset.y;
-        spawn = GetComponent<Spawner>();
 
         hp = maxHp;
     }

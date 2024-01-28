@@ -36,14 +36,11 @@ public class GameManager : MonoBehaviour
     // 사용할 클래스 객체들
     public Player player;
     public Boss boss;
-    private EnemyManager enemyManager;
     private GameAudioManager gameAudioManager;
     private FollowCam followCam;
     private InputManager inputManager;
-    private SkillManager skillManager;
     private SkillSelectManager skillSelectManager;
     private EXP exp;
-    private BossManager bossManager;
     public PoolManager poolManager;
 
     // GameObject에서 프리팹을 넣어주기 위해 public으로 설정
@@ -88,13 +85,10 @@ public class GameManager : MonoBehaviour
 
         // 클래스 객체들 초기화
         CreatePlayer();
-        enemyManager = FindAnyObjectByType<EnemyManager>();
         inputManager = FindAnyObjectByType<InputManager>();
         gameAudioManager = FindAnyObjectByType<GameAudioManager>();
         followCam = FindAnyObjectByType<FollowCam>();
-        skillManager = FindAnyObjectByType<SkillManager>();
         skillSelectManager = FindAnyObjectByType<SkillSelectManager>();
-        bossManager = FindAnyObjectByType<BossManager>();
         poolManager = FindAnyObjectByType<PoolManager>();
 
         // inputManger Delegate 할당
@@ -105,15 +99,18 @@ public class GameManager : MonoBehaviour
         followCam.player = player;
 
         // skillManager에 객체 할당
-        skillManager.player = player;
+        poolManager.skillManager.player = player;
 
         // skillManager Delegate 할당
-        skillManager.onShiledSkillActivated = OnShieldSkillActivated;
-        skillManager.onShiledSkillUnActivated = OnShieldSkillUnActivated;
+        poolManager.skillManager.onShiledSkillActivated = OnShieldSkillActivated;
+        poolManager.skillManager.onShiledSkillUnActivated = OnShieldSkillUnActivated;
+
+        // PoolManager Player 할당
+        poolManager.player = player;
 
         // delegate 할당
-        enemyManager.onEnemiesChanged = OnEnemiesChanged;
-        enemyManager.onEnemyKilled = OnEnemyKilled;
+        poolManager.enemyManager.onEnemiesChanged = OnEnemiesChanged;
+        poolManager.enemyManager.onEnemyKilled = OnEnemyKilled;
 
         // delegate 할당
         skillSelectManager.onSkillSelectObjectDisplayed = OnSkillSelectObjectDisplayed;
@@ -121,7 +118,7 @@ public class GameManager : MonoBehaviour
         skillSelectManager.onPlayerHealed = OnPlayerHealed;
 
         // delegate 할당
-        bossManager.onBossHasKilled = OnBossHasKilled;
+        poolManager.bossManager.onBossHasKilled = OnBossHasKilled;
 
         //gameTime = 60 * 5f;
         //player.isPlayerShielded = true;
@@ -131,7 +128,9 @@ public class GameManager : MonoBehaviour
     {
         gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // GameStart 선택 효과음
         gameAudioManager.PlayBGM(0, true); // 배경음 시작
-        enemyManager.CreateEnemies(50, player, 0, maxEnemySpawnRange); // 몬스터 소환
+
+        SpawnEnemies(50, 0); // 시작 적 소환
+
         skillSelectManager.ChooseStartSkill(); // 시작 스킬 선택
     }
 
@@ -150,7 +149,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        skillManager.enemies = enemies;
+        poolManager.skillManager.enemies = enemies;
     }
 
     // Player 생성 함수
@@ -165,40 +164,49 @@ public class GameManager : MonoBehaviour
     {
         if (gameTime <= 60 * 1 && CoolTimer >= CoolTime)
         {
-            enemyManager.CreateEnemies(10, player, 0, maxEnemySpawnRange); // Ghoul 몬스터 소환
+            SpawnEnemies(0, 10); // Ghoul 몬스터 소환
             CoolTimer = 0f;
         }
         else if (gameTime <= 60 * 2 && CoolTimer >= CoolTime)
         {
-            enemyManager.CreateEnemies(5, player, 0, maxEnemySpawnRange); // Ghoul 몬스터 소환
-            enemyManager.CreateEnemies(10, player, 1, maxEnemySpawnRange); // Spitter 몬스터 소환
+            SpawnEnemies(0, 5); // Ghoul 몬스터 소환
+            SpawnEnemies(1, 10); // Spitter 몬스터 소환
             CoolTimer = 0f;
         }
         else if (gameTime <= 60 * 3 && CoolTimer >= CoolTime)
         {
-            enemyManager.CreateEnemies(2, player, 0, maxEnemySpawnRange); // Ghoul 몬스터 소환
-            enemyManager.CreateEnemies(5, player, 1, maxEnemySpawnRange); // Spitter 몬스터 소환
-            enemyManager.CreateEnemies(10, player, 2, maxEnemySpawnRange); //Summoner 몬스터 소환
+            SpawnEnemies(0, 2); // Ghoul 몬스터 소환
+            SpawnEnemies(1, 5); // Spitter 몬스터 소환
+            SpawnEnemies(2, 10); // Summoner 몬스터 소환
             CoolTime = 1.5f;
             CoolTimer = 0f;
         }
         else if (gameTime < 60 * 4 && CoolTimer >= CoolTime)
         {
-            enemyManager.CreateEnemies(2, player, 0, maxEnemySpawnRange); // Ghoul 몬스터 소환
-            enemyManager.CreateEnemies(5, player, 1, maxEnemySpawnRange); // Spitter 몬스터 소환
-            enemyManager.CreateEnemies(8, player, 2, maxEnemySpawnRange); //Summoner 몬스터 소환
-            enemyManager.CreateEnemies(15, player, 3, maxEnemySpawnRange); //BloodKing 몬스터 소환
+            SpawnEnemies(0, 2); // Ghoul 몬스터 소환
+            SpawnEnemies(1, 5); // Spitter 몬스터 소환
+            SpawnEnemies(2, 8); // Summoner 몬스터 소환
+            SpawnEnemies(3, 15); // BloodKing 몬스터 소환
             CoolTime = 1f;
             CoolTimer = 0f;
         }
         else if (gameTime < 60 * 5 && CoolTimer >= CoolTime)
         {
-            enemyManager.CreateEnemies(2, player, 0, maxEnemySpawnRange); // Ghoul 몬스터 소환
-            enemyManager.CreateEnemies(5, player, 1, maxEnemySpawnRange); // Spitter 몬스터 소환
-            enemyManager.CreateEnemies(8, player, 2, maxEnemySpawnRange); //Summoner 몬스터 소환
-            enemyManager.CreateEnemies(20, player, 3, maxEnemySpawnRange); //BloodKing 몬스터 소환
+            SpawnEnemies(0, 2); // Ghoul 몬스터 소환
+            SpawnEnemies(1, 4); // Spitter 몬스터 소환
+            SpawnEnemies(2, 6); // Summoner 몬스터 소환
+            SpawnEnemies(3, 20); // BloodKing 몬스터 소환
             CoolTime = 1f;
             CoolTimer = 0f;
+        }
+    }
+
+    // Enemy 소환 함수
+    void SpawnEnemies(int index, int num)
+    {
+        for (int i = 0; i < num; i++)
+        {
+            poolManager.GetEnemy(index); // 몬스터 소환
         }
     }
 
@@ -207,11 +215,11 @@ public class GameManager : MonoBehaviour
         if (gameTime >= maxGameTime)
         {
             // 보스 등장
-            bossManager.player = player;
-            bossManager.CreateBoss();
+            poolManager.bossManager.player = player;
+            poolManager.bossManager.CreateBoss();
 
-            skillManager.isBossAppear = true;
-            skillManager.boss = bossManager.boss;
+            poolManager.skillManager.isBossAppear = true;
+            poolManager.skillManager.boss = poolManager.bossManager.boss;
 
             // 보스 HP바 active
             BossHPObject.SetActive(true);
