@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5912551829932145164}
   - component: {fileID: 4004015624756598873}
+  - component: {fileID: 5389540657384261061}
   m_Layer: 0
   m_Name: Fire_Normal2_Shadow
   m_TagString: Untagged
@@ -84,3 +85,29 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &5389540657384261061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9124107383370398149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a953555e404b9a46989636228be6680, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemy: {fileID: 0}
+  boss: {fileID: 0}
+  player: {fileID: 0}
+  speed: 0
+  damage: 0
+  index: 0
+  randomSkill: {fileID: 0}
+  impactPonitX: 0
+  impactPonitY: 0
+  aliveTime: 0
+  isMeteor: 0
+  isIceSpike: 0
+  isStaySkill: 0
+  scale: 0

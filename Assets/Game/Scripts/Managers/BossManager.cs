@@ -62,8 +62,8 @@ public class BossManager : MonoBehaviour
 
     private void onBossTryBulletAttack()
     {
-        //bossBullet = Instantiate(bossBulletPrefab);
-        GameManager.instance.poolManager.Get(0);
+        bossBullet = Instantiate(bossBulletPrefab);
+        //GameManager.instance.poolManager.Get(0);
     }
 
     private void onBossTryLaserAttack(float num)

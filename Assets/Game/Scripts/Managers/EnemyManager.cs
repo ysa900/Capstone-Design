@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using Unity.Collections;
 using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
     // Enemy들을 담을 리스트
+    [SerializeField]
+    [ReadOnly]
     List<Enemy> enemies = new List<Enemy>();
 
     // Enemy 클래스 객체

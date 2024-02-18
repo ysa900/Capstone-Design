@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class PlayerAttachSkill : Skill
+public class PlayerAttachSkill : Skill, IPullingObject
 {
     // 플레이어 좌표를 기준으로 위치를 어디로 가야하나를 받는 변수
     public float xPositionNum;
@@ -30,6 +30,11 @@ public class PlayerAttachSkill : Skill
     public delegate void OnShieldSkillDestroyed();
     public OnShieldSkillDestroyed onShieldSkillDestroyed;
 
+    public new void Init()
+    {
+        aliveTimer = 0;
+    }
+
     private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -44,7 +49,7 @@ public class PlayerAttachSkill : Skill
             if (isShieldSkill)
                 onShieldSkillDestroyed(); // 쉴드 스킬이 파괴될 땐 SkillManager에 알려준다
 
-            Destroy(gameObject);
+            GameManager.instance.poolManager.ReturnSkill(this, index);
             return;
         }
         else if (isCircleSkill)

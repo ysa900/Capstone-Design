@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
 using UnityEngine;
 
 // Pause 걸면 이전에는 인게임 속 UI들(피통, 스킬 패널, 프로필)이 안사라져서
@@ -12,14 +13,11 @@ public class GameManager : MonoBehaviour
 
     // 게임 시간
     public float gameTime;
-    public float maxGameTime = 5 * 60f;
+    public float maxGameTime = 5 * 60f; // 보스 스폰 시간
 
     // 적 스폰 쿨타임
     private float CoolTime = 2f;
     private float CoolTimer = 0f;
-
-    // 적 최대 생성 거리 (최소는 20, EnemyManager에 있음)
-    private float maxEnemySpawnRange = 30;
 
     // GameOver가 됐는지 판별하는 변수
     public bool isGameOver;
@@ -31,6 +29,8 @@ public class GameManager : MonoBehaviour
     private bool isEnemiesTooMany;
 
     // Enemy들을 담을 리스트
+    [SerializeField]
+    [ReadOnly]
     private List<Enemy> enemies = new List<Enemy>();
 
     // 사용할 클래스 객체들
@@ -39,8 +39,10 @@ public class GameManager : MonoBehaviour
     private GameAudioManager gameAudioManager;
     private FollowCam followCam;
     private InputManager inputManager;
+    private SkillManager skillManager;
     private SkillSelectManager skillSelectManager;
     private EXP exp;
+    private BossManager bossManager;
     public PoolManager poolManager;
 
     // GameObject에서 프리팹을 넣어주기 위해 public으로 설정
@@ -88,7 +90,9 @@ public class GameManager : MonoBehaviour
         inputManager = FindAnyObjectByType<InputManager>();
         gameAudioManager = FindAnyObjectByType<GameAudioManager>();
         followCam = FindAnyObjectByType<FollowCam>();
+        skillManager = FindAnyObjectByType<SkillManager>();
         skillSelectManager = FindAnyObjectByType<SkillSelectManager>();
+        bossManager = FindAnyObjectByType<BossManager>();
         poolManager = FindAnyObjectByType<PoolManager>();
 
         // inputManger Delegate 할당
@@ -99,29 +103,30 @@ public class GameManager : MonoBehaviour
         followCam.player = player;
 
         // skillManager에 객체 할당
-        poolManager.skillManager.player = player;
+        skillManager.player = player;
 
         // skillManager Delegate 할당
-        poolManager.skillManager.onShiledSkillActivated = OnShieldSkillActivated;
-        poolManager.skillManager.onShiledSkillUnActivated = OnShieldSkillUnActivated;
+        skillManager.onShiledSkillActivated = OnShieldSkillActivated;
+        skillManager.onShiledSkillUnActivated = OnShieldSkillUnActivated;
 
         // PoolManager Player 할당
         poolManager.player = player;
 
-        // delegate 할당
+        // EnemyManager delegate 할당
         poolManager.enemyManager.onEnemiesChanged = OnEnemiesChanged;
         poolManager.enemyManager.onEnemyKilled = OnEnemyKilled;
 
-        // delegate 할당
+        // SkillSelectManager delegate 할당
         skillSelectManager.onSkillSelectObjectDisplayed = OnSkillSelectObjectDisplayed;
         skillSelectManager.onSkillSelectObjectHided = OnSkillSelectObjectHided;
         skillSelectManager.onPlayerHealed = OnPlayerHealed;
 
-        // delegate 할당
-        poolManager.bossManager.onBossHasKilled = OnBossHasKilled;
+        // BossManager delegate 할당
+        bossManager.onBossHasKilled = OnBossHasKilled;
 
         //gameTime = 60 * 5f;
         //player.isPlayerShielded = true;
+        //player.level = 20;
     }
 
     void Start()
@@ -129,7 +134,7 @@ public class GameManager : MonoBehaviour
         gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // GameStart 선택 효과음
         gameAudioManager.PlayBGM(0, true); // 배경음 시작
 
-        SpawnEnemies(50, 0); // 시작 적 소환
+        SpawnEnemies(0, 50); // 시작 적 소환
 
         skillSelectManager.ChooseStartSkill(); // 시작 스킬 선택
     }
@@ -141,7 +146,7 @@ public class GameManager : MonoBehaviour
             gameTime += Time.deltaTime; // 게임 시간 증가
             CoolTimer += Time.deltaTime;
 
-            if(!isBossSpawned) {
+            if (!isBossSpawned) {
                 isEnemiesTooMany = enemies.Count > 300;
                 SpawnBoss();
                 if (!isEnemiesTooMany)
@@ -149,7 +154,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        poolManager.skillManager.enemies = enemies;
+        skillManager.enemies = enemies;
     }
 
     // Player 생성 함수
@@ -215,11 +220,11 @@ public class GameManager : MonoBehaviour
         if (gameTime >= maxGameTime)
         {
             // 보스 등장
-            poolManager.bossManager.player = player;
-            poolManager.bossManager.CreateBoss();
+            bossManager.player = player;
+            bossManager.CreateBoss();
 
-            poolManager.skillManager.isBossAppear = true;
-            poolManager.skillManager.boss = poolManager.bossManager.boss;
+            skillManager.isBossAppear = true;
+            skillManager.boss = bossManager.boss;
 
             // 보스 HP바 active
             BossHPObject.SetActive(true);
@@ -323,36 +328,40 @@ public class GameManager : MonoBehaviour
         {
             if (killedEnemy.tag == "Ghoul")
             {
-                exp = Instantiate(expPrefab1);
+                exp = poolManager.GetExp(0);
 
                 exp.expAmount = 1;
+                exp.index = 0;
 
                 exp.X = killedEnemy.X;
                 exp.Y = killedEnemy.Y + 1f;
             }
             else if (killedEnemy.tag == "Spitter")
             {
-                exp = Instantiate(expPrefab2);
+                exp = poolManager.GetExp(1);
 
                 exp.expAmount = 2;
+                exp.index = 1;
 
                 exp.X = killedEnemy.X;
                 exp.Y = killedEnemy.Y + 1f;
             }
             else if (killedEnemy.tag == "Summoner")
             {
-                exp = Instantiate(expPrefab2);
+                exp = poolManager.GetExp(1);
 
                 exp.expAmount = 3;
+                exp.index = 1;
 
                 exp.X = killedEnemy.X;
                 exp.Y = killedEnemy.Y + 1f;
             }
             else if (killedEnemy.tag == "BloodKing")
             {
-                exp = Instantiate(expPrefab3);
+                exp = poolManager.GetExp(2);
 
                 exp.expAmount = 4;
+                exp.index = 2;
 
                 exp.X = killedEnemy.X;
                 exp.Y = killedEnemy.Y + 1f;

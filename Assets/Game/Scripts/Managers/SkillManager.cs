@@ -1,10 +1,7 @@
-﻿using NUnit.Framework.Constraints;
-using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using Unity.Collections;
 using UnityEngine;
-using static UnityEngine.EventSystems.EventTrigger;
 
 public class SkillManager : MonoBehaviour
 {
@@ -15,6 +12,8 @@ public class SkillManager : MonoBehaviour
 
     public bool isBossAppear; // 보스가 소환됐는지를 판단하는 변수
 
+    [SerializeField]
+    [ReadOnly]
     public List<Enemy> enemies; // Enemy들을 담을 리스트
     public Boss boss;
 
@@ -30,7 +29,7 @@ public class SkillManager : MonoBehaviour
     private EnemyOnSkill enemyOnSkill;
     private EnemyTrackingSkill enemyTrackingSkill;
     private RandomSkill randomSkill;
-    private GameObject skillObject;
+    private RandomSkill skillObject;
 
     // 스킬 관련 배열들 공통 사항
     // 스킬들 index: 불 - 3n, 전기 - 3n + 1, 물 - 3n + 2
@@ -75,7 +74,7 @@ public class SkillManager : MonoBehaviour
         {
             if (skillData.skillSelected[i]) // 활성화(선택)된 스킬만 실행
             {
-                bool shouldBeAttack = 0 >= attackDelayTimer[i]; // 공격 쿨타임이 됐는지 확인
+                bool shouldBeAttack = 0 >= attackDelayTimer[i]; // 쿨타임이 됐는지 확인
                 if (shouldBeAttack)
                 {
                     attackDelayTimer[i] = skillData.Delay[i];
@@ -203,7 +202,7 @@ public class SkillManager : MonoBehaviour
                         while (true)
                         {
                             int ranNum = UnityEngine.Random.Range(0, enemies.Count);
-
+                            
                             enemy = enemies[ranNum];
                             
                             if (!(enemy == null))
@@ -290,12 +289,12 @@ public class SkillManager : MonoBehaviour
         {
             case 0:
                 {
-                    enemyTrackingSkill = Instantiate(fireBasicSkillPrefab);
+                    enemyTrackingSkill = GameManager.instance.poolManager.GetSkill(0, enemy) as EnemyTrackingSkill;
                     gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                     Vector2 playerPosition = player.transform.position;
                     Vector2 enemyPosition = enemy.transform.position;
-
+                    
                     // 파이퍼볼 방향 보정 (적 바라보게)
                     Vector2 direction = new Vector2(playerPosition.x - enemyPosition.x, playerPosition.y - enemyPosition.y);
                     float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
@@ -303,11 +302,11 @@ public class SkillManager : MonoBehaviour
                     Quaternion angleAxis = Quaternion.AngleAxis(angle + 90f, Vector3.forward);
                     Quaternion rotation = Quaternion.Slerp(enemyTrackingSkill.transform.rotation, angleAxis, 5f);
                     enemyTrackingSkill.transform.rotation = rotation;
-
+                    
                     enemyTrackingSkill.X = playerPosition.x;
                     enemyTrackingSkill.Y = playerPosition.y;
 
-                    enemyTrackingSkill.enemy = enemy;
+                    //enemyTrackingSkill.enemy = enemy; 현재 enemy는 PoolManager에서 Init시키기 전에 할당해주는 중
 
                     enemyTrackingSkill.speed = 20;
                     enemyTrackingSkill.damage = skillData.Damage[index];
@@ -318,7 +317,7 @@ public class SkillManager : MonoBehaviour
                 }
             case 1:
                 {
-                    enemyOnSkill = Instantiate(electricBasicSkillPrefab);
+                    enemyOnSkill = GameManager.instance.poolManager.GetSkill(7, enemy) as EnemyOnSkill;
                     gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                     Vector2 enemyPosition = enemy.transform.position;
@@ -330,7 +329,7 @@ public class SkillManager : MonoBehaviour
                         enemyOnSkill.X = enemyPosition.x + enemy.capsuleCollider.size.x * 6;
                     enemyOnSkill.Y = enemyPosition.y + enemy.capsuleCollider.size.y * 8;
 
-                    enemyOnSkill.enemy = enemy;
+                    //enemyOnSkill.enemy = enemy;
                     enemyOnSkill.damage = skillData.Damage[index];
 
                     SetScale(enemyOnSkill.gameObject, index);
@@ -347,7 +346,7 @@ public class SkillManager : MonoBehaviour
         {
             case 0:
                 {
-                    enemyTrackingSkill = Instantiate(fireBasicSkillPrefab);
+                    enemyTrackingSkill = (EnemyTrackingSkill)GameManager.instance.poolManager.GetSkill(0, boss);
                     gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                     Vector2 playerPosition = player.transform.position;
@@ -364,7 +363,7 @@ public class SkillManager : MonoBehaviour
                     enemyTrackingSkill.X = playerPosition.x;
                     enemyTrackingSkill.Y = playerPosition.y;
 
-                    enemyTrackingSkill.boss = boss;
+                    // enemyTrackingSkill.boss = boss;
                     enemyTrackingSkill.isBossAppear = true;
 
                     enemyTrackingSkill.speed = 20;
@@ -376,7 +375,7 @@ public class SkillManager : MonoBehaviour
                 }
             case 1:
                 {
-                    enemyOnSkill = Instantiate(electricBasicSkillPrefab);
+                    enemyOnSkill = GameManager.instance.poolManager.GetSkill(7, boss) as EnemyOnSkill;
                     gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                     Vector2 bossPosition = boss.transform.position;
@@ -403,10 +402,10 @@ public class SkillManager : MonoBehaviour
         {
             case 2:
                 {
-                    playerAttachSkill = Instantiate(waterBasicSkillPrefab);
+                    playerAttachSkill = GameManager.instance.poolManager.GetSkill(11) as PlayerAttachSkill;
                     gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
-                    playerAttachSkill.player = player;
+                    //playerAttachSkill.player = player; player는 현재 PoolManager에서 할당중
 
                     if (skillData.level[index] == 5)
                     {
@@ -439,7 +438,7 @@ public class SkillManager : MonoBehaviour
                 }
             case 3:
                 {
-                    playerAttachSkill = Instantiate(fireNormalSkillPrefab1);
+                    playerAttachSkill = GameManager.instance.poolManager.GetSkill(1) as PlayerAttachSkill;
                     gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                     playerAttachSkill.player = player;
@@ -466,10 +465,10 @@ public class SkillManager : MonoBehaviour
                 }
             case 5:
                 {
-                    playerAttachSkill = Instantiate(waterNormalSkillPrefab1);
+                    playerAttachSkill = GameManager.instance.poolManager.GetSkill(12) as PlayerAttachSkill;
                     gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
-                    playerAttachSkill.player = player;
+                    //playerAttachSkill.player = player;
 
                     playerAttachSkill.X = player.transform.position.x;
                     playerAttachSkill.Y = player.transform.position.y;
@@ -487,7 +486,7 @@ public class SkillManager : MonoBehaviour
                 }
             case 6:
                 {
-                    randomSkill = Instantiate(fireNormal2MeteorPrefab);
+                    randomSkill = GameManager.instance.poolManager.GetSkill(3) as RandomSkill;
                     gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                     float tmpX = player.transform.position.x;
@@ -520,8 +519,6 @@ public class SkillManager : MonoBehaviour
                     randomSkill.damage = skillData.Damage[index];
                     randomSkill.scale = skillData.scale[index];
 
-                    randomSkill.fireNormal2ExplodePrefab = fireNormal2ExplodePrefab;
-
                     SetScale(randomSkill.gameObject, index);
 
                     StartCoroutine(DisplayShadowNDestroy(tmpX + 2.6f, tmpY + 3.4f)); // 그림자 나타내고 지우기
@@ -530,12 +527,11 @@ public class SkillManager : MonoBehaviour
                 }
             case 7:
                 {
-                    playerAttachSkill = Instantiate(electricNormalSkillPrefab2);
+                    playerAttachSkill = GameManager.instance.poolManager.GetSkill(9) as PlayerAttachSkill;
                     gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
-                    playerAttachSkill.player = player;
+                    //playerAttachSkill.player = player;
 
-                    
                     playerAttachSkill.xPositionNum = 8.5f;
                     playerAttachSkill.yPositionNum = -0.2f;
 
@@ -561,7 +557,7 @@ public class SkillManager : MonoBehaviour
                 }
             case 8:
                 {
-                    randomSkill = Instantiate(waterNormalSkillPrefab2);
+                    randomSkill = GameManager.instance.poolManager.GetSkill(13) as RandomSkill;
                     gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                     float tmpX = player.transform.position.x;
@@ -576,7 +572,7 @@ public class SkillManager : MonoBehaviour
                     randomSkill.X = tmpX;
                     randomSkill.Y = tmpY;
 
-                    randomSkill.player = player;
+                    //randomSkill.player = player;
 
                     randomSkill.isStaySkill = true;
                     randomSkill.isIceSpike = true;
@@ -593,7 +589,7 @@ public class SkillManager : MonoBehaviour
                     {
                         for (int i = 0; i < 2; i++)
                         {
-                            playerAttachSkill = Instantiate(fireNormalSkillPrefab3_2);
+                            playerAttachSkill = GameManager.instance.poolManager.GetSkill(6) as PlayerAttachSkill;
                             gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                             if (i == 0)
@@ -615,7 +611,7 @@ public class SkillManager : MonoBehaviour
                                 }
                                 playerAttachSkill.yPositionNum = 0f;
 
-                                playerAttachSkill.player = player;
+                                //playerAttachSkill.player = player;
 
                                 playerAttachSkill.isAttachSkill = true;
                                 playerAttachSkill.isFlipped = false;
@@ -644,7 +640,7 @@ public class SkillManager : MonoBehaviour
                                 }
                                 playerAttachSkill.yPositionNum = 0f;
 
-                                playerAttachSkill.player = player;
+                                //playerAttachSkill.player = player;
 
                                 playerAttachSkill.isAttachSkill = true;
                                 playerAttachSkill.isFlipped = true;
@@ -661,7 +657,7 @@ public class SkillManager : MonoBehaviour
                     {
                         for (int i = 0; i < 2; i++)
                         {
-                            playerAttachSkill = Instantiate(fireNormalSkillPrefab3_1);
+                            playerAttachSkill = GameManager.instance.poolManager.GetSkill(5) as PlayerAttachSkill;
                             gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                             if (i == 0)
@@ -685,7 +681,7 @@ public class SkillManager : MonoBehaviour
 
                                 playerAttachSkill.GetComponent<SpriteRenderer>().flipY = true;
 
-                                playerAttachSkill.player = player;
+                                //playerAttachSkill.player = player;
 
                                 playerAttachSkill.isAttachSkill = true;
 
@@ -713,7 +709,7 @@ public class SkillManager : MonoBehaviour
                                     playerAttachSkill.yPositionNum = -2.5f;
                                 }
 
-                                playerAttachSkill.player = player;
+                                //playerAttachSkill.player = player;
 
                                 playerAttachSkill.isAttachSkill = true;
 
@@ -738,10 +734,10 @@ public class SkillManager : MonoBehaviour
                 }
             case 11:
                 {
-                    playerAttachSkill = Instantiate(waterNormalSkillPrefab3);
+                    playerAttachSkill = GameManager.instance.poolManager.GetSkill(14) as PlayerAttachSkill;
                     gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
-                    playerAttachSkill.player = player;
+                    //playerAttachSkill.player = player;
 
                     if (skillData.level[index] == 5)
                     {
@@ -798,7 +794,7 @@ public class SkillManager : MonoBehaviour
         {
             for(int i = 0; i < 3; i++)
             {
-                playerAttachSkill = Instantiate(electricNormalSkillPrefab1);
+                playerAttachSkill = GameManager.instance.poolManager.GetSkill(8) as PlayerAttachSkill;
 
                 playerAttachSkill.degree = tmpDegree;
                 tmpDegree -= 120f;
@@ -806,11 +802,9 @@ public class SkillManager : MonoBehaviour
                 playerAttachSkill.xPositionNum = 4f;
                 playerAttachSkill.aliveTime = 5f * 1.5f;
 
-
-
                 gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
-                playerAttachSkill.player = player;
+                //playerAttachSkill.player = player;
 
                 playerAttachSkill.X = player.transform.position.x + 3f;
                 playerAttachSkill.Y = player.transform.position.y;
@@ -828,7 +822,7 @@ public class SkillManager : MonoBehaviour
         {
             for(int i = 0; i < 2; i++)
             {
-                playerAttachSkill = Instantiate(electricNormalSkillPrefab1);
+                playerAttachSkill = GameManager.instance.poolManager.GetSkill(8) as PlayerAttachSkill;
 
                 playerAttachSkill.degree = tmpDegree;
                 tmpDegree -= 180f;
@@ -836,10 +830,9 @@ public class SkillManager : MonoBehaviour
                 playerAttachSkill.xPositionNum = 3.5f;
                 playerAttachSkill.aliveTime = 5f * 1.25f;
 
-
                 gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
-                playerAttachSkill.player = player;
+                //playerAttachSkill.player = player;
 
                 playerAttachSkill.X = player.transform.position.x + 3f;
                 playerAttachSkill.Y = player.transform.position.y;
@@ -855,7 +848,7 @@ public class SkillManager : MonoBehaviour
         }
         else
         {
-            playerAttachSkill = Instantiate(electricNormalSkillPrefab1);
+            playerAttachSkill = GameManager.instance.poolManager.GetSkill(8) as PlayerAttachSkill;
 
             playerAttachSkill.degree = 0f;
 
@@ -864,7 +857,7 @@ public class SkillManager : MonoBehaviour
 
             gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
-            playerAttachSkill.player = player;
+            //playerAttachSkill.player = player;
 
             playerAttachSkill.X = player.transform.position.x + 3f;
             playerAttachSkill.Y = player.transform.position.y;
@@ -882,7 +875,7 @@ public class SkillManager : MonoBehaviour
     // 메테오 떨어질 때 그림자 오브젝트 생성 후 제거
     IEnumerator DisplayShadowNDestroy(float x, float y)
     {
-        skillObject = Instantiate(fireNormal2ShadowPrefab);
+        skillObject = GameManager.instance.poolManager.GetSkill(4) as RandomSkill;
 
         skillObject.transform.position = new Vector2(x, y);
 
@@ -890,11 +883,13 @@ public class SkillManager : MonoBehaviour
 
         isShadowAlive = true;
 
+        skillObject.aliveTime = 0.6f;
+
         yield return new WaitForSeconds(0.5f); // 지정한 초 만큼 쉬기
 
         isShadowAlive = false;
 
-        Destroy(skillObject);
+        GameManager.instance.poolManager.ReturnSkill(skillObject, 4);
     }
 
     // Judgment 스킬 쓸 때 일정 딜레이로 스킬 cast하기 위함
@@ -902,7 +897,7 @@ public class SkillManager : MonoBehaviour
     {
         for (int i = 0; i < num; i++)
         {
-            randomSkill = Instantiate(electricNormalSkillPrefab3);
+            randomSkill = GameManager.instance.poolManager.GetSkill(10) as RandomSkill;
 
             float tmpX = player.transform.position.x;
             float tmpY = player.transform.position.y;
@@ -916,7 +911,7 @@ public class SkillManager : MonoBehaviour
             randomSkill.X = tmpX;
             randomSkill.Y = tmpY;
 
-            randomSkill.player = player;
+            //randomSkill.player = player;
 
             randomSkill.aliveTime = 0.8f;
             randomSkill.damage = skillData.Damage[index];

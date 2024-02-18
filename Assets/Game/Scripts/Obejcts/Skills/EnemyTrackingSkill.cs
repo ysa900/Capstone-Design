@@ -1,9 +1,9 @@
-﻿using UnityEngine;
+﻿using Unity.VisualScripting;
+using UnityEngine;
 
-public class EnemyTrackingSkill : Skill
+public class EnemyTrackingSkill : Skill, IPullingObject
 {
     public bool isBossAppear;
-    public Boss boss;
 
     private float aliveTime; // 스킬 생존 시간을 체크할 변수
 
@@ -14,11 +14,11 @@ public class EnemyTrackingSkill : Skill
     Vector2 myPosition;
     Vector2 direction;
 
-    private void Start()
+    public new void Init()
     {
-        rigid = GetComponent<Rigidbody2D>();
+        aliveTime = 0;
 
-        if(!isBossAppear )
+        if (!isBossAppear)
         {
             SetEnemyPosition();
         }
@@ -26,7 +26,20 @@ public class EnemyTrackingSkill : Skill
         {
             SetBossPosition();
         }
+    }
+
+    private void Start()
+    {
+        rigid = GetComponent<Rigidbody2D>();
         
+        if(!isBossAppear)
+        {
+            SetEnemyPosition();
+        }
+        else
+        {
+            SetBossPosition();
+        }
     }
 
     private void FixedUpdate()
@@ -35,7 +48,7 @@ public class EnemyTrackingSkill : Skill
 
         if (destroySkill)
         {
-            Destroy(gameObject);
+            GameManager.instance.poolManager.ReturnSkill(this, index);
             return;
         }
         else if(!isBossAppear)
@@ -53,7 +66,8 @@ public class EnemyTrackingSkill : Skill
     private void SetEnemyPosition()
     {
         enemyPosition = enemy.transform.position;
-        myPosition = transform.position;
+
+        myPosition = player.transform.position;
 
         // 적 실제 위치로 보정
         if (enemy.isEnemyLookLeft)
@@ -110,7 +124,7 @@ public class EnemyTrackingSkill : Skill
         {
             damageable.TakeDamage(gameObject, damage);
 
-            Destroy(gameObject);
+            GameManager.instance.poolManager.ReturnSkill(this, index);
 
             return;
         }
@@ -121,7 +135,7 @@ public class EnemyTrackingSkill : Skill
         {
             damageableSkill.TakeDamage(damage);
 
-            Destroy(gameObject);
+            GameManager.instance.poolManager.ReturnSkill(this, index);
 
             return;
         }

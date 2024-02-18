@@ -105,7 +105,7 @@ public class Enemy : Object, IDamageable, IPullingObject
 
         Vector2 direction = playerPosition - myPosition;
 
-        if (Math.Abs(direction.x) >= 2f)
+        if (Math.Abs(direction.x) >= 0.5f)
         {
             isEnemyLookLeft = direction.x < 0;
         }
