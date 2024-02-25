@@ -10,9 +10,9 @@ public class GameAudioManager : MonoBehaviour
 
     // BGM
     [Header("#BGM")]
-    public AudioClip bgmClip; // BGM 관련 클립
+    public AudioClip[] bgmClips; // BGM 관련 클립 배열
     public float bgmVolume; // BGM 관련 볼륨
-    AudioSource bgmPlayer; // BGM 관련 오디오소스
+    AudioSource[] bgmPlayers; // BGM 관련 오디오소스
     AudioHighPassFilter bgmEffect;
 
     // SFX(효과음)
@@ -24,11 +24,11 @@ public class GameAudioManager : MonoBehaviour
     int channelIndex; // 채널 인덱스
     AudioSource[] sfxPlayers; // BGM 관련 오디오소스
 
-    // 오디오 겹침 현상 해결 위한 코드(변수)
+    // 오디오 겹침 현상 해결 위한 코드(변수), 보류
     private Dictionary<AudioClip, List<float>> soundOneShot = new Dictionary<AudioClip, List<float>>();
     private int MaxDuplicateOneShotAudioClips = 30; // oneshot이 최대 겹처서 재생될수 잇는 수
 
-    public enum Sfx { Dead, Hit, LevelUp=3, Lose, Melee, Range=7, Select, Win, Cast }
+    public enum Sfx { Dead, Hit, LevelUp=3, Lose, Melee, Range=7, Select, Win }
 
     private void Awake()
     {
@@ -41,11 +41,20 @@ public class GameAudioManager : MonoBehaviour
         // 배경음 플레이어 초기화
         GameObject bgmObject = new GameObject("BgmPlayer");
         bgmObject.transform.parent = transform; // 배경음을 담당하는 자식 오브젝트 생성
-        bgmPlayer =bgmObject.AddComponent<AudioSource>();
-        bgmPlayer.playOnAwake = false; // Game 시작되자마자 켜지지 않게..
-        bgmPlayer.loop = true; // BGM 무한반복
-        bgmPlayer.volume = bgmVolume;
-        bgmPlayer.clip = bgmClip;
+        bgmPlayers = new AudioSource[2];
+
+        bgmPlayers[0] = bgmObject.AddComponent<AudioSource>();
+        bgmPlayers[0].playOnAwake = false; // Game 시작되자마자 켜지지 않게..
+        bgmPlayers[0].loop = true; // BGM 무한반복
+        bgmPlayers[0].volume = bgmVolume;
+        bgmPlayers[0].clip = bgmClips[0];
+
+        bgmPlayers[1] = bgmObject.AddComponent<AudioSource>();
+        bgmPlayers[1].playOnAwake = false; // Game 시작되자마자 켜지지 않게..
+        bgmPlayers[1].loop = true; // BGM 무한반복
+        bgmPlayers[1].volume = bgmVolume;
+        bgmPlayers[1].clip = bgmClips[1];
+
         bgmEffect = Camera.main.GetComponent<AudioHighPassFilter>();
 
         // 효과음 플레이어 초기화
@@ -62,14 +71,14 @@ public class GameAudioManager : MonoBehaviour
         }
     }
 
-    public void PlayBGM(bool isPlay)
+    public void PlayBGM(int num, bool isPlay)
     {
         if (isPlay)
         {
-            bgmPlayer.Play();
+            bgmPlayers[num].Play();
         }
         else {
-            bgmPlayer.Stop();
+            bgmPlayers[num].Stop();
         }
     }
 
@@ -98,14 +107,14 @@ public class GameAudioManager : MonoBehaviour
             channelIndex = loopIndex;
             sfxPlayers[loopIndex].clip = sfxClips[(int)sfx];
             sfxPlayers[loopIndex].Play();
-            // ??
+            // 보류
             //PlayOneShotSound(sfxPlayers[loopIndex], sfxClips[loopIndex], 0.2f);
             break;
         }
     }
 
 
-    // 오디오 겹침 현상 해결 위한 코드(메소드)
+    // 오디오 겹침 현상 해결 위한 코드(메소드), 보류
     void PlayOneShotSound(AudioSource source, AudioClip clip, float volumeScale)
     {
 
@@ -123,7 +132,6 @@ public class GameAudioManager : MonoBehaviour
             soundOneShot[clip].Add(volumeScale);
         }
         int count1 = soundOneShot[clip].Count;
-        //Debug.Log(clip.name + " 재생갯수 : " + count1);
 
 
         source.PlayOneShot(clip, volumeScale);

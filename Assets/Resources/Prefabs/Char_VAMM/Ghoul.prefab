@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -8880372759947703905}
   m_Layer: 0
   m_Name: Ghoul
-  m_TagString: Untagged
+  m_TagString: Ghoul
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -123,7 +123,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  hp: 10
+  hp: 15
   speed: 1
   isEnemyLookLeft: 0
   capsuleCollider: {fileID: 0}

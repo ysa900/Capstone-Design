@@ -14,6 +14,7 @@ public class SkillData2 : ScriptableObject
     public int[] level;
     public float[] Damage;
     public float[] Delay;
+    public float[] scale;
 
     [Header("# Skill")]
     public bool[] skillSelected;

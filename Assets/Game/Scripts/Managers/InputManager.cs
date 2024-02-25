@@ -9,6 +9,9 @@ public class InputManager: MonoBehaviour
     // GameoVer_Restart 버튼
     public UnityEngine.UI.Button GVRestartButtonObject;
 
+    // GameClear_GoTOLobby 버튼
+    public UnityEngine.UI.Button GCGoToLobbyButtonObject;
+
     // Pause 버튼
     public UnityEngine.UI.Button PauseButtonObject;
 
@@ -45,6 +48,10 @@ public class InputManager: MonoBehaviour
         // GameoVer_GoTOLobby 버튼 눌렀을 때
         UnityEngine.UI.Button GVGoToLobbyButton = GVGoToLobbyButtonObject.GetComponent<UnityEngine.UI.Button>();
         GVGoToLobbyButton.onClick.AddListener(goToLobbyButtonClicked);
+
+        // GameClear_GoTOLobby 버튼 눌렀을 때
+        UnityEngine.UI.Button GCGoToLobbyButton = GCGoToLobbyButtonObject.GetComponent<UnityEngine.UI.Button>();
+        GCGoToLobbyButton.onClick.AddListener(goToLobbyButtonClicked);
 
         // Pause 버튼 눌렀을 때
         UnityEngine.UI.Button PauseButton = PauseButtonObject.GetComponent<UnityEngine.UI.Button>();
@@ -83,6 +90,7 @@ public class InputManager: MonoBehaviour
     private void PauseButtonClicked()
     {
         gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 선택 시 효과음
+
         if (Time.timeScale == 0) // Pause 누른 상태에서 한번 더 누르면 Pause 풀리게 하려고
             PlayButtonClicked();
         else

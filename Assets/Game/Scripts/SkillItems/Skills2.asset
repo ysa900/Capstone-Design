@@ -13,74 +13,88 @@ MonoBehaviour:
   m_Name: Skills2
   m_EditorClassIdentifier: 
   skillName:
-  - Lightning
-  - Electric Ball
-  - Energy Blast
-  - Judgement
   - Fire Ball
-  - Explosion
-  - Meteor
-  - Alternative Flame
+  - Lightning
   - Water Shot
+  - Explosion
+  - Electric Ball
   - Water Shield
+  - Meteor
+  - Energy Blast
   - Ice Spike
+  - Twin Flame
+  - Judgement
   - Ice Blast
   - Blood
   skillDescription:
-  - Cast Lightning on Random Enemy
-  - Electric Ball Move Around Player
-  - K a m e h a m e h a!!
-  - Lightning Rains Stormy
   - Cast FireBall to Nearest Enemy
-  - Fire Explode Around Player
-  - Meteor Falls on Random Point
-  - Flame Changes ALternatively
+  - Cast Lightning on Random Enemy
   - Cast Water Shot In front of Player
+  - Fire Explode Around Player
+  - Electric Ball Move Around Player
   - Water Shield Protects Player from Enemy
+  - Meteor Falls on Random Point
+  - K a m e h a m e h a!!
   - Ice Spike Rise at Random Point
-  - Cast Ice Blast in front of Player
-  - Heal 10 Points
-  level: 000000000100000001000000010000000000000000000000020000000200000000000000000000000000000000000000
+  - Two Flame Changes Alternatively
+  - Lightning Rains Stormy
+  - Case Ice Blast In front of Player
+  - Heal ten Points
+  level: 050000000500000000000000050000000000000000000000000000000500000005000000000000000500000000000000
   Damage:
-  - 30
-  - 10
-  - 1
-  - 20
+  - 77.76001
+  - 51.840004
+  - 2
+  - 51.840004
   - 15
   - 0
-  - 36
-  - 2.4
-  - 20
-  - 20
-  - 20
-  - 20
+  - 60
+  - 7.776001
+  - 5.1840005
+  - 40
+  - 103.68001
+  - 2
   Delay:
-  - 0.8
+  - 0.34991997
+  - 0.43739995
+  - 1.5
+  - 1.3122
+  - 14
+  - 10
+  - 3
+  - 1.7495998
+  - 0.8747999
+  - 3
+  - 3.2805
+  - 8
+  scale:
+  - 2
+  - 2
   - 1
   - 2
-  - 3
-  - 8
-  - 10
-  - 2.6999998
-  - 3.6
-  - 3
-  - 3
-  - 3
-  - 3
-  skillSelected: 000101010000010100000000
+  - 1
+  - 1
+  - 1
+  - 2
+  - 2
+  - 1
+  - 2
+  - 1
+  skillSelected: 010100010000000101000100
   skillicon:
-  - {fileID: 21300000, guid: 6885201bbf93f074c98b6b578a79bb15, type: 2}
-  - {fileID: 21300000, guid: 25359beb46853fb4397c0b7290ee9f5a, type: 2}
-  - {fileID: 21300000, guid: 5fbd9a6d8953713438785abb2ed42e1a, type: 2}
-  - {fileID: 21300000, guid: f75bd353d209d174aaa28850a3695f2f, type: 2}
-  - {fileID: 21300000, guid: ba722acb33ee0774bb7f750e36fa0287, type: 2}
-  - {fileID: 21300000, guid: c62e5760005d8d74bb76d7435d2770f9, type: 2}
-  - {fileID: 21300000, guid: e784020dc82875f4b8f02f9667b5e70c, type: 2}
-  - {fileID: 21300000, guid: c4322abfbefec6d46a4283e434dc46cb, type: 2}
+  - {fileID: 21300000, guid: 90f5c378a37421e4c900728afc36b321, type: 2}
+  - {fileID: 21300000, guid: 83ce16839d132e842a2b72cbf6a4410f, type: 2}
   - {fileID: 21300000, guid: 2b5e0b4341ab9a54999add375c2e8a87, type: 2}
+  - {fileID: 21300000, guid: bb170114dfb0b02429d4c6e2d7fd387e, type: 2}
+  - {fileID: 21300000, guid: acd12b9e52d962c43b344e34e47a3a02, type: 2}
   - {fileID: 21300000, guid: 516efd04627540f42838259ea470f42b, type: 2}
+  - {fileID: 21300000, guid: f2b882308d3041b489b3542416ebfe5c, type: 2}
+  - {fileID: 21300000, guid: 5fbd9a6d8953713438785abb2ed42e1a, type: 2}
   - {fileID: 21300000, guid: e541fe5d9f1fffa42902c86789fc11a7, type: 2}
-  - {fileID: 21300000, guid: ae9055e37e6e6f84196f90fe9ad0d097, type: 2}
+  - {fileID: 21300000, guid: c4322abfbefec6d46a4283e434dc46cb, type: 2}
+  - {fileID: 21300000, guid: f75bd353d209d174aaa28850a3695f2f, type: 2}
+  - {fileID: 21300000, guid: bef00553c8586ce4f97ab31fad65e9ea, type: 2}
+  - {fileID: 21300000, guid: 7f6251c7985e30447bf8dc271d8dae64, type: 2}
   projectile:
   - {fileID: 1876097049369689279, guid: 4f5aab16534b5d543b90b75837de3cc4, type: 3}
   - {fileID: 3719459856391972471, guid: a30f3ee6b2db5c540af102e95890215c, type: 3}

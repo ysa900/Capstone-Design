@@ -1,3 +1,4 @@
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class Player : MonoBehaviour, IPlayer
@@ -12,7 +13,7 @@ public class Player : MonoBehaviour, IPlayer
     public float maxHp = 100;
     public int Exp;
     public int level;
-    public int[] nextExp = { 3, 5, 10, 15, 30, 50, 80, 100, 150, 210, 280, 360, 450, 600 };
+    public int[] nextExp;
     
     //킬 수
     public int kill;
@@ -35,12 +36,38 @@ public class Player : MonoBehaviour, IPlayer
     public delegate void OnPlayerLevelUP();
     public OnPlayerLevelUP onPlayerLevelUP;
 
+    private GameAudioManager gameAudioManager;
+
+    private void Awake()
+    {
+        gameAudioManager = FindAnyObjectByType<GameAudioManager>();
+    }
+
     void Start()
     {
         // 변수 초기화
         rigid = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
+
+        nextExp = new int[100];
+        int num = 0;
+        for (int i = 0; i < nextExp.Length; i++)
+        {
+            if(level >= 30)
+            {
+                num += 100;
+                nextExp[i] = num;
+
+
+            }
+            else
+            {
+                num += 5;
+                nextExp[i] = num;
+
+            }
+        }
     }
 
     // Update is called once per frame
@@ -98,7 +125,7 @@ public class Player : MonoBehaviour, IPlayer
     {
         Exp += expAmount;
 
-        if (Exp == nextExp[level])
+        if (Exp >= nextExp[level])
         {
             onPlayerLevelUP(); // delegate 호출
             
@@ -114,8 +141,36 @@ public class Player : MonoBehaviour, IPlayer
         if (!isPlayerDead)
         {
             if (!isPlayerShielded)
-                hp -= Time.deltaTime * 10;
+            {
+                hp -= Time.deltaTime * 5;
+                gameAudioManager.PlaySfx(GameAudioManager.Sfx.Melee); // 피격  효과음
+            }
+            
+            if (hp <= 0)
+            {
+                isPlayerDead = true;
 
+                animator.SetBool("Dead", true);
+
+                onPlayerWasKilled(this);
+
+                rigid.constraints = RigidbodyConstraints2D.FreezeAll;
+
+                transform.localScale = new Vector3(1.0f, 1.0f, 1.0f); // 죽었을 때 나오는 묘비 크기 때문에 크기 조정 해준 것
+            }
+        }
+    }
+
+    public void TakeDamage(float damage)
+    {
+        if (!isPlayerDead)
+        {
+            if (!isPlayerShielded)
+            {
+                hp -= damage;
+                gameAudioManager.PlaySfx(GameAudioManager.Sfx.Melee); // 피격  효과음
+            }
+            
             if (hp <= 0)
             {
                 isPlayerDead = true;

@@ -16,12 +16,13 @@ public class Enemy : Object, IDamageable
     public bool isEnemyLookLeft; // 적이 보고 있는 방향을 알려주는 변수
 
     private bool isDead;
+    private bool isTimeOver;
 
     private float damageDelay = 2f;
     private float damageDelayTimer = 0;
 
     // enemy가 죽었을 때 EnemyManager에게 알려주기 위한 delegate
-    public delegate void OnEnemyWasKilled(Enemy killedEnemy);
+    public delegate void OnEnemyWasKilled(Enemy killedEnemy, bool isKilledByPlayer);
     public OnEnemyWasKilled onEnemyWasKilled;
 
     Rigidbody2D rigid; // 물리 입력을 받기위한 변수
@@ -50,6 +51,12 @@ public class Enemy : Object, IDamageable
             MoveToPlayer();
         }
 
+        isTimeOver = GameManager.instance.gameTime >= GameManager.instance.maxGameTime;
+        if (isTimeOver && !isDead)
+        {
+            StartCoroutine(Dead());
+        }
+
         DestryIfToFar(); // 플레이어와의 거리가 너무 멀면 죽음
         damageDelayTimer += Time.fixedDeltaTime;
     }
@@ -67,7 +74,7 @@ public class Enemy : Object, IDamageable
         {
             isEnemyLookLeft = direction.x < 0;
         }
-        
+
         spriteRenderer.flipX = isEnemyLookLeft;
 
         Vector2 colliderOffset; // CapsuleCollider의 offset에 넣을 Vector2
@@ -76,7 +83,8 @@ public class Enemy : Object, IDamageable
         {
             colliderOffset = new Vector2(-colliderOffsetX, colliderOffsetY);
         }
-        else {
+        else
+        {
             colliderOffset = new Vector2(colliderOffsetX, colliderOffsetY);
 
         }
@@ -98,7 +106,11 @@ public class Enemy : Object, IDamageable
 
         bool isToFar = Mathf.Sqrt(Mathf.Pow(direction.x, 2) + Mathf.Pow(direction.y, 2)) > 100f;
 
-        if (isToFar) { Destroy(gameObject); }
+        if (isToFar)
+        {
+            onEnemyWasKilled(this, false); // 대리자 호출
+            Destroy(gameObject);
+        }
 
     }
 
@@ -107,19 +119,15 @@ public class Enemy : Object, IDamageable
     {
         hp = hp - (int)damage;
 
-        if (hp <= 0)
+        if (hp <= 0 && !isDead)
         {
             StartCoroutine(Dead());
-            StopCoroutine(Dead());
         }
         else
         {
             if (damageDelay <= damageDelayTimer)
             {
                 animator.SetTrigger("Hit");
-            }
-            else
-            {
                 damageDelayTimer = 0;
             }
         }
@@ -127,10 +135,14 @@ public class Enemy : Object, IDamageable
 
     IEnumerator Dead()
     {
-        animator.SetBool("Dead", true);
-        onEnemyWasKilled(this); // 대리자 호출
-
         isDead = true;
+
+        animator.SetTrigger("Dead");
+
+        if (!isTimeOver)
+        {
+            onEnemyWasKilled(this, true); // 대리자 호출
+        }
 
         rigid.constraints = RigidbodyConstraints2D.FreezeAll;
         GetComponent<CapsuleCollider2D>().enabled = false;

@@ -1,45 +1,38 @@
-using NUnit.Framework;
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Security.Cryptography;
 using UnityEngine;
-using static Player;
 
-// Pause °É¸é ÀÌÀü¿¡´Â ÀÎ°ÔÀÓ ¼Ó UIµé(ÇÇÅë, ½ºÅ³ ÆÐ³Î, ÇÁ·ÎÇÊ)ÀÌ ¾È»ç¶óÁ®¼­
-// »ç¶óÁö°Ô ÇÏ·Á°í gameObject·Î ¼±¾ðÇÑ°Å¶û
-// OnPauseButtonClicked() ,onPlayButtonClicked() ¸Þ¼Òµå ¼öÁ¤ÇßÀ½
+// Pause ï¿½É¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î°ï¿½ï¿½ï¿½ ï¿½ï¿½ UIï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½Å³ ï¿½Ð³ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)ï¿½ï¿½ ï¿½È»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½ï¿½ï¿½ gameObjectï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ°Å¶ï¿½
+// OnPauseButtonClicked() ,onPlayButtonClicked() ï¿½Þ¼Òµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance; // GameManager¸¦ instanceÈ­
+    public static GameManager instance; // GameManagerï¿½ï¿½ instanceÈ­
 
-    // °ÔÀÓ ½Ã°£
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½
     public float gameTime;
-    //private float maxGameTime = 15 * 60f;
+    public float maxGameTime = 5 * 60f;
 
-    // Àû ÃÖ´ë »ý¼º °Å¸® (ÃÖ¼Ò´Â 20, EnemyManager¿¡ ÀÖÀ½)
+    // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¸ï¿½ï¿½
+    private float CoolTime = 2f;
+    private float CoolTimer = 0f;
+
+    // ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½ (ï¿½Ö¼Ò´ï¿½ 20, EnemyManagerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
     private float maxEnemySpawnRange = 30;
 
-    // Enemy0 ½ºÆù °ü·Ã ¼³Á¤
-    private float spawnCoolTime0 = 10;
-    private int compensationNum0= 1; // ½ºÆù ÄðÅ¸ÀÓ º¸Á¤°ª
-
-    // Enemy1 ½ºÆù °ü·Ã ¼³Á¤
-    private float spawnCoolTime1 = 10;
-    private int compensationNum1 = 1; // ½ºÆù ÄðÅ¸ÀÓ º¸Á¤°ª
-
-    // level ½Ã°£ ¼³Á¤
-    private float level2Time = 30;
-
-    // GameOver°¡ µÆ´ÂÁö ÆÇº°ÇÏ´Â º¯¼ö
+    // GameOverï¿½ï¿½ ï¿½Æ´ï¿½ï¿½ï¿½ ï¿½Çºï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½
     public bool isGameOver;
 
-    // EnemyµéÀ» ´ãÀ» ¸®½ºÆ®
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Æ´ï¿½ï¿½ï¿½ ï¿½Çºï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½
+    private bool isBossSpawned;
+
+    // Enemyï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
     private List<Enemy> enemies = new List<Enemy>();
 
-    // »ç¿ëÇÒ Å¬·¡½º °´Ã¼µé
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½
     public Player player;
+    public Boss boss;
     private EnemyManager enemyManager;
     private GameAudioManager gameAudioManager;
     private FollowCam followCam;
@@ -47,19 +40,23 @@ public class GameManager : MonoBehaviour
     private SkillManager skillManager;
     private SkillSelectManager skillSelectManager;
     private EXP exp;
+    private BossManager bossManager;
+    public PoolManager poolManager;
 
-    // GameObject¿¡¼­ ÇÁ¸®ÆÕÀ» ³Ö¾îÁÖ±â À§ÇØ publicÀ¸·Î ¼³Á¤
+    // GameObjectï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½Ö±ï¿½ ï¿½ï¿½ï¿½ï¿½ publicï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public Player playerPrefab;
 
-    // EXP ÇÁ¸®ÆÕ
+    // EXP ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     public EXP expPrefab1;
     public EXP expPrefab2;
     public EXP expPrefab3;
 
-    // GameOver ¿ÀºêÁ§Æ®
+    // GameOver ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
     public GameObject gameOverObject;
+    // GameClear ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
+    public GameObject gameClearObject;
 
-    // Pause ¿ÀºêÁ§Æ®
+    // Pause ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
     public GameObject pauseObject;
 
     // HpBar
@@ -72,18 +69,21 @@ public class GameManager : MonoBehaviour
     public GameObject SkillPanelObject;
     // CharacterProfile
     public GameObject CharacterProfileObject;
-
+    // Boss HP
+    public GameObject BossHPObject;
 
     private void Awake()
     {
-        instance = this; // GameManager¸¦ ÀÎ½ºÅÏ½ºÈ­
+        instance = this; // GameManagerï¿½ï¿½ ï¿½Î½ï¿½ï¿½Ï½ï¿½È­
 
-        // ½ÃÀÛ ½Ã ºñÈ°¼ºÈ­
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½È°ï¿½ï¿½È­
         gameOverObject.SetActive(false);
+        gameClearObject.SetActive(false);
         pauseObject.SetActive(false);
         HpBarObject.SetActive(true);
+        BossHPObject.SetActive(false);
 
-        // Å¬·¡½º °´Ã¼µé ÃÊ±âÈ­
+        // Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½Ê±ï¿½È­
         CreatePlayer();
         enemyManager = FindAnyObjectByType<EnemyManager>();
         inputManager = FindAnyObjectByType<InputManager>();
@@ -91,119 +91,173 @@ public class GameManager : MonoBehaviour
         followCam = FindAnyObjectByType<FollowCam>();
         skillManager = FindAnyObjectByType<SkillManager>();
         skillSelectManager = FindAnyObjectByType<SkillSelectManager>();
+        bossManager = FindAnyObjectByType<BossManager>();
+        poolManager = FindAnyObjectByType<PoolManager>();
 
-        // inputManger Delegate ÇÒ´ç
+        // inputManger Delegate ï¿½Ò´ï¿½
         inputManager.onPauseButtonClicked = OnPauseButtonClicked;
         inputManager.onPlayButtonClicked = onPlayButtonClicked;
 
-        // followCam ÇÃ·¹ÀÌ¾î °´Ã¼ ÇÒ´ç
+        // followCam ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Ã¼ ï¿½Ò´ï¿½
         followCam.player = player;
 
-        // skillManager¿¡ °´Ã¼ ÇÒ´ç
+        // skillManagerï¿½ï¿½ ï¿½ï¿½Ã¼ ï¿½Ò´ï¿½
         skillManager.player = player;
 
-        // skillManager Delegate ÇÒ´ç
+        // skillManager Delegate ï¿½Ò´ï¿½
         skillManager.onShiledSkillActivated = OnShieldSkillActivated;
         skillManager.onShiledSkillUnActivated = OnShieldSkillUnActivated;
 
-
-        // delegate ÇÒ´ç
+        // delegate ï¿½Ò´ï¿½
         enemyManager.onEnemiesChanged = OnEnemiesChanged;
         enemyManager.onEnemyKilled = OnEnemyKilled;
 
-        // delegate ÇÒ´ç
+        // delegate ï¿½Ò´ï¿½
         skillSelectManager.onSkillSelectObjectDisplayed = OnSkillSelectObjectDisplayed;
         skillSelectManager.onSkillSelectObjectHided = OnSkillSelectObjectHided;
+        skillSelectManager.onPlayerHealed = OnPlayerHealed;
+
+        // delegate ï¿½Ò´ï¿½
+        bossManager.onBossHasKilled = OnBossHasKilled;
+
+        //gameTime = 60 * 12f;
+        //player.isPlayerShielded = true;
     }
 
     void Start()
     {
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // GameStart ¼±ÅÃ È¿°úÀ½
-        gameAudioManager.PlayBGM(true); // ¹è°æÀ½ ½ÃÀÛ
-       // enemyManager.CreateEnemies(50, player, 2, maxEnemySpawnRange); // ¸ó½ºÅÍ ¼ÒÈ¯
+        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // GameStart ï¿½ï¿½ï¿½ï¿½ È¿ï¿½ï¿½ï¿½ï¿½
+        gameAudioManager.PlayBGM(0, true); // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        enemyManager.CreateEnemies(50, player, 0, maxEnemySpawnRange); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
+        skillSelectManager.ChooseStartSkill(); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å³ ï¿½ï¿½ï¿½ï¿½
 
-        skillSelectManager.ChooseStartSkill(); // ½ÃÀÛ ½ºÅ³ ¼±ÅÃ
+        //gameTime = 5 * 60f;
     }
 
     // Update is called once per frame
     void Update()
     {
         if(!isGameOver) {
-            gameTime += Time.deltaTime; // °ÔÀÓ ½Ã°£ Áõ°¡
+            gameTime += Time.deltaTime; // ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½
+            CoolTimer += Time.deltaTime;
 
-            //CalculateEnemySpawnTime(); // ¼ÒÈ¯ÇÒ ÀûÀ» ÁöÁ¤ÇÏ°í ½ºÆù
+            if(!isBossSpawned) {
+                CalculateEnemySpawnTime(); // ï¿½ï¿½È¯ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½ï¿½
+            }
         }
 
         skillManager.enemies = enemies;
     }
 
-    // Player »ý¼º ÇÔ¼ö
+    // Player ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
     private void CreatePlayer(){
         player = Instantiate(playerPrefab);
         player.onPlayerWasKilled = OnPlayerHasKilled;
         player.onPlayerLevelUP = OnPlayerLevelUP;
     }
 
-    // Enemy ½ºÆù ½Ã°£À» °è»êÇØ ¼ÒÈ¯ÇÒ ÀûÀ» ÁöÁ¤ÇÏ´Â ÇÔ¼ö
+    // Enemy ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
     private void CalculateEnemySpawnTime()
     {
-        bool isLevel2TimeOver = gameTime >= level2Time; // level2°¡ µÇ¾ß ÇÒ ½Ã°£ÀÌ Áö³µ³ª ÆÇº°
-
-        // Enemy0, 1ÀÇ ½ºÆù ÄðÅ¸ÀÓÀÌ Áö³µ³ª ÆÇº°
-        bool is_spawnCoolTimeOver0 = gameTime > spawnCoolTime0 * compensationNum0;
-        bool is_spawnCoolTimeOver1 = gameTime > spawnCoolTime1 * compensationNum1;
-
-        // ÄðÅ¸ÀÓÀÌ Âû ¶§¸¶´Ù ÄðÅ¸ÀÓÀ» º¸Á¤
-        if (is_spawnCoolTimeOver0)
-            compensationNum0++;
-
-        if (is_spawnCoolTimeOver1)
-            compensationNum1++;
-
-        bool is_spawn1ok = is_spawnCoolTimeOver0 && !isLevel2TimeOver;
-        bool is_spawn2ok = is_spawnCoolTimeOver1 && isLevel2TimeOver;
-
-        // ¼ÒÈ¯µÇ¾î¾ß ÇÒ Enemy¸¦ ½ºÆù
-        if (is_spawn1ok)
+        if (gameTime <= 60 * 1 && CoolTimer >= CoolTime)
         {
-            enemyManager.CreateEnemies(20, player, 2, maxEnemySpawnRange);
-            enemyManager.CreateEnemies(40, player, 3, maxEnemySpawnRange);
+            enemyManager.CreateEnemies(10, player, 0, maxEnemySpawnRange); // Ghoul ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
+            CoolTimer = 0f;
         }
-        
-        if (is_spawn2ok)
+        else if (gameTime <= 60 * 2 && CoolTimer >= CoolTime)
         {
-            enemyManager.CreateEnemies(10, player, 2, maxEnemySpawnRange);
-            enemyManager.CreateEnemies(20, player, 3, maxEnemySpawnRange);
-            enemyManager.CreateEnemies(30, player, 4, maxEnemySpawnRange);
+            enemyManager.CreateEnemies(5, player, 0, maxEnemySpawnRange); // Ghoul ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
+            enemyManager.CreateEnemies(10, player, 1, maxEnemySpawnRange); // Spitter ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
+            CoolTimer = 0f;
         }
-            
+        else if (gameTime <= 60 * 3 && CoolTimer >= CoolTime)
+        {
+            enemyManager.CreateEnemies(2, player, 0, maxEnemySpawnRange); // Ghoul ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
+            enemyManager.CreateEnemies(5, player, 1, maxEnemySpawnRange); // Spitter ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
+            enemyManager.CreateEnemies(10, player, 2, maxEnemySpawnRange); //Summoner ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
+            CoolTime = 1.5f;
+            CoolTimer = 0f;
+        }
+        else if (gameTime < 60 * 4 && CoolTimer >= CoolTime)
+        {
+            enemyManager.CreateEnemies(2, player, 0, maxEnemySpawnRange); // Ghoul ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
+            enemyManager.CreateEnemies(5, player, 1, maxEnemySpawnRange); // Spitter ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
+            enemyManager.CreateEnemies(8, player, 2, maxEnemySpawnRange); //Summoner ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
+            enemyManager.CreateEnemies(15, player, 3, maxEnemySpawnRange); //BloodKing ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
+            CoolTime = 1f;
+            CoolTimer = 0f;
+        }
+        else if (gameTime < 60 * 5 && CoolTimer >= CoolTime)
+        {
+            enemyManager.CreateEnemies(2, player, 0, maxEnemySpawnRange); // Ghoul ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
+            enemyManager.CreateEnemies(5, player, 1, maxEnemySpawnRange); // Spitter ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
+            enemyManager.CreateEnemies(8, player, 2, maxEnemySpawnRange); //Summoner ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
+            enemyManager.CreateEnemies(20, player, 3, maxEnemySpawnRange); //BloodKing ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
+            CoolTime = 1f;
+            CoolTimer = 0f;
+        }
+        else if (gameTime >= maxGameTime)
+        {
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+            bossManager.player = player;
+            bossManager.CreateBoss();
+
+            skillManager.isBossAppear = true;
+            skillManager.boss = bossManager.boss;
+
+            // ï¿½ï¿½ï¿½ï¿½ HPï¿½ï¿½ active
+            BossHPObject.SetActive(true);
+
+            // ï¿½ï¿½ï¿½ï¿½ BGM ON
+            gameAudioManager.PlayBGM(0, false); // ï¿½âº» ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+            gameAudioManager.PlayBGM(1, true); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+
+            isBossSpawned = true;
+        }
+
     }
 
-    // ÇÃ·¹ÀÌ¾î°¡ Á×¾úÀ» ½Ã ½ÇÇàµÊ
+    // ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½×¾ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
     private void OnPlayerHasKilled(Player player)
     {
-        StartCoroutine(PlayerHasKilled()); // È¿°úÀ½ ³Ö±â À§ÇÑ ÄÚ·çÆ¾ »ý¼º ¹× »ç¿ë
+        StartCoroutine(PlayerHasKilled()); // È¿ï¿½ï¿½ï¿½ï¿½ ï¿½Ö±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ú·ï¿½Æ¾ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½
     }
-
     IEnumerator PlayerHasKilled()
     {
         isGameOver = true;
         gameOverObject.SetActive(true);
 
-        yield return new WaitForSeconds(0.5f); // 0.5ÃÊ ÀÌÈÄ ½Ã°£ Â÷ µÎ±â
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Lose); // Ä³¸¯ÅÍ »ç¸Á ½Ã È¿°úÀ½
-        inputManager.PauseButtonObject.interactable = false; // Pause¹öÆ° ºñÈ°¼ºÈ­
-        gameAudioManager.PlayBGM(false); // ¹è°æÀ½ Á¾·á
-        Time.timeScale = 0; // È­¸é ¸ØÃß±â
+        yield return new WaitForSeconds(0.5f); // 0.5ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ ï¿½ï¿½ ï¿½Î±ï¿½
+        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Lose); // Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ È¿ï¿½ï¿½ï¿½ï¿½
+        inputManager.PauseButtonObject.interactable = false; // Pauseï¿½ï¿½Æ° ï¿½ï¿½È°ï¿½ï¿½È­
+        gameAudioManager.PlayBGM(0, false); // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        Time.timeScale = 0; // È­ï¿½ï¿½ ï¿½ï¿½ï¿½ß±ï¿½
     }
 
-    // Pause¹öÆ°ÀÌ Å¬¸¯µÆÀ» ½Ã ½ÇÇàµÊ
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×¾ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
+    private void OnBossHasKilled()
+    {
+        StartCoroutine(BossHasKilled()); // È¿ï¿½ï¿½ï¿½ï¿½ ï¿½Ö±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ú·ï¿½Æ¾ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½
+    }
+    IEnumerator BossHasKilled()
+    {
+        player.isPlayerShielded = true;
+        isGameOver = true;
+        gameClearObject.SetActive(true);
+
+        yield return new WaitForSeconds(0.5f); // 0.5ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ ï¿½ï¿½ ï¿½Î±ï¿½
+        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Win); // ï¿½Â¸ï¿½ï¿½ï¿½ È¿ï¿½ï¿½ï¿½ï¿½
+        inputManager.PauseButtonObject.interactable = false; // Pauseï¿½ï¿½Æ° ï¿½ï¿½È°ï¿½ï¿½È­
+        gameAudioManager.PlayBGM(0, false); // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        Time.timeScale = 0; // È­ï¿½ï¿½ ï¿½ï¿½ï¿½ß±ï¿½
+    }
+
+    // Pauseï¿½ï¿½Æ°ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
     private void OnPauseButtonClicked()
     {
         pauseObject.SetActive(true);
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // ¹öÆ° Å¬¸¯ È¿°úÀ½
-
-        // UI ºñÈ°¼ºÈ­
+        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // ï¿½ï¿½Æ° Å¬ï¿½ï¿½ È¿ï¿½ï¿½ï¿½ï¿½
+        // UI ï¿½ï¿½È°ï¿½ï¿½È­
         HpBarObject.SetActive(false);
         HpStatusLetteringObject.SetActive(false);
         HpStatusObject.SetActive(false);
@@ -214,8 +268,8 @@ public class GameManager : MonoBehaviour
     private void onPlayButtonClicked()
     {
         pauseObject.SetActive(false);
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // ¹öÆ° Å¬¸¯ È¿°úÀ½
-        // UI È°¼ºÈ­
+        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // ï¿½ï¿½Æ° Å¬ï¿½ï¿½ È¿ï¿½ï¿½ï¿½ï¿½
+        // UI È°ï¿½ï¿½È­
         HpBarObject.SetActive(true);
         HpStatusLetteringObject.SetActive(true);
         HpStatusObject.SetActive(true);
@@ -228,19 +282,19 @@ public class GameManager : MonoBehaviour
         this.enemies = enemies;
     }
 
-    // ½¯µå ÄÑÁú ¶§ delegate¿¡ ÇÒ´çÇØÁÙ ÇÔ¼ö
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ delegateï¿½ï¿½ ï¿½Ò´ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
     private void OnShieldSkillActivated()
     {
         player.isPlayerShielded = true;
     }
 
-    // ½¯µå ²¨Áú ¶§ delegate¿¡ ÇÒ´çÇØÁÙ ÇÔ¼ö
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ delegateï¿½ï¿½ ï¿½Ò´ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
     private void OnShieldSkillUnActivated()
     {
         player.isPlayerShielded = false;
     }
 
-    // ÀûÀÌ Á×¾úÀ» ¶§ ½ÇÇàÇÏ´Â ÇÔ¼ö
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½×¾ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
     private void OnEnemyKilled(Enemy killedEnemy)
     {
         if (!player.isPlayerDead)
@@ -248,24 +302,60 @@ public class GameManager : MonoBehaviour
             player.kill++;
         }
 
-        exp = Instantiate(expPrefab1);
-        exp.expAmount = 1;
+        int ranNum = UnityEngine.Random.Range(0, 11);
 
-        exp.X = killedEnemy.X;
-        exp.Y = killedEnemy.Y + 1f;
+        if(ranNum >= 6)
+        {
+            if (killedEnemy.tag == "Ghoul")
+            {
+                exp = Instantiate(expPrefab1);
+
+                exp.expAmount = 1;
+
+                exp.X = killedEnemy.X;
+                exp.Y = killedEnemy.Y + 1f;
+            }
+            else if (killedEnemy.tag == "Spitter")
+            {
+                exp = Instantiate(expPrefab2);
+
+                exp.expAmount = 2;
+
+                exp.X = killedEnemy.X;
+                exp.Y = killedEnemy.Y + 1f;
+            }
+            else if (killedEnemy.tag == "Summoner")
+            {
+                exp = Instantiate(expPrefab2);
+
+                exp.expAmount = 3;
+
+                exp.X = killedEnemy.X;
+                exp.Y = killedEnemy.Y + 1f;
+            }
+            else if (killedEnemy.tag == "BloodKing")
+            {
+                exp = Instantiate(expPrefab3);
+
+                exp.expAmount = 4;
+
+                exp.X = killedEnemy.X;
+                exp.Y = killedEnemy.Y + 1f;
+            }
+        }
     }
 
-    // ÇÃ·¹ÀÌ¾î°¡ ·¹º§ ¾÷ ÇßÀ» ½Ã ½ÇÇà
+    // ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     private void OnPlayerLevelUP()
     {
         skillSelectManager.DisplayLevelupPanel();
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.LevelUp); // ·¹º§¾÷ ½Ã È¿°úÀ½
-        gameAudioManager.EffectBGM(true); // AudioFilter ÄÑ±â
+        gameAudioManager.PlaySfx(GameAudioManager.Sfx.LevelUp); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ È¿ï¿½ï¿½ï¿½ï¿½
+        gameAudioManager.EffectBGM(true); // AudioFilter ï¿½Ñ±ï¿½
     }
 
     private void OnSkillSelectObjectDisplayed()
     {
-        // UI ºñÈ°¼ºÈ­
+        // UI ï¿½ï¿½È°ï¿½ï¿½È­
         HpBarObject.SetActive(false);
         HpStatusLetteringObject.SetActive(false);
         HpStatusObject.SetActive(false);
@@ -276,12 +366,18 @@ public class GameManager : MonoBehaviour
 
     private void OnSkillSelectObjectHided()
     {
-        // UI È°¼ºÈ­
+        // UI È°ï¿½ï¿½È­
         HpBarObject.SetActive(true);
         HpStatusLetteringObject.SetActive(true);
         HpStatusObject.SetActive(true);
         SkillPanelObject.SetActive(true);
         CharacterProfileObject.SetActive(true);
         inputManager.PauseButtonObject.interactable = true;
+    }
+
+    private void OnPlayerHealed()
+    {
+        player.hp += 10;
+        if(player.hp > 100) { player.hp = 100; }
     }
 }
