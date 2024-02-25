@@ -1,4 +1,9 @@
+<<<<<<< Updated upstream
 ﻿using System.Collections;
+=======
+﻿using System;
+using System.Collections;
+>>>>>>> Stashed changes
 using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
@@ -35,26 +40,6 @@ public class SkillManager : MonoBehaviour
     // 스킬들 index: 불 - 3n, 전기 - 3n + 1, 물 - 3n + 2
     // 불 - 0, 3, 6, 9 / 전기 - 1, 4, 7, 10 / 물 - 2, 5, 8 ,11
     float[] attackDelayTimer = new float[12];
-
-    // 스킬 프리팹들
-    public EnemyTrackingSkill fireBasicSkillPrefab;
-    public EnemyOnSkill electricBasicSkillPrefab;
-    public PlayerAttachSkill waterBasicSkillPrefab;
-
-    public PlayerAttachSkill fireNormalSkillPrefab1;
-    public PlayerAttachSkill electricNormalSkillPrefab1;
-    public PlayerAttachSkill waterNormalSkillPrefab1;
-
-    public RandomSkill fireNormal2MeteorPrefab;
-    public RandomSkill fireNormal2ExplodePrefab;
-    public GameObject fireNormal2ShadowPrefab;
-    public PlayerAttachSkill electricNormalSkillPrefab2;
-    public RandomSkill waterNormalSkillPrefab2;
-
-    public PlayerAttachSkill fireNormalSkillPrefab3_1;
-    public PlayerAttachSkill fireNormalSkillPrefab3_2;
-    public RandomSkill electricNormalSkillPrefab3;
-    public PlayerAttachSkill waterNormalSkillPrefab3;
 
     // delegate들
     public delegate void OnShiledSkillActivated(); // 쉴드 스킬이 켜 질때
@@ -346,7 +331,11 @@ public class SkillManager : MonoBehaviour
         {
             case 0:
                 {
+<<<<<<< Updated upstream
                     enemyTrackingSkill = (EnemyTrackingSkill)GameManager.instance.poolManager.GetSkill(0, boss);
+=======
+                    enemyTrackingSkill = GameManager.instance.poolManager.GetSkill(0, boss) as EnemyTrackingSkill;
+>>>>>>> Stashed changes
                     gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                     Vector2 playerPosition = player.transform.position;
@@ -879,7 +868,13 @@ public class SkillManager : MonoBehaviour
 
         skillObject.transform.position = new Vector2(x, y);
 
-        SetScale(skillObject.gameObject, 6);
+        // 그림자 sacle 조정
+        Transform parent = skillObject.gameObject.transform.parent;
+
+        skillObject.gameObject.transform.parent = null;
+        // * 6 / 1.5는 메테오와 메테오 그림자 사이의 스케일 조정
+        skillObject.gameObject.transform.localScale = new Vector3(skillData.scale[6] * 6 / (float)1.5, skillData.scale[6] * 6 / (float)1.5, 0);
+        skillObject.gameObject.transform.parent = parent;
 
         isShadowAlive = true;
 

@@ -1,12 +1,8 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class Boss_Genesis : Object
+public class Boss_Genesis : BossSkill, IPullingObject
 {
-    public Player player;
-    public Boss boss;
-    private float damage = 0.25f;
-
     //public float impactPonitX;
     //public float impactPonitY;
 
@@ -23,6 +19,29 @@ public class Boss_Genesis : Object
     SpriteRenderer spriteRenderer_child3;
     SpriteRenderer spriteRenderer_child4;
 
+    public new void Init()
+    {
+        aliveTimer = 0f;
+        isCoroutineNow = false;
+        animator.SetBool("Stay", true);
+
+        UnityEngine.Color col = spriteRenderer_child1.color;
+        col.a = 1f;
+        spriteRenderer_child1.color = col;
+
+        col = spriteRenderer_child2.color;
+        col.a = 1f;
+        spriteRenderer_child2.color = col;
+
+        col = spriteRenderer_child3.color;
+        col.a = 1f;
+        spriteRenderer_child3.color = col;
+
+        col = spriteRenderer_child4.color;
+        col.a = 1f;
+        spriteRenderer_child4.color = col;
+    }
+
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -31,6 +50,8 @@ public class Boss_Genesis : Object
         spriteRenderer_child2 = GetComponentsInChildren<SpriteRenderer>()[1];
         spriteRenderer_child3 = GetComponentsInChildren<SpriteRenderer>()[2];
         spriteRenderer_child4 = GetComponentsInChildren<SpriteRenderer>()[3];
+
+        damage = 0.25f;
     }
 
     private void FixedUpdate()
@@ -101,7 +122,7 @@ public class Boss_Genesis : Object
 
         yield return new WaitForSeconds(0.2f); // 지정한 초 만큼 쉬기
 
-        Destroy(gameObject);
+        GameManager.instance.poolManager.ReturnBossSkill(this, index);
 
         isCoroutineNow = false;
     }

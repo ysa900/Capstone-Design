@@ -18,6 +18,12 @@ public class EnemyTrackingSkill : Skill, IPullingObject
     {
         aliveTime = 0;
 
+<<<<<<< Updated upstream
+=======
+        X = player.transform.position.x;
+        Y = player.transform.position.y;
+
+>>>>>>> Stashed changes
         if (!isBossAppear)
         {
             SetEnemyPosition();

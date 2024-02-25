@@ -50173,6 +50173,10 @@ Transform:
   - {fileID: 1926747367}
   - {fileID: 1339954514}
   - {fileID: 1273848032}
+<<<<<<< Updated upstream
+=======
+  - {fileID: 1710890406}
+>>>>>>> Stashed changes
   m_Father: {fileID: 159581882}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &223361690
@@ -50214,6 +50218,14 @@ MonoBehaviour:
   - {fileID: 6682502125918302997, guid: 607156135ff587f4e89da21cbc00b368, type: 3}
   - {fileID: 2782590012111047386, guid: b84d81b6f156b2f4dac75aef7135da29, type: 3}
   - {fileID: 1444332819241385628, guid: d2530acac34981c4faab6c24d17cb3cc, type: 3}
+<<<<<<< Updated upstream
+=======
+  Boss_Skill_prefabs:
+  - {fileID: -1771623486371533203, guid: de9c659ef6987cd4d97a8993c6f85295, type: 3}
+  - {fileID: 2732523751204016929, guid: 2a2d1bcd248cdf54684ae75c9eb4af0f, type: 3}
+  - {fileID: 1930705433329540371, guid: 8f5011304ff329b4290bb88df1149bd6, type: 3}
+  - {fileID: 8481769435239011553, guid: 11cd9e812ccf413469944be1258b259f, type: 3}
+>>>>>>> Stashed changes
 --- !u!1 &231257536
 GameObject:
   m_ObjectHideFlags: 0
@@ -70012,11 +70024,7 @@ MonoBehaviour:
   boss: {fileID: 0}
   bossPrefab: {fileID: -5412648688130606181, guid: 0c22f765985c5e24b95007b88c4ea986, type: 3}
   player: {fileID: 0}
-  bossBulletPrefab: {fileID: -1771623486371533203, guid: de9c659ef6987cd4d97a8993c6f85295, type: 3}
   bossBulletPrefab_ML: {fileID: 3993712466396084629, guid: c7689f2d3c129ce4c8a3f60f82405bdf, type: 3}
-  bossLaserPrefab: {fileID: 2732523751204016929, guid: 2a2d1bcd248cdf54684ae75c9eb4af0f, type: 3}
-  bossGridLaserPrefab: {fileID: 1930705433329540371, guid: 8f5011304ff329b4290bb88df1149bd6, type: 3}
-  bossGenesisPrefab: {fileID: 8481769435239011553, guid: 11cd9e812ccf413469944be1258b259f, type: 3}
 --- !u!1 &1177041980
 GameObject:
   m_ObjectHideFlags: 0
@@ -71498,21 +71506,6 @@ MonoBehaviour:
   enemies: []
   boss: {fileID: 0}
   skillData: {fileID: 11400000, guid: ddb44fb17cc59a34e9ddb19d7c8e3ef5, type: 2}
-  fireBasicSkillPrefab: {fileID: -7424071372996459232, guid: 4f5aab16534b5d543b90b75837de3cc4, type: 3}
-  electricBasicSkillPrefab: {fileID: -3618531333995826868, guid: a30f3ee6b2db5c540af102e95890215c, type: 3}
-  waterBasicSkillPrefab: {fileID: 99437377000021322, guid: 3772c381276b3ab4aa6590f755c6521d, type: 3}
-  fireNormalSkillPrefab1: {fileID: 2903703863847993547, guid: 9aef766674f0e6148bc3d4baa343e2fb, type: 3}
-  electricNormalSkillPrefab1: {fileID: 8321802461996845402, guid: ce1225d4b4af3da418cea198e24f7b90, type: 3}
-  waterNormalSkillPrefab1: {fileID: 6682502125918302997, guid: 607156135ff587f4e89da21cbc00b368, type: 3}
-  fireNormal2MeteorPrefab: {fileID: 2240211933938734696, guid: ba6330b3512e6c643add2b05ab30848e, type: 3}
-  fireNormal2ExplodePrefab: {fileID: 4859099823860586685, guid: 2bbedd47b22a3f740ab3a942bc2a039f, type: 3}
-  fireNormal2ShadowPrefab: {fileID: 9124107383370398149, guid: adff58463d85b224fa928ca2768eaef6, type: 3}
-  electricNormalSkillPrefab2: {fileID: 5073037063245546934, guid: 1cd30b0d5ebd233439adbfba80643266, type: 3}
-  waterNormalSkillPrefab2: {fileID: 2782590012111047386, guid: b84d81b6f156b2f4dac75aef7135da29, type: 3}
-  fireNormalSkillPrefab3_1: {fileID: -6343141511844630435, guid: 87ba2ce188ae8064e9b0fbba9b20d208, type: 3}
-  fireNormalSkillPrefab3_2: {fileID: 4518516078226156872, guid: e10c7ce82083b894b99662222c6662c7, type: 3}
-  electricNormalSkillPrefab3: {fileID: 2157301204777056331, guid: 88968603cec0de5428a062716d4906b6, type: 3}
-  waterNormalSkillPrefab3: {fileID: 1444332819241385628, guid: d2530acac34981c4faab6c24d17cb3cc, type: 3}
 --- !u!4 &1452367875
 Transform:
   m_ObjectHideFlags: 0
@@ -73055,6 +73048,37 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1710890405
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1710890406}
+  m_Layer: 0
+  m_Name: BossSkills
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1710890406
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1710890405}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 223361689}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1732455771
 GameObject:
   m_ObjectHideFlags: 0
@@ -73465,10 +73489,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemies: []
+<<<<<<< Updated upstream
   ghoulPrefab: {fileID: 4691429641230944019, guid: 5920a0b6c14ef5342881fd22905e5816, type: 3}
   spitterPrefab: {fileID: 4788991516957631958, guid: e9542daca9865404d9c061c62a9d3302, type: 3}
   summonerPrefab: {fileID: 2361909946878411841, guid: 1bc44c269c2f8094795f41ef3c7b81c5, type: 3}
   bloodKingPrefab: {fileID: 2216331277548415748, guid: fb0aa5f779142414f90b71fb86c75d7b, type: 3}
+=======
+>>>>>>> Stashed changes
 --- !u!4 &1772697862
 Transform:
   m_ObjectHideFlags: 0

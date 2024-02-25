@@ -15,12 +15,6 @@ public class EnemyManager : MonoBehaviour
 
     private GameAudioManager gameAudioManager;
 
-    // Enemy 프리팹
-    public Enemy ghoulPrefab;
-    public Enemy spitterPrefab;
-    public Enemy summonerPrefab;
-    public Enemy bloodKingPrefab;
-
     // Enemy들이 생성되었을 때에 GameManager에게 Enemy 리스트를 전달해주기 위한 delegate
     public delegate void OnEnemiesChanged(List<Enemy> enemies);
     public OnEnemiesChanged onEnemiesChanged;

@@ -124,7 +124,11 @@ public class GameManager : MonoBehaviour
         // BossManager delegate วาด็
         bossManager.onBossHasKilled = OnBossHasKilled;
 
+<<<<<<< Updated upstream
         //gameTime = 60 * 5f;
+=======
+        //gameTime = maxGameTime;
+>>>>>>> Stashed changes
         //player.isPlayerShielded = true;
         //player.level = 20;
     }

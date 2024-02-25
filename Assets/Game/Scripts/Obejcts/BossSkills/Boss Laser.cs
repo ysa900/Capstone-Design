@@ -1,12 +1,8 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class Boss_Lazer : Object
+public class Boss_Laser : BossSkill, IPullingObject
 {
-    public Player player;
-    public Boss boss;
-    private float damage = 0.25f;
-
     float laserHalf = 29 / 2; // 레이저 prefab의 절반 길이
 
     public float aliveTime = 3f; // 스킬 생존 시간을 체크할 변수
@@ -15,17 +11,29 @@ public class Boss_Lazer : Object
     private float safeTime = 0.3f; // 플레이어가 피할 수 있게 아주 살짝 데미지 안들어가는 시간
     private float safeTimer; // 데미지 안들어가는 시간 타이머
 
-    public float laserTurnNum; // 레이저 회전 각도
+    //public float laserTurnNum; // 레이저 회전 각도, 지금은 Boss Skill에 있음
 
     private bool isCoroutineNow; // 현재 코루틴을 실행하고 있는지를 체크할 변수
 
     Animator animator;
+    
+    public new void Init()
+    {
+        aliveTimer = 0f;
+        safeTimer = 0f;
+        isCoroutineNow = false;
+
+        animator.SetBool("Stay", false);
+        AttachBoss();
+    }
 
     private void Start()
     {
         animator = GetComponent<Animator>();
         animator.SetBool("Stay", false);
         AttachBoss();
+
+        damage = 0.25f;
     }
 
     private void FixedUpdate()
@@ -113,7 +121,7 @@ public class Boss_Lazer : Object
 
         yield return new WaitForSeconds(0.2f); // 지정한 초 만큼 쉬기
 
-        Destroy(gameObject);
+        GameManager.instance.poolManager.ReturnBossSkill(this, index);
     }
 }
 
