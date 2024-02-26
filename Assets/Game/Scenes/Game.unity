@@ -50173,10 +50173,7 @@ Transform:
   - {fileID: 1926747367}
   - {fileID: 1339954514}
   - {fileID: 1273848032}
-<<<<<<< Updated upstream
-=======
   - {fileID: 1710890406}
->>>>>>> Stashed changes
   m_Father: {fileID: 159581882}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &223361690
@@ -50218,14 +50215,11 @@ MonoBehaviour:
   - {fileID: 6682502125918302997, guid: 607156135ff587f4e89da21cbc00b368, type: 3}
   - {fileID: 2782590012111047386, guid: b84d81b6f156b2f4dac75aef7135da29, type: 3}
   - {fileID: 1444332819241385628, guid: d2530acac34981c4faab6c24d17cb3cc, type: 3}
-<<<<<<< Updated upstream
-=======
   Boss_Skill_prefabs:
   - {fileID: -1771623486371533203, guid: de9c659ef6987cd4d97a8993c6f85295, type: 3}
   - {fileID: 2732523751204016929, guid: 2a2d1bcd248cdf54684ae75c9eb4af0f, type: 3}
   - {fileID: 1930705433329540371, guid: 8f5011304ff329b4290bb88df1149bd6, type: 3}
   - {fileID: 8481769435239011553, guid: 11cd9e812ccf413469944be1258b259f, type: 3}
->>>>>>> Stashed changes
 --- !u!1 &231257536
 GameObject:
   m_ObjectHideFlags: 0
@@ -73489,13 +73483,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemies: []
-<<<<<<< Updated upstream
-  ghoulPrefab: {fileID: 4691429641230944019, guid: 5920a0b6c14ef5342881fd22905e5816, type: 3}
-  spitterPrefab: {fileID: 4788991516957631958, guid: e9542daca9865404d9c061c62a9d3302, type: 3}
-  summonerPrefab: {fileID: 2361909946878411841, guid: 1bc44c269c2f8094795f41ef3c7b81c5, type: 3}
-  bloodKingPrefab: {fileID: 2216331277548415748, guid: fb0aa5f779142414f90b71fb86c75d7b, type: 3}
-=======
->>>>>>> Stashed changes
 --- !u!4 &1772697862
 Transform:
   m_ObjectHideFlags: 0

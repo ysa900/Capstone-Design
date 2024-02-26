@@ -58,15 +58,10 @@ public class BossManager : MonoBehaviour
 
     private void onBossTryBulletAttack()
     {
-<<<<<<< Updated upstream
-        bossBullet = Instantiate(bossBulletPrefab);
-        //GameManager.instance.poolManager.Get(0);
-=======
         bossBullet = GameManager.instance.poolManager.GetBossSkill(0) as Boss_Bullet;
 
         bossBullet.boss = boss;
         bossBullet.player = player;
->>>>>>> Stashed changes
     }
 
     private void onBossTryLaserAttack(float num)

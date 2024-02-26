@@ -1,9 +1,5 @@
-<<<<<<< Updated upstream
-﻿using System.Collections;
-=======
 ﻿using System;
 using System.Collections;
->>>>>>> Stashed changes
 using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
@@ -331,11 +327,7 @@ public class SkillManager : MonoBehaviour
         {
             case 0:
                 {
-<<<<<<< Updated upstream
-                    enemyTrackingSkill = (EnemyTrackingSkill)GameManager.instance.poolManager.GetSkill(0, boss);
-=======
                     enemyTrackingSkill = GameManager.instance.poolManager.GetSkill(0, boss) as EnemyTrackingSkill;
->>>>>>> Stashed changes
                     gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                     Vector2 playerPosition = player.transform.position;
