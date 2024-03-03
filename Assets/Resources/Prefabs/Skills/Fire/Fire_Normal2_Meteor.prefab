@@ -294,12 +294,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemy: {fileID: 0}
+  boss: {fileID: 0}
   player: {fileID: 0}
   speed: 15
   damage: 0
+  index: 0
   randomSkill: {fileID: 0}
   impactPonitX: 0
   impactPonitY: 0
   aliveTime: 0
   isMeteor: 0
-  fireNormal2ExplodePrefab: {fileID: 0}
+  isIceSpike: 0
+  isStaySkill: 0
+  scale: 0

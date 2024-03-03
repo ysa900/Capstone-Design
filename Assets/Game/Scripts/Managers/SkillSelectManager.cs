@@ -69,7 +69,7 @@ public class SkillSelectManager: MonoBehaviour
 
     bool isSkillAllMax; // 스킬이 전부 만렙인지 판단하는 변수
 
-    float normalDamageCoefficient = 1.1f;
+    float normalDamageCoefficient = 1.15f;
     float normalDelayCoefficient = 0.95f;
     float normalscaleCoefficient = 1.25f;
 

@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class RandomSkill : Skill
+public class RandomSkill : Skill, IPullingObject
 {
     public RandomSkill randomSkill;
 
@@ -25,7 +25,14 @@ public class RandomSkill : Skill
     Animator animator;
     Animator animator_ground;
 
-    public RandomSkill fireNormal2ExplodePrefab;
+    public new void Init()
+    {
+        aliveTimer = 0;
+        if (isIceSpike)
+        {
+            animator_ground = transform.Find("ground").GetComponent<Animator>();
+        }
+    }
 
     private void Start()
     {
@@ -46,7 +53,7 @@ public class RandomSkill : Skill
             if (isMeteor)
             {
                 RandomSkill explode;
-                explode = Instantiate(fireNormal2ExplodePrefab);
+                explode = GameManager.instance.poolManager.GetSkill(2) as RandomSkill;
 
                 explode.X = X;
                 explode.Y = Y;
@@ -67,7 +74,7 @@ public class RandomSkill : Skill
             }
             else
             {
-                Destroy(gameObject);
+                GameManager.instance.poolManager.ReturnSkill(this, index);
             }
             
             return;
@@ -159,7 +166,7 @@ public class RandomSkill : Skill
         
         yield return new WaitForSeconds(0.2f); // 지정한 초 만큼 쉬기
         
-        Destroy(gameObject);
+        GameManager.instance.poolManager.ReturnSkill(this, index);
 
         isCoroutineNow = false;
     }

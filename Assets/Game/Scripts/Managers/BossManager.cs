@@ -12,19 +12,15 @@ public class BossManager : MonoBehaviour
     public Player player;
 
     Boss_Bullet bossBullet;
-    public Boss_Bullet bossBulletPrefab;
 
     Boss_Bullet_ML bossBullet_ML;
     public Boss_Bullet_ML bossBulletPrefab_ML;
 
-    Boss_Lazer bossLaser;
-    public Boss_Lazer bossLaserPrefab;
+    Boss_Laser bossLaser;
 
-    Boss_Grid_Lazer bossGridLaser;
-    public Boss_Grid_Lazer bossGridLaserPrefab;
+    Boss_Grid_Laser bossGridLaser;
 
     Boss_Genesis bossGenesis;
-    public Boss_Genesis bossGenesisPrefab;
 
     // GameManger에게 보스가 죽었다고 알려주기 위한 delegate
     public delegate void OnBossHasKilled();
@@ -62,30 +58,32 @@ public class BossManager : MonoBehaviour
 
     private void onBossTryBulletAttack()
     {
-        //bossBullet = Instantiate(bossBulletPrefab);
-        GameManager.instance.poolManager.Get(0);
+        bossBullet = GameManager.instance.poolManager.GetBossSkill(0) as Boss_Bullet;
+
+        bossBullet.boss = boss;
+        bossBullet.player = player;
     }
 
     private void onBossTryLaserAttack(float num)
     {
-        bossLaser = Instantiate(bossLaserPrefab);
+        bossLaser = GameManager.instance.poolManager.GetBossSkill(1, num) as Boss_Laser;
 
         bossLaser.boss = boss;
         bossLaser.player = player;
-        bossLaser.laserTurnNum = num;
+        //bossLaser.laserTurnNum = num;
     }
 
     private void onBossTryGridLaserAttack(float x, float y, bool isRightTop)
     {
-        bossGridLaser = Instantiate(bossGridLaserPrefab);
+        bossGridLaser = GameManager.instance.poolManager.GetBossSkill(2, x, y, isRightTop) as Boss_Grid_Laser;
 
         bossGridLaser.boss = boss;
         bossGridLaser.player = player;
-
+        /*
         bossGridLaser.X = x;
         bossGridLaser.Y = y;
         bossGridLaser.isRightTop = isRightTop;
-        bossGridLaser.isRightBottom = !isRightTop;
+        bossGridLaser.isRightBottom = !isRightTop;*/
     }
 
     private void onBossTryGenesisAttack()
@@ -98,7 +96,7 @@ public class BossManager : MonoBehaviour
     {
         for (int i = 0; i < num; i++)
         {
-            bossGenesis = Instantiate(bossGenesisPrefab);
+            bossGenesis = GameManager.instance.poolManager.GetBossSkill(3) as Boss_Genesis;
 
             float tmpX = boss.transform.position.x;
             float tmpY = boss.transform.position.y;

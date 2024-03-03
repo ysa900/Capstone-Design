@@ -2,12 +2,9 @@
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
-public class Boss_Bullet : Object
+public class Boss_Bullet : BossSkill, IPullingObject
 {
-    public Player player;
     public Transform target;
-
-    public float damage = 10f;
 
     bool isDead;
     bool isOnLeftSide;
@@ -20,19 +17,34 @@ public class Boss_Bullet : Object
     Animator animator;
     Rigidbody2D rigid; // 물리 입력을 받기위한 변수
     SpriteRenderer spriteRenderer;
+
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+        rigid = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
     private void Start()
     {
+        damage = 10f;
+
         Init();
     }
 
-    private void Init()
+    public new void Init()
     {
         if (!(GameManager.instance.boss == null))
         {
-            bool isBossLookLeft = GameManager.instance.boss.isBossLookLeft;
+            isDead = false;
+            aliveTimer = 0f;
+            rigid.constraints = RigidbodyConstraints2D.None;
+            GetComponent<CapsuleCollider2D>().enabled = true;
 
-            float bulletX = GameManager.instance.boss.transform.position.x;
-            float bulletY = GameManager.instance.boss.transform.position.y;
+            bool isBossLookLeft = boss.isBossLookLeft;
+
+            float bulletX = boss.transform.position.x;
+            float bulletY = boss.transform.position.y;
 
             if (isBossLookLeft)
             {
@@ -49,10 +61,6 @@ public class Boss_Bullet : Object
 
             player = GameManager.instance.player;
             target = player.GetComponent<Transform>();
-
-            animator = GetComponent<Animator>();
-            rigid = GetComponent<Rigidbody2D>();
-            spriteRenderer = GetComponent<SpriteRenderer>();
         }
 
     }
@@ -99,7 +107,7 @@ public class Boss_Bullet : Object
 
         yield return new WaitForSeconds(0.35f); // 지정한 초 만큼 쉬기
 
-        Destroy(gameObject);
+        GameManager.instance.poolManager.ReturnBossSkill(this, index);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

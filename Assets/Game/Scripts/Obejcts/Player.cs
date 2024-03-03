@@ -138,6 +138,9 @@ public class Player : MonoBehaviour, IPlayer
     // 플레이어가 무언가와 충돌하면 데미지를 입는다
     private void OnCollisionStay2D(Collision2D collision)
     {
+        if (collision.gameObject.tag == "Obstacle") // 장애물과 충돌한거면 데미지 안입음 
+            return;
+
         if (!isPlayerDead)
         {
             if (!isPlayerShielded)

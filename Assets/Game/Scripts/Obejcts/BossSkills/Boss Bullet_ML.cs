@@ -4,7 +4,7 @@ using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 
-public class Boss_Bullet_ML : Agent, IPullingObject, IDamageableSkill
+public class Boss_Bullet_ML : Agent, IDamageableSkill
 {
     Player player;
 

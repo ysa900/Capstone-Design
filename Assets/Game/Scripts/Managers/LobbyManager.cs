@@ -6,34 +6,43 @@ public class LobbyManager : MonoBehaviour
 {
     private LobbyAudioManager lobbyAudioManager;
 
-    // gameStart ¹öÆ°
+    // gameStart ï¿½ï¿½Æ°
     public UnityEngine.UI.Button gameStartButtonObject;
 
-    // Character ¹öÆ°
+    // Character ï¿½ï¿½Æ°
     public UnityEngine.UI.Button CharacterButtonObject;
 
-    // Item ¹öÆ°
+    // Item ï¿½ï¿½Æ°
     public UnityEngine.UI.Button ItemButtonObject;
 
-    // Character Page Back ¹öÆ°
+    // Character Page Back ï¿½ï¿½Æ°
     public UnityEngine.UI.Button CharacterPageBackButtonObject;
 
-    // Item Page Back ¹öÆ°
+    // Item Page Back ï¿½ï¿½Æ°
     public UnityEngine.UI.Button ItemPageBackButtonObject;
 
-    // Exit ¹öÆ°
+    // Setting Page Back ë²„íŠ¼
+    public UnityEngine.UI.Button SettingPageBackButtonObject;
+
+    // Exit ï¿½ï¿½Æ°
     public UnityEngine.UI.Button ExitButtonObject;
 
-    // Character Page ¿ÀºêÁ§Æ®
+    // Option ë²„íŠ¼
+    public UnityEngine.UI.Button OptionButtonObject;
+
+    // Character Page ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
     public GameObject CharacterPage;
 
-    // Item Page ¿ÀºêÁ§Æ®
+    // Item Page ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
     public GameObject ItemPage;
 
-    // Ä³¸¯ÅÍ ¼±ÅÃ ¹× ½ºÅä¸® ÆÐ³Î
+    // Setting Page
+    public GameObject SettingPage;
+
+    // Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ä¸® ï¿½Ð³ï¿½
     public GameObject CharacterExplainGroup;
 
-    // Ä³¸¯ÅÍ ¼±ÅÃ
+    // Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public GameObject SelectAssassin; // Assasin
     public GameObject SelectMage; // Mage
     public GameObject SelectWarrior; // Warrior
@@ -45,96 +54,111 @@ public class LobbyManager : MonoBehaviour
 
     private void Start()
     {
-        lobbyAudioManager.PlayBGM(true);
-        // ½ÃÀÛ ½Ã ºñÈ°¼ºÈ­
+        //lobbyAudioManager.PlayBGM(true);
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½È°ï¿½ï¿½È­
         CharacterPage.SetActive(false);
         ItemPage.SetActive(false);
 
-        // Restart ¹öÆ° ´­·¶À» ¶§
+        // Restart ï¿½ï¿½Æ° ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
         UnityEngine.UI.Button gameStartButton = gameStartButtonObject.GetComponent<UnityEngine.UI.Button>();
         gameStartButton.onClick.AddListener(GameStartButtonClicked);
 
-        // Exit ¹öÆ° ´­·¶À» ¶§
+        // Exit ï¿½ï¿½Æ° ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
         UnityEngine.UI.Button exitButton = ExitButtonObject.GetComponent<UnityEngine.UI.Button>();
         exitButton.onClick.AddListener(ExitButtonClicked);
 
-        // Character ¹öÆ° ´­·¶À» ¶§
+        // Character ï¿½ï¿½Æ° ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
         UnityEngine.UI.Button CharacterButton = CharacterButtonObject.GetComponent<UnityEngine.UI.Button>();
         CharacterButton.onClick.AddListener(CharacterButtonClicked);
 
-        // Item ¹öÆ° ´­·¶À» ¶§
+        // Item ï¿½ï¿½Æ° ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
         UnityEngine.UI.Button AbilityButton = ItemButtonObject.GetComponent<UnityEngine.UI.Button>();
         AbilityButton.onClick.AddListener(AbilityButtonClicked);
 
-        // Character Page µÚ·Î°¡±â ¹öÆ° ´­·¶À» ¶§
+        // Character Page ï¿½Ú·Î°ï¿½ï¿½ï¿½ ï¿½ï¿½Æ° ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
         UnityEngine.UI.Button CharacterPageBackButton = CharacterPageBackButtonObject.GetComponent<UnityEngine.UI.Button>();
         CharacterPageBackButton.onClick.AddListener(CBackButtonClicked);
 
-        // Item Page µÚ·Î°¡±â ¹öÆ° ´­·¶À» ¶§
+        // Item Page ï¿½Ú·Î°ï¿½ï¿½ï¿½ ï¿½ï¿½Æ° ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
         UnityEngine.UI.Button ItemPageBackButton = ItemPageBackButtonObject.GetComponent<UnityEngine.UI.Button>();
         ItemPageBackButton.onClick.AddListener(ItemPageBackButtonClicked);
 
-        // Mage ¼±ÅÃ ½Ã
+        // 
+
+        // Option ë²„íŠ¼ ì´ˆê¸°í™”
+        UnityEngine.UI.Button OptionButton = OptionButtonObject.GetComponent<UnityEngine.UI.Button>();
+        OptionButton.onClick.AddListener(OptionButtonClicked);
+
+        // Mage ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
         UnityEngine.UI.Button SelectMageButton = SelectMage.GetComponent<UnityEngine.UI.Button>();
         SelectMageButton.onClick.AddListener(SelectMageButtonClicked);
     }
 
-    // Exit ¹öÆ° Å¬¸¯½Ã
+    // Exit ï¿½ï¿½Æ° Å¬ï¿½ï¿½ï¿½ï¿½
     private void ExitButtonClicked()
     {
-        lobbyAudioManager.PlaySfx(LobbyAudioManager.Sfx.Select); // ¹öÆ° Å¬¸¯ ½Ã È¿°úÀ½
+        //lobbyAudioManager.PlaySfx(LobbyAudioManager.Sfx.Select); // ï¿½ï¿½Æ° Å¬ï¿½ï¿½ ï¿½ï¿½ È¿ï¿½ï¿½ï¿½ï¿½
 
-        // À¯´ÏÆ¼ ¿¡µðÅÍ¿¡¼­ °ÔÀÓ ÇÃ·¹ÀÌ Á¾·á À§ÇÑ #if Å°¿öµå »ç¿ë
+        // ï¿½ï¿½ï¿½ï¿½Æ¼ ï¿½ï¿½ï¿½ï¿½ï¿½Í¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ #if Å°ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
         #else
-        Application.Quit(); // °ÔÀÓ Á¾·á
+        Application.Quit(); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         #endif
     }
     
-    // Mage ¼±ÅÃ½Ã
+    // Mage ï¿½ï¿½ï¿½Ã½ï¿½
     private void SelectMageButtonClicked()
     {
-        lobbyAudioManager.PlaySfx(LobbyAudioManager.Sfx.Select); // ¹öÆ° Å¬¸¯ ½Ã È¿°úÀ½
+        //lobbyAudioManager.PlaySfx(LobbyAudioManager.Sfx.Select); // ï¿½ï¿½Æ° Å¬ï¿½ï¿½ ï¿½ï¿½ È¿ï¿½ï¿½ï¿½ï¿½
         CharacterExplainGroup.SetActive(true);
-        // GameStart ¹öÆ° È°¼ºÈ­ ??
+        // GameStart ï¿½ï¿½Æ° È°ï¿½ï¿½È­ ??
 
     }
 
-    // GameStart ¹öÆ° Å¬¸¯½Ã
+    // GameStart ï¿½ï¿½Æ° Å¬ï¿½ï¿½ï¿½ï¿½
     private void GameStartButtonClicked()
     {
-        lobbyAudioManager.PlaySfx(LobbyAudioManager.Sfx.Select); // ¹öÆ° Å¬¸¯ ½Ã È¿°úÀ½
-        SceneManager.LoadScene("Game"); // Game ¾À ºÒ·¯¿À±â
+        //lobbyAudioManager.PlaySfx(LobbyAudioManager.Sfx.Select); // ï¿½ï¿½Æ° Å¬ï¿½ï¿½ ï¿½ï¿½ È¿ï¿½ï¿½ï¿½ï¿½
+        SceneManager.LoadScene("Game"); // Game ï¿½ï¿½ ï¿½Ò·ï¿½ï¿½ï¿½ï¿½ï¿½
     }
 
-    // Character ¹öÆ° Å¬¸¯½Ã
+    // Character ï¿½ï¿½Æ° Å¬ï¿½ï¿½ï¿½ï¿½
     private void CharacterButtonClicked()
     {
-        lobbyAudioManager.PlaySfx(LobbyAudioManager.Sfx.Select); // ¹öÆ° Å¬¸¯ ½Ã È¿°úÀ½
+        //lobbyAudioManager.PlaySfx(LobbyAudioManager.Sfx.Select); // ï¿½ï¿½Æ° Å¬ï¿½ï¿½ ï¿½ï¿½ È¿ï¿½ï¿½ï¿½ï¿½
         CharacterPage.SetActive(true);
         CharacterExplainGroup.SetActive(false);
-        // GameStart ¹öÆ° ºñÈ°¼ºÈ­ ??
+        // GameStart ï¿½ï¿½Æ° ï¿½ï¿½È°ï¿½ï¿½È­ ??
     }
 
-    // Item ¹öÆ° Å¬¸¯½Ã
+    // Item ï¿½ï¿½Æ° Å¬ï¿½ï¿½ï¿½ï¿½
     private void AbilityButtonClicked()
     {
-        lobbyAudioManager.PlaySfx(LobbyAudioManager.Sfx.Select);
+        //lobbyAudioManager.PlaySfx(LobbyAudioManager.Sfx.Select);
         ItemPage.SetActive(true);
     }
 
-    // Character Page µÚ·Î°¡±â ¹öÆ° Å¬¸¯½Ã
+    // Character Page ï¿½Ú·Î°ï¿½ï¿½ï¿½ ï¿½ï¿½Æ° Å¬ï¿½ï¿½ï¿½ï¿½
     private void CBackButtonClicked()
     {
-        lobbyAudioManager.PlaySfx(LobbyAudioManager.Sfx.Select); 
+        //lobbyAudioManager.PlaySfx(LobbyAudioManager.Sfx.Select); 
         CharacterPage.SetActive(false);
     }
 
-    // Item page µÚ·Î°¡±â ¹öÆ° Å¬¸¯½Ã
+    // Item page ï¿½Ú·Î°ï¿½ï¿½ï¿½ ï¿½ï¿½Æ° Å¬ï¿½ï¿½ï¿½ï¿½
     private void ItemPageBackButtonClicked()
     {
-        lobbyAudioManager.PlaySfx(LobbyAudioManager.Sfx.Select);
+        //lobbyAudioManager.PlaySfx(LobbyAudioManager.Sfx.Select);
         ItemPage.SetActive(false);
+    }
+
+    private void OptionButtonClicked()
+    {
+        //lobbyAudioManager.PlaySfx(LobbyAudioManager.Sfx.Select);
+        SettingPage.SetActive(true);
+        CharacterButtonObject.enabled = !CharacterButtonObject.enabled; // CharacterButton ë¹„í™œì„±
+
+        
     }
 }
