@@ -19,6 +19,7 @@ public class SkillManager : MonoBehaviour
     public Boss boss;
 
     public SkillData2 skillData;
+    public SkillData2 passiveSkillData;
 
     private bool isShadowAlive; // 그림자가 살아있으면 알파값을 조정하기 위함
     private float alpha = 0;
@@ -87,10 +88,8 @@ public class SkillManager : MonoBehaviour
     {
         gameAudioManager = FindAnyObjectByType<GameAudioManager>();
 
-        for (int i = 0; i < skillData.level.Length; i++)
-        {
-            skillData.level[i] = 0;
-        }
+        // Skill Data 초기화
+        for (int i = 0; i < skillData.level.Length; i++) { skillData.level[i] = 0; }
 
         skillData.Damage[0] = 30f;
         skillData.Damage[1] = 20f;
@@ -131,10 +130,18 @@ public class SkillManager : MonoBehaviour
         skillData.scale[10] = 1.5f;
         skillData.scale[11] = 1.5f;
 
-        for (int i = 0; i < skillData.skillSelected.Length; i++)
-        {
-            skillData.skillSelected[i] = false;
-        }
+        for (int i = 0; i < skillData.skillSelected.Length; i++) { skillData.skillSelected[i] = false; }
+
+        // Passive Skill Data 초기화
+        for (int i = 0; i < passiveSkillData.level.Length; i++) { passiveSkillData.level[i] = 0; }
+
+        passiveSkillData.Damage[0] = 1f;
+        passiveSkillData.Damage[1] = 1f;
+        passiveSkillData.Damage[2] = 1f;
+        passiveSkillData.Damage[3] = 1f;
+        passiveSkillData.Damage[4] = 1f;
+        passiveSkillData.Damage[5] = 1f;
+        for (int i = 0; i < passiveSkillData.skillSelected.Length; i++) { passiveSkillData.skillSelected[i] = false; }
     }
 
     // 시작 스킬을 선택하는 함수 (개발용)

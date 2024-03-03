@@ -125,7 +125,7 @@ public class GameManager : MonoBehaviour
         bossManager.onBossHasKilled = OnBossHasKilled;
 
         //gameTime = maxGameTime;
-        //player.isPlayerShielded = true;
+        player.isPlayerShielded = true;
         //player.level = 20;
     }
 
