@@ -2657,8 +2657,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Item
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: cf3c68e01418178408fe2df216db0215, type: 2}
-  m_sharedMaterial: {fileID: 128062771252624904, guid: cf3c68e01418178408fe2df216db0215, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b478b6ef737064c3fa5157479c9a2c25, type: 2}
+  m_sharedMaterial: {fileID: -1791730566149748383, guid: b478b6ef737064c3fa5157479c9a2c25, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -9883,22 +9883,6 @@ MonoBehaviour:
   m_MusicMasterSlider: {fileID: 1990545970}
   m_MusicBGMSlider: {fileID: 1528205573}
   m_MusicSFXSlider: {fileID: 198988682}
-  bgmClip: {fileID: 8300000, guid: 634a3d18acbf59d42885a3d357a7c8c2, type: 3}
-  bgmVolume: 0
-  sfxClips:
-  - {fileID: 8300000, guid: 4d9fd255977d4a94da1fc16ff5dc6ab0, type: 3}
-  - {fileID: 8300000, guid: 6495457deb5e1b34484842e18ea851a2, type: 3}
-  - {fileID: 8300000, guid: b9f97782785ced1439bbc1855dedc4c5, type: 3}
-  - {fileID: 8300000, guid: bba43d7789cc6db41954528893278f62, type: 3}
-  - {fileID: 8300000, guid: 2a9d412a78bc23c449ac776b0e3cea6f, type: 3}
-  - {fileID: 8300000, guid: 4f59cf4ac93b9e94e9f24d0571f7bc89, type: 3}
-  - {fileID: 8300000, guid: f259b4252b3edb348ae31091535c5d7f, type: 3}
-  - {fileID: 8300000, guid: 4c1f0530ede2bd04bbafb53a3ec164d9, type: 3}
-  - {fileID: 8300000, guid: 1ff77c53034af2e419061fdd0fee3ebe, type: 3}
-  - {fileID: 8300000, guid: e92e7b0aad95fc541bcc6979b3f5e35f, type: 3}
-  - {fileID: 8300000, guid: 3d87ffc08ea64834882e9031301a16ef, type: 3}
-  SfxVolume: 0
-  channels: 2
 --- !u!4 &1863497826
 Transform:
   m_ObjectHideFlags: 0
@@ -10263,8 +10247,8 @@ MonoBehaviour:
 
 '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: cf3c68e01418178408fe2df216db0215, type: 2}
-  m_sharedMaterial: {fileID: 128062771252624904, guid: cf3c68e01418178408fe2df216db0215, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b478b6ef737064c3fa5157479c9a2c25, type: 2}
+  m_sharedMaterial: {fileID: -1791730566149748383, guid: b478b6ef737064c3fa5157479c9a2c25, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -10419,6 +10403,7 @@ MonoBehaviour:
   ItemButtonObject: {fileID: 1499602626}
   CharacterPageBackButtonObject: {fileID: 815627648}
   ItemPageBackButtonObject: {fileID: 1142962510}
+  SettingPageBackButtonObject: {fileID: 1365811826}
   ExitButtonObject: {fileID: 2075031570}
   OptionButtonObject: {fileID: 637307110}
   CharacterPage: {fileID: 1504360538}

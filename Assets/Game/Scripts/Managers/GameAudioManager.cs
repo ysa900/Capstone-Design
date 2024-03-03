@@ -10,23 +10,27 @@ public class GameAudioManager : MonoBehaviour
 
     // BGM
     [Header("#BGM")]
-    public AudioClip[] bgmClips; // BGM °ü·Ã Å¬¸³ ¹è¿­
-    public float bgmVolume; // BGM °ü·Ã º¼·ı
-    AudioSource[] bgmPlayers; // BGM °ü·Ã ¿Àµğ¿À¼Ò½º
+    public AudioClip[] bgmClips; // BGM ê´€ë ¨ í´ë¦½ ë°°ì—´
+    public float bgmVolume; // BGM ê´€ë ¨ ë³¼ë¥¨
+    AudioSource[] bgmPlayers; // BGM ê´€ë ¨ ì˜¤ë””ì˜¤ì†ŒìŠ¤
     AudioHighPassFilter bgmEffect;
 
-    // SFX(È¿°úÀ½)
+    // SFX(íš¨ê³¼ìŒ)
     [Header("#SFX")]
-    public AudioClip[] sfxClips; // SFX °ü·Ã Å¬¸³ ¹è¿­
-    public float SfxVolume; // SFX °ü·Ã º¼·ı
-    // ¿Àµğ¿À Ã¤³Î ½Ã½ºÅÛ
-    public int channels; // ´Ù·®ÀÇ È¿°úÀ½À» ³»±â À§ÇØ Ã¤³Î °³¼ö ¹è¿­ ¼±¾ğ
-    int channelIndex; // Ã¤³Î ÀÎµ¦½º
-    AudioSource[] sfxPlayers; // BGM °ü·Ã ¿Àµğ¿À¼Ò½º
+    public AudioClip[] sfxClips; // SFX ê´€ë ¨ í´ë¦½ ë°°ì—´
+    public float SfxVolume; // SFX ê´€ë ¨ ë³¼ë¥¨
 
-    // ¿Àµğ¿À °ãÄ§ Çö»ó ÇØ°á À§ÇÑ ÄÚµå(º¯¼ö), º¸·ù
+    // ì˜¤ë””ì˜¤ ì±„ë„ ì‹œìŠ¤í…œ
+    public int channels; // ë‹¤ëŸ‰ì˜ íš¨ê³¼ìŒì„ ë‚´ê¸° ìœ„í•´ ì±„ë„ ê°œìˆ˜ ë°°ì—´ ì„ ì–¸
+    int channelIndex; // ì±„ë„ ì¸ë±ìŠ¤
+
+    AudioSource[] sfxPlayers; // BGM ê´€ë ¨ ì˜¤ë””ì˜¤ì†ŒìŠ¤
+
+    /*
+    // ì˜¤ë””ì˜¤ ê²¹ì¹¨ í˜„ìƒ í•´ê²° ìœ„í•œ ì½”ë“œ(ë³€ìˆ˜), ë³´ë¥˜
     private Dictionary<AudioClip, List<float>> soundOneShot = new Dictionary<AudioClip, List<float>>();
-    private int MaxDuplicateOneShotAudioClips = 30; // oneshotÀÌ ÃÖ´ë °ãÃ³¼­ Àç»ıµÉ¼ö ÀÕ´Â ¼ö
+    private int MaxDuplicateOneShotAudioClips = 30; // oneshotì´ ìµœëŒ€ ê²¹ì²˜ì„œ ì¬ìƒë ìˆ˜ ì‡ëŠ” ìˆ˜
+    */
 
     public enum Sfx { Dead, Hit, LevelUp=3, Lose, Melee, Range=7, Select, Win }
 
@@ -38,28 +42,28 @@ public class GameAudioManager : MonoBehaviour
 
     private void Init()
     {
-        // ¹è°æÀ½ ÇÃ·¹ÀÌ¾î ÃÊ±âÈ­
+        // ë°°ê²½ìŒ í”Œë ˆì´ì–´ ì´ˆê¸°í™”
         GameObject bgmObject = new GameObject("BgmPlayer");
-        bgmObject.transform.parent = transform; // ¹è°æÀ½À» ´ã´çÇÏ´Â ÀÚ½Ä ¿ÀºêÁ§Æ® »ı¼º
+        bgmObject.transform.parent = transform; // ë°°ê²½ìŒì„ ë‹´ë‹¹í•˜ëŠ” ìì‹ ì˜¤ë¸Œì íŠ¸ ìƒì„±
         bgmPlayers = new AudioSource[2];
 
         bgmPlayers[0] = bgmObject.AddComponent<AudioSource>();
-        bgmPlayers[0].playOnAwake = false; // Game ½ÃÀÛµÇÀÚ¸¶ÀÚ ÄÑÁöÁö ¾Ê°Ô..
-        bgmPlayers[0].loop = true; // BGM ¹«ÇÑ¹İº¹
+        bgmPlayers[0].playOnAwake = false; // Game ì‹œì‘ë˜ìë§ˆì ì¼œì§€ì§€ ì•Šê²Œ..
+        bgmPlayers[0].loop = true; // BGM ë¬´í•œë°˜ë³µ
         bgmPlayers[0].volume = bgmVolume;
         bgmPlayers[0].clip = bgmClips[0];
 
         bgmPlayers[1] = bgmObject.AddComponent<AudioSource>();
-        bgmPlayers[1].playOnAwake = false; // Game ½ÃÀÛµÇÀÚ¸¶ÀÚ ÄÑÁöÁö ¾Ê°Ô..
-        bgmPlayers[1].loop = true; // BGM ¹«ÇÑ¹İº¹
+        bgmPlayers[1].playOnAwake = false; // Game ì‹œì‘ë˜ìë§ˆì ì¼œì§€ì§€ ì•Šê²Œ..
+        bgmPlayers[1].loop = true; // BGM ë¬´í•œë°˜ë³µ
         bgmPlayers[1].volume = bgmVolume;
         bgmPlayers[1].clip = bgmClips[1];
 
         bgmEffect = Camera.main.GetComponent<AudioHighPassFilter>();
 
-        // È¿°úÀ½ ÇÃ·¹ÀÌ¾î ÃÊ±âÈ­
+        // íš¨ê³¼ìŒ í”Œë ˆì´ì–´ ì´ˆê¸°í™”
         GameObject sfxObject = new GameObject("SfxPlayer");
-        sfxObject.transform.parent = transform; // È¿°úÀ½À» ´ã´çÇÏ´Â ÀÚ½Ä ¿ÀºêÁ§Æ® »ı¼º
+        sfxObject.transform.parent = transform; // íš¨ê³¼ìŒì„ ë‹´ë‹¹í•˜ëŠ” ìì‹ ì˜¤ë¸Œì íŠ¸ ìƒì„±
         sfxPlayers = new AudioSource[channels];
 
         for(int index=0; index<sfxPlayers.Length; index++)
@@ -107,19 +111,19 @@ public class GameAudioManager : MonoBehaviour
             channelIndex = loopIndex;
             sfxPlayers[loopIndex].clip = sfxClips[(int)sfx];
             sfxPlayers[loopIndex].Play();
-            // º¸·ù
-            //PlayOneShotSound(sfxPlayers[loopIndex], sfxClips[loopIndex], 0.2f);
+
+            //PlayOneShotSound(sfxPlayers[loopIndex], sfxClips[loopIndex], 0.2f); // ë³´ë¥˜
             break;
         }
     }
 
-
-    // ¿Àµğ¿À °ãÄ§ Çö»ó ÇØ°á À§ÇÑ ÄÚµå(¸Ş¼Òµå), º¸·ù
+    /*
+    // ì˜¤ë””ì˜¤ ê²¹ì¹¨ í˜„ìƒ í•´ê²° ìœ„í•œ ì½”ë“œ(ë©”ì†Œë“œ), ë³´ë¥˜
     void PlayOneShotSound(AudioSource source, AudioClip clip, float volumeScale)
     {
 
-        //ÇØ´ç Å¬¸³´ç Àç»ıµÇ°í ÀÕ´Â »ç¿îµå ¼ö¸¦ °è»êÇÏ±âÀ§ÇØ ¾Æ·¡¿Í°°ÀÌ Ã³¸®ÇÑ´Ù
-        // Àç»ı¼ö°¡ max ¸¸Å­ÀÌ¸é Àç»ı¾ÈÇÑ´Ù
+        // í•´ë‹¹ í´ë¦½ë‹¹ ì¬ìƒë˜ê³  ì‡ëŠ” ì‚¬ìš´ë“œ ìˆ˜ë¥¼ ê³„ì‚°í•˜ê¸°ìœ„í•´ ì•„ë˜ì™€ê°™ì´ ì²˜ë¦¬í•œë‹¤
+        // ì¬ìƒìˆ˜ê°€ max ë§Œí¼ì´ë©´ ì¬ìƒì•ˆí•œë‹¤
         if (!soundOneShot.ContainsKey(clip))
         {
             soundOneShot[clip] = new List<float>() { volumeScale };
@@ -127,7 +131,8 @@ public class GameAudioManager : MonoBehaviour
         else
         {
             int count = soundOneShot[clip].Count;
-            //ÇÑÅ¬¸³´ç ÇöÀç Àç»ı¼ö°¡ ÁöÁ¤ÇÑ °¹¼ö¸¦ ³ÑÀ¸¸é ¸®ÅÏÇÑ´Ù
+
+            //í•œí´ë¦½ë‹¹ í˜„ì¬ ì¬ìƒìˆ˜ê°€ ì§€ì •í•œ ê°¯ìˆ˜ë¥¼ ë„˜ìœ¼ë©´ ë¦¬í„´í•œë‹¤
             if (count == MaxDuplicateOneShotAudioClips) return;
             soundOneShot[clip].Add(volumeScale);
         }
@@ -141,7 +146,7 @@ public class GameAudioManager : MonoBehaviour
 
     private IEnumerator RemoveVolumeFromClip(AudioClip clip, float volume)
     {
-        // Àç»ı ½Ã°£µ¿¾È±â´Ù¸®°í ±×ÈÄ¿¡ ÀúÀåµÈ °ªÀ» Áö¿î´Ù
+        // ì¬ìƒ ì‹œê°„ë™ì•ˆê¸°ë‹¤ë¦¬ê³  ê·¸í›„ì— ì €ì¥ëœ ê°’ì„ ì§€ìš´ë‹¤
         yield return new WaitForSeconds(clip.length);
 
         List<float> volumes;
@@ -150,4 +155,5 @@ public class GameAudioManager : MonoBehaviour
             volumes.Remove(volume);
         }
     }
+    */
 }

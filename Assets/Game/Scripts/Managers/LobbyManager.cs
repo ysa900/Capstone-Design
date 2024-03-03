@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class LobbyManager : MonoBehaviour
 {
@@ -64,8 +63,8 @@ public class LobbyManager : MonoBehaviour
         gameStartButton.onClick.AddListener(GameStartButtonClicked);
 
         // Exit ��ư ������ ��
-        UnityEngine.UI.Button exitButton = ExitButtonObject.GetComponent<UnityEngine.UI.Button>();
-        exitButton.onClick.AddListener(ExitButtonClicked);
+        UnityEngine.UI.Button ExitButton = ExitButtonObject.GetComponent<UnityEngine.UI.Button>();
+        ExitButton.onClick.AddListener(ExitButtonClicked);
 
         // Character ��ư ������ ��
         UnityEngine.UI.Button CharacterButton = CharacterButtonObject.GetComponent<UnityEngine.UI.Button>();
@@ -83,7 +82,9 @@ public class LobbyManager : MonoBehaviour
         UnityEngine.UI.Button ItemPageBackButton = ItemPageBackButtonObject.GetComponent<UnityEngine.UI.Button>();
         ItemPageBackButton.onClick.AddListener(ItemPageBackButtonClicked);
 
-        // 
+        // Option 뒤로가기 버튼 초기화
+        UnityEngine.UI.Button SettingPageBackButton = SettingPageBackButtonObject.GetComponent<UnityEngine.UI.Button>();
+        SettingPageBackButton.onClick.AddListener(SettingPageBackButtonClicked);
 
         // Option 버튼 초기화
         UnityEngine.UI.Button OptionButton = OptionButtonObject.GetComponent<UnityEngine.UI.Button>();
@@ -146,19 +147,32 @@ public class LobbyManager : MonoBehaviour
         CharacterPage.SetActive(false);
     }
 
-    // Item page �ڷΰ��� ��ư Ŭ����
+    // Item Page �ڷΰ��� ��ư Ŭ����
     private void ItemPageBackButtonClicked()
     {
         //lobbyAudioManager.PlaySfx(LobbyAudioManager.Sfx.Select);
         ItemPage.SetActive(false);
     }
 
+    // Option Page 뒤로가기
+    private void SettingPageBackButtonClicked()
+    {
+        //lobbyAudioManager.PlaySfx(LobbyAudioMaßnager.Sfx.Select);
+        SettingPage.SetActive(false);
+
+        // 비활성화했던 버튼들 다시 활성화
+        CharacterButtonObject.interactable = true;
+        ExitButtonObject.interactable = true;
+    }
+
     private void OptionButtonClicked()
     {
         //lobbyAudioManager.PlaySfx(LobbyAudioManager.Sfx.Select);
         SettingPage.SetActive(true);
-        CharacterButtonObject.enabled = !CharacterButtonObject.enabled; // CharacterButton 비활성
 
-        
+        // 다른 버튼들 비활성화
+        CharacterButtonObject.enabled = false; // Character 버튼 비활성화
+        ExitButtonObject.enabled = false; // Exit 버튼 비활성화
+
     }
 }
