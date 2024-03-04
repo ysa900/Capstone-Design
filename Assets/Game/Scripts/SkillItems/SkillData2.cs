@@ -5,7 +5,6 @@
 public class SkillData2 : ScriptableObject
 {
 
-    // Start is called before the first frame update
     [Header("# Main Info")]
     public string[] skillName;
     public string[] skillDescription;

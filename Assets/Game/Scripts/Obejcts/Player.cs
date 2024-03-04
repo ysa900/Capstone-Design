@@ -3,36 +3,36 @@ using UnityEngine;
 
 public class Player : MonoBehaviour, IPlayer
 {
-    // Å°º¸µå ¹æÇâÅ° ÀÔ·ÂÀ» À§ÇÑ º¤ÅÍ
+    // í‚¤ë³´ë“œ ë°©í–¥í‚¤ ì…ë ¥ì„ ìœ„í•œ ë²¡í„°
     public Vector2 inputVec;
 
     [SerializeField]
-    // ÇÃ·¹ÀÌ¾î Á¤º¸
+    // í”Œë ˆì´ì–´ ì •ë³´
     public float speed;
     public float hp;
     public float maxHp = 100;
     public int Exp;
     public int level;
     public int[] nextExp;
-    
-    //Å³ ¼ö
+
+    //í‚¬ ìˆ˜
     public int kill;
 
-    public bool isPlayerDead; // ÇÃ·¹ÀÌ¾î°¡ Á×¾ú´ÂÁö ÆÇº°ÇÏ´Â º¯¼ö
+    public bool isPlayerDead; // í”Œë ˆì´ì–´ê°€ ì£½ì—ˆëŠ”ì§€ íŒë³„í•˜ëŠ” ë³€ìˆ˜
 
-    public bool isPlayerLookLeft; // ÇÃ·¹ÀÌ¾î°¡ º¸°í ÀÖ´Â ¹æÇâÀ» ¾Ë·ÁÁÖ´Â º¯¼ö
+    public bool isPlayerLookLeft; // í”Œë ˆì´ì–´ê°€ ë³´ê³  ìˆëŠ” ë°©í–¥ì„ ì•Œë ¤ì£¼ëŠ” ë³€ìˆ˜
 
-    public bool isPlayerShielded; // ÇÃ·¹ÀÌ¾î°¡ º¸È£¸·ÀÇ º¸È£¸¦ ¹Ş°íÀÖ³Ä
+    public bool isPlayerShielded; // í”Œë ˆì´ì–´ê°€ ë³´í˜¸ë§‰ì˜ ë³´í˜¸ë¥¼ ë°›ê³ ìˆëƒ
 
-    Rigidbody2D rigid; // ¹°¸® ÀÔ·ÂÀ» ¹Ş±âÀ§ÇÑ º¯¼ö
-    SpriteRenderer spriteRenderer; // ÇÃ·¹ÀÌ¾î ¹æÇâÀ» ¹Ù²Ù±â À§ÇØ flipX¸¦ °¡Á®¿À±â À§ÇÑ º¯¼ö
-    Animator animator; // ¾Ö´Ï¸ŞÀÌ¼Ç °ü¸®¸¦ À§ÇÑ º¯¼ö
+    Rigidbody2D rigid; // ë¬¼ë¦¬ ì…ë ¥ì„ ë°›ê¸°ìœ„í•œ ë³€ìˆ˜
+    SpriteRenderer spriteRenderer; // í”Œë ˆì´ì–´ ë°©í–¥ì„ ë°”ê¾¸ê¸° ìœ„í•´ flipXë¥¼ ê°€ì ¸ì˜¤ê¸° ìœ„í•œ ë³€ìˆ˜
+    Animator animator; // ì• ë‹ˆë©”ì´ì…˜ ê´€ë¦¬ë¥¼ ìœ„í•œ ë³€ìˆ˜
 
-    // ÇÃ·¹ÀÌ¾î°¡ Á×¾úÀ» ½Ã GameManager¿¡°Ô ¾Ë·ÁÁÖ±â À§ÇÑ delegate
+    // í”Œë ˆì´ì–´ê°€ ì£½ì—ˆì„ ì‹œ GameManagerì—ê²Œ ì•Œë ¤ì£¼ê¸° ìœ„í•œ delegate
     public delegate void OnPlayerWasKilled(Player player);
     public OnPlayerWasKilled onPlayerWasKilled;
 
-    // ÇÃ·¹ÀÌ¾î°¡ ·¹º§¾÷ ÇßÀ» ¶§ GameManager¿¡°Ô ¾Ë·ÁÁÖ±â À§ÇÑ delegate
+    // í”Œë ˆì´ì–´ê°€ ë ˆë²¨ì—… í–ˆì„ ë•Œ GameManagerì—ê²Œ ì•Œë ¤ì£¼ê¸° ìœ„í•œ delegate
     public delegate void OnPlayerLevelUP();
     public OnPlayerLevelUP onPlayerLevelUP;
 
@@ -45,7 +45,7 @@ public class Player : MonoBehaviour, IPlayer
 
     void Start()
     {
-        // º¯¼ö ÃÊ±âÈ­
+        // ë³€ìˆ˜ ì´ˆê¸°í™”
         rigid = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
@@ -54,7 +54,7 @@ public class Player : MonoBehaviour, IPlayer
         int num = 0;
         for (int i = 0; i < nextExp.Length; i++)
         {
-            if(level >= 30)
+            if (level >= 30)
             {
                 num += 100;
                 nextExp[i] = num;
@@ -73,25 +73,25 @@ public class Player : MonoBehaviour, IPlayer
     // Update is called once per frame
     void Update()
     {
-        ReceiveDirectionInput(); // Å°º¸µå ¹æÇâÅ° ÀÔ·ÂÀ» °¡Á®¿À´Â ÇÔ¼ö
+        ReceiveDirectionInput(); // í‚¤ë³´ë“œ ë°©í–¥í‚¤ ì…ë ¥ì„ ê°€ì ¸ì˜¤ëŠ” í•¨ìˆ˜
     }
 
-    // ¹°¸® ¿¬»ê ÇÁ·¹ÀÓ¸¶´Ù È£ÃâµÇ´Â »ı¸íÁÖ±â ÇÔ¼ö
+    // ë¬¼ë¦¬ ì—°ì‚° í”„ë ˆì„ë§ˆë‹¤ í˜¸ì¶œë˜ëŠ” ìƒëª…ì£¼ê¸° í•¨ìˆ˜
     private void FixedUpdate()
     {
         MovePlayer();
     }
 
-    // ÇÁ·¹ÀÓÀÌ ³¡³ª±â Á÷Àü¿¡ ½ÇÇàµÇ´Â ÇÔ¼ö
+    // í”„ë ˆì„ì´ ëë‚˜ê¸° ì§ì „ì— ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     private void LateUpdate()
     {
-        animator.SetFloat("Speed", inputVec.magnitude); // animatorÀÇ floatÅ¸ÀÔÀÎ º¯¼ö Speed¸¦ inpuVecÀÇ Å©±â¸¸Å­À¸·Î ¼³Á¤ÇÑ´Ù
+        animator.SetFloat("Speed", inputVec.magnitude); // animatorì˜ floatíƒ€ì…ì¸ ë³€ìˆ˜ Speedë¥¼ inpuVecì˜ í¬ê¸°ë§Œí¼ìœ¼ë¡œ ì„¤ì •í•œë‹¤
 
-        isPlayerLookLeft = inputVec.x < 0; // ÇÃ·¹ÀÌ¾î°¡ ¿ŞÂÊÀ» º¸°í ÀÖÀ¸¸é
+        isPlayerLookLeft = inputVec.x < 0; // í”Œë ˆì´ì–´ê°€ ì™¼ìª½ì„ ë³´ê³  ìˆìœ¼ë©´
 
-        if (inputVec.x != 0) // Å°¸¦ ¾È´­·¶À» ¶§´Â ½ÇÇà ¾ÈµÇµµ·Ï ÇÏ±â À§ÇØ inputVec.x°¡ 0ÀÌ ¾Æ´Ñ °æ¿ì¸¸ ½ÇÇàÇÏ°Ô ÇÑ´Ù
+        if (inputVec.x != 0) // í‚¤ë¥¼ ì•ˆëˆŒë €ì„ ë•ŒëŠ” ì‹¤í–‰ ì•ˆë˜ë„ë¡ í•˜ê¸° ìœ„í•´ inputVec.xê°€ 0ì´ ì•„ë‹Œ ê²½ìš°ë§Œ ì‹¤í–‰í•˜ê²Œ í•œë‹¤
         {
-            spriteRenderer.flipX = isPlayerLookLeft; // ÇÃ·¹ÀÌ¾î¸¦ xÃàÀ¸·Î µÚÁı´Â´Ù
+            spriteRenderer.flipX = isPlayerLookLeft; // í”Œë ˆì´ì–´ë¥¼ xì¶•ìœ¼ë¡œ ë’¤ì§‘ëŠ”ë‹¤
         }
         else
         {
@@ -99,46 +99,46 @@ public class Player : MonoBehaviour, IPlayer
         }
     }
 
-    // Å°º¸µå ¹æÇâÅ° ÀÔ·ÂÀ» °¡Á®¿À´Â ÇÔ¼ö
+    // í‚¤ë³´ë“œ ë°©í–¥í‚¤ ì…ë ¥ì„ ê°€ì ¸ì˜¤ëŠ” í•¨ìˆ˜
     private void ReceiveDirectionInput()
     {
-        // ¼öÆò, ¼öÁ÷ ¹æÇâ ÀÔ·ÂÀ» ¹Ş´Â´Ù
-        // inputmanager¿¡ ±âº» ¼³Á¤µÅÀÖ´Ù
-        // GetAxisRaw¸¦ ÇØ¾ß ´õ¿í ¸íÈ®ÇÑ ÄÁÆ®·Ñ °¡´É
+        // ìˆ˜í‰, ìˆ˜ì§ ë°©í–¥ ì…ë ¥ì„ ë°›ëŠ”ë‹¤
+        // inputmanagerì— ê¸°ë³¸ ì„¤ì •ë¼ìˆë‹¤
+        // GetAxisRawë¥¼ í•´ì•¼ ë”ìš± ëª…í™•í•œ ì»¨íŠ¸ë¡¤ ê°€ëŠ¥
         inputVec.x = Input.GetAxisRaw("Horizontal");
         inputVec.y = Input.GetAxisRaw("Vertical");
     }
 
-    // ÇÃ·¹ÀÌ¾î¸¦ ¿òÁ÷ÀÌ´Â ÇÔ¼ö
+    // í”Œë ˆì´ì–´ë¥¼ ì›€ì§ì´ëŠ” í•¨ìˆ˜
     private void MovePlayer()
     {
-        // ÇÃ·¹ÀÌ¾îÀÇ ¹æÇâº¤ÅÍ¸¦ °¡Á®¿Í¼­ ¼Óµµ¸¦ ¼³Á¤
-        // fixedDeltaTimeÀº ¹°¸® ÇÁ·¹ÀÓ ½Ã°£
+        // í”Œë ˆì´ì–´ì˜ ë°©í–¥ë²¡í„°ë¥¼ ê°€ì ¸ì™€ì„œ ì†ë„ë¥¼ ì„¤ì •
+        // fixedDeltaTimeì€ ë¬¼ë¦¬ í”„ë ˆì„ ì‹œê°„
         Vector2 nextVec = inputVec.normalized * speed * Time.fixedDeltaTime;
 
-        // ÀÔ·Â¹ŞÀº ¹æÇâÀ¸·Î ÇÃ·¹ÀÌ¾î À§Ä¡ ¼³Á¤
+        // ì…ë ¥ë°›ì€ ë°©í–¥ìœ¼ë¡œ í”Œë ˆì´ì–´ ìœ„ì¹˜ ì„¤ì •
         rigid.MovePosition(rigid.position + nextVec);
     }
 
-    //player °æÇèÄ¡ È¹µæ ÇÔ¼ö
+    //player ê²½í—˜ì¹˜ íšë“ í•¨ìˆ˜
     public void GetExp(int expAmount)
     {
         Exp += expAmount;
 
         if (Exp >= nextExp[level])
         {
-            onPlayerLevelUP(); // delegate È£Ãâ
-            
+            onPlayerLevelUP(); // delegate í˜¸ì¶œ
+
             level++;
             Exp = 0;
         }
 
     }
 
-    // ÇÃ·¹ÀÌ¾î°¡ ¹«¾ğ°¡¿Í Ãæµ¹ÇÏ¸é µ¥¹ÌÁö¸¦ ÀÔ´Â´Ù
+    // í”Œë ˆì´ì–´ê°€ ë¬´ì–¸ê°€ì™€ ì¶©ëŒí•˜ë©´ ë°ë¯¸ì§€ë¥¼ ì…ëŠ”ë‹¤
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Obstacle") // Àå¾Ö¹°°ú Ãæµ¹ÇÑ°Å¸é µ¥¹ÌÁö ¾ÈÀÔÀ½ 
+        if (collision.gameObject.tag == "Obstacle") // ì¥ì• ë¬¼ê³¼ ì¶©ëŒí•œê±°ë©´ ë°ë¯¸ì§€ ì•ˆì…ìŒ 
             return;
 
         if (!isPlayerDead)
@@ -146,9 +146,9 @@ public class Player : MonoBehaviour, IPlayer
             if (!isPlayerShielded)
             {
                 hp -= Time.deltaTime * 5;
-                gameAudioManager.PlaySfx(GameAudioManager.Sfx.Melee); // ÇÇ°İ  È¿°úÀ½
+                gameAudioManager.PlaySfx(GameAudioManager.Sfx.Melee); // í”¼ê²©  íš¨ê³¼ìŒ
             }
-            
+
             if (hp <= 0)
             {
                 isPlayerDead = true;
@@ -159,7 +159,7 @@ public class Player : MonoBehaviour, IPlayer
 
                 rigid.constraints = RigidbodyConstraints2D.FreezeAll;
 
-                transform.localScale = new Vector3(1.0f, 1.0f, 1.0f); // Á×¾úÀ» ¶§ ³ª¿À´Â ¹¦ºñ Å©±â ¶§¹®¿¡ Å©±â Á¶Á¤ ÇØÁØ °Í
+                transform.localScale = new Vector3(1.0f, 1.0f, 1.0f); // ì£½ì—ˆì„ ë•Œ ë‚˜ì˜¤ëŠ” ë¬˜ë¹„ í¬ê¸° ë•Œë¬¸ì— í¬ê¸° ì¡°ì • í•´ì¤€ ê²ƒ
             }
         }
     }
@@ -171,9 +171,9 @@ public class Player : MonoBehaviour, IPlayer
             if (!isPlayerShielded)
             {
                 hp -= damage;
-                gameAudioManager.PlaySfx(GameAudioManager.Sfx.Melee); // ÇÇ°İ  È¿°úÀ½
+                gameAudioManager.PlaySfx(GameAudioManager.Sfx.Melee); // í”¼ê²©  íš¨ê³¼ìŒ
             }
-            
+
             if (hp <= 0)
             {
                 isPlayerDead = true;
@@ -184,7 +184,7 @@ public class Player : MonoBehaviour, IPlayer
 
                 rigid.constraints = RigidbodyConstraints2D.FreezeAll;
 
-                transform.localScale = new Vector3(1.0f, 1.0f, 1.0f); // Á×¾úÀ» ¶§ ³ª¿À´Â ¹¦ºñ Å©±â ¶§¹®¿¡ Å©±â Á¶Á¤ ÇØÁØ °Í
+                transform.localScale = new Vector3(1.0f, 1.0f, 1.0f); // ì£½ì—ˆì„ ë•Œ ë‚˜ì˜¤ëŠ” ë¬˜ë¹„ í¬ê¸° ë•Œë¬¸ì— í¬ê¸° ì¡°ì • í•´ì¤€ ê²ƒ
             }
         }
     }

@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class HUD : MonoBehaviour
 {
-    // ¥Ÿ∑Á∞‘ µ… µ•¿Ã≈Õ enum¿∏∑Œ º±æ
+    // Îã§Î£®Í≤å Îê† Îç∞Ïù¥ÌÑ∞ enumÏúºÎ°ú ÏÑ†Ïñ∏
     public enum InfoType { Exp, Level, Kill, Time, Hp, HpStatus, BossHP }
     public InfoType type;
 
@@ -14,24 +14,24 @@ public class HUD : MonoBehaviour
 
     void Awake()
     {
-        hpText=GetComponent<Text>();
-        timeText=GetComponent<Text>();
-        myHpSlider=GetComponent<Slider>();
+        hpText = GetComponent<Text>();
+        timeText = GetComponent<Text>();
+        myHpSlider = GetComponent<Slider>();
         bossHPSlider = GetComponent<Slider>();
     }
 
     private void LateUpdate()
     {
-        switch(type)
+        switch (type)
         {
             case InfoType.Exp:
                 float curExp = GameManager.instance.player.Exp;
                 float maxExp = GameManager.instance.player.nextExp[GameManager.instance.player.level];
-                myHpSlider.value = curExp/maxExp;
-                
+                myHpSlider.value = curExp / maxExp;
+
                 break;
             case InfoType.Level:
-                timeText.text = string.Format("Lv.{0:F0}",GameManager.instance.player.level);
+                timeText.text = string.Format("Lv.{0:F0}", GameManager.instance.player.level);
                 break;
 
             case InfoType.Kill:
@@ -43,7 +43,7 @@ public class HUD : MonoBehaviour
                 float maxHp = GameManager.instance.player.maxHp;
 
                 myHpSlider.value = currentHp / maxHp;
-                
+
                 //Debug.Log(currentHp + " " + maxHp);
                 break;
 

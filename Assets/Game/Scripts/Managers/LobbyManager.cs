@@ -5,43 +5,43 @@ public class LobbyManager : MonoBehaviour
 {
     private LobbyAudioManager lobbyAudioManager;
 
-    // gameStart ��ư
+    // gameStart 버튼
     public UnityEngine.UI.Button gameStartButtonObject;
 
-    // Character ��ư
+    // Character 버튼
     public UnityEngine.UI.Button CharacterButtonObject;
 
-    // Item ��ư
+    // Item 버튼
     public UnityEngine.UI.Button ItemButtonObject;
 
-    // Character Page Back ��ư
+    // Character Page Back 버튼
     public UnityEngine.UI.Button CharacterPageBackButtonObject;
 
-    // Item Page Back ��ư
+    // Item Page Back 버튼
     public UnityEngine.UI.Button ItemPageBackButtonObject;
 
     // Setting Page Back 버튼
     public UnityEngine.UI.Button SettingPageBackButtonObject;
 
-    // Exit ��ư
+    // Exit 버튼
     public UnityEngine.UI.Button ExitButtonObject;
 
     // Option 버튼
     public UnityEngine.UI.Button OptionButtonObject;
 
-    // Character Page ������Ʈ
+    // Character Page 오브젝트
     public GameObject CharacterPage;
 
-    // Item Page ������Ʈ
+    // Item Page 오브젝트
     public GameObject ItemPage;
 
-    // Setting Page
+    // Setting Page 오브젝트
     public GameObject SettingPage;
 
-    // ĳ���� ���� �� ���丮 �г�
+    // 캐릭터 선택 및 스토리 패널
     public GameObject CharacterExplainGroup;
 
-    // ĳ���� ����
+    // 캐릭터(3) 선택
     public GameObject SelectAssassin; // Assasin
     public GameObject SelectMage; // Mage
     public GameObject SelectWarrior; // Warrior
@@ -54,107 +54,111 @@ public class LobbyManager : MonoBehaviour
     private void Start()
     {
         //lobbyAudioManager.PlayBGM(true);
-        // ���� �� ��Ȱ��ȭ
+        // 시작 시 비활성화
         CharacterPage.SetActive(false);
         ItemPage.SetActive(false);
 
-        // Restart ��ư ������ ��
+        // Restart 버튼 눌렀을 때
         UnityEngine.UI.Button gameStartButton = gameStartButtonObject.GetComponent<UnityEngine.UI.Button>();
         gameStartButton.onClick.AddListener(GameStartButtonClicked);
 
-        // Exit ��ư ������ ��
+        // Exit 버튼 눌렀을 때
         UnityEngine.UI.Button ExitButton = ExitButtonObject.GetComponent<UnityEngine.UI.Button>();
         ExitButton.onClick.AddListener(ExitButtonClicked);
 
-        // Character ��ư ������ ��
+        // Character 버튼 눌렀을 때
         UnityEngine.UI.Button CharacterButton = CharacterButtonObject.GetComponent<UnityEngine.UI.Button>();
         CharacterButton.onClick.AddListener(CharacterButtonClicked);
 
-        // Item ��ư ������ ��
+        // Item 버튼 눌렀을 때
         UnityEngine.UI.Button AbilityButton = ItemButtonObject.GetComponent<UnityEngine.UI.Button>();
         AbilityButton.onClick.AddListener(AbilityButtonClicked);
 
-        // Character Page �ڷΰ��� ��ư ������ ��
+        // Character Page 뒤로가기 버튼 눌렀을 때
         UnityEngine.UI.Button CharacterPageBackButton = CharacterPageBackButtonObject.GetComponent<UnityEngine.UI.Button>();
         CharacterPageBackButton.onClick.AddListener(CBackButtonClicked);
 
-        // Item Page �ڷΰ��� ��ư ������ ��
+        // Item Page 뒤로가기 버튼 눌렀을 때
         UnityEngine.UI.Button ItemPageBackButton = ItemPageBackButtonObject.GetComponent<UnityEngine.UI.Button>();
         ItemPageBackButton.onClick.AddListener(ItemPageBackButtonClicked);
 
-        // Option 뒤로가기 버튼 초기화
+        // Option 뒤로가기 버튼 눌렀을 때
         UnityEngine.UI.Button SettingPageBackButton = SettingPageBackButtonObject.GetComponent<UnityEngine.UI.Button>();
         SettingPageBackButton.onClick.AddListener(SettingPageBackButtonClicked);
 
-        // Option 버튼 초기화
+        // Option 버튼 눌렀을 때
         UnityEngine.UI.Button OptionButton = OptionButtonObject.GetComponent<UnityEngine.UI.Button>();
         OptionButton.onClick.AddListener(OptionButtonClicked);
 
-        // Mage ���� ��
+        // 현재 구현 1개 - Mage
+        // Mage 선택 시
         UnityEngine.UI.Button SelectMageButton = SelectMage.GetComponent<UnityEngine.UI.Button>();
         SelectMageButton.onClick.AddListener(SelectMageButtonClicked);
     }
 
-    // Exit ��ư Ŭ����
+    // Exit 버튼 눌렀을 때
     private void ExitButtonClicked()
     {
-        //lobbyAudioManager.PlaySfx(LobbyAudioManager.Sfx.Select); // ��ư Ŭ�� �� ȿ����
+        //lobbyAudioManager.PlaySfx(LobbyAudioManager.Sfx.Select);
 
-        // ����Ƽ �����Ϳ��� ���� �÷��� ���� ���� #if Ű���� ���
+        // 유니티 에디터에서 게임 플레이 종료 위한 #if 키워드 사용
         #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
         #else
-        Application.Quit(); // ���� ����
+        Application.Quit(); // 게임 종
         #endif
     }
     
-    // Mage ���ý�
+    // Mage 선택 시
     private void SelectMageButtonClicked()
     {
-        //lobbyAudioManager.PlaySfx(LobbyAudioManager.Sfx.Select); // ��ư Ŭ�� �� ȿ����
+        //lobbyAudioManager.PlaySfx(LobbyAudioManager.Sfx.Select);
         CharacterExplainGroup.SetActive(true);
-        // GameStart ��ư Ȱ��ȭ ??
 
+        // 추가사항 필요 - GameStart 버튼 활성화
+        gameStartButtonObject.interactable = true;
     }
 
-    // GameStart ��ư Ŭ����
+    // GameStart 버튼 클릭 시
     private void GameStartButtonClicked()
     {
-        //lobbyAudioManager.PlaySfx(LobbyAudioManager.Sfx.Select); // ��ư Ŭ�� �� ȿ����
-        SceneManager.LoadScene("Game"); // Game �� �ҷ�����
+        //lobbyAudioManager.PlaySfx(LobbyAudioManager.Sfx.Select);
+        SceneManager.LoadScene("Game"); // Game 씬 불러오기
     }
 
-    // Character ��ư Ŭ����
+    // Character 버튼 클릭 시
     private void CharacterButtonClicked()
     {
-        //lobbyAudioManager.PlaySfx(LobbyAudioManager.Sfx.Select); // ��ư Ŭ�� �� ȿ����
+        //lobbyAudioManager.PlaySfx(LobbyAudioManager.Sfx.Select);
         CharacterPage.SetActive(true);
         CharacterExplainGroup.SetActive(false);
-        // GameStart ��ư ��Ȱ��ȭ ??
+
+        // 추가사항 - GameStart 버튼 비활성화
+        gameStartButtonObject.interactable = false;
     }
 
-    // Item ��ư Ŭ����
+    // Item 버튼 클릭 시
     private void AbilityButtonClicked()
     {
         //lobbyAudioManager.PlaySfx(LobbyAudioManager.Sfx.Select);
         ItemPage.SetActive(true);
     }
 
-    // Character Page �ڷΰ��� ��ư Ŭ����
+    // Character Page 뒤로가기 버튼 클릭 시
     private void CBackButtonClicked()
     {
         //lobbyAudioManager.PlaySfx(LobbyAudioManager.Sfx.Select); 
         CharacterPage.SetActive(false);
     }
 
-    // Item Page �ڷΰ��� ��ư Ŭ����
+    // Item Page 뒤로가기 버튼 클릭 시
     private void ItemPageBackButtonClicked()
     {
         //lobbyAudioManager.PlaySfx(LobbyAudioManager.Sfx.Select);
         ItemPage.SetActive(false);
     }
 
-    // Option Page 뒤로가기
+    // Option Page 뒤로가기 버튼 클릭 시
     private void SettingPageBackButtonClicked()
     {
         //lobbyAudioManager.PlaySfx(LobbyAudioMaßnager.Sfx.Select);
