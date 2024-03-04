@@ -64,12 +64,12 @@ public class InputManager: MonoBehaviour
         UnityEngine.UI.Button PGoToLobbyButton = PGoToLobbyButtonObject.GetComponent<UnityEngine.UI.Button>();
         PGoToLobbyButton.onClick.AddListener(goToLobbyButtonClicked);
 
-        // Play 버튼 눌렀을 때s
+        // Play 버튼 눌렀을 때
         UnityEngine.UI.Button PlayButton = PlayButtonObject.GetComponent<UnityEngine.UI.Button>();
         PlayButton.onClick.AddListener(PlayButtonClicked);
     }
 
-    // RestartButton이 눌렀을 때
+    // RestartButton이 눌렸을 때
     private void RestartButtonClicked()
     {
         gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 선택 시 효과음
@@ -77,7 +77,7 @@ public class InputManager: MonoBehaviour
         Time.timeScale = 1;
     }
 
-    // goToLobbyButton�� ������ ��
+    // goToLobbyButton이 눌렸을 때
     private void goToLobbyButtonClicked()
     {
         gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 선택 시 효과음
@@ -85,7 +85,7 @@ public class InputManager: MonoBehaviour
         Time.timeScale = 1;
     }
 
-    // PauseButton�� ������ ��
+    // PauseButton이 눌렸을 때
     private void PauseButtonClicked()
     {
         gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 선택 시 효과음

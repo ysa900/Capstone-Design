@@ -165,8 +165,8 @@ public class LobbyManager : MonoBehaviour
         SettingPage.SetActive(false);
 
         // 비활성화했던 버튼들 다시 활성화
-        CharacterButtonObject.interactable = true;
-        ExitButtonObject.interactable = true;
+        CharacterButtonObject.enabled = true;
+        ExitButtonObject.enabled = true;
     }
 
     private void OptionButtonClicked()
