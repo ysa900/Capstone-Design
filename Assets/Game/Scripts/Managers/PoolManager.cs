@@ -8,10 +8,7 @@ public class PoolManager : MonoBehaviour
     const int ENEMY_NUM = 4;
     const int EXP_NUM = 3;
     const int SKILL_NUM = 15; // 불: 0 ~ 6, 전기: 7 ~ 10, 물: 11 ~ 14
-<<<<<<< Updated upstream
-=======
     const int BOSS_SKILL_NUM = 4;
->>>>>>> Stashed changes
 
     // 사용할 클래스 객체들
     public EnemyManager enemyManager;
@@ -21,19 +18,13 @@ public class PoolManager : MonoBehaviour
     public Enemy[] Enemy_prefabs = new Enemy[ENEMY_NUM]; // ENEMY_NUM = 4
     public EXP[] Exp_prefabs = new EXP[EXP_NUM]; // EXP_NUM = 3
     public Skill[] Skill_prefabs = new Skill[SKILL_NUM]; // SKILL_NUM = 15
-<<<<<<< Updated upstream
-=======
     public BossSkill[] Boss_Skill_prefabs = new BossSkill[BOSS_SKILL_NUM]; // BOSS_SKILL_NUM = 4
->>>>>>> Stashed changes
 
     // 풀 담당을 하는 리스트들
     List<Enemy>[] Enemy_pools;
     List<EXP>[] Exp_pools;
     List<Skill>[] Skill_pools;
-<<<<<<< Updated upstream
-=======
     List<BossSkill>[] Boss_Skill_pools;
->>>>>>> Stashed changes
 
     private void Awake()
     {
@@ -56,15 +47,12 @@ public class PoolManager : MonoBehaviour
         for (int index = 0; index < Skill_pools.Length; index++)
         {
             Skill_pools[index] = new List<Skill>();
-<<<<<<< Updated upstream
-=======
         }
 
         Boss_Skill_pools = new List<BossSkill>[Boss_Skill_prefabs.Length];
         for (int index = 0; index < Boss_Skill_prefabs.Length; index++)
         {
             Boss_Skill_pools[index] = new List<BossSkill>();
->>>>>>> Stashed changes
         }
     }
 
@@ -98,11 +86,7 @@ public class PoolManager : MonoBehaviour
 
             enemyManager.SetEnemyInfo(select, player, index);
 
-<<<<<<< Updated upstream
-            select.Init();
-=======
             select.Init(); // 얘는 Init 해줘야됨
->>>>>>> Stashed changes
 
             select.transform.SetParent(this.gameObject.transform.GetChild(0));
             Enemy_pools[index].Add(select);
@@ -158,11 +142,7 @@ public class PoolManager : MonoBehaviour
             // 자기 자신(transform) 추가 이유: hierarchy창 지저분해지는 거 방지
             select = Instantiate(Exp_prefabs[index]);
 
-<<<<<<< Updated upstream
-            select.Init();
-=======
             //select.Init();
->>>>>>> Stashed changes
 
             select.transform.SetParent(this.gameObject.transform.GetChild(1));
             Exp_pools[index].Add(select);
@@ -235,22 +215,14 @@ public class PoolManager : MonoBehaviour
                     select.enemy = target as Enemy;
                 }
                 else if (target is Boss)
-<<<<<<< Updated upstream
-                    select.boss = target as Boss;
-=======
                 {
                     select.boss = target as Boss;
                 }
->>>>>>> Stashed changes
 
                 select.player = player;
                 select.index = index; // return을 위해 index 부여
 
-<<<<<<< Updated upstream
-                select.GetComponent<IPullingObject>().Init();
-=======
                 //select.GetComponent<IPullingObject>().Init();
->>>>>>> Stashed changes
             }
 
             select.transform.SetParent(this.gameObject.transform.GetChild(2));
@@ -295,11 +267,7 @@ public class PoolManager : MonoBehaviour
                 select.player = player;
                 select.index = index; // return을 위해 index 부여
 
-<<<<<<< Updated upstream
-                select.GetComponent<IPullingObject>().Init();
-=======
                 //select.GetComponent<IPullingObject>().Init();
->>>>>>> Stashed changes
             }
 
             select.transform.SetParent(this.gameObject.transform.GetChild(2));
@@ -329,8 +297,6 @@ public class PoolManager : MonoBehaviour
             skill.gameObject.SetActive(false);
         }
     }
-<<<<<<< Updated upstream
-=======
 
     public BossSkill GetBossSkill(int index)
     {
@@ -478,5 +444,4 @@ public class PoolManager : MonoBehaviour
         obj.transform.SetParent(this.gameObject.transform.GetChild(3));
         Boss_Skill_pools[index].Add(obj);
     }
->>>>>>> Stashed changes
 }

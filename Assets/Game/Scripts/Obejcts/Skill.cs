@@ -1,10 +1,6 @@
 ﻿public class Skill : Object, IPullingObject
 {
-<<<<<<< Updated upstream
-    public void Init(){}
-=======
     public void Init() { } // PoolManager때문에 이거 지우면 안됨
->>>>>>> Stashed changes
 
     public Enemy enemy;
     public Boss boss;
