@@ -1,10 +1,13 @@
 fileFormatVersion: 2
-guid: 24773bd69dd911a43a844e3d3abc3144
+guid: c6be6805035a94145a6144228b632d47
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5437184911584266826
-    second: Body_Strengthening_Icon_0
+      213: -4109743668327233128
+    second: Light_Footsteps_Icon_0
+  - first:
+      213: 5261501134426675830
+    second: Light_Footsteps_Icon_1
   externalObjects: {}
   serializedVersion: 12
   mipmaps:
@@ -122,13 +125,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Body_Strengthening_Icon_0
+      name: Light_Footsteps_Icon_0
       rect:
         serializedVersion: 2
         x: 16
-        y: 2
-        width: 270
-        height: 275
+        y: 103
+        width: 268
+        height: 146
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -136,8 +139,29 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a4a0811aed2c47b40800000000000000
-      internalID: 5437184911584266826
+      spriteID: 899c17378e147f6c0800000000000000
+      internalID: -4109743668327233128
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Light_Footsteps_Icon_1
+      rect:
+        serializedVersion: 2
+        x: 28
+        y: 49
+        width: 230
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 67a11d6b76b940940800000000000000
+      internalID: 5261501134426675830
       vertices: []
       indices: 
       edges: []
@@ -152,7 +176,9 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Light_Footsteps_Icon_0: -4109743668327233128
+      Light_Footsteps_Icon_1: 5261501134426675830
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

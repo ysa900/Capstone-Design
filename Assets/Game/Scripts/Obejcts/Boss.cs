@@ -12,62 +12,62 @@ public class Boss : Object, IDamageable
     [SerializeField]
     public float hp;
     public float maxHp = 20000;
-    
+
     [SerializeField]
     float degreeSpeed;
 
     public Player player;
 
-    // ½ºÅ³µéÀÌ ÁØºñ µÆ´ÂÁö
+    // ìŠ¤í‚¬ë“¤ì´ ì¤€ë¹„ ëëŠ”ì§€
     bool bulletSkillShouldBeAttack;
     bool laserSkillShouldBeAttack;
     bool gridLaserSkillShouldBeAttack;
     bool genesisSkillShouldBeAttack;
 
-    // ÃÑ¾Ë(ÇØ°ñ) µô·¹ÀÌ
+    // ì´ì•Œ(í•´ê³¨) ë”œë ˆì´
     float bulletAttackDelayTimer = 6f;
     float bulletAttackDelay = 8f;
 
-    // ·¹ÀÌÀú µô·¹ÀÌ
+    // ë ˆì´ì € ë”œë ˆì´
     float laserAttackDelayTimer = 8f;
     float laserAttackDelay = 15f;
 
-    // °İÀÚ ·¹ÀÌÀú µô·¹ÀÌ
+    // ê²©ì ë ˆì´ì € ë”œë ˆì´
     float gridLaserAttackDelayTimer = 18f;
     float gridLaserAttackDelay = 20f;
 
-    // Á¦³×½Ã½º µô·¹ÀÌ
+    // ì œë„¤ì‹œìŠ¤ ë”œë ˆì´
     float genesisAttackDelayTimer = 25f;
     float genesisAttackDelay = 30f;
 
-    bool isAttackNow; // °ø°İ ÁßÀÌ¸é ¿òÁ÷ÀÌÁö ¾Êµµ·Ï ÇÏ±â À§ÇÑ º¯¼ö
-    bool isAttackReady = true; // °ø°İÁß¿£ ´Ù¸¥ °ø°İÀÌ ³ª°¡Áö ¾Êµµ·Ï ÇÏ±â À§ÇÑ º¯¼ö
+    bool isAttackNow; // ê³µê²© ì¤‘ì´ë©´ ì›€ì§ì´ì§€ ì•Šë„ë¡ í•˜ê¸° ìœ„í•œ ë³€ìˆ˜
+    bool isAttackReady = true; // ê³µê²©ì¤‘ì—” ë‹¤ë¥¸ ê³µê²©ì´ ë‚˜ê°€ì§€ ì•Šë„ë¡ í•˜ê¸° ìœ„í•œ ë³€ìˆ˜
 
-    private float colliderOffsetX; // colliderÀÇ offset xÁÂÇ¥
-    private float colliderOffsetY; // colliderÀÇ offset yÁÂÇ¥
+    private float colliderOffsetX; // colliderì˜ offset xì¢Œí‘œ
+    private float colliderOffsetY; // colliderì˜ offset yì¢Œí‘œ
 
     private bool isDead;
 
     private float damageDelay = 4f;
     private float damageDelayTimer = 0;
 
-    public bool isBossLookLeft; // º¸½º°¡ º¸°í ÀÖ´Â ¹æÇâÀ» ¾Ë·ÁÁÖ´Â º¯¼ö
+    public bool isBossLookLeft; // ë³´ìŠ¤ê°€ ë³´ê³  ìˆëŠ” ë°©í–¥ì„ ì•Œë ¤ì£¼ëŠ” ë³€ìˆ˜
 
-    private bool isRanNumDecided; // º¸½º°¡ ÇÃ·¹ÀÌ¾î ÁÖÀ§¸¦ ¾ó¸¶³ª µ¹Áö¸¦ Á¤ÇÏ´Â ranNumÀÌ Á¤ÇØÁ³³Ä
-    private bool isGoingClock; // Áö±İ ½Ã°è¹æÇâÀ¸·Î µ¹°íÀÖ³Ä
-    private float ranNum_End; // ranNum ³¡ À§Ä¡
-    private float degree = Pi / 4; // º¸½ºÀÇ ÇöÀç ¿ø °¢µµ
-    private float radius = 8.5f; // ¿øÀÇ ¹İÁö¸§
-    private float tmpX; // CirleÀ» °è»êÇÒ ¶§ 0,0À» ±âÁØÀ¸·Î »ı°¢ÇÑ X
-    private float tmpY; // CirleÀ» °è»êÇÒ ¶§ 0,0À» ±âÁØÀ¸·Î »ı°¢ÇÑ X
-    
+    private bool isRanNumDecided; // ë³´ìŠ¤ê°€ í”Œë ˆì´ì–´ ì£¼ìœ„ë¥¼ ì–¼ë§ˆë‚˜ ëŒì§€ë¥¼ ì •í•˜ëŠ” ranNumì´ ì •í•´ì¡Œëƒ
+    private bool isGoingClock; // ì§€ê¸ˆ ì‹œê³„ë°©í–¥ìœ¼ë¡œ ëŒê³ ìˆëƒ
+    private float ranNum_End; // ranNum ë ìœ„ì¹˜
+    private float degree = Pi / 4; // ë³´ìŠ¤ì˜ í˜„ì¬ ì› ê°ë„
+    private float radius = 8.5f; // ì›ì˜ ë°˜ì§€ë¦„
+    private float tmpX; // Cirleì„ ê³„ì‚°í•  ë•Œ 0,0ì„ ê¸°ì¤€ìœ¼ë¡œ ìƒê°í•œ X
+    private float tmpY; // Cirleì„ ê³„ì‚°í•  ë•Œ 0,0ì„ ê¸°ì¤€ìœ¼ë¡œ ìƒê°í•œ X
+
     Animator animator;
 
-    // BossManager¿¡°Ô º¸½º°¡ Á×¾ú´Ù°í ¾Ë·ÁÁÖ±â À§ÇÑ Delegate
+    // BossManagerì—ê²Œ ë³´ìŠ¤ê°€ ì£½ì—ˆë‹¤ê³  ì•Œë ¤ì£¼ê¸° ìœ„í•œ Delegate
     public delegate void OnBossDead();
     public OnBossDead onbossDead;
 
-    // BossManager¿¡°Ô ½ºÅ³ »ç¿ëÀ» ¾Ë·ÁÁÖ±â À§ÇÑ Delegateµé
+    // BossManagerì—ê²Œ ìŠ¤í‚¬ ì‚¬ìš©ì„ ì•Œë ¤ì£¼ê¸° ìœ„í•œ Delegateë“¤
     public delegate void OnBossTryBulletAttack();
     public OnBossTryBulletAttack onBossTryBulletAttack;
 
@@ -80,9 +80,9 @@ public class Boss : Object, IDamageable
     public delegate void OnBossTryGenesisAttack();
     public OnBossTryGenesisAttack onBossTryGenesisAttack;
 
-    Rigidbody2D rigid; // ¹°¸® ÀÔ·ÂÀ» ¹Ş±âÀ§ÇÑ º¯¼ö
+    Rigidbody2D rigid; // ë¬¼ë¦¬ ì…ë ¥ì„ ë°›ê¸°ìœ„í•œ ë³€ìˆ˜
     SpriteRenderer spriteRenderer;
-    public CapsuleCollider2D capsuleCollider; // ColliderÀÇ offsetÀ» º¯°æÇÏ±â À§ÇÑ º¯¼ö
+    public CapsuleCollider2D capsuleCollider; // Colliderì˜ offsetì„ ë³€ê²½í•˜ê¸° ìœ„í•œ ë³€ìˆ˜
 
     private void Start()
     {
@@ -91,7 +91,7 @@ public class Boss : Object, IDamageable
         capsuleCollider = GetComponent<CapsuleCollider2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
 
-        colliderOffsetX = capsuleCollider.offset.x; // offset ÃÊ±â°ªÀ» ÀúÀå
+        colliderOffsetX = capsuleCollider.offset.x; // offset ì´ˆê¸°ê°’ì„ ì €ì¥
         colliderOffsetY = capsuleCollider.offset.y;
 
         hp = maxHp;
@@ -99,33 +99,33 @@ public class Boss : Object, IDamageable
 
     private void Update()
     {
-        if(!isDead)
+        if (!isDead)
         {
-            SetBossDirection(); // º¸½º ¹æÇâ ¼³Á¤
+            SetBossDirection(); // ë³´ìŠ¤ ë°©í–¥ ì„¤ì •
 
-            // Bullet °ø°İ
-            bulletSkillShouldBeAttack = bulletAttackDelay < bulletAttackDelayTimer; // °ø°İ ÄğÅ¸ÀÓÀÌ µÆ´ÂÁö È®ÀÎ
+            // Bullet ê³µê²©
+            bulletSkillShouldBeAttack = bulletAttackDelay < bulletAttackDelayTimer; // ê³µê²© ì¿¨íƒ€ì„ì´ ëëŠ”ì§€ í™•ì¸
             if (bulletSkillShouldBeAttack && isAttackReady)
             {
                 bulletAttackDelayTimer = 0;
 
-                TryAttack(0); // ½ºÅ³ ÄğÅ¸ÀÓÀÌ ´Ù µÆÀ¸¸é °ø°İÀ» ½ÃµµÇÑ´Ù
+                TryAttack(0); // ìŠ¤í‚¬ ì¿¨íƒ€ì„ì´ ë‹¤ ëìœ¼ë©´ ê³µê²©ì„ ì‹œë„í•œë‹¤
             }
             else
             {
                 bulletAttackDelayTimer += Time.deltaTime;
             }
 
-            if (hp < maxHp / 100 * 80) // hp°¡ 80ÇÁ·Î ¹Ì¸¸ÀÌ¸é
+            if (hp < maxHp / 100 * 80) // hpê°€ 80í”„ë¡œ ë¯¸ë§Œì´ë©´
             {
-                // gridLaser °ø°İ
-                gridLaserSkillShouldBeAttack = gridLaserAttackDelay < gridLaserAttackDelayTimer; // °ø°İ ÄğÅ¸ÀÓÀÌ µÆ´ÂÁö È®ÀÎ
+                // gridLaser ê³µê²©
+                gridLaserSkillShouldBeAttack = gridLaserAttackDelay < gridLaserAttackDelayTimer; // ê³µê²© ì¿¨íƒ€ì„ì´ ëëŠ”ì§€ í™•ì¸
 
                 if (gridLaserSkillShouldBeAttack && isAttackReady)
                 {
                     gridLaserAttackDelayTimer = 0;
 
-                    TryAttack(3); // ½ºÅ³ ÄğÅ¸ÀÓÀÌ ´Ù µÆÀ¸¸é °ø°İÀ» ½ÃµµÇÑ´Ù
+                    TryAttack(3); // ìŠ¤í‚¬ ì¿¨íƒ€ì„ì´ ë‹¤ ëìœ¼ë©´ ê³µê²©ì„ ì‹œë„í•œë‹¤
                 }
                 else
                 {
@@ -133,32 +133,32 @@ public class Boss : Object, IDamageable
                 }
             }
 
-            if (hp >= maxHp / 100 * 50) // hp°¡ 50% ÀÌ»óÀÌ¸é
+            if (hp >= maxHp / 100 * 50) // hpê°€ 50% ì´ìƒì´ë©´
             {
-                // Laser °ø°İ
-                laserSkillShouldBeAttack = laserAttackDelay < laserAttackDelayTimer; // °ø°İ ÄğÅ¸ÀÓÀÌ µÆ´ÂÁö È®ÀÎ
+                // Laser ê³µê²©
+                laserSkillShouldBeAttack = laserAttackDelay < laserAttackDelayTimer; // ê³µê²© ì¿¨íƒ€ì„ì´ ëëŠ”ì§€ í™•ì¸
 
                 if (laserSkillShouldBeAttack && isAttackReady)
                 {
                     laserAttackDelayTimer = 0;
 
-                    TryAttack(1); // ½ºÅ³ ÄğÅ¸ÀÓÀÌ ´Ù µÆÀ¸¸é °ø°İÀ» ½ÃµµÇÑ´Ù
+                    TryAttack(1); // ìŠ¤í‚¬ ì¿¨íƒ€ì„ì´ ë‹¤ ëìœ¼ë©´ ê³µê²©ì„ ì‹œë„í•œë‹¤
                 }
                 else
                 {
                     laserAttackDelayTimer += Time.deltaTime;
                 }
             }
-            else // hp°¡ 50% ¹Ì¸¸ÀÌ¸é
+            else // hpê°€ 50% ë¯¸ë§Œì´ë©´
             {
-                // LaserThree °ø°İ
-                laserSkillShouldBeAttack = laserAttackDelay < laserAttackDelayTimer; // °ø°İ ÄğÅ¸ÀÓÀÌ µÆ´ÂÁö È®ÀÎ
+                // LaserThree ê³µê²©
+                laserSkillShouldBeAttack = laserAttackDelay < laserAttackDelayTimer; // ê³µê²© ì¿¨íƒ€ì„ì´ ëëŠ”ì§€ í™•ì¸
 
                 if (laserSkillShouldBeAttack && isAttackReady)
                 {
                     laserAttackDelayTimer = 0;
 
-                    TryAttack(2); // ½ºÅ³ ÄğÅ¸ÀÓÀÌ ´Ù µÆÀ¸¸é °ø°İÀ» ½ÃµµÇÑ´Ù
+                    TryAttack(2); // ìŠ¤í‚¬ ì¿¨íƒ€ì„ì´ ë‹¤ ëìœ¼ë©´ ê³µê²©ì„ ì‹œë„í•œë‹¤
                 }
                 else
                 {
@@ -166,16 +166,16 @@ public class Boss : Object, IDamageable
                 }
             }
 
-            if (hp < maxHp / 100 * 30) // hp°¡ 30ÇÁ·Î ¹Ì¸¸ÀÌ¸é
+            if (hp < maxHp / 100 * 30) // hpê°€ 30í”„ë¡œ ë¯¸ë§Œì´ë©´
             {
-                // Genesis °ø°İ
-                genesisSkillShouldBeAttack = genesisAttackDelay < genesisAttackDelayTimer; // °ø°İ ÄğÅ¸ÀÓÀÌ µÆ´ÂÁö È®ÀÎ
+                // Genesis ê³µê²©
+                genesisSkillShouldBeAttack = genesisAttackDelay < genesisAttackDelayTimer; // ê³µê²© ì¿¨íƒ€ì„ì´ ëëŠ”ì§€ í™•ì¸
 
                 if (genesisSkillShouldBeAttack && isAttackReady)
                 {
                     genesisAttackDelayTimer = 0;
 
-                    TryAttack(4); // ½ºÅ³ ÄğÅ¸ÀÓÀÌ ´Ù µÆÀ¸¸é °ø°İÀ» ½ÃµµÇÑ´Ù
+                    TryAttack(4); // ìŠ¤í‚¬ ì¿¨íƒ€ì„ì´ ë‹¤ ëìœ¼ë©´ ê³µê²©ì„ ì‹œë„í•œë‹¤
                 }
                 else
                 {
@@ -189,18 +189,18 @@ public class Boss : Object, IDamageable
 
     private void FixedUpdate()
     {
-        if(!isDead && !isAttackNow)
+        if (!isDead && !isAttackNow)
             MoveAroundPlayer();
     }
 
-    // ÇÃ·¹ÀÌ¾î ÁÖÀ§¸¦ µµ´Â ÇÔ¼ö
+    // í”Œë ˆì´ì–´ ì£¼ìœ„ë¥¼ ë„ëŠ” í•¨ìˆ˜
     private void MoveAroundPlayer()
     {
         if (!isRanNumDecided)
         {
             isGoingClock = UnityEngine.Random.Range(0, 2) == 0;
-            
-            if(isGoingClock)
+
+            if (isGoingClock)
                 ranNum_End = degree - UnityEngine.Random.Range(Pi / 180 * 80, Pi / 180 * 271);
             else
                 ranNum_End = degree + UnityEngine.Random.Range(Pi / 180 * 80, Pi / 180 * 271);
@@ -229,7 +229,7 @@ public class Boss : Object, IDamageable
                     isRanNumDecided = false;
                 }
             }
-            
+
             tmpX = (float)Math.Cos(degree) * radius;
             tmpY = (float)Math.Sin(degree) * radius;
 
@@ -238,7 +238,7 @@ public class Boss : Object, IDamageable
         }
 
         if (degree >= Pi * 4)
-            degree %= Pi*2;
+            degree %= Pi * 2;
 
         if (degree <= -Pi * 4)
             degree %= -Pi * 2;
@@ -249,7 +249,7 @@ public class Boss : Object, IDamageable
         isAttackNow = true;
         isAttackReady = false;
 
-        rigid.constraints = RigidbodyConstraints2D.FreezeAll; // ÇÃ·¹ÀÌ¾î°¡ ¹Ğ ¶§ ¹Ğ¸®Áö ¾Ê°Ô ÁÂÇ¥¸¦ °íÁ¤
+        rigid.constraints = RigidbodyConstraints2D.FreezeAll; // í”Œë ˆì´ì–´ê°€ ë°€ ë•Œ ë°€ë¦¬ì§€ ì•Šê²Œ ì¢Œí‘œë¥¼ ê³ ì •
         switch (num)
         {
             case 0:
@@ -285,9 +285,9 @@ public class Boss : Object, IDamageable
 
         spriteRenderer.flipX = isBossLookLeft;
 
-        Vector2 colliderOffset; // CapsuleColliderÀÇ offset¿¡ ³ÖÀ» Vector2
+        Vector2 colliderOffset; // CapsuleColliderì˜ offsetì— ë„£ì„ Vector2
 
-        if (isBossLookLeft) // Enemy°¡ ¿ŞÂÊÀ» º¸¸é colliderµµ xÃà ´ëÄªÀ» ÇØÁØ´Ù
+        if (isBossLookLeft) // Enemyê°€ ì™¼ìª½ì„ ë³´ë©´ colliderë„ xì¶• ëŒ€ì¹­ì„ í•´ì¤€ë‹¤
         {
             colliderOffset = new Vector2(-colliderOffsetX, colliderOffsetY);
         }
@@ -296,13 +296,13 @@ public class Boss : Object, IDamageable
             colliderOffset = new Vector2(colliderOffsetX, colliderOffsetY);
 
         }
-        capsuleCollider.offset = colliderOffset; // capsuleCollider¿¡ Àû¿ë
+        capsuleCollider.offset = colliderOffset; // capsuleColliderì— ì ìš©
     }
 
     IEnumerator CastBullet()
     {
         animator.SetTrigger("Teleport");
-        yield return new WaitForSeconds(0.34f); // ÁöÁ¤ÇÑ ÃÊ ¸¸Å­ ½¬±â
+        yield return new WaitForSeconds(0.34f); // ì§€ì •í•œ ì´ˆ ë§Œí¼ ì‰¬ê¸°
 
         tmpX = (float)Math.Cos(degree) * (radius + 5);
         tmpY = (float)Math.Sin(degree) * (radius + 5);
@@ -312,10 +312,10 @@ public class Boss : Object, IDamageable
 
         animator.SetTrigger("Teleport_arrive");
 
-        yield return new WaitForSeconds(0.34f); // ÁöÁ¤ÇÑ ÃÊ ¸¸Å­ ½¬±â
-        
+        yield return new WaitForSeconds(0.34f); // ì§€ì •í•œ ì´ˆ ë§Œí¼ ì‰¬ê¸°
+
         animator.SetBool("Shoot", true);
-        yield return new WaitForSeconds(0.3f); // ÁöÁ¤ÇÑ ÃÊ ¸¸Å­ ½¬±â
+        yield return new WaitForSeconds(0.3f); // ì§€ì •í•œ ì´ˆ ë§Œí¼ ì‰¬ê¸°
 
         //GameManager.instance.poolManager.Get(0);
         onBossTryBulletAttack();
@@ -327,24 +327,24 @@ public class Boss : Object, IDamageable
 
     IEnumerator CastLaser()
     {
-        yield return new WaitForSeconds(0.75f); // ÁöÁ¤ÇÑ ÃÊ ¸¸Å­ ½¬±â
+        yield return new WaitForSeconds(0.75f); // ì§€ì •í•œ ì´ˆ ë§Œí¼ ì‰¬ê¸°
 
         onBossTryLaserAttack(0f);
 
-        yield return new WaitForSeconds(3.2f); // ÁöÁ¤ÇÑ ÃÊ ¸¸Å­ ½¬±â
+        yield return new WaitForSeconds(3.2f); // ì§€ì •í•œ ì´ˆ ë§Œí¼ ì‰¬ê¸°
 
         StartCoroutine(TelePort());
     }
 
     IEnumerator CastLaserThree()
     {
-        yield return new WaitForSeconds(1.5f); // ÁöÁ¤ÇÑ ÃÊ ¸¸Å­ ½¬±â
+        yield return new WaitForSeconds(1.5f); // ì§€ì •í•œ ì´ˆ ë§Œí¼ ì‰¬ê¸°
 
         onBossTryLaserAttack(30f);
         onBossTryLaserAttack(0f);
         onBossTryLaserAttack(-30f);
 
-        yield return new WaitForSeconds(3.2f); // ÁöÁ¤ÇÑ ÃÊ ¸¸Å­ ½¬±â
+        yield return new WaitForSeconds(3.2f); // ì§€ì •í•œ ì´ˆ ë§Œí¼ ì‰¬ê¸°
 
         StartCoroutine(TelePort());
     }
@@ -377,7 +377,7 @@ public class Boss : Object, IDamageable
             tmpY += root2 * 4;
         }
 
-        yield return new WaitForSeconds(1.6f); // ÁöÁ¤ÇÑ ÃÊ ¸¸Å­ ½¬±â
+        yield return new WaitForSeconds(1.6f); // ì§€ì •í•œ ì´ˆ ë§Œí¼ ì‰¬ê¸°
 
         animator.SetBool("Genesis_Stay", false);
 
@@ -388,11 +388,11 @@ public class Boss : Object, IDamageable
     {
         animator.SetTrigger("Genesis");
         animator.SetBool("Genesis_Stay", true);
-        yield return new WaitForSeconds(1.5f); // ÁöÁ¤ÇÑ ÃÊ ¸¸Å­ ½¬±â
-        
+        yield return new WaitForSeconds(1.5f); // ì§€ì •í•œ ì´ˆ ë§Œí¼ ì‰¬ê¸°
+
         onBossTryGenesisAttack();
 
-        yield return new WaitForSeconds(2.5f); // ÁöÁ¤ÇÑ ÃÊ ¸¸Å­ ½¬±â
+        yield return new WaitForSeconds(2.5f); // ì§€ì •í•œ ì´ˆ ë§Œí¼ ì‰¬ê¸°
         animator.SetBool("Genesis_Stay", false);
 
         StartCoroutine(TelePort());
@@ -401,25 +401,25 @@ public class Boss : Object, IDamageable
     IEnumerator TelePort()
     {
         animator.SetTrigger("Teleport");
-        yield return new WaitForSeconds(0.34f); // ÁöÁ¤ÇÑ ÃÊ ¸¸Å­ ½¬±â
+        yield return new WaitForSeconds(0.34f); // ì§€ì •í•œ ì´ˆ ë§Œí¼ ì‰¬ê¸°
 
-        rigid.constraints = RigidbodyConstraints2D.FreezeRotation; // ÁÂÇ¥ °íÁ¤Àº Ç®µÇ, È¸ÀüÀº ¸øÇÏ°Ô
+        rigid.constraints = RigidbodyConstraints2D.FreezeRotation; // ì¢Œí‘œ ê³ ì •ì€ í’€ë˜, íšŒì „ì€ ëª»í•˜ê²Œ
         isAttackNow = false;
 
-        yield return new WaitForSeconds(0.02f); // ÁöÁ¤ÇÑ ÃÊ ¸¸Å­ ½¬±â
+        yield return new WaitForSeconds(0.02f); // ì§€ì •í•œ ì´ˆ ë§Œí¼ ì‰¬ê¸°
 
         isAttackNow = true;
 
         animator.SetTrigger("Teleport_arrive");
 
-        yield return new WaitForSeconds(0.34f); // ÁöÁ¤ÇÑ ÃÊ ¸¸Å­ ½¬±â
+        yield return new WaitForSeconds(0.34f); // ì§€ì •í•œ ì´ˆ ë§Œí¼ ì‰¬ê¸°
 
         isAttackNow = false;
 
         isAttackReady = true;
     }
 
-    // IDamageableÀÇ ÇÔ¼ö TakeDamage
+    // IDamageableì˜ í•¨ìˆ˜ TakeDamage
     public void TakeDamage(GameObject causer, float damage)
     {
         hp = hp - (int)damage;
@@ -432,7 +432,7 @@ public class Boss : Object, IDamageable
         {
             if (damageDelay <= damageDelayTimer)
             {
-                if(!isAttackNow)
+                if (!isAttackNow)
                 {
                     animator.SetTrigger("Hit");
                 }
@@ -445,14 +445,14 @@ public class Boss : Object, IDamageable
     IEnumerator Dead()
     {
         animator.SetTrigger("Dead");
-        //onBossWasKilled(this); // ´ë¸®ÀÚ È£Ãâ
+        //onBossWasKilled(this); // ëŒ€ë¦¬ì í˜¸ì¶œ
 
         rigid.constraints = RigidbodyConstraints2D.FreezeAll;
         GetComponent<CapsuleCollider2D>().enabled = false;
 
         isDead = true;
 
-        yield return new WaitForSeconds(0.5f); // ÁöÁ¤ÇÑ ÃÊ ¸¸Å­ ½¬±â
+        yield return new WaitForSeconds(0.5f); // ì§€ì •í•œ ì´ˆ ë§Œí¼ ì‰¬ê¸°
 
         Destroy(gameObject);
         onbossDead();

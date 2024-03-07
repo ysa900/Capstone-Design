@@ -4,8 +4,8 @@ public class RePositon : MonoBehaviour
 {
     private void OnTriggerExit2D(Collider2D collision)
     {
-        // ÇÃ·¹ÀÌ¾îÀÇ Area¿Í Ãæµ¹À» °¨ÁöÇØ ¹ş¾î³µ´Ù¸é ½ÇÇà
-        // ÇÃ·¹ÀÌ¾î ÇÁ¸®ÆÕ ÇÏÀ§¿¡ Area¶ó´Â°Ô ÀÖÀ½ 
+        // í”Œë ˆì´ì–´ì˜ Areaì™€ ì¶©ëŒì„ ê°ì§€í•´ ë²—ì–´ë‚¬ë‹¤ë©´ ì‹¤í–‰
+        // í”Œë ˆì´ì–´ í”„ë¦¬íŒ¹ í•˜ìœ„ì— Areaë¼ëŠ”ê²Œ ìˆìŒ 
         if (!collision.CompareTag("Area"))
         {
             return;
@@ -17,7 +17,7 @@ public class RePositon : MonoBehaviour
         float diffY = Mathf.Abs(playerPosition.y - myPosition.y);
 
         Vector3 playerDirection = GameManager.instance.player.inputVec;
-        float dirtionX = playerDirection.x < 0 ? -1 : 1; // playerDirectionÀÌ ¸¶ÀÌ³Ê½º¸é -1, ÇÃ·¯½º¸é 1
+        float dirtionX = playerDirection.x < 0 ? -1 : 1; // playerDirectionì´ ë§ˆì´ë„ˆìŠ¤ë©´ -1, í”ŒëŸ¬ìŠ¤ë©´ 1
         float dirtionY = playerDirection.y < 0 ? -1 : 1;
 
         switch (transform.tag)
@@ -25,11 +25,11 @@ public class RePositon : MonoBehaviour
             case "Ground":
                 if(diffX > diffY)
                 {
-                    transform.Translate(Vector3.right * dirtionX * 80); // ¿À¸¥ÂÊ ¹æÇâ * (-1 or 1) * °Å¸®
+                    transform.Translate(Vector3.right * dirtionX * 80); // ì˜¤ë¥¸ìª½ ë°©í–¥ * (-1 or 1) * ê±°ë¦¬
                 }
                 else if(diffX < diffY)
                 {
-                    transform.Translate(Vector3.up * dirtionY * 80);// À­ ¹æÇâ * (-1 or 1) * °Å¸®
+                    transform.Translate(Vector3.up * dirtionY * 80); // ìœ— ë°©í–¥ * (-1 or 1) * ê±°ë¦¬
                 }
                 break;
             case "Enemy":

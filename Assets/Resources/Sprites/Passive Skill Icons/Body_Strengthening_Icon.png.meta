@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 5c0a5fcecc215d841b9374d142af4cbf
+guid: 24773bd69dd911a43a844e3d3abc3144
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5244987416966198153
-    second: Magnet_Icon_0
+      213: 5437184911584266826
+    second: Body_Strengthening_Icon_0
   externalObjects: {}
   serializedVersion: 12
   mipmaps:
@@ -122,13 +122,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Magnet_Icon_0
+      name: Body_Strengthening_Icon_0
       rect:
         serializedVersion: 2
-        x: 3
+        x: 16
         y: 2
-        width: 296
-        height: 289
+        width: 270
+        height: 275
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -136,8 +136,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 77c0650cbbf0637b0800000000000000
-      internalID: -5244987416966198153
+      spriteID: a4a0811aed2c47b40800000000000000
+      internalID: 5437184911584266826
       vertices: []
       indices: 
       edges: []
@@ -152,7 +152,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Body_Strengthening_Icon_0: 5437184911584266826
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

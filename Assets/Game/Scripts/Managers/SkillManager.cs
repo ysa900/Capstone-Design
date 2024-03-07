@@ -52,7 +52,7 @@ public class SkillManager : MonoBehaviour
 
     private void Update()
     {
-        for(int i = 0; i < skillData.Damage.Length; i++)
+        for (int i = 0; i < skillData.Damage.Length; i++)
         {
             if (skillData.skillSelected[i]) // 활성화(선택)된 스킬만 실행
             {
@@ -61,7 +61,7 @@ public class SkillManager : MonoBehaviour
                 {
                     attackDelayTimer[i] = skillData.Delay[i];
 
-                    if(i == 0 || i == 1)
+                    if (i == 0 || i == 1)
                         TryAttack(i); // 스킬 쿨타임이 다 됐으면 공격을 시도한다
                     else
                         CastSkill(i); // 스킬 쿨타임이 다 됐으면 공격한다
@@ -169,7 +169,7 @@ public class SkillManager : MonoBehaviour
                         Vector2 enemyPos = enemy.transform.position;
                         Vector2 playerPos = player.transform.position;
                         float distance = Vector2.Distance(enemyPos, playerPos);
-                        
+
                         bool isInAttackRange = distance <= attackRange; // 적이 사거리 내에 있을때만 공격이 나간다
 
                         if (isInAttackRange)
@@ -190,13 +190,13 @@ public class SkillManager : MonoBehaviour
                         while (true)
                         {
                             int ranNum = UnityEngine.Random.Range(0, enemies.Count);
-                            
+
                             enemy = enemies[ranNum];
-                            
+
                             if (!(enemy == null))
                             {
                                 float distance = Vector2.Distance(enemy.transform.position, player.transform.position);
-                                
+
                                 isInAttackRange = distance <= attackRange; // 적이 사거리 내에 있을때만 공격이 나간다
 
                                 if (isInAttackRange)
@@ -209,7 +209,7 @@ public class SkillManager : MonoBehaviour
                         }
                         if (enemy == null) return; // 적이 없으면 공격 X
 
-                        if(isInAttackRange)
+                        if (isInAttackRange)
                             CastSkill(enemy, index);
 
                         break;
@@ -218,7 +218,7 @@ public class SkillManager : MonoBehaviour
         }
         else
         {
-            if(boss == null) return;
+            if (boss == null) return;
             switch (index)
             {
                 case 0:
@@ -239,12 +239,12 @@ public class SkillManager : MonoBehaviour
                 case 1:
                     {
                         CastSkill(boss, index);
-                        
+
                         break;
                     }
             }
         }
-        
+
     }
 
     // 가장 가까운 Enemy를 찾는 함수
@@ -282,7 +282,7 @@ public class SkillManager : MonoBehaviour
 
                     Vector2 playerPosition = player.transform.position;
                     Vector2 enemyPosition = enemy.transform.position;
-                    
+
                     // 파이퍼볼 방향 보정 (적 바라보게)
                     Vector2 direction = new Vector2(playerPosition.x - enemyPosition.x, playerPosition.y - enemyPosition.y);
                     float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
@@ -290,7 +290,7 @@ public class SkillManager : MonoBehaviour
                     Quaternion angleAxis = Quaternion.AngleAxis(angle + 90f, Vector3.forward);
                     Quaternion rotation = Quaternion.Slerp(enemyTrackingSkill.transform.rotation, angleAxis, 5f);
                     enemyTrackingSkill.transform.rotation = rotation;
-                    
+
                     enemyTrackingSkill.X = playerPosition.x;
                     enemyTrackingSkill.Y = playerPosition.y;
 
@@ -371,7 +371,7 @@ public class SkillManager : MonoBehaviour
                     // 스킬 위치를 보스 실제 위치로 변경
                     enemyOnSkill.X = bossPosition.x;
                     enemyOnSkill.Y = bossPosition.y - boss.capsuleCollider.size.y * 4;
-                    
+
                     enemyOnSkill.isBossAppear = true;
 
                     enemyOnSkill.damage = skillData.Damage[index];
@@ -587,7 +587,7 @@ public class SkillManager : MonoBehaviour
 
                                 if (skillData.level[index] == 5)
                                 {
-                                    playerAttachSkill.xPositionNum = - 4 * 1.5f;
+                                    playerAttachSkill.xPositionNum = -4 * 1.5f;
                                 }
                                 else if (skillData.level[index] >= 3)
                                 {
@@ -620,7 +620,7 @@ public class SkillManager : MonoBehaviour
                                 }
                                 else if (skillData.level[index] >= 3)
                                 {
-                                    playerAttachSkill.xPositionNum =  4 * 1.25f;
+                                    playerAttachSkill.xPositionNum = 4 * 1.25f;
                                 }
                                 else
                                 {
@@ -780,7 +780,7 @@ public class SkillManager : MonoBehaviour
 
         if (skillData.level[4] == 5)
         {
-            for(int i = 0; i < 3; i++)
+            for (int i = 0; i < 3; i++)
             {
                 playerAttachSkill = GameManager.instance.poolManager.GetSkill(8) as PlayerAttachSkill;
 
@@ -808,7 +808,7 @@ public class SkillManager : MonoBehaviour
         }
         else if (skillData.level[4] >= 3)
         {
-            for(int i = 0; i < 2; i++)
+            for (int i = 0; i < 2; i++)
             {
                 playerAttachSkill = GameManager.instance.poolManager.GetSkill(8) as PlayerAttachSkill;
 
@@ -914,7 +914,6 @@ public class SkillManager : MonoBehaviour
 
             yield return new WaitForSeconds(0.2f); // 지정한 초 만큼 쉬기
         }
-        
+
     }
 }
-

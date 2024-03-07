@@ -6,7 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SkillSelectManager: MonoBehaviour
+public class SkillSelectManager : MonoBehaviour
 {
     // 현재 고를 수 있는 스킬 번호 (0 ~ 4 레벨: 5번까지 / 5 ~ 9 레벨: 8번까지 / 10레벨 이상 : 11번까지)
     // 12번은 Blood임
@@ -14,7 +14,7 @@ public class SkillSelectManager: MonoBehaviour
 
     // 패시브 스킬을 3개까지 가지고 있을 수 있음
     private int passiveSkillCount = 19; // 패시브 스킬은 13 ~ 18까지 6개
-    
+
     private GameAudioManager gameAudioManager;
 
     // 스킬 선택 버튼들
@@ -78,7 +78,7 @@ public class SkillSelectManager: MonoBehaviour
     int[] selected_Skills = new int[] { -1, -1, -1, -1, -1, -1 }; // 선택된 스킬 번호가 들어갈 배열
     int selected_Skills_Pointer = 0;
 
-    int[] selected_Passive_Skills = new int[] { -1, -1, -1}; // 선택된 패시브 스킬 번호가 들어갈 배열
+    int[] selected_Passive_Skills = new int[] { -1, -1, -1 }; // 선택된 패시브 스킬 번호가 들어갈 배열
     int selected_Passive_Skills_Pointer = 0;
 
     bool isSkillAllSelected; // 스킬이 전부 선택됐는지 판단하는 변수
@@ -153,7 +153,7 @@ public class SkillSelectManager: MonoBehaviour
             icon.sprite = skillData.skillicon[i];
 
             string color;
-            
+
             if (i % 3 == 0) { color = "#FF0000"; }
             else if (i % 3 == 1) { color = "#D2F7FF"; }
             else { color = "#0000FF"; }
@@ -191,7 +191,7 @@ public class SkillSelectManager: MonoBehaviour
         {
             skillCount = 6;
         }
-        else if(playerLevel <= 10)
+        else if (playerLevel <= 10)
         {
             skillCount = 9;
         }
@@ -208,10 +208,10 @@ public class SkillSelectManager: MonoBehaviour
 
         List<int> list = new List<int>(); // 이 리스트의 숫자들 중에서 랜덤으로 뽑는 것
 
-        if(selected_Skills_Pointer >= 6)
+        if (selected_Skills_Pointer >= 6)
             isSkillAllSelected = true;
 
-        if(selected_Passive_Skills_Pointer >= 3)
+        if (selected_Passive_Skills_Pointer >= 3)
             isPassiveSkillAllSelected = true;
 
         if (!isSkillAllSelected)
@@ -248,7 +248,7 @@ public class SkillSelectManager: MonoBehaviour
             }
         }
 
-        if(list.Count == 2) // 만렙 안찍은 스킬이 2개면 실행
+        if (list.Count == 2) // 만렙 안찍은 스킬이 2개면 실행
         {
             openSkillObject2.SetActive(false);
             closedSkillObject2.SetActive(true);
@@ -262,11 +262,12 @@ public class SkillSelectManager: MonoBehaviour
                 list.RemoveAt(ran);
             }
 
-            for(int i = 0; i < 2; i++)
+            for (int i = 0; i < 2; i++)
             {
                 SetSkillPanel(i);
             }
-        }else if(list.Count == 1) // 만렙 안찍은 스킬이 1개면 실행
+        }
+        else if (list.Count == 1) // 만렙 안찍은 스킬이 1개면 실행
         {
             openSkillObject1.SetActive(false);
             closedSkillObject1.SetActive(true);
@@ -274,7 +275,8 @@ public class SkillSelectManager: MonoBehaviour
             ranNum[1] = list[0];
 
             SetSkillPanel(1);
-        }else if(list.Count == 0) // 스킬 전부 만렙 찍으면 체력 회복하게 함
+        }
+        else if (list.Count == 0) // 스킬 전부 만렙 찍으면 체력 회복하게 함
         {
             isSkillAllMax = true;
             SetSkillPanel(1);
@@ -357,12 +359,12 @@ public class SkillSelectManager: MonoBehaviour
             icon.sprite = passiveSkillData.skillicon[ranNum[i] - 13];
 
             string color;
-            
+
             if (ranNum[i] - 13 == 0) { color = "#F7570B"; }
             else if (ranNum[i] - 13 == 1) { color = "#0EB4FC"; }
             else if (ranNum[i] - 13 == 2) { color = "#79EDFF"; }
             else { color = "#FFFFFF"; }
-            
+
             //color = "#FFFFFF";
 
             textName = skill_TextName[i].GetComponent<TextMeshProUGUI>();
@@ -561,7 +563,7 @@ public class SkillSelectManager: MonoBehaviour
                         isSkillMaxLevel[ranNum[1]] = skillData.level[ranNum[1]] == 5;
 
                         int index = Array.IndexOf(selected_Skills, ranNum[1]);
-                        
+
                         textName = panel_skill_LevelText[index].GetComponent<TextMeshProUGUI>();
                         textName.text = "Lv " + skillData.level[ranNum[1]];
 
@@ -767,4 +769,3 @@ public class SkillSelectManager: MonoBehaviour
         Time.timeScale = 1;
     }
 }
-

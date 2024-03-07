@@ -3,37 +3,37 @@ using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
 
-// Pause °É¸é ÀÌÀü¿¡´Â ÀÎ°ÔÀÓ ¼Ó UIµé(ÇÇÅë, ½ºÅ³ ÆĞ³Î, ÇÁ·ÎÇÊ)ÀÌ ¾È»ç¶óÁ®¼­
-// »ç¶óÁö°Ô ÇÏ·Á°í gameObject·Î ¼±¾ğÇÑ°Å¶û
-// OnPauseButtonClicked() ,onPlayButtonClicked() ¸Ş¼Òµå ¼öÁ¤ÇßÀ½
+// Pause ê±¸ë©´ ì´ì „ì—ëŠ” ì¸ê²Œì„ ì† UIë“¤(í”¼í†µ, ìŠ¤í‚¬ íŒ¨ë„, í”„ë¡œí•„)ì´ ì•ˆì‚¬ë¼ì ¸ì„œ
+// ì‚¬ë¼ì§€ê²Œ í•˜ë ¤ê³  gameObjectë¡œ ì„ ì–¸í•œê±°ë‘
+// OnPauseButtonClicked() ,onPlayButtonClicked() ë©”ì†Œë“œ ìˆ˜ì •í–ˆìŒ
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance; // GameManager¸¦ instanceÈ­
+    public static GameManager instance; // GameManagerë¥¼ instanceí™”
 
-    // °ÔÀÓ ½Ã°£
+    // ê²Œì„ ì‹œê°„
     public float gameTime;
-    public float maxGameTime = 5 * 60f; // º¸½º ½ºÆù ½Ã°£
+    public float maxGameTime = 5 * 60f; // ë³´ìŠ¤ ìŠ¤í° ì‹œê°„
 
-    // Àû ½ºÆù ÄğÅ¸ÀÓ
+    // ì  ìŠ¤í° ì¿¨íƒ€ì„
     private float CoolTime = 2f;
     private float CoolTimer = 0f;
 
-    // GameOver°¡ µÆ´ÂÁö ÆÇº°ÇÏ´Â º¯¼ö
+    // GameOverê°€ ëëŠ”ì§€ íŒë³„í•˜ëŠ” ë³€ìˆ˜
     public bool isGameOver;
 
-    // º¸½º°¡ ÀÌ¹Ì ½ºÆù µÆ´ÂÁö ÆÇº°ÇÏ´Â º¯¼ö
+    // ë³´ìŠ¤ê°€ ì´ë¯¸ ìŠ¤í° ëëŠ”ì§€ íŒë³„í•˜ëŠ” ë³€ìˆ˜
     private bool isBossSpawned;
 
-    // ÀûÀÌ ³Ê¹« ¸¹ÀºÁö(300¸¶¸® ÀÌ»ó) ÆÇº°ÇÏ´Â º¯¼ö
+    // ì ì´ ë„ˆë¬´ ë§ì€ì§€(300ë§ˆë¦¬ ì´ìƒ) íŒë³„í•˜ëŠ” ë³€ìˆ˜
     private bool isEnemiesTooMany;
 
-    // EnemyµéÀ» ´ãÀ» ¸®½ºÆ®
+    // Enemyë“¤ì„ ë‹´ì„ ë¦¬ìŠ¤íŠ¸
     [SerializeField]
     [ReadOnly]
     private List<Enemy> enemies = new List<Enemy>();
 
-    // »ç¿ëÇÒ Å¬·¡½º °´Ã¼µé
+    // ì‚¬ìš©í•  í´ë˜ìŠ¤ ê°ì²´ë“¤
     public Player player;
     public Boss boss;
     private GameAudioManager gameAudioManager;
@@ -45,22 +45,23 @@ public class GameManager : MonoBehaviour
     private BossManager bossManager;
     public PoolManager poolManager;
 
-    // GameObject¿¡¼­ ÇÁ¸®ÆÕÀ» ³Ö¾îÁÖ±â À§ÇØ publicÀ¸·Î ¼³Á¤
+    // GameObjectì—ì„œ í”„ë¦¬íŒ¹ì„ ë„£ì–´ì£¼ê¸° ìœ„í•´ publicìœ¼ë¡œ ì„¤ì •
     public Player playerPrefab;
 
-    // EXP ÇÁ¸®ÆÕ
+    // EXP í”„ë¦¬íŒ¹
     public EXP expPrefab1;
     public EXP expPrefab2;
     public EXP expPrefab3;
 
-    // GameOver ¿ÀºêÁ§Æ®
+    // GameOver ì˜¤ë¸Œì íŠ¸
     public GameObject gameOverObject;
-    // GameClear ¿ÀºêÁ§Æ®
+    // GameClear ì˜¤ë¸Œì íŠ¸
     public GameObject gameClearObject;
 
-    // Pause ¿ÀºêÁ§Æ®
+    // Pause ì˜¤ë¸Œì íŠ¸
     public GameObject pauseObject;
 
+    // UI ê´€ë ¨ Object
     // HpBar
     public GameObject HpBarObject;
     // HpStatus
@@ -76,16 +77,16 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        instance = this; // GameManager¸¦ ÀÎ½ºÅÏ½ºÈ­
+        instance = this; // GameManagerë¥¼ ì¸ìŠ¤í„´ìŠ¤í™”
 
-        // ½ÃÀÛ ½Ã ºñÈ°¼ºÈ­
+        // ì‹œì‘ ì‹œ ë¹„í™œì„±í™”
         gameOverObject.SetActive(false);
         gameClearObject.SetActive(false);
         pauseObject.SetActive(false);
         HpBarObject.SetActive(true);
         BossHPObject.SetActive(false);
 
-        // Å¬·¡½º °´Ã¼µé ÃÊ±âÈ­
+        // í´ë˜ìŠ¤ ê°ì²´ë“¤ ì´ˆê¸°í™”
         CreatePlayer();
         inputManager = FindAnyObjectByType<InputManager>();
         gameAudioManager = FindAnyObjectByType<GameAudioManager>();
@@ -95,33 +96,33 @@ public class GameManager : MonoBehaviour
         bossManager = FindAnyObjectByType<BossManager>();
         poolManager = FindAnyObjectByType<PoolManager>();
 
-        // inputManger Delegate ÇÒ´ç
+        // inputManger Delegate í• ë‹¹
         inputManager.onPauseButtonClicked = OnPauseButtonClicked;
         inputManager.onPlayButtonClicked = onPlayButtonClicked;
 
-        // followCam ÇÃ·¹ÀÌ¾î °´Ã¼ ÇÒ´ç
+        // followCam í”Œë ˆì´ì–´ ê°ì²´ í• ë‹¹
         followCam.player = player;
 
-        // skillManager¿¡ °´Ã¼ ÇÒ´ç
+        // skillManagerì— ê°ì²´ í• ë‹¹
         skillManager.player = player;
 
-        // skillManager Delegate ÇÒ´ç
+        // skillManager Delegate í• ë‹¹
         skillManager.onShiledSkillActivated = OnShieldSkillActivated;
         skillManager.onShiledSkillUnActivated = OnShieldSkillUnActivated;
 
-        // PoolManager Player ÇÒ´ç
+        // PoolManager Player í• ë‹¹
         poolManager.player = player;
 
-        // EnemyManager delegate ÇÒ´ç
+        // EnemyManager delegate í• ë‹¹
         poolManager.enemyManager.onEnemiesChanged = OnEnemiesChanged;
         poolManager.enemyManager.onEnemyKilled = OnEnemyKilled;
 
-        // SkillSelectManager delegate ÇÒ´ç
+        // SkillSelectManager delegate í• ë‹¹
         skillSelectManager.onSkillSelectObjectDisplayed = OnSkillSelectObjectDisplayed;
         skillSelectManager.onSkillSelectObjectHided = OnSkillSelectObjectHided;
         skillSelectManager.onPlayerHealed = OnPlayerHealed;
 
-        // BossManager delegate ÇÒ´ç
+        // BossManager delegate í• ë‹¹
         bossManager.onBossHasKilled = OnBossHasKilled;
 
         //gameTime = maxGameTime;
@@ -131,87 +132,86 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // GameStart ¼±ÅÃ È¿°úÀ½
-        gameAudioManager.PlayBGM(0, true); // ¹è°æÀ½ ½ÃÀÛ
+        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // GameStart ì„ íƒ íš¨ê³¼ìŒ
+        gameAudioManager.PlayBGM(0, true); // ë°°ê²½ìŒ ì‹œì‘
 
-        SpawnEnemies(0, 50); // ½ÃÀÛ Àû ¼ÒÈ¯
+        SpawnEnemies(0, 50); // ì‹œì‘ ì  ì†Œí™˜
 
-        skillSelectManager.ChooseStartSkill(); // ½ÃÀÛ ½ºÅ³ ¼±ÅÃ
+        skillSelectManager.ChooseStartSkill(); // ì‹œì‘ ìŠ¤í‚¬ ì„ íƒ
     }
 
-    // Update is called once per frame
     void Update()
     {
         if(!isGameOver) {
-            gameTime += Time.deltaTime; // °ÔÀÓ ½Ã°£ Áõ°¡
+            gameTime += Time.deltaTime; // ê²Œì„ ì‹œê°„ ì¦ê°€
             CoolTimer += Time.deltaTime;
 
             if (!isBossSpawned) {
                 isEnemiesTooMany = enemies.Count > 300;
                 SpawnBoss();
                 if (!isEnemiesTooMany)
-                    CalculateEnemySpawnTimeNSpawn(); // ¼ÒÈ¯ÇÒ ÀûÀ» ÁöÁ¤ÇÏ°í ½ºÆù
+                    CalculateEnemySpawnTimeNSpawn(); // ì†Œí™˜í•  ì ì„ ì§€ì •í•˜ê³  ìŠ¤í°
             }
         }
 
         skillManager.enemies = enemies;
     }
 
-    // Player »ı¼º ÇÔ¼ö
+    // Player ìƒì„± í•¨ìˆ˜
     private void CreatePlayer(){
         player = Instantiate(playerPrefab);
         player.onPlayerWasKilled = OnPlayerHasKilled;
         player.onPlayerLevelUP = OnPlayerLevelUP;
     }
 
-    // Enemy ½ºÆù ½Ã°£À» °è»êÇØ ¼ÒÈ¯ÇÒ ÀûÀ» ÁöÁ¤ÇÏ´Â ÇÔ¼ö
+    // Enemy ìŠ¤í° ì‹œê°„ì„ ê³„ì‚°í•´ ì†Œí™˜í•  ì ì„ ì§€ì •í•˜ëŠ” í•¨ìˆ˜
     private void CalculateEnemySpawnTimeNSpawn()
     {
         if (gameTime <= 60 * 1 && CoolTimer >= CoolTime)
         {
-            SpawnEnemies(0, 10); // Ghoul ¸ó½ºÅÍ ¼ÒÈ¯
+            SpawnEnemies(0, 10); // Ghoul ëª¬ìŠ¤í„° ì†Œí™˜
             CoolTimer = 0f;
         }
         else if (gameTime <= 60 * 2 && CoolTimer >= CoolTime)
         {
-            SpawnEnemies(0, 5); // Ghoul ¸ó½ºÅÍ ¼ÒÈ¯
-            SpawnEnemies(1, 10); // Spitter ¸ó½ºÅÍ ¼ÒÈ¯
+            SpawnEnemies(0, 5); // Ghoul ëª¬ìŠ¤í„° ì†Œí™˜
+            SpawnEnemies(1, 10); // Spitter ëª¬ìŠ¤í„° ì†Œí™˜
             CoolTimer = 0f;
         }
         else if (gameTime <= 60 * 3 && CoolTimer >= CoolTime)
         {
-            SpawnEnemies(0, 2); // Ghoul ¸ó½ºÅÍ ¼ÒÈ¯
-            SpawnEnemies(1, 5); // Spitter ¸ó½ºÅÍ ¼ÒÈ¯
-            SpawnEnemies(2, 10); // Summoner ¸ó½ºÅÍ ¼ÒÈ¯
+            SpawnEnemies(0, 2); // Ghoul ëª¬ìŠ¤í„° ì†Œí™˜
+            SpawnEnemies(1, 5); // Spitter ëª¬ìŠ¤í„° ì†Œí™˜
+            SpawnEnemies(2, 10); // Summoner ëª¬ìŠ¤í„° ì†Œí™˜
             CoolTime = 1.5f;
             CoolTimer = 0f;
         }
         else if (gameTime < 60 * 4 && CoolTimer >= CoolTime)
         {
-            SpawnEnemies(0, 2); // Ghoul ¸ó½ºÅÍ ¼ÒÈ¯
-            SpawnEnemies(1, 5); // Spitter ¸ó½ºÅÍ ¼ÒÈ¯
-            SpawnEnemies(2, 8); // Summoner ¸ó½ºÅÍ ¼ÒÈ¯
-            SpawnEnemies(3, 15); // BloodKing ¸ó½ºÅÍ ¼ÒÈ¯
+            SpawnEnemies(0, 2); // Ghoul ëª¬ìŠ¤í„° ì†Œí™˜
+            SpawnEnemies(1, 5); // Spitter ëª¬ìŠ¤í„° ì†Œí™˜
+            SpawnEnemies(2, 8); // Summoner ëª¬ìŠ¤í„° ì†Œí™˜
+            SpawnEnemies(3, 15); // BloodKing ëª¬ìŠ¤í„° ì†Œí™˜
             CoolTime = 1f;
             CoolTimer = 0f;
         }
         else if (gameTime < 60 * 5 && CoolTimer >= CoolTime)
         {
-            SpawnEnemies(0, 2); // Ghoul ¸ó½ºÅÍ ¼ÒÈ¯
-            SpawnEnemies(1, 4); // Spitter ¸ó½ºÅÍ ¼ÒÈ¯
-            SpawnEnemies(2, 6); // Summoner ¸ó½ºÅÍ ¼ÒÈ¯
-            SpawnEnemies(3, 20); // BloodKing ¸ó½ºÅÍ ¼ÒÈ¯
+            SpawnEnemies(0, 2); // Ghoul ëª¬ìŠ¤í„° ì†Œí™˜
+            SpawnEnemies(1, 4); // Spitter ëª¬ìŠ¤í„° ì†Œí™˜
+            SpawnEnemies(2, 6); // Summoner ëª¬ìŠ¤í„° ì†Œí™˜
+            SpawnEnemies(3, 20); // BloodKing ëª¬ìŠ¤í„° ì†Œí™˜
             CoolTime = 1f;
             CoolTimer = 0f;
         }
     }
 
-    // Enemy ¼ÒÈ¯ ÇÔ¼ö
+    // Enemy ì†Œí™˜ í•¨ìˆ˜
     void SpawnEnemies(int index, int num)
     {
         for (int i = 0; i < num; i++)
         {
-            poolManager.GetEnemy(index); // ¸ó½ºÅÍ ¼ÒÈ¯
+            poolManager.GetEnemy(index); // ëª¬ìŠ¤í„° ì†Œí™˜
         }
     }
 
@@ -219,45 +219,45 @@ public class GameManager : MonoBehaviour
     {
         if (gameTime >= maxGameTime)
         {
-            // º¸½º µîÀå
+            // ë³´ìŠ¤ ë“±ì¥
             bossManager.player = player;
             bossManager.CreateBoss();
 
             skillManager.isBossAppear = true;
             skillManager.boss = bossManager.boss;
 
-            // º¸½º HP¹Ù active
+            // ë³´ìŠ¤ HpBar active
             BossHPObject.SetActive(true);
 
-            // º¸½º BGM ON
-            gameAudioManager.PlayBGM(0, false); // ±âº» ¹è°æÀ½ Á¾·á
-            gameAudioManager.PlayBGM(1, true); // º¸½º ¹è°æÀ½ ½ÇÇà
+            // ë³´ìŠ¤ BGM ON
+            gameAudioManager.PlayBGM(0, false); // ê¸°ë³¸ ë°°ê²½ìŒ ì¢…ë£Œ
+            gameAudioManager.PlayBGM(1, true); // ë³´ìŠ¤ ë°°ê²½ìŒ ì‹¤í–‰
 
             isBossSpawned = true;
         }
     }
 
-    // ÇÃ·¹ÀÌ¾î°¡ Á×¾úÀ» ½Ã ½ÇÇàµÊ
+    // í”Œë ˆì´ì–´ê°€ ì£½ì—ˆì„ ì‹œ ì‹¤í–‰
     private void OnPlayerHasKilled(Player player)
     {
-        StartCoroutine(PlayerHasKilled()); // È¿°úÀ½ ³Ö±â À§ÇÑ ÄÚ·çÆ¾ »ı¼º ¹× »ç¿ë
+        StartCoroutine(PlayerHasKilled()); // íš¨ê³¼ìŒ ë„£ê¸° ìœ„í•œ ì½”ë£¨í‹´ ìƒì„± ë° ì‚¬ìš©
     }
     IEnumerator PlayerHasKilled()
     {
         isGameOver = true;
         gameOverObject.SetActive(true);
 
-        yield return new WaitForSeconds(0.5f); // 0.5ÃÊ ÀÌÈÄ ½Ã°£ Â÷ µÎ±â
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Lose); // Ä³¸¯ÅÍ »ç¸Á ½Ã È¿°úÀ½
-        inputManager.PauseButtonObject.interactable = false; // Pause¹öÆ° ºñÈ°¼ºÈ­
-        gameAudioManager.PlayBGM(0, false); // ¹è°æÀ½ Á¾·á
-        Time.timeScale = 0; // È­¸é ¸ØÃß±â
+        yield return new WaitForSeconds(0.5f); // 0.5ì´ˆ ì´í›„ ì‹œê°„ ì°¨ ë‘ê¸°
+        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Lose); // ìºë¦­í„° ì‚¬ë§ ì‹œ íš¨ê³¼ìŒ
+        inputManager.PauseButtonObject.interactable = false; // Pauseë²„íŠ¼ ë¹„í™œì„±í™”
+        gameAudioManager.PlayBGM(0, false); // ë°°ê²½ìŒ ì¢…ë£Œ
+        Time.timeScale = 0; // í™”ë©´ ë©ˆì¶”ê¸°
     }
 
-    // º¸½º°¡ Á×¾úÀ» ½Ã ½ÇÇàµÊ
+    // ë³´ìŠ¤ê°€ ì£½ì—ˆì„ ì‹œ ì‹¤í–‰ë¨
     private void OnBossHasKilled()
     {
-        StartCoroutine(BossHasKilled()); // È¿°úÀ½ ³Ö±â À§ÇÑ ÄÚ·çÆ¾ »ı¼º ¹× »ç¿ë
+        StartCoroutine(BossHasKilled()); // íš¨ê³¼ìŒ ë„£ê¸° ìœ„í•œ ì½”ë£¨í‹´ ìƒì„± ë° ì‚¬ìš©
     }
     IEnumerator BossHasKilled()
     {
@@ -265,19 +265,20 @@ public class GameManager : MonoBehaviour
         isGameOver = true;
         gameClearObject.SetActive(true);
 
-        yield return new WaitForSeconds(0.5f); // 0.5ÃÊ ÀÌÈÄ ½Ã°£ Â÷ µÎ±â
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Win); // ½Â¸®½Ã È¿°úÀ½
-        inputManager.PauseButtonObject.interactable = false; // Pause¹öÆ° ºñÈ°¼ºÈ­
-        gameAudioManager.PlayBGM(0, false); // ¹è°æÀ½ Á¾·á
-        Time.timeScale = 0; // È­¸é ¸ØÃß±â
+        yield return new WaitForSeconds(0.5f); // 0.5ì´ˆ ì´í›„ ì‹œê°„ ì°¨ ë‘ê¸°
+        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Win); // ìŠ¹ë¦¬ ì‹œ íš¨ê³¼ìŒ
+        inputManager.PauseButtonObject.interactable = false; // Pauseë²„íŠ¼ ë¹„í™œì„±í™”
+        gameAudioManager.PlayBGM(0, false); // ë°°ê²½ìŒ ì¢…ë£Œ
+        Time.timeScale = 0;  // í™”ë©´ ë©ˆì¶”ê¸°
     }
 
-    // Pause¹öÆ°ÀÌ Å¬¸¯µÆÀ» ½Ã ½ÇÇàµÊ
+    // Pauseë²„íŠ¼ì´ í´ë¦­ëì„ ì‹œ ì‹¤í–‰ë¨
     private void OnPauseButtonClicked()
     {
         pauseObject.SetActive(true);
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // ¹öÆ° Å¬¸¯ È¿°úÀ½
-        // UI ºñÈ°¼ºÈ­
+        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // ë²„íŠ¼ í´ë¦­ íš¨ê³¼ìŒ
+
+        // UI ë¹„í™œì„±í™”
         HpBarObject.SetActive(false);
         HpStatusLetteringObject.SetActive(false);
         HpStatusObject.SetActive(false);
@@ -288,8 +289,8 @@ public class GameManager : MonoBehaviour
     private void onPlayButtonClicked()
     {
         pauseObject.SetActive(false);
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // ¹öÆ° Å¬¸¯ È¿°úÀ½
-        // UI È°¼ºÈ­
+        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // ë²„íŠ¼ í´ë¦­ íš¨ê³¼ìŒ
+        // UI í™œì„±í™”
         HpBarObject.SetActive(true);
         HpStatusLetteringObject.SetActive(true);
         HpStatusObject.SetActive(true);
@@ -302,19 +303,19 @@ public class GameManager : MonoBehaviour
         this.enemies = enemies;
     }
 
-    // ½¯µå ÄÑÁú ¶§ delegate¿¡ ÇÒ´çÇØÁÙ ÇÔ¼ö
+    // ì‰´ë“œ ì¼œì§ˆ ë•Œ delegateì— í• ë‹¹í•´ì¤„ í•¨ìˆ˜
     private void OnShieldSkillActivated()
     {
         player.isPlayerShielded = true;
     }
 
-    // ½¯µå ²¨Áú ¶§ delegate¿¡ ÇÒ´çÇØÁÙ ÇÔ¼ö
+    // ì‰´ë“œ êº¼ì§ˆ ë•Œ delegateì— í• ë‹¹í•´ì¤„ í•¨ìˆ˜
     private void OnShieldSkillUnActivated()
     {
         player.isPlayerShielded = false;
     }
 
-    // ÀûÀÌ Á×¾úÀ» ¶§ ½ÇÇàÇÏ´Â ÇÔ¼ö
+    // ì ì´ ì£½ì—ˆì„ ë•Œ ì‹¤í–‰í•˜ëŠ” í•¨ìˆ˜
     private void OnEnemyKilled(Enemy killedEnemy)
     {
         if (!player.isPlayerDead)
@@ -369,17 +370,17 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // ÇÃ·¹ÀÌ¾î°¡ ·¹º§ ¾÷ ÇßÀ» ½Ã ½ÇÇà
+    // í”Œë ˆì´ì–´ê°€ ë ˆë²¨ ì—… í–ˆì„ ì‹œ ì‹¤í–‰
     private void OnPlayerLevelUP()
     {
         skillSelectManager.DisplayLevelupPanel();
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.LevelUp); // ·¹º§¾÷ ½Ã È¿°úÀ½
-        gameAudioManager.EffectBGM(true); // AudioFilter ÄÑ±â
+        gameAudioManager.PlaySfx(GameAudioManager.Sfx.LevelUp); // ë ˆë²¨ì—… ì‹œ íš¨ê³¼// UI ë¹„í™œì„±í™”
+        gameAudioManager.EffectBGM(true); // AudioFilter ì¼œê¸°
     }
 
     private void OnSkillSelectObjectDisplayed()
     {
-        // UI ºñÈ°¼ºÈ­
+        // UI ë¹„í™œì„±í™”
         HpBarObject.SetActive(false);
         HpStatusLetteringObject.SetActive(false);
         HpStatusObject.SetActive(false);
@@ -390,7 +391,7 @@ public class GameManager : MonoBehaviour
 
     private void OnSkillSelectObjectHided()
     {
-        // UI È°¼ºÈ­
+        // UI í™œì„±í™”
         HpBarObject.SetActive(true);
         HpStatusLetteringObject.SetActive(true);
         HpStatusObject.SetActive(true);

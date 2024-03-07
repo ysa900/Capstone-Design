@@ -9,7 +9,7 @@ public class SplashManager : MonoBehaviour
 {
     // 참조 사이트 링크
     // https://cherish-my-codes.tistory.com/entry/Unity-인트로-비동기로드-씬-만들기
-    
+
     [SerializeField] Image image = null;
     [SerializeField] TextMeshProUGUI text = null;
 
@@ -56,7 +56,7 @@ public class SplashManager : MonoBehaviour
         j.color = new Color(j.color.r, j.color.g, j.color.b, 1);
 
         yield return new WaitUntil(() => isTypingFinish);
-        
+
         while (j.color.a > 0.0f)
         {
             j.color = new Color(j.color.r, j.color.g, j.color.b, j.color.a - (Time.deltaTime / t));
