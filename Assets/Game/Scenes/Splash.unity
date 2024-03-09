@@ -309,6 +309,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 488336674}
   text: {fileID: 1417106614}
+  isTypingFinish: 0
 --- !u!1 &1391039604
 GameObject:
   m_ObjectHideFlags: 0
@@ -504,7 +505,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC0C8\uB85C\uC6B4 \uD55C\uAE00\uC785\uB2C8\uB2E4."
+  m_text: "Englich Ok? \uC0C8\uB85C\uC6B4 \uD55C\uAE00\uC785\uB2C8\uB2E4."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b478b6ef737064c3fa5157479c9a2c25, type: 2}
   m_sharedMaterial: {fileID: -1791730566149748383, guid: b478b6ef737064c3fa5157479c9a2c25, type: 2}
@@ -593,7 +594,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 435720f1105a047b9818b43f50cd80eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delay: 1
   message: "\uC0C8\uB85C\uC6B4 \uD55C\uAE00\uC785\uB2C8\uB2E4."
 --- !u!1 &1659255813
 GameObject:
