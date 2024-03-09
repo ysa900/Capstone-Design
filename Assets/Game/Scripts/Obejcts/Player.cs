@@ -42,6 +42,13 @@ public class Player : MonoBehaviour, IPlayer
     public delegate void OnPlayerLevelUP();
     public OnPlayerLevelUP onPlayerLevelUP;
 
+    private GameAudioManager gameAudioManager;
+
+    private void Awake()
+    {
+        gameAudioManager = FindAnyObjectByType<GameAudioManager>();
+    }
+
     void Start()
     {
         // 변수 초기화
@@ -54,8 +61,19 @@ public class Player : MonoBehaviour, IPlayer
         int num = 0;
         for (int i = 0; i < nextExp.Length; i++)
         {
-            num += 2;
-            nextExp[i] = num;
+            if(level >= 30)
+            {
+                num += 100;
+                nextExp[i] = num;
+
+
+            }
+            else
+            {
+                num += 5;
+                nextExp[i] = num;
+
+            }
         }
     }
 
@@ -133,13 +151,12 @@ public class Player : MonoBehaviour, IPlayer
     // 플레이어가 무언가와 충돌하면 데미지를 입는다
     private void OnCollisionStay2D(Collision2D collision)
     {
+        if (collision.gameObject.tag == "Obstacle") // 장애물과 충돌한거면 데미지 안입음 
+            return;
+
         if (!isPlayerDead)
         {
             if (!isPlayerShielded)
-<<<<<<< Updated upstream
-                hp -= Time.deltaTime * 10;
-
-=======
             {
                 hp -= Time.deltaTime * 5 * damageReductionValue;
                 gameAudioManager.PlaySfx(GameAudioManager.Sfx.Melee); // 피격  효과음
@@ -170,7 +187,6 @@ public class Player : MonoBehaviour, IPlayer
                 gameAudioManager.PlaySfx(GameAudioManager.Sfx.Melee); // 피격  효과음
             }
             
->>>>>>> Stashed changes
             if (hp <= 0)
             {
                 isPlayerDead = true;

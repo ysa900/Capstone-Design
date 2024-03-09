@@ -9,6 +9,9 @@ public class InputManager: MonoBehaviour
     // GameoVer_Restart 버튼
     public UnityEngine.UI.Button GVRestartButtonObject;
 
+    // GameClear_GoTOLobby 버튼
+    public UnityEngine.UI.Button GCGoToLobbyButtonObject;
+
     // Pause 버튼
     public UnityEngine.UI.Button PauseButtonObject;
 
@@ -21,7 +24,7 @@ public class InputManager: MonoBehaviour
     // Play 버튼
     public UnityEngine.UI.Button PlayButtonObject;
 
-
+    private GameAudioManager gameAudioManager;
 
     // GameManager에게 정보 전달을 하기 위한 Delegate들
     public delegate void OnPauseButtonClicked();
@@ -29,6 +32,11 @@ public class InputManager: MonoBehaviour
 
     public delegate void OnPlayButtonClicked();
     public OnPlayButtonClicked onPlayButtonClicked;
+
+    private void Awake()
+    {
+        gameAudioManager = FindAnyObjectByType<GameAudioManager>();
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -40,6 +48,10 @@ public class InputManager: MonoBehaviour
         // GameoVer_GoTOLobby 버튼 눌렀을 때
         UnityEngine.UI.Button GVGoToLobbyButton = GVGoToLobbyButtonObject.GetComponent<UnityEngine.UI.Button>();
         GVGoToLobbyButton.onClick.AddListener(goToLobbyButtonClicked);
+
+        // GameClear_GoTOLobby 버튼 눌렀을 때
+        UnityEngine.UI.Button GCGoToLobbyButton = GCGoToLobbyButtonObject.GetComponent<UnityEngine.UI.Button>();
+        GCGoToLobbyButton.onClick.AddListener(goToLobbyButtonClicked);
 
         // Pause 버튼 눌렀을 때
         UnityEngine.UI.Button PauseButton = PauseButtonObject.GetComponent<UnityEngine.UI.Button>();
@@ -61,6 +73,7 @@ public class InputManager: MonoBehaviour
     // RestartButton이 눌렀을 때
     private void RestartButtonClicked()
     {
+        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 선택 시 효과음
         SceneManager.LoadScene("Game");
         Time.timeScale = 1;
     }
@@ -68,6 +81,7 @@ public class InputManager: MonoBehaviour
     // goToLobbyButton이 눌렀을 때
     private void goToLobbyButtonClicked()
     {
+        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 선택 시 효과음
         SceneManager.LoadScene("Lobby");
         Time.timeScale = 1;
     }
@@ -75,7 +89,9 @@ public class InputManager: MonoBehaviour
     // PauseButton이 눌렀을 때
     private void PauseButtonClicked()
     {
-        if(Time.timeScale == 0) // Pause 누른 상태에서 한번 더 누르면 Pause 풀리게 하려고
+        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 선택 시 효과음
+
+        if (Time.timeScale == 0) // Pause 누른 상태에서 한번 더 누르면 Pause 풀리게 하려고
             PlayButtonClicked();
         else
         {
@@ -87,6 +103,7 @@ public class InputManager: MonoBehaviour
     // PlayButton이 눌렀을 때
     private void PlayButtonClicked()
     {
+        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 선택 시 효과음
         Time.timeScale = 1;
         onPlayButtonClicked(); // delegate 호출
     }

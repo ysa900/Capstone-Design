@@ -2,10 +2,13 @@
 using System.Collections;
 using UnityEngine;
 
-public class Enemy : Object, IDamageable
+public class Enemy : Object, IDamageable, IPullingObject
 {
     // 플레이어 객체
     public Player player;
+
+    // Enemy들 체력
+    int[] enemy_HP = { 15, 50, 100, 120 };
 
     // enemy 정보
     public int hp;
@@ -16,15 +19,20 @@ public class Enemy : Object, IDamageable
     public bool isEnemyLookLeft; // 적이 보고 있는 방향을 알려주는 변수
 
     private bool isDead;
+    private bool isTimeOver;
 
     private float damageDelay = 2f;
     private float damageDelayTimer = 0;
 
+    private float degree = 0;
+
+    public int index; // Enemy 종류
+
     // enemy가 죽었을 때 EnemyManager에게 알려주기 위한 delegate
-    public delegate void OnEnemyWasKilled(Enemy killedEnemy);
+    public delegate void OnEnemyWasKilled(Enemy killedEnemy, bool isKilledByPlayer);
     public OnEnemyWasKilled onEnemyWasKilled;
 
-    Rigidbody2D rigid; // 물리 입력을 받기위한 변수
+    public Rigidbody2D rigid; // 물리 입력을 받기위한 변수
 
     SpriteRenderer spriteRenderer; // 적 방향을 바꾸기 위해 flipX를 가져오기 위한 변수
 
@@ -32,7 +40,36 @@ public class Enemy : Object, IDamageable
 
     public CapsuleCollider2D capsuleCollider; // Collider의 offset을 변경하기 위한 변수
 
-    private void Start()
+    public void Init()
+    {
+        hp = enemy_HP[index];
+        isDead = false;
+
+        damageDelayTimer = 0;
+
+        float playerX = player.transform.position.x;
+        float playerY = player.transform.position.y;
+
+        // 몬스터가 원형으로 소환되게 함
+        float radius = UnityEngine.Random.Range(20, 30);
+        degree = UnityEngine.Random.Range(0f, 360f);
+
+        float tmpX = (float)Math.Cos(degree) * radius;
+        float tmpY = (float)Math.Sin(degree) * radius;
+
+        X = tmpX + playerX;
+        Y = tmpY + playerY;
+
+        if (degree <= -360)
+        {
+            degree %= -360;
+        }
+        rigid.constraints = RigidbodyConstraints2D.None;
+        rigid.constraints = RigidbodyConstraints2D.FreezeRotation;
+        GetComponent<CapsuleCollider2D>().enabled = true;
+    }
+
+    private void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -50,6 +87,12 @@ public class Enemy : Object, IDamageable
             MoveToPlayer();
         }
 
+        isTimeOver = GameManager.instance.gameTime >= GameManager.instance.maxGameTime;
+        if (isTimeOver && !isDead)
+        {
+            StartCoroutine(Dead());
+        }
+
         DestryIfToFar(); // 플레이어와의 거리가 너무 멀면 죽음
         damageDelayTimer += Time.fixedDeltaTime;
     }
@@ -61,13 +104,12 @@ public class Enemy : Object, IDamageable
         Vector2 myPosition = transform.position;
 
         Vector2 direction = playerPosition - myPosition;
-        direction = direction.normalized;
 
-        if (Math.Abs(direction.x) >= 0.3f)
+        if (Math.Abs(direction.x) >= 0.5f)
         {
             isEnemyLookLeft = direction.x < 0;
         }
-        
+
         spriteRenderer.flipX = isEnemyLookLeft;
 
         Vector2 colliderOffset; // CapsuleCollider의 offset에 넣을 Vector2
@@ -76,12 +118,14 @@ public class Enemy : Object, IDamageable
         {
             colliderOffset = new Vector2(-colliderOffsetX, colliderOffsetY);
         }
-        else {
+        else
+        {
             colliderOffset = new Vector2(colliderOffsetX, colliderOffsetY);
 
         }
         capsuleCollider.offset = colliderOffset; // capsuleCollider에 적용
 
+        direction = direction.normalized;
         rigid.MovePosition(rigid.position + direction * speed * Time.fixedDeltaTime); // 플레이어 방향으로 위치 변경
 
         X = transform.position.x;
@@ -98,7 +142,11 @@ public class Enemy : Object, IDamageable
 
         bool isToFar = Mathf.Sqrt(Mathf.Pow(direction.x, 2) + Mathf.Pow(direction.y, 2)) > 100f;
 
-        if (isToFar) { Destroy(gameObject); }
+        if (isToFar)
+        {
+            onEnemyWasKilled(this, false); // 대리자 호출
+            GameManager.instance.poolManager.ReturnEnemy(this, index);
+        }
 
     }
 
@@ -107,19 +155,15 @@ public class Enemy : Object, IDamageable
     {
         hp = hp - (int)damage;
 
-        if (hp <= 0)
+        if (hp <= 0 && !isDead)
         {
             StartCoroutine(Dead());
-            StopCoroutine(Dead());
         }
         else
         {
             if (damageDelay <= damageDelayTimer)
             {
                 animator.SetTrigger("Hit");
-            }
-            else
-            {
                 damageDelayTimer = 0;
             }
         }
@@ -127,17 +171,21 @@ public class Enemy : Object, IDamageable
 
     IEnumerator Dead()
     {
-        animator.SetTrigger("Dead");
-        onEnemyWasKilled(this); // 대리자 호출
-
         isDead = true;
+
+        animator.SetTrigger("Dead");
+
+        if (!isTimeOver)
+        {
+            onEnemyWasKilled(this, true); // 대리자 호출
+        }
 
         rigid.constraints = RigidbodyConstraints2D.FreezeAll;
         GetComponent<CapsuleCollider2D>().enabled = false;
 
         yield return new WaitForSeconds(0.5f); // 지정한 초 만큼 쉬기
 
-        Destroy(gameObject);
+        GameManager.instance.poolManager.ReturnEnemy(this, index);
     }
 
 }

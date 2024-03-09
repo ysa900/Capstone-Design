@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class PlayerAttachSkill : Skill
+public class PlayerAttachSkill : Skill, IPullingObject
 {
     // 플레이어 좌표를 기준으로 위치를 어디로 가야하나를 받는 변수
     public float xPositionNum;
@@ -16,10 +16,9 @@ public class PlayerAttachSkill : Skill
 
     public bool isStaySkill; // 스킬이 유지되는 동안 계속 데미지가 들어가야되는 스킬이냐
 
-    private float degree = 0f;
+    public float degree = 0f;
     private float tmpX; // Cirle을 계산할 때 0,0을 기준으로 생각한 X
     private float tmpY; // Cirle을 계산할 때 0,0을 기준으로 생각한 X
-    private bool isUpSide; // 플레이어를 돌 때 반원 기준으로 위에 있는지 아래 있는지를 판단할 변수
 
     private float delay = 0.45f;
     private float delayTimer = 0f;
@@ -30,6 +29,11 @@ public class PlayerAttachSkill : Skill
 
     public delegate void OnShieldSkillDestroyed();
     public OnShieldSkillDestroyed onShieldSkillDestroyed;
+
+    public new void Init()
+    {
+        aliveTimer = 0;
+    }
 
     private void Start()
     {
@@ -45,7 +49,7 @@ public class PlayerAttachSkill : Skill
             if (isShieldSkill)
                 onShieldSkillDestroyed(); // 쉴드 스킬이 파괴될 땐 SkillManager에 알려준다
 
-            Destroy(gameObject);
+            GameManager.instance.poolManager.ReturnSkill(this, index);
             return;
         }
         else if (isCircleSkill)
@@ -112,54 +116,26 @@ public class PlayerAttachSkill : Skill
     // 플레이어 주위를 빙빙 도는 스킬
     private void CircleMove()
     {
-        degree += 0.1f;
+        degree -= speed;
 
-        if (degree >= 180)
-        {
-            isUpSide ^= false;
-        }
-
-        tmpX = (float)Math.Cos(degree) * xPositionNum;
-        tmpY = (float)Math.Sin(degree) * xPositionNum; //이거 잘못쓴거 아님 (xPositionNum이 여기서 반지름 역할)
-
-        if (!isUpSide) // 아래 반원이면 음수값 부여
-            tmpY = -tmpY;
+        tmpX = (float)Math.Cos(degree * Mathf.Deg2Rad) * xPositionNum;
+        tmpY = (float)Math.Sin(degree * Mathf.Deg2Rad) * xPositionNum; //이거 잘못쓴거 아님 (xPositionNum이 여기서 반지름 역할)
 
         X = tmpX + player.transform.position.x;
         Y = tmpY + player.transform.position.y;
+
+        if (degree <= -360)
+        {
+            degree %= -360;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         IDamageable damageable = collision.GetComponent<IDamageable>();
 
-        if (damageable == null)
+        if (damageable != null)
         {
-            return;
-        }
-
-        if (isDelaySkill)
-        {
-            if (delayTimer >= delay)
-            {
-                damageable.TakeDamage(gameObject, damage);
-            }
-        }
-        else if (!isShieldSkill)
-            damageable.TakeDamage(gameObject, damage);
-    }
-
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (isStaySkill)
-        {
-            IDamageable damageable = collision.GetComponent<IDamageable>();
-
-            if (damageable == null)
-            {
-                return;
-            }
-
             if (isDelaySkill)
             {
                 if (delayTimer >= delay)
@@ -169,6 +145,67 @@ public class PlayerAttachSkill : Skill
             }
             else if (!isShieldSkill)
                 damageable.TakeDamage(gameObject, damage);
+
+            return;
+        }
+
+        IDamageableSkill damageableSkill = collision.GetComponent<IDamageableSkill>();
+
+        if (damageableSkill != null)
+        {
+            if (isDelaySkill)
+            {
+                if (delayTimer >= delay)
+                {
+                    damageableSkill.TakeDamage(damage);
+                }
+            }
+            else if (!isShieldSkill)
+                damageableSkill.TakeDamage(damage);
+
+            return;
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (isStaySkill)
+        {
+            IDamageable damageable = collision.GetComponent<IDamageable>();
+
+            if (damageable != null)
+            {
+                if (isDelaySkill)
+                {
+                    if (delayTimer >= delay)
+                    {
+                        damageable.TakeDamage(gameObject, damage);
+                    }
+                }
+                else if (!isShieldSkill)
+                    damageable.TakeDamage(gameObject, damage);
+
+                return;
+            }
+
+            IDamageableSkill damageableSkill = collision.GetComponent<IDamageableSkill>();
+
+            if (damageableSkill != null)
+            {
+                if (isDelaySkill)
+                {
+                    if (delayTimer >= delay)
+                    {
+                        damageableSkill.TakeDamage(damage);
+                    }
+                }
+                else if (!isShieldSkill)
+                    damageableSkill.TakeDamage(damage);
+
+                return;
+            }
+
+            
         }
     }
 }

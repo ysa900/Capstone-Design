@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 3957377648651410911}
   m_Layer: 0
   m_Name: Spitter
-  m_TagString: Untagged
+  m_TagString: Spitter
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -123,9 +123,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  hp: 20
+  hp: 30
   speed: 2
   isEnemyLookLeft: 0
+  index: 0
+  rigid: {fileID: 0}
   capsuleCollider: {fileID: 0}
 --- !u!50 &2406250041084801470
 Rigidbody2D:

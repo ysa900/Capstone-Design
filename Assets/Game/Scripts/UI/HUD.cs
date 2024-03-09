@@ -4,11 +4,12 @@ using UnityEngine.UI;
 public class HUD : MonoBehaviour
 {
     // 다루게 될 데이터 enum으로 선언
-    public enum InfoType { Exp, Level, Kill, Time, Hp, HpStatus }
+    public enum InfoType { Exp, Level, Kill, Time, Hp, HpStatus, BossHP }
     public InfoType type;
 
     Text hpText, timeText;
     Slider myHpSlider;
+    Slider bossHPSlider;
 
 
     void Awake()
@@ -16,6 +17,7 @@ public class HUD : MonoBehaviour
         hpText=GetComponent<Text>();
         timeText=GetComponent<Text>();
         myHpSlider=GetComponent<Slider>();
+        bossHPSlider = GetComponent<Slider>();
     }
 
     private void LateUpdate()
@@ -52,6 +54,14 @@ public class HUD : MonoBehaviour
                 hpText.text = string.Format("{0} / {1}", (int)currentHp2, (int)maxHp2);
 
                 //Debug.Log(currentHp + " " + maxHp);
+                break;
+            case InfoType.BossHP:
+                float currentBossHp = GameManager.instance.boss.hp;
+                float bossMaxHp = GameManager.instance.boss.maxHp;
+
+                bossHPSlider.value = currentBossHp / bossMaxHp * 100;
+
+                //Debug.Log(currentBossHp + " " + bossMaxHp);
                 break;
             case InfoType.Time:
                 float playTime = GameManager.instance.gameTime;

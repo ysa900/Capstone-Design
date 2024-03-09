@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class RandomSkill : Skill
+public class RandomSkill : Skill, IPullingObject
 {
     public RandomSkill randomSkill;
 
@@ -17,13 +17,22 @@ public class RandomSkill : Skill
     public bool isIceSpike; // IceSpike 스킬의 자식 오브젝트 때문에 만든 변수
     public bool isStaySkill; // 몇초동안 지속되다가 사라지는 스킬이냐
 
+    public float scale;
+
     Rigidbody2D rigid; // 물리 입력을 받기위한 변수
     Vector2 direction; // 날아갈 방향
 
     Animator animator;
     Animator animator_ground;
 
-    public RandomSkill fireNormal2ExplodePrefab;
+    public new void Init()
+    {
+        aliveTimer = 0;
+        if (isIceSpike)
+        {
+            animator_ground = transform.Find("ground").GetComponent<Animator>();
+        }
+    }
 
     private void Start()
     {
@@ -44,13 +53,19 @@ public class RandomSkill : Skill
             if (isMeteor)
             {
                 RandomSkill explode;
-                explode = Instantiate(fireNormal2ExplodePrefab);
+                explode = GameManager.instance.poolManager.GetSkill(2) as RandomSkill;
 
                 explode.X = X;
                 explode.Y = Y;
 
                 explode.aliveTime = 0.5f;
                 explode.damage = damage;
+
+                Transform parent = explode.transform.parent;
+
+                explode.transform.parent = null;
+                explode.transform.localScale = new Vector3(scale, scale, 0);
+                explode.transform.parent = parent;
             }
             if (isStaySkill)
             {
@@ -59,7 +74,7 @@ public class RandomSkill : Skill
             }
             else
             {
-                Destroy(gameObject);
+                GameManager.instance.poolManager.ReturnSkill(this, index);
             }
             
             return;
@@ -100,12 +115,21 @@ public class RandomSkill : Skill
         {
             IDamageable damageable = collision.GetComponent<IDamageable>();
 
-            if (damageable == null)
+            if (damageable != null)
             {
+                damageable.TakeDamage(gameObject, damage);
+
                 return;
             }
 
-            damageable.TakeDamage(gameObject, damage);
+            IDamageableSkill damageableSkill = collision.GetComponent<IDamageableSkill>();
+
+            if (damageableSkill != null)
+            {
+                damageableSkill.TakeDamage(damage);
+
+                return;
+            }
         }
     }
 
@@ -115,12 +139,21 @@ public class RandomSkill : Skill
         {
             IDamageable damageable = collision.GetComponent<IDamageable>();
 
-            if (damageable == null)
+            if (damageable != null)
             {
+                damageable.TakeDamage(gameObject, damage);
+
                 return;
             }
 
-            damageable.TakeDamage(gameObject, damage);
+            IDamageableSkill damageableSkill = collision.GetComponent<IDamageableSkill>();
+
+            if (damageableSkill != null)
+            {
+                damageableSkill.TakeDamage(damage);
+
+                return;
+            }
         }
     }
 
@@ -133,7 +166,7 @@ public class RandomSkill : Skill
         
         yield return new WaitForSeconds(0.2f); // 지정한 초 만큼 쉬기
         
-        Destroy(gameObject);
+        GameManager.instance.poolManager.ReturnSkill(this, index);
 
         isCoroutineNow = false;
     }

@@ -1,9 +1,16 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class EnemyOnSkill : Skill
+public class EnemyOnSkill : Skill, IPullingObject
 {
-    private float aliveTime; // 스킬 생존 시간을 체크할 변수
+    public bool isBossAppear;
+
+    private float aliveTime = 0f; // 스킬 생존 시간을 체크할 변수
+
+    public new void Init()
+    {
+        aliveTime = 0f;
+    }
 
     private void Start()
     {
@@ -11,11 +18,11 @@ public class EnemyOnSkill : Skill
 
     private void FixedUpdate()
     {
-        bool destroySkill = aliveTime > 1f || enemy == null;
+        bool destroySkill = aliveTime > 1.5f || enemy == null;
 
         if (destroySkill)
         {
-            Destroy(gameObject);
+            GameManager.instance.poolManager.ReturnSkill(this, index);
             return;
         }
 
@@ -26,22 +33,32 @@ public class EnemyOnSkill : Skill
     {
         IDamageable damageable = collision.GetComponent<IDamageable>();
 
-        if (damageable == null)
+        if (damageable != null)
         {
+            damageable.TakeDamage(gameObject, damage);
+
+            StartCoroutine(Delay(0.5f));
+
             return;
         }
 
-        damageable.TakeDamage(gameObject, damage);
+        IDamageableSkill damageableSkill = collision.GetComponent<IDamageableSkill>();
 
-        StartCoroutine(Delay(0.5f));
-        StopCoroutine(Delay(0.5f));
+        if (damageableSkill != null)
+        {
+            damageableSkill.TakeDamage(damage);
 
+            StartCoroutine(Delay(0.5f));
+
+            return;
+        }
     }
 
     IEnumerator Delay(float delayTime)
     {
         yield return new WaitForSeconds(delayTime); // 지정한 초 만큼 쉬기
-        Destroy(gameObject);
+
+        GameManager.instance.poolManager.ReturnSkill(this, index);
     }
 }
 

@@ -1,10 +1,8 @@
 ﻿using UnityEngine;
 
-public class EXP : Object
+public class EXP : Object, IPullingObject
 {
     public int expAmount;
-<<<<<<< Updated upstream
-=======
     public int index;
 
     public void Init(){}
@@ -18,7 +16,6 @@ public class EXP : Object
     {
 
     }
->>>>>>> Stashed changes
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -31,7 +28,7 @@ public class EXP : Object
 
         iPlayer.GetExp(expAmount);
 
-        Destroy(gameObject);
+        GameManager.instance.poolManager.ReturnExp(this, index);
     }
 }
 

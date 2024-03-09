@@ -120,11 +120,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
-<<<<<<< Updated upstream
---- !u!1 &1286232364
-=======
 --- !u!1 &245976649
->>>>>>> Stashed changes
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -132,27 +128,17 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-<<<<<<< Updated upstream
-  - component: {fileID: 1286232365}
-  - component: {fileID: 1286232366}
-  m_Layer: 0
-  m_Name: BossManager
-=======
   - component: {fileID: 245976653}
   - component: {fileID: 245976652}
   - component: {fileID: 245976651}
   - component: {fileID: 245976650}
   m_Layer: 3
   m_Name: Triangle (4)
->>>>>>> Stashed changes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
-<<<<<<< Updated upstream
---- !u!4 &1286232365
-=======
 --- !u!61 &245976650
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -279,17 +265,11 @@ SpriteRenderer:
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!4 &245976653
->>>>>>> Stashed changes
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-<<<<<<< Updated upstream
-  m_GameObject: {fileID: 1286232364}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-=======
   m_GameObject: {fileID: 245976649}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -745,34 +725,18 @@ Transform:
   m_GameObject: {fileID: 947405093}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
->>>>>>> Stashed changes
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-<<<<<<< Updated upstream
---- !u!114 &1286232366
-MonoBehaviour:
-=======
 --- !u!58 &947405099
 CircleCollider2D:
->>>>>>> Stashed changes
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-<<<<<<< Updated upstream
-  m_GameObject: {fileID: 1286232364}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 179370d75c8349b409b525d060491b85, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bossPrefab: {fileID: -5412648688130606181, guid: 0c22f765985c5e24b95007b88c4ea986, type: 3}
-  bossBulletPrefab: {fileID: 1944315885923239456, guid: b26f9d7dd6e9777479f039153083429d, type: 3}
-=======
   m_GameObject: {fileID: 947405093}
   m_Enabled: 1
   serializedVersion: 3
@@ -1598,7 +1562,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
->>>>>>> Stashed changes
 --- !u!1 &2000850627
 GameObject:
   m_ObjectHideFlags: 0
@@ -1741,9 +1704,6 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 2000850630}
-<<<<<<< Updated upstream
-  - {fileID: 1286232365}
-=======
   - {fileID: 947405098}
   - {fileID: 1097650032}
   - {fileID: 245976653}
@@ -1753,4 +1713,3 @@ SceneRoots:
   - {fileID: 1936983098}
   - {fileID: 1493692248}
   - {fileID: 1028413267}
->>>>>>> Stashed changes
