@@ -106,6 +106,18 @@ public class GameManager : MonoBehaviour
         skillSelectManager.onSkillSelectObjectDisplayed = OnSkillSelectObjectDisplayed;
         skillSelectManager.onSkillSelectObjectHided = OnSkillSelectObjectHided;
         skillSelectManager.onPlayerHealed = OnPlayerHealed;
+<<<<<<< Updated upstream
+=======
+        skillSelectManager.onPassiveSkillSelected = OnPassiveSkillSelected;
+        skillSelectManager.onSkillSelected = OnSkillSelected;
+
+        // BossManager delegate 할당
+        bossManager.onBossHasKilled = OnBossHasKilled;
+
+        //gameTime = maxGameTime;
+        //player.isPlayerShielded = true;
+        //player.level = 20;
+>>>>>>> Stashed changes
     }
 
     void Start()
@@ -264,5 +276,25 @@ public class GameManager : MonoBehaviour
     {
         player.hp += 10;
         if(player.hp > 100) { player.hp = 100; }
+    }
+
+    // 스킬이 선택되면 즉시 스킬 쿨타임을 초기화 시킨다
+    private void OnSkillSelected(int index)
+    {
+        skillManager.ResetDelayTimer(index);
+    }
+
+    // 3 - 뎀감, 4 - 이속증가, 5 - 자석 효과
+    private void OnPassiveSkillSelected(int num, float value)
+    {
+        switch (num)
+        {
+            case 3: { player.damageReductionValue = value; break; }
+            case 4: { player.speed *= value; break; } // 얘는 플레이어 스피드에 즉시 적용
+            case 5: { 
+                    player.magnetRange = value; 
+                    player.ChangeMagnetRange(); 
+                    break; }
+        }
     }
 }

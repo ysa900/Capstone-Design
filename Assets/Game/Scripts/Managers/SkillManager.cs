@@ -127,10 +127,38 @@ public class SkillManager : MonoBehaviour
         skillData.Delay[10] = 4.5f;
         skillData.Delay[11] = 6f;
 
+<<<<<<< Updated upstream
         for (int i = 0; i < skillData.skillSelected.Length; i++)
         {
             skillData.skillSelected[i] = false;
         }
+=======
+        skillData.scale[0] = 1.5f;
+        skillData.scale[1] = 1f;
+        skillData.scale[2] = 2f;
+        skillData.scale[3] = 1.5f;
+        skillData.scale[4] = 1.5f;
+        skillData.scale[5] = 1f;
+        skillData.scale[6] = 1.5f;
+        skillData.scale[7] = 1f;
+        skillData.scale[8] = 1.8f;
+        skillData.scale[9] = 1.75f;
+        skillData.scale[10] = 1.5f;
+        skillData.scale[11] = 1.5f;
+
+        for (int i = 0; i < skillData.skillSelected.Length; i++) { skillData.skillSelected[i] = false; }
+
+        // Passive Skill Data 초기화
+        for (int i = 0; i < passiveSkillData.level.Length; i++) { passiveSkillData.level[i] = 0; }
+
+        passiveSkillData.Damage[0] = 1.2f;
+        passiveSkillData.Damage[1] = 1.2f;
+        passiveSkillData.Damage[2] = 1.2f;
+        passiveSkillData.Damage[3] = 0.9f;
+        passiveSkillData.Damage[4] = 1.2f;
+        passiveSkillData.Damage[5] = 0.5f;
+        for (int i = 0; i < passiveSkillData.skillSelected.Length; i++) { passiveSkillData.skillSelected[i] = false; }
+>>>>>>> Stashed changes
     }
 
     // 시작 스킬을 선택하는 함수 (개발용)
@@ -314,8 +342,13 @@ public class SkillManager : MonoBehaviour
 
                     enemyTrackingSkill.enemy = enemy;
 
+<<<<<<< Updated upstream
                     enemyTrackingSkill.speed = 10;
                     enemyTrackingSkill.damage = skillData.Damage[index];
+=======
+                    enemyTrackingSkill.speed = 20;
+                    enemyTrackingSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[0];
+>>>>>>> Stashed changes
 
                     break;
                 }
@@ -332,11 +365,83 @@ public class SkillManager : MonoBehaviour
                         enemyOnSkill.X = enemyPosition.x + enemy.capsuleCollider.size.x * 6;
                     enemyOnSkill.Y = enemyPosition.y + enemy.capsuleCollider.size.y * 8;
 
+<<<<<<< Updated upstream
                     enemyOnSkill.enemy = enemy;
                     enemyOnSkill.damage = skillData.Damage[index];
+=======
+                    //enemyOnSkill.enemy = enemy;
+                    enemyOnSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[1];
+>>>>>>> Stashed changes
 
                     break;
                 }
+<<<<<<< Updated upstream
+=======
+        }
+    }
+
+    // 스킬을 시전하는 함수 (Boss)
+    private void CastSkill(Boss boss, int index)
+    {
+        switch (index)
+        {
+            case 0:
+                {
+                    enemyTrackingSkill = GameManager.instance.poolManager.GetSkill(0, boss) as EnemyTrackingSkill;
+                    gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+
+                    Vector2 playerPosition = player.transform.position;
+                    Vector2 bossPosition = boss.transform.position;
+
+                    // 파이퍼볼 방향 보정 (적 바라보게)
+                    Vector2 direction = new Vector2(playerPosition.x - bossPosition.x, playerPosition.y - bossPosition.y);
+                    float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+                    Quaternion angleAxis = Quaternion.AngleAxis(angle + 90f, Vector3.forward);
+                    Quaternion rotation = Quaternion.Slerp(enemyTrackingSkill.transform.rotation, angleAxis, 5f);
+                    enemyTrackingSkill.transform.rotation = rotation;
+
+                    enemyTrackingSkill.X = playerPosition.x;
+                    enemyTrackingSkill.Y = playerPosition.y;
+
+                    // enemyTrackingSkill.boss = boss;
+                    enemyTrackingSkill.isBossAppear = true;
+
+                    enemyTrackingSkill.speed = 20;
+                    enemyTrackingSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[0];
+
+                    SetScale(enemyTrackingSkill.gameObject, index);
+
+                    break;
+                }
+            case 1:
+                {
+                    enemyOnSkill = GameManager.instance.poolManager.GetSkill(7, boss) as EnemyOnSkill;
+                    gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+
+                    Vector2 bossPosition = boss.transform.position;
+
+                    // 스킬 위치를 보스 실제 위치로 변경
+                    enemyOnSkill.X = bossPosition.x;
+                    enemyOnSkill.Y = bossPosition.y - boss.capsuleCollider.size.y * 4;
+                    
+                    enemyOnSkill.isBossAppear = true;
+
+                    enemyOnSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[1];
+
+                    SetScale(enemyOnSkill.gameObject, index);
+
+                    break;
+                }
+        }
+    }
+
+    // 스킬을 시전하는 함수
+    private void CastSkill(int index)
+    {
+        switch (index)
+        {
+>>>>>>> Stashed changes
             case 2:
                 {
                     playerAttachSkill = Instantiate(waterBasicSkillPrefab);
@@ -356,7 +461,13 @@ public class SkillManager : MonoBehaviour
 
                     playerAttachSkill.aliveTime = 0.5f;
 
+<<<<<<< Updated upstream
                     playerAttachSkill.damage = skillData.Damage[index];
+=======
+                    playerAttachSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[2];
+
+                    SetScale(playerAttachSkill.gameObject, index);
+>>>>>>> Stashed changes
                     break;
                 }
             case 3:
@@ -375,7 +486,13 @@ public class SkillManager : MonoBehaviour
 
                     playerAttachSkill.aliveTime = 0.5f;
 
+<<<<<<< Updated upstream
                     playerAttachSkill.damage = skillData.Damage[index];
+=======
+                    playerAttachSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[0];
+
+                    SetScale(playerAttachSkill.gameObject, index);
+>>>>>>> Stashed changes
                     break;
                 }
             case 4:
@@ -408,7 +525,7 @@ public class SkillManager : MonoBehaviour
 
                     playerAttachSkill.isShieldSkill = true;
 
-                    playerAttachSkill.damage = skillData.Damage[index];
+                    playerAttachSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[2];
 
                     playerAttachSkill.aliveTime = 3f;
 
@@ -448,7 +565,12 @@ public class SkillManager : MonoBehaviour
                     randomSkill.isMeteor = true;
 
                     randomSkill.aliveTime = 0.5f;
+<<<<<<< Updated upstream
                     randomSkill.damage = skillData.Damage[index];
+=======
+                    randomSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[0];
+                    randomSkill.scale = skillData.scale[index];
+>>>>>>> Stashed changes
 
                     randomSkill.fireNormal2ExplodePrefab = fireNormal2ExplodePrefab;
 
@@ -475,7 +597,18 @@ public class SkillManager : MonoBehaviour
 
                     playerAttachSkill.aliveTime = 0.8f;
 
+<<<<<<< Updated upstream
                     playerAttachSkill.damage = skillData.Damage[index];
+=======
+                    playerAttachSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[1];
+
+                    Transform parent = playerAttachSkill.transform.parent;
+
+                    playerAttachSkill.transform.parent = null;
+                    playerAttachSkill.transform.localScale = new Vector3(3, skillData.scale[index], 0);
+                    playerAttachSkill.transform.parent = parent;
+
+>>>>>>> Stashed changes
                     break;
                 }
             case 8:
@@ -500,7 +633,13 @@ public class SkillManager : MonoBehaviour
                     randomSkill.isIceSpike = true;
 
                     randomSkill.aliveTime = 3f;
+<<<<<<< Updated upstream
                     randomSkill.damage = skillData.Damage[index];
+=======
+                    randomSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[2];
+
+                    SetScale(randomSkill.gameObject, index);
+>>>>>>> Stashed changes
                     break;
                 }
             case 9:
@@ -524,7 +663,13 @@ public class SkillManager : MonoBehaviour
                                 playerAttachSkill.isFlipped = false;
 
                                 playerAttachSkill.aliveTime = 0.8f;
+<<<<<<< Updated upstream
                                 playerAttachSkill.damage = skillData.Damage[index];
+=======
+                                playerAttachSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[0];
+
+                                SetScale(playerAttachSkill.gameObject, index);
+>>>>>>> Stashed changes
                             }
                             else
                             {
@@ -540,7 +685,13 @@ public class SkillManager : MonoBehaviour
                                 playerAttachSkill.isFlipped = true;
 
                                 playerAttachSkill.aliveTime = 0.8f;
+<<<<<<< Updated upstream
                                 playerAttachSkill.damage = skillData.Damage[index];
+=======
+                                playerAttachSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[0];
+
+                                SetScale(playerAttachSkill.gameObject, index);
+>>>>>>> Stashed changes
                             }
                         }
                         isFire3SkillLeftRight = false;
@@ -566,7 +717,13 @@ public class SkillManager : MonoBehaviour
                                 playerAttachSkill.isAttachSkill = true;
 
                                 playerAttachSkill.aliveTime = 1f;
+<<<<<<< Updated upstream
                                 playerAttachSkill.damage = skillData.Damage[index];
+=======
+                                playerAttachSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[0];
+
+                                SetScale(playerAttachSkill.gameObject, index);
+>>>>>>> Stashed changes
                             }
                             else
                             {
@@ -581,7 +738,13 @@ public class SkillManager : MonoBehaviour
                                 playerAttachSkill.isAttachSkill = true;
 
                                 playerAttachSkill.aliveTime = 1f;
+<<<<<<< Updated upstream
                                 playerAttachSkill.damage = skillData.Damage[index];
+=======
+                                playerAttachSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[0];
+
+                                SetScale(playerAttachSkill.gameObject, index);
+>>>>>>> Stashed changes
                             }
                             
                         }
@@ -614,7 +777,13 @@ public class SkillManager : MonoBehaviour
 
                     playerAttachSkill.aliveTime = 3f;
 
+<<<<<<< Updated upstream
                     playerAttachSkill.damage = skillData.Damage[index];
+=======
+                    playerAttachSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[2];
+
+                    SetScale(playerAttachSkill.gameObject, index);
+>>>>>>> Stashed changes
                     break;
                 }
         }
@@ -627,7 +796,98 @@ public class SkillManager : MonoBehaviour
 
     IEnumerator DisplayNDestroy(float x, float y)
     {
+<<<<<<< Updated upstream
         skillObject = Instantiate(fireNormal2ShadowPrefab);
+=======
+        float tmpDegree = 0f;
+
+        if (skillData.level[4] == 5)
+        {
+            for(int i = 0; i < 3; i++)
+            {
+                playerAttachSkill = GameManager.instance.poolManager.GetSkill(8) as PlayerAttachSkill;
+
+                playerAttachSkill.degree = tmpDegree;
+                tmpDegree -= 120f;
+
+                playerAttachSkill.xPositionNum = 4f;
+                playerAttachSkill.aliveTime = 5f * 1.5f;
+
+                gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+
+                //playerAttachSkill.player = player;
+
+                playerAttachSkill.X = player.transform.position.x + 3f;
+                playerAttachSkill.Y = player.transform.position.y;
+
+                playerAttachSkill.yPositionNum = 0f;
+
+                playerAttachSkill.isCircleSkill = true;
+
+                playerAttachSkill.damage = skillData.Damage[4] * passiveSkillData.Damage[1];
+
+                SetScale(playerAttachSkill.gameObject, 4);
+            }
+        }
+        else if (skillData.level[4] >= 3)
+        {
+            for(int i = 0; i < 2; i++)
+            {
+                playerAttachSkill = GameManager.instance.poolManager.GetSkill(8) as PlayerAttachSkill;
+
+                playerAttachSkill.degree = tmpDegree;
+                tmpDegree -= 180f;
+
+                playerAttachSkill.xPositionNum = 3.5f;
+                playerAttachSkill.aliveTime = 5f * 1.25f;
+
+                gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+
+                //playerAttachSkill.player = player;
+
+                playerAttachSkill.X = player.transform.position.x + 3f;
+                playerAttachSkill.Y = player.transform.position.y;
+
+                playerAttachSkill.yPositionNum = 0f;
+
+                playerAttachSkill.isCircleSkill = true;
+
+                playerAttachSkill.damage = skillData.Damage[4] * passiveSkillData.Damage[1];
+
+                SetScale(playerAttachSkill.gameObject, 4);
+            }
+        }
+        else
+        {
+            playerAttachSkill = GameManager.instance.poolManager.GetSkill(8) as PlayerAttachSkill;
+
+            playerAttachSkill.degree = 0f;
+
+            playerAttachSkill.xPositionNum = 3f;
+            playerAttachSkill.aliveTime = 5f;
+
+            gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+
+            //playerAttachSkill.player = player;
+
+            playerAttachSkill.X = player.transform.position.x + 3f;
+            playerAttachSkill.Y = player.transform.position.y;
+
+            playerAttachSkill.yPositionNum = 0f;
+
+            playerAttachSkill.isCircleSkill = true;
+
+            playerAttachSkill.damage = skillData.Damage[4] * passiveSkillData.Damage[1];
+
+            SetScale(playerAttachSkill.gameObject, 4);
+        }
+    }
+
+    // 메테오 떨어질 때 그림자 오브젝트 생성 후 제거
+    IEnumerator DisplayShadowNDestroy(float x, float y)
+    {
+        skillObject = GameManager.instance.poolManager.GetSkill(4) as RandomSkill;
+>>>>>>> Stashed changes
 
         skillObject.transform.position = new Vector2(x, y);
 
@@ -661,11 +921,16 @@ public class SkillManager : MonoBehaviour
             randomSkill.player = player;
 
             randomSkill.aliveTime = 0.8f;
-            randomSkill.damage = skillData.Damage[index];
+            randomSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[1];
 
             yield return new WaitForSeconds(0.2f); // 지정한 초 만큼 쉬기
         }
-        
+    }
+
+    // 쿨타임 초기화 함수
+    public void ResetDelayTimer(int index)
+    {
+        attackDelayTimer[index] = 0;
     }
 }
 

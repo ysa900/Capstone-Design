@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Google.Protobuf.WellKnownTypes;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using TMPro;
@@ -66,6 +67,24 @@ public class SkillSelectManager: MonoBehaviour
 
     bool isSkillAllMax; // 스킬이 전부 만렙인지 판단하는 변수
 
+<<<<<<< Updated upstream
+=======
+    // 스킬 레벨업시 데미지, 딜레이 증가 계수
+    float normalDamageCoefficient = 1.15f;
+    float normalDelayCoefficient = 0.95f;
+    float normalscaleCoefficient = 1.25f;
+
+    float maxDamageCoefficient = 1.3f;
+    float maxDelayCoefficient = 0.8f;
+    float maxscaleCoefficient = 1.5f;
+
+    // 패시브 스킬 레벨업시 수치 증가 값(뎀감만 감소함)
+    float masterySkill_IncrementValue = 0.2f;
+    float damageReductionSkill_IncrementValue = 0.1f; // 이건 뎀감 수치 (레벨업 시 1 -> 0.9 -> 0.8 -> 0.7로 감소함)
+    float speedUpSkill_IncrementValue = 0.2f;
+    float magnetSkill_IncrementValue = 0.5f;
+
+>>>>>>> Stashed changes
     // GameManager에게 알려주기 위한 delegate들
     public delegate void OnSkillSelectObjectDisplayed();
     public OnSkillSelectObjectDisplayed onSkillSelectObjectDisplayed;
@@ -75,6 +94,12 @@ public class SkillSelectManager: MonoBehaviour
 
     public delegate void OnPlayerHealed();
     public OnPlayerHealed onPlayerHealed;
+
+    public delegate void OnSkillSelected(int num); // 스킬이 선택되면 즉시 쿨타임 초기화를 해주기 위해 만든 delegate
+    public OnSkillSelected onSkillSelected;
+
+    public delegate void OnPassiveSkillSelected(int num, float value); // num: 패시브 스킬 종류, value: 바뀐 수치 값
+    public OnPassiveSkillSelected onPassiveSkillSelected;
 
     private void Awake()
     {
@@ -238,6 +263,7 @@ public class SkillSelectManager: MonoBehaviour
             icon = skill_Icon[i].GetComponent<Image>();
             icon.sprite = skillData.skillicon[ranNum[i]];
 
+            // 텍스트 색 설정
             string color;
 
             if (ranNum[i] % 3 == 0) { color = "#FF0000"; }
@@ -252,6 +278,7 @@ public class SkillSelectManager: MonoBehaviour
 
             Image[] img = levelObject[i].GetComponentsInChildren<Image>();
 
+            // 마법진 알파값 설정 (레벨 표시)
             for (int num = 4; num >= skillData.level[ranNum[i]]; num--)
             {
                 UnityEngine.Color col = img[num].color;
@@ -265,12 +292,22 @@ public class SkillSelectManager: MonoBehaviour
                 img[num].color = col;
             }
         }
-        else
+        else // 패시브 스킬 이면
         {
             icon = skill_Icon[i].GetComponent<Image>();
             icon.sprite = skillData.skillicon[12];
 
+<<<<<<< Updated upstream
             string color = "#FF0000";
+=======
+            // 텍스트 색 설정
+            string color;
+            
+            if (ranNum[i] - 13 == 0) { color = "#F7570B"; }
+            else if (ranNum[i] - 13 == 1) { color = "#0EB4FC"; }
+            else if (ranNum[i] - 13 == 2) { color = "#79EDFF"; }
+            else { color = "#FFFFFF"; }
+>>>>>>> Stashed changes
 
             textName = skill_TextName[i].GetComponent<TextMeshProUGUI>();
             textName.text = "<color=" + color + ">" + skillData.skillName[12] + "</color>";
@@ -278,7 +315,33 @@ public class SkillSelectManager: MonoBehaviour
             textDescription = skill_TextDescription[i].GetComponent<TextMeshProUGUI>();
             textDescription.text = "<color=" + color + ">" + skillData.skillDescription[12] + "</color>";
 
+<<<<<<< Updated upstream
             levelObject[i].SetActive(false);
+=======
+            Image[] img = levelObject[i].GetComponentsInChildren<Image>();
+
+            // 마법진 알파값 설정 (레벨 표시)
+            UnityEngine.Color col = img[0].color; // 0, 4번은 아에 안보이게(패시브 스킬은 만렙이 3이니까)
+            col.a = 0f;
+            img[0].color = col;
+
+            col = img[4].color;
+            col.a = 0f;
+            img[4].color = col;
+
+            for (int num = 3; num > passiveSkillData.level[ranNum[i] - 13]; num--)
+            {
+                col = img[num].color;
+                col.a = 0.3f;
+                img[num].color = col;
+            }
+            for (int num = 1; num <= passiveSkillData.level[ranNum[i] - 13]; num++)
+            {
+                col = img[num].color;
+                col.a = 1f;
+                img[num].color = col;
+            }
+>>>>>>> Stashed changes
         }
     }
 
@@ -316,7 +379,50 @@ public class SkillSelectManager: MonoBehaviour
 
                 panel_skill_Icon[selectedSkillsPointer].SetActive(true);
 
+<<<<<<< Updated upstream
                 selectedSkills[selectedSkillsPointer++] = ranNum[0];
+=======
+                    selected_Skills[selected_Skills_Pointer++] = ranNum[0];
+
+                    if (ranNum[0] != 12) // blood는 빼고
+                        onSkillSelected(ranNum[0]); // delegate 호출
+                }
+                else
+                {
+                    skillData.level[ranNum[0]]++;
+
+                    isSkillMaxLevel[ranNum[0]] = skillData.level[ranNum[0]] == 5;
+
+                    int index = Array.IndexOf(selected_Skills, ranNum[0]);
+
+                    textName = panel_skill_LevelText[index].GetComponent<TextMeshProUGUI>();
+                    textName.text = "Lv " + skillData.level[ranNum[0]];
+
+                    if (isSkillMaxLevel[ranNum[0]])
+                    {
+                        // 만랩 찍으면 많이 쌔짐
+                        skillData.Damage[ranNum[0]] *= maxDamageCoefficient;
+                        skillData.Delay[ranNum[0]] *= maxDelayCoefficient;
+                        skillData.scale[ranNum[0]] /= normalscaleCoefficient;
+                        skillData.scale[ranNum[0]] *= maxscaleCoefficient;
+                        textName.text = "Lv Max";
+                    }
+                    else if (skillData.level[ranNum[0]] == 3)
+                    {
+                        skillData.Damage[ranNum[0]] *= normalDamageCoefficient;
+                        skillData.Delay[ranNum[0]] *= normalDelayCoefficient;
+                        skillData.scale[ranNum[0]] *= normalscaleCoefficient;
+                    }
+                    else
+                    {
+                        skillData.Damage[ranNum[0]] *= normalDamageCoefficient;
+                        skillData.Delay[ranNum[0]] *= normalDelayCoefficient;
+                    }
+
+                    if (ranNum[0] != 12) // blood는 빼고
+                        onSkillSelected(ranNum[0]); // delegate 호출
+                }
+>>>>>>> Stashed changes
             }
             else
             {
@@ -331,6 +437,7 @@ public class SkillSelectManager: MonoBehaviour
 
                 if (isSkillMaxLevel[ranNum[0]])
                 {
+<<<<<<< Updated upstream
                     // 만랩 찍으면 많이 쌔짐
                     skillData.Damage[ranNum[0]] *= 1.5f;
                     skillData.Delay[ranNum[0]] *= 0.6f;
@@ -339,6 +446,45 @@ public class SkillSelectManager: MonoBehaviour
                 {
                     skillData.Damage[ranNum[0]] *= 1.2f;
                     skillData.Delay[ranNum[0]] *= 0.9f;
+=======
+                    passiveSkillData.skillSelected[ranNum[0] - 13] = true;
+                    passiveSkillData.level[ranNum[0] - 13] = 1;
+
+                    icon = panel_passive_skill_Icon[selected_Passive_Skills_Pointer].GetComponent<Image>();
+                    icon.sprite = passiveSkillData.skillicon[ranNum[0] - 13];
+
+                    textName = panel_passive_skill_LevelText[selected_Passive_Skills_Pointer].GetComponent<TextMeshProUGUI>();
+                    textName.text = "Lv " + passiveSkillData.level[ranNum[0] - 13];
+
+                    panel_passive_skill_Icon[selected_Passive_Skills_Pointer].SetActive(true);
+
+                    selected_Passive_Skills[selected_Passive_Skills_Pointer++] = ranNum[0] - 13;
+
+                    onPassiveSkillSelected(ranNum[0] - 13, passiveSkillData.Damage[ranNum[0] - 13]); // delegate 호출
+                }
+                else
+                {
+                    passiveSkillData.level[ranNum[0] - 13]++;
+
+                    isPassiveSkillMaxLevel[ranNum[0] - 13] = passiveSkillData.level[ranNum[0] - 13] == 3;
+
+                    int index = Array.IndexOf(selected_Passive_Skills, ranNum[0] - 13);
+
+                    textName = panel_passive_skill_LevelText[index].GetComponent<TextMeshProUGUI>();
+                    textName.text = "Lv " + passiveSkillData.level[ranNum[0] - 13];
+
+                    switch(ranNum[0] - 13)
+                    {
+                        case 3: { passiveSkillData.Damage[ranNum[0] - 13] -= damageReductionSkill_IncrementValue; break; }
+                        case 4: { passiveSkillData.Damage[ranNum[0] - 13] += speedUpSkill_IncrementValue; break; }
+                        case 5: { passiveSkillData.Damage[ranNum[0] - 13] += magnetSkill_IncrementValue; break; }
+                        default: { passiveSkillData.Damage[ranNum[0] - 13] += masterySkill_IncrementValue; break; }
+                    }
+
+                    if (isPassiveSkillMaxLevel[ranNum[0] - 13]) { textName.text = "Lv Max"; }
+
+                    onPassiveSkillSelected(ranNum[0] - 13, passiveSkillData.Damage[ranNum[0] - 13]); // delegate 호출
+>>>>>>> Stashed changes
                 }
             }
         }
@@ -385,7 +531,50 @@ public class SkillSelectManager: MonoBehaviour
 
                     panel_skill_Icon[selectedSkillsPointer].SetActive(true);
 
+<<<<<<< Updated upstream
                     selectedSkills[selectedSkillsPointer++] = ranNum[1];
+=======
+                        selected_Skills[selected_Skills_Pointer++] = ranNum[1];
+
+                        if (ranNum[0] != 12) // blood는 빼고
+                            onSkillSelected(ranNum[1]); // delegate 호출
+                    }
+                    else
+                    {
+                        skillData.level[ranNum[1]]++;
+
+                        isSkillMaxLevel[ranNum[1]] = skillData.level[ranNum[1]] == 5;
+
+                        int index = Array.IndexOf(selected_Skills, ranNum[1]);
+                        
+                        textName = panel_skill_LevelText[index].GetComponent<TextMeshProUGUI>();
+                        textName.text = "Lv " + skillData.level[ranNum[1]];
+
+                        if (isSkillMaxLevel[ranNum[1]])
+                        {
+                            // 만랩 찍으면 많이 쌔짐
+                            skillData.Damage[ranNum[1]] *= maxDamageCoefficient;
+                            skillData.Delay[ranNum[1]] *= maxDelayCoefficient;
+                            skillData.scale[ranNum[1]] /= normalscaleCoefficient;
+                            skillData.scale[ranNum[1]] *= maxscaleCoefficient;
+                            textName.text = "Lv Max";
+                        }
+                        else if (skillData.level[ranNum[1]] == 3)
+                        {
+                            skillData.Damage[ranNum[1]] *= normalDamageCoefficient;
+                            skillData.Delay[ranNum[1]] *= normalDelayCoefficient;
+                            skillData.scale[ranNum[1]] *= normalscaleCoefficient;
+                        }
+                        else
+                        {
+                            skillData.Damage[ranNum[1]] *= normalDamageCoefficient;
+                            skillData.Delay[ranNum[1]] *= normalDelayCoefficient;
+                        }
+
+                        if (ranNum[0] != 12) // blood는 빼고
+                            onSkillSelected(ranNum[1]); // delegate 호출
+                    }
+>>>>>>> Stashed changes
                 }
                 else
                 {
@@ -400,6 +589,7 @@ public class SkillSelectManager: MonoBehaviour
 
                     if (isSkillMaxLevel[ranNum[1]])
                     {
+<<<<<<< Updated upstream
                         // 만랩 찍으면 많이 쌔짐
                         skillData.Damage[ranNum[1]] *= 1.5f;
                         skillData.Delay[ranNum[1]] *= 0.6f;
@@ -408,6 +598,45 @@ public class SkillSelectManager: MonoBehaviour
                     {
                         skillData.Damage[ranNum[1]] *= 1.2f;
                         skillData.Delay[ranNum[1]] *= 0.9f;
+=======
+                        passiveSkillData.skillSelected[ranNum[1] - 13] = true;
+                        passiveSkillData.level[ranNum[1] - 13] = 1;
+
+                        icon = panel_passive_skill_Icon[selected_Passive_Skills_Pointer].GetComponent<Image>();
+                        icon.sprite = passiveSkillData.skillicon[ranNum[1] - 13];
+
+                        textName = panel_passive_skill_LevelText[selected_Passive_Skills_Pointer].GetComponent<TextMeshProUGUI>();
+                        textName.text = "Lv " + passiveSkillData.level[ranNum[1] - 13];
+
+                        panel_passive_skill_Icon[selected_Passive_Skills_Pointer].SetActive(true);
+
+                        selected_Passive_Skills[selected_Passive_Skills_Pointer++] = ranNum[1] - 13;
+
+                        onPassiveSkillSelected(ranNum[1] - 13, passiveSkillData.Damage[ranNum[1] - 13]); // delegate 호출
+                    }
+                    else
+                    {
+                        passiveSkillData.level[ranNum[1] - 13]++;
+
+                        isPassiveSkillMaxLevel[ranNum[1] - 13] = passiveSkillData.level[ranNum[1] - 13] == 3;
+
+                        int index = Array.IndexOf(selected_Passive_Skills, ranNum[1] - 13);
+
+                        textName = panel_passive_skill_LevelText[index].GetComponent<TextMeshProUGUI>();
+                        textName.text = "Lv " + passiveSkillData.level[ranNum[1] - 13];
+
+                        switch (ranNum[1] - 13)
+                        {
+                            case 3: { passiveSkillData.Damage[ranNum[1] - 13] -= damageReductionSkill_IncrementValue; break; }
+                            case 4: { passiveSkillData.Damage[ranNum[1] - 13] += speedUpSkill_IncrementValue; break; }
+                            case 5: { passiveSkillData.Damage[ranNum[1] - 13] += magnetSkill_IncrementValue; break; }
+                            default: { passiveSkillData.Damage[ranNum[1] - 13] += masterySkill_IncrementValue; break; }
+                        }
+
+                        if (isPassiveSkillMaxLevel[ranNum[1] - 13]) { textName.text = "Lv Max"; }
+
+                        onPassiveSkillSelected(ranNum[1] - 13, passiveSkillData.Damage[ranNum[1] - 13]); // delegate 호출
+>>>>>>> Stashed changes
                     }
                 }
             }
@@ -457,7 +686,50 @@ public class SkillSelectManager: MonoBehaviour
 
                 panel_skill_Icon[selectedSkillsPointer].SetActive(true);
 
+<<<<<<< Updated upstream
                 selectedSkills[selectedSkillsPointer++] = ranNum[2];
+=======
+                    selected_Skills[selected_Skills_Pointer++] = ranNum[2];
+
+                    if (ranNum[0] != 12) // blood는 빼고
+                        onSkillSelected(ranNum[2]); // delegate 호출
+                }
+                else
+                {
+                    skillData.level[ranNum[2]]++;
+
+                    isSkillMaxLevel[ranNum[2]] = skillData.level[ranNum[2]] == 5;
+
+                    int index = Array.IndexOf(selected_Skills, ranNum[2]);
+
+                    textName = panel_skill_LevelText[index].GetComponent<TextMeshProUGUI>();
+                    textName.text = "Lv " + skillData.level[ranNum[2]];
+
+                    if (isSkillMaxLevel[ranNum[2]])
+                    {
+                        // 만랩 찍으면 많이 쌔짐
+                        skillData.Damage[ranNum[2]] *= maxDamageCoefficient;
+                        skillData.Delay[ranNum[2]] *= maxDelayCoefficient;
+                        skillData.scale[ranNum[2]] /= normalscaleCoefficient;
+                        skillData.scale[ranNum[2]] *= maxscaleCoefficient;
+                        textName.text = "Lv Max";
+                    }
+                    else if (skillData.level[ranNum[2]] == 3)
+                    {
+                        skillData.Damage[ranNum[2]] *= normalDamageCoefficient;
+                        skillData.Delay[ranNum[2]] *= normalDelayCoefficient;
+                        skillData.scale[ranNum[2]] *= normalscaleCoefficient;
+                    }
+                    else
+                    {
+                        skillData.Damage[ranNum[2]] *= normalDamageCoefficient;
+                        skillData.Delay[ranNum[2]] *= normalDelayCoefficient;
+                    }
+
+                    if (ranNum[0] != 12) // blood는 빼고
+                        onSkillSelected(ranNum[2]); // delegate 호출
+                }
+>>>>>>> Stashed changes
             }
             else
             {
@@ -472,6 +744,7 @@ public class SkillSelectManager: MonoBehaviour
 
                 if (isSkillMaxLevel[ranNum[2]])
                 {
+<<<<<<< Updated upstream
                     // 만랩 찍으면 많이 쌔짐
                     skillData.Damage[ranNum[2]] *= 1.5f;
                     skillData.Delay[ranNum[2]] *= 0.6f;
@@ -480,6 +753,45 @@ public class SkillSelectManager: MonoBehaviour
                 {
                     skillData.Damage[ranNum[2]] *= 1.2f;
                     skillData.Delay[ranNum[2]] *= 0.9f;
+=======
+                    passiveSkillData.skillSelected[ranNum[2] - 13] = true;
+                    passiveSkillData.level[ranNum[2] - 13] = 1;
+
+                    icon = panel_passive_skill_Icon[selected_Passive_Skills_Pointer].GetComponent<Image>();
+                    icon.sprite = passiveSkillData.skillicon[ranNum[2] - 13];
+
+                    textName = panel_passive_skill_LevelText[selected_Passive_Skills_Pointer].GetComponent<TextMeshProUGUI>();
+                    textName.text = "Lv " + passiveSkillData.level[ranNum[2] - 13];
+
+                    panel_passive_skill_Icon[selected_Passive_Skills_Pointer].SetActive(true);
+
+                    selected_Passive_Skills[selected_Passive_Skills_Pointer++] = ranNum[2] - 13;
+
+                    onPassiveSkillSelected(ranNum[2] - 13, passiveSkillData.Damage[ranNum[2] - 13]); // delegate 호출
+                }
+                else
+                {
+                    passiveSkillData.level[ranNum[2] - 13]++;
+
+                    isPassiveSkillMaxLevel[ranNum[2] - 13] = passiveSkillData.level[ranNum[2] - 13] == 3;
+
+                    int index = Array.IndexOf(selected_Passive_Skills, ranNum[2] - 13);
+
+                    textName = panel_passive_skill_LevelText[index].GetComponent<TextMeshProUGUI>();
+                    textName.text = "Lv " + passiveSkillData.level[ranNum[2] - 13];
+
+                    switch (ranNum[2] - 13)
+                    {
+                        case 3: { passiveSkillData.Damage[ranNum[2] - 13] -= damageReductionSkill_IncrementValue; break; }
+                        case 4: { passiveSkillData.Damage[ranNum[2] - 13] += speedUpSkill_IncrementValue; break; }
+                        case 5: { passiveSkillData.Damage[ranNum[2] - 13] += magnetSkill_IncrementValue; break; }
+                        default: { passiveSkillData.Damage[ranNum[2] - 13] += masterySkill_IncrementValue; break; }
+                    }
+
+                    if (isPassiveSkillMaxLevel[ranNum[2] - 13]) { textName.text = "Lv Max"; }
+
+                    onPassiveSkillSelected(ranNum[2] - 13, passiveSkillData.Damage[ranNum[2] - 13]); // delegate 호출
+>>>>>>> Stashed changes
                 }
             }
         }
