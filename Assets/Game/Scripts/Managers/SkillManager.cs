@@ -52,7 +52,7 @@ public class SkillManager : MonoBehaviour
 
     private void Update()
     {
-        for (int i = 0; i < skillData.Damage.Length; i++)
+        for(int i = 0; i < skillData.Damage.Length; i++)
         {
             if (skillData.skillSelected[i]) // 활성화(선택)된 스킬만 실행
             {
@@ -61,7 +61,7 @@ public class SkillManager : MonoBehaviour
                 {
                     attackDelayTimer[i] = skillData.Delay[i];
 
-                    if (i == 0 || i == 1)
+                    if(i == 0 || i == 1)
                         TryAttack(i); // 스킬 쿨타임이 다 됐으면 공격을 시도한다
                     else
                         CastSkill(i); // 스킬 쿨타임이 다 됐으면 공격한다
@@ -135,12 +135,12 @@ public class SkillManager : MonoBehaviour
         // Passive Skill Data 초기화
         for (int i = 0; i < passiveSkillData.level.Length; i++) { passiveSkillData.level[i] = 0; }
 
-        passiveSkillData.Damage[0] = 1f;
-        passiveSkillData.Damage[1] = 1f;
-        passiveSkillData.Damage[2] = 1f;
-        passiveSkillData.Damage[3] = 1f;
-        passiveSkillData.Damage[4] = 1f;
-        passiveSkillData.Damage[5] = 1f;
+        passiveSkillData.Damage[0] = 1.2f;
+        passiveSkillData.Damage[1] = 1.2f;
+        passiveSkillData.Damage[2] = 1.2f;
+        passiveSkillData.Damage[3] = 0.9f;
+        passiveSkillData.Damage[4] = 1.2f;
+        passiveSkillData.Damage[5] = 0.5f;
         for (int i = 0; i < passiveSkillData.skillSelected.Length; i++) { passiveSkillData.skillSelected[i] = false; }
     }
 
@@ -169,7 +169,7 @@ public class SkillManager : MonoBehaviour
                         Vector2 enemyPos = enemy.transform.position;
                         Vector2 playerPos = player.transform.position;
                         float distance = Vector2.Distance(enemyPos, playerPos);
-
+                        
                         bool isInAttackRange = distance <= attackRange; // 적이 사거리 내에 있을때만 공격이 나간다
 
                         if (isInAttackRange)
@@ -190,13 +190,13 @@ public class SkillManager : MonoBehaviour
                         while (true)
                         {
                             int ranNum = UnityEngine.Random.Range(0, enemies.Count);
-
+                            
                             enemy = enemies[ranNum];
-
+                            
                             if (!(enemy == null))
                             {
                                 float distance = Vector2.Distance(enemy.transform.position, player.transform.position);
-
+                                
                                 isInAttackRange = distance <= attackRange; // 적이 사거리 내에 있을때만 공격이 나간다
 
                                 if (isInAttackRange)
@@ -209,7 +209,7 @@ public class SkillManager : MonoBehaviour
                         }
                         if (enemy == null) return; // 적이 없으면 공격 X
 
-                        if (isInAttackRange)
+                        if(isInAttackRange)
                             CastSkill(enemy, index);
 
                         break;
@@ -218,7 +218,7 @@ public class SkillManager : MonoBehaviour
         }
         else
         {
-            if (boss == null) return;
+            if(boss == null) return;
             switch (index)
             {
                 case 0:
@@ -239,12 +239,12 @@ public class SkillManager : MonoBehaviour
                 case 1:
                     {
                         CastSkill(boss, index);
-
+                        
                         break;
                     }
             }
         }
-
+        
     }
 
     // 가장 가까운 Enemy를 찾는 함수
@@ -282,7 +282,7 @@ public class SkillManager : MonoBehaviour
 
                     Vector2 playerPosition = player.transform.position;
                     Vector2 enemyPosition = enemy.transform.position;
-
+                    
                     // 파이퍼볼 방향 보정 (적 바라보게)
                     Vector2 direction = new Vector2(playerPosition.x - enemyPosition.x, playerPosition.y - enemyPosition.y);
                     float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
@@ -290,14 +290,14 @@ public class SkillManager : MonoBehaviour
                     Quaternion angleAxis = Quaternion.AngleAxis(angle + 90f, Vector3.forward);
                     Quaternion rotation = Quaternion.Slerp(enemyTrackingSkill.transform.rotation, angleAxis, 5f);
                     enemyTrackingSkill.transform.rotation = rotation;
-
+                    
                     enemyTrackingSkill.X = playerPosition.x;
                     enemyTrackingSkill.Y = playerPosition.y;
 
                     //enemyTrackingSkill.enemy = enemy; 현재 enemy는 PoolManager에서 Init시키기 전에 할당해주는 중
 
                     enemyTrackingSkill.speed = 20;
-                    enemyTrackingSkill.damage = skillData.Damage[index];
+                    enemyTrackingSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[0];
 
                     SetScale(enemyTrackingSkill.gameObject, index);
 
@@ -318,7 +318,7 @@ public class SkillManager : MonoBehaviour
                     enemyOnSkill.Y = enemyPosition.y + enemy.capsuleCollider.size.y * 8;
 
                     //enemyOnSkill.enemy = enemy;
-                    enemyOnSkill.damage = skillData.Damage[index];
+                    enemyOnSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[1];
 
                     SetScale(enemyOnSkill.gameObject, index);
 
@@ -355,7 +355,7 @@ public class SkillManager : MonoBehaviour
                     enemyTrackingSkill.isBossAppear = true;
 
                     enemyTrackingSkill.speed = 20;
-                    enemyTrackingSkill.damage = skillData.Damage[index];
+                    enemyTrackingSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[0];
 
                     SetScale(enemyTrackingSkill.gameObject, index);
 
@@ -371,10 +371,10 @@ public class SkillManager : MonoBehaviour
                     // 스킬 위치를 보스 실제 위치로 변경
                     enemyOnSkill.X = bossPosition.x;
                     enemyOnSkill.Y = bossPosition.y - boss.capsuleCollider.size.y * 4;
-
+                    
                     enemyOnSkill.isBossAppear = true;
 
-                    enemyOnSkill.damage = skillData.Damage[index];
+                    enemyOnSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[1];
 
                     SetScale(enemyOnSkill.gameObject, index);
 
@@ -419,7 +419,7 @@ public class SkillManager : MonoBehaviour
 
                     playerAttachSkill.aliveTime = 0.5f;
 
-                    playerAttachSkill.damage = skillData.Damage[index];
+                    playerAttachSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[2];
 
                     SetScale(playerAttachSkill.gameObject, index);
                     break;
@@ -441,7 +441,7 @@ public class SkillManager : MonoBehaviour
 
                     playerAttachSkill.aliveTime = 0.5f;
 
-                    playerAttachSkill.damage = skillData.Damage[index];
+                    playerAttachSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[0];
 
                     SetScale(playerAttachSkill.gameObject, index);
                     break;
@@ -463,7 +463,7 @@ public class SkillManager : MonoBehaviour
 
                     playerAttachSkill.isShieldSkill = true;
 
-                    playerAttachSkill.damage = skillData.Damage[index];
+                    playerAttachSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[2];
 
                     playerAttachSkill.aliveTime = 3f;
 
@@ -504,7 +504,7 @@ public class SkillManager : MonoBehaviour
                     randomSkill.isMeteor = true;
 
                     randomSkill.aliveTime = 0.5f;
-                    randomSkill.damage = skillData.Damage[index];
+                    randomSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[0];
                     randomSkill.scale = skillData.scale[index];
 
                     SetScale(randomSkill.gameObject, index);
@@ -533,7 +533,7 @@ public class SkillManager : MonoBehaviour
 
                     playerAttachSkill.aliveTime = 0.8f;
 
-                    playerAttachSkill.damage = skillData.Damage[index];
+                    playerAttachSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[1];
 
                     Transform parent = playerAttachSkill.transform.parent;
 
@@ -566,7 +566,7 @@ public class SkillManager : MonoBehaviour
                     randomSkill.isIceSpike = true;
 
                     randomSkill.aliveTime = 3f;
-                    randomSkill.damage = skillData.Damage[index];
+                    randomSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[2];
 
                     SetScale(randomSkill.gameObject, index);
                     break;
@@ -587,7 +587,7 @@ public class SkillManager : MonoBehaviour
 
                                 if (skillData.level[index] == 5)
                                 {
-                                    playerAttachSkill.xPositionNum = -4 * 1.5f;
+                                    playerAttachSkill.xPositionNum = - 4 * 1.5f;
                                 }
                                 else if (skillData.level[index] >= 3)
                                 {
@@ -605,7 +605,7 @@ public class SkillManager : MonoBehaviour
                                 playerAttachSkill.isFlipped = false;
 
                                 playerAttachSkill.aliveTime = 0.8f;
-                                playerAttachSkill.damage = skillData.Damage[index];
+                                playerAttachSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[0];
 
                                 SetScale(playerAttachSkill.gameObject, index);
                             }
@@ -620,7 +620,7 @@ public class SkillManager : MonoBehaviour
                                 }
                                 else if (skillData.level[index] >= 3)
                                 {
-                                    playerAttachSkill.xPositionNum = 4 * 1.25f;
+                                    playerAttachSkill.xPositionNum =  4 * 1.25f;
                                 }
                                 else
                                 {
@@ -634,7 +634,7 @@ public class SkillManager : MonoBehaviour
                                 playerAttachSkill.isFlipped = true;
 
                                 playerAttachSkill.aliveTime = 0.8f;
-                                playerAttachSkill.damage = skillData.Damage[index];
+                                playerAttachSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[0];
 
                                 SetScale(playerAttachSkill.gameObject, index);
                             }
@@ -674,7 +674,7 @@ public class SkillManager : MonoBehaviour
                                 playerAttachSkill.isAttachSkill = true;
 
                                 playerAttachSkill.aliveTime = 1f;
-                                playerAttachSkill.damage = skillData.Damage[index];
+                                playerAttachSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[0];
 
                                 SetScale(playerAttachSkill.gameObject, index);
                             }
@@ -702,7 +702,7 @@ public class SkillManager : MonoBehaviour
                                 playerAttachSkill.isAttachSkill = true;
 
                                 playerAttachSkill.aliveTime = 1f;
-                                playerAttachSkill.damage = skillData.Damage[index];
+                                playerAttachSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[0];
 
                                 SetScale(playerAttachSkill.gameObject, index);
                             }
@@ -750,7 +750,7 @@ public class SkillManager : MonoBehaviour
 
                     playerAttachSkill.aliveTime = 3f;
 
-                    playerAttachSkill.damage = skillData.Damage[index];
+                    playerAttachSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[2];
 
                     SetScale(playerAttachSkill.gameObject, index);
                     break;
@@ -780,7 +780,7 @@ public class SkillManager : MonoBehaviour
 
         if (skillData.level[4] == 5)
         {
-            for (int i = 0; i < 3; i++)
+            for(int i = 0; i < 3; i++)
             {
                 playerAttachSkill = GameManager.instance.poolManager.GetSkill(8) as PlayerAttachSkill;
 
@@ -801,14 +801,14 @@ public class SkillManager : MonoBehaviour
 
                 playerAttachSkill.isCircleSkill = true;
 
-                playerAttachSkill.damage = skillData.Damage[4];
+                playerAttachSkill.damage = skillData.Damage[4] * passiveSkillData.Damage[1];
 
                 SetScale(playerAttachSkill.gameObject, 4);
             }
         }
         else if (skillData.level[4] >= 3)
         {
-            for (int i = 0; i < 2; i++)
+            for(int i = 0; i < 2; i++)
             {
                 playerAttachSkill = GameManager.instance.poolManager.GetSkill(8) as PlayerAttachSkill;
 
@@ -829,7 +829,7 @@ public class SkillManager : MonoBehaviour
 
                 playerAttachSkill.isCircleSkill = true;
 
-                playerAttachSkill.damage = skillData.Damage[4];
+                playerAttachSkill.damage = skillData.Damage[4] * passiveSkillData.Damage[1];
 
                 SetScale(playerAttachSkill.gameObject, 4);
             }
@@ -854,7 +854,7 @@ public class SkillManager : MonoBehaviour
 
             playerAttachSkill.isCircleSkill = true;
 
-            playerAttachSkill.damage = skillData.Damage[4];
+            playerAttachSkill.damage = skillData.Damage[4] * passiveSkillData.Damage[1];
 
             SetScale(playerAttachSkill.gameObject, 4);
         }
@@ -908,12 +908,18 @@ public class SkillManager : MonoBehaviour
             //randomSkill.player = player;
 
             randomSkill.aliveTime = 0.8f;
-            randomSkill.damage = skillData.Damage[index];
+            randomSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[1];
 
             SetScale(randomSkill.gameObject, index);
 
             yield return new WaitForSeconds(0.2f); // 지정한 초 만큼 쉬기
         }
+    }
 
+    // 쿨타임 초기화 함수
+    public void ResetDelayTimer(int index)
+    {
+        attackDelayTimer[index] = 0;
     }
 }
+

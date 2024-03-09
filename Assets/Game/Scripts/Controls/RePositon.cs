@@ -10,7 +10,7 @@ public class RePositon : MonoBehaviour
         {
             return;
         }
-        
+
         Vector3 playerPosition = GameManager.instance.player.transform.position;
         Vector3 myPosition = transform.position;
         float diffX = Mathf.Abs(playerPosition.x - myPosition.x);
@@ -23,13 +23,13 @@ public class RePositon : MonoBehaviour
         switch (transform.tag)
         {
             case "Ground":
-                if(diffX > diffY)
+                if (diffX > diffY)
                 {
                     transform.Translate(Vector3.right * dirtionX * 80); // 오른쪽 방향 * (-1 or 1) * 거리
                 }
-                else if(diffX < diffY)
+                else if (diffX < diffY)
                 {
-                    transform.Translate(Vector3.up * dirtionY * 80); // 윗 방향 * (-1 or 1) * 거리
+                    transform.Translate(Vector3.up * dirtionY * 80);// 윗 방향 * (-1 or 1) * 거리
                 }
                 break;
             case "Enemy":
