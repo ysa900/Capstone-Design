@@ -475,14 +475,14 @@ RectTransform:
   m_GameObject: {fileID: 1417106612}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.0354, y: 1.0354, z: 1.0354}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1659255817}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 32, y: -67}
+  m_AnchoredPosition: {x: -223, y: 429.24994}
   m_SizeDelta: {x: 515.5111, y: 213.5001}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1417106614
@@ -505,7 +505,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Englich Ok? \uC0C8\uB85C\uC6B4 \uD55C\uAE00\uC785\uB2C8\uB2E4."
+  m_text: "\uD14C\uC2A4\uD2B8\uC6A9 \uD504\uB85C\uD1A0\uD0C0\uC785\uB2C8\uB2E4. \uB9CE\uAD00\uBD80\nThis
+    is Test Game. "
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b478b6ef737064c3fa5157479c9a2c25, type: 2}
   m_sharedMaterial: {fileID: -1791730566149748383, guid: b478b6ef737064c3fa5157479c9a2c25, type: 2}
@@ -568,7 +569,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: -539.1574, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0

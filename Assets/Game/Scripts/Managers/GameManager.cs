@@ -61,7 +61,6 @@ public class GameManager : MonoBehaviour
     // Pause 오브젝트
     public GameObject pauseObject;
 
-    // UI 관련 Object
     // HpBar
     public GameObject HpBarObject;
     // HpStatus
@@ -121,12 +120,14 @@ public class GameManager : MonoBehaviour
         skillSelectManager.onSkillSelectObjectDisplayed = OnSkillSelectObjectDisplayed;
         skillSelectManager.onSkillSelectObjectHided = OnSkillSelectObjectHided;
         skillSelectManager.onPlayerHealed = OnPlayerHealed;
+        skillSelectManager.onPassiveSkillSelected = OnPassiveSkillSelected;
+        skillSelectManager.onSkillSelected = OnSkillSelected;
 
         // BossManager delegate 할당
         bossManager.onBossHasKilled = OnBossHasKilled;
 
         //gameTime = maxGameTime;
-        player.isPlayerShielded = true;
+        //player.isPlayerShielded = true;
         //player.level = 20;
     }
 
@@ -140,13 +141,16 @@ public class GameManager : MonoBehaviour
         skillSelectManager.ChooseStartSkill(); // 시작 스킬 선택
     }
 
+    // Update is called once per frame
     void Update()
     {
-        if(!isGameOver) {
+        if (!isGameOver)
+        {
             gameTime += Time.deltaTime; // 게임 시간 증가
             CoolTimer += Time.deltaTime;
 
-            if (!isBossSpawned) {
+            if (!isBossSpawned)
+            {
                 isEnemiesTooMany = enemies.Count > 300;
                 SpawnBoss();
                 if (!isEnemiesTooMany)
@@ -158,7 +162,8 @@ public class GameManager : MonoBehaviour
     }
 
     // Player 생성 함수
-    private void CreatePlayer(){
+    private void CreatePlayer()
+    {
         player = Instantiate(playerPrefab);
         player.onPlayerWasKilled = OnPlayerHasKilled;
         player.onPlayerLevelUP = OnPlayerLevelUP;
@@ -226,7 +231,7 @@ public class GameManager : MonoBehaviour
             skillManager.isBossAppear = true;
             skillManager.boss = bossManager.boss;
 
-            // 보스 HpBar active
+            // 보스 HP바 active
             BossHPObject.SetActive(true);
 
             // 보스 BGM ON
@@ -237,7 +242,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // 플레이어가 죽었을 시 실행
+    // 플레이어가 죽었을 시 실행됨
     private void OnPlayerHasKilled(Player player)
     {
         StartCoroutine(PlayerHasKilled()); // 효과음 넣기 위한 코루틴 생성 및 사용
@@ -266,10 +271,10 @@ public class GameManager : MonoBehaviour
         gameClearObject.SetActive(true);
 
         yield return new WaitForSeconds(0.5f); // 0.5초 이후 시간 차 두기
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Win); // 승리 시 효과음
+        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Win); // 승리시 효과음
         inputManager.PauseButtonObject.interactable = false; // Pause버튼 비활성화
         gameAudioManager.PlayBGM(0, false); // 배경음 종료
-        Time.timeScale = 0;  // 화면 멈추기
+        Time.timeScale = 0; // 화면 멈추기
     }
 
     // Pause버튼이 클릭됐을 시 실행됨
@@ -277,7 +282,6 @@ public class GameManager : MonoBehaviour
     {
         pauseObject.SetActive(true);
         gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 클릭 효과음
-
         // UI 비활성화
         HpBarObject.SetActive(false);
         HpStatusLetteringObject.SetActive(false);
@@ -325,7 +329,7 @@ public class GameManager : MonoBehaviour
 
         int ranNum = UnityEngine.Random.Range(0, 11);
 
-        if(ranNum >= 6)
+        if (ranNum >= 6)
         {
             if (killedEnemy.tag == "Ghoul")
             {
@@ -374,7 +378,7 @@ public class GameManager : MonoBehaviour
     private void OnPlayerLevelUP()
     {
         skillSelectManager.DisplayLevelupPanel();
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.LevelUp); // 레벨업 시 효과// UI 비활성화
+        gameAudioManager.PlaySfx(GameAudioManager.Sfx.LevelUp); // 레벨업 시 효과음
         gameAudioManager.EffectBGM(true); // AudioFilter 켜기
     }
 
@@ -403,6 +407,28 @@ public class GameManager : MonoBehaviour
     private void OnPlayerHealed()
     {
         player.hp += 10;
-        if(player.hp > 100) { player.hp = 100; }
+        if (player.hp > 100) { player.hp = 100; }
+    }
+
+    // 스킬이 선택되면 즉시 스킬 쿨타임을 초기화 시킨다
+    private void OnSkillSelected(int index)
+    {
+        skillManager.ResetDelayTimer(index);
+    }
+
+    // 3 - 뎀감, 4 - 이속증가, 5 - 자석 효과
+    private void OnPassiveSkillSelected(int num, float value)
+    {
+        switch (num)
+        {
+            case 3: { player.damageReductionValue = value; break; }
+            case 4: { player.speed *= value; break; } // 얘는 플레이어 스피드에 즉시 적용
+            case 5:
+                {
+                    player.magnetRange = value;
+                    player.ChangeMagnetRange();
+                    break;
+                }
+        }
     }
 }

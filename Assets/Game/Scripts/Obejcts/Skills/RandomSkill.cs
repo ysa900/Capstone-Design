@@ -69,19 +69,19 @@ public class RandomSkill : Skill, IPullingObject
             }
             if (isStaySkill)
             {
-                if (!isCoroutineNow)
+                if(!isCoroutineNow)
                     StartCoroutine(Disappear());
             }
             else
             {
                 GameManager.instance.poolManager.ReturnSkill(this, index);
             }
-
+            
             return;
         }
         else
         {
-            if (isMeteor) { MoveToimpactPonit(); }
+            if(isMeteor) { MoveToimpactPonit(); }
         }
 
         aliveTimer += Time.fixedDeltaTime;
@@ -90,7 +90,7 @@ public class RandomSkill : Skill, IPullingObject
     // 날아갈 방향을 정하는 함수
     public void setDirection()
     {
-        Vector2 impactVector = new Vector2(impactPonitX, impactPonitY);
+        Vector2 impactVector = new Vector2 (impactPonitX, impactPonitY);
         Vector2 nowVector = transform.position;
 
         direction = impactVector - nowVector;
@@ -163,9 +163,9 @@ public class RandomSkill : Skill, IPullingObject
         animator_ground.SetTrigger("Finish");
 
         isCoroutineNow = true;
-
+        
         yield return new WaitForSeconds(0.2f); // 지정한 초 만큼 쉬기
-
+        
         GameManager.instance.poolManager.ReturnSkill(this, index);
 
         isCoroutineNow = false;

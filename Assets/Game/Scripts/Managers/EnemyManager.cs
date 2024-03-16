@@ -58,6 +58,6 @@ public class EnemyManager : MonoBehaviour
 
         enemies.Remove(killedEnemy);
 
-        onEnemiesChanged(enemies); // enemy 배열 업데이트하도록 GameManager에게 알려주기
+        onEnemiesChanged(enemies); // enmy 배열 업데이트하도록 GameManager에게 알려주기
     }
 }

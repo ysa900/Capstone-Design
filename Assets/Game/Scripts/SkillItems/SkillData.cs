@@ -10,6 +10,7 @@ public class SkillData : ScriptableObject
                             Wind1, Wind2, Wind3, Wind4 }
 
 
+    // Start is called before the first frame update
     [Header("# Main Info")]
     public SkillType skillType;
     public int skillId;

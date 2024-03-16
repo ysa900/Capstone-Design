@@ -131,7 +131,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Run 0
+      name: Farmer 3_Run 0
       rect:
         serializedVersion: 2
         x: 0
@@ -145,14 +145,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7e2b4788caacd844282a62b4e2ad1566
-      internalID: -2088749509
+      spriteID: 58977ea6a94eb4ccba4a89142be37a43
+      internalID: 206724118
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Run 1
+      name: Farmer 3_Run 1
       rect:
         serializedVersion: 2
         x: 19
@@ -166,14 +166,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1bf0fef3e79fe034694fcc437dde75d9
-      internalID: -1836318166
+      spriteID: d189e56f709744bd1bbc69ed71e52ff1
+      internalID: -1608882692
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Run 2
+      name: Farmer 3_Run 2
       rect:
         serializedVersion: 2
         x: 38
@@ -187,14 +187,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 944816b4b17b43346ae045dc696ababd
-      internalID: -198311514
+      spriteID: 3f99c7fa4ab4f4168a5cc626ccfe2eac
+      internalID: -683240513
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Run 3
+      name: Farmer 3_Run 3
       rect:
         serializedVersion: 2
         x: 0
@@ -208,14 +208,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f74ac41b67e8eb44a8aa3e0dac809f47
-      internalID: -1997520891
+      spriteID: 3f8bdddbba6da47cb9d02ba1c13fcf48
+      internalID: 620627831
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Run 4
+      name: Farmer 3_Run 4
       rect:
         serializedVersion: 2
         x: 19
@@ -229,14 +229,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 33c6f95c6aa48ed4185b3e95ca72205f
-      internalID: -1017442464
+      spriteID: ac448c67030074651aea47cebfa6c30e
+      internalID: -1256130028
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Run 5
+      name: Farmer 3_Run 5
       rect:
         serializedVersion: 2
         x: 38
@@ -250,14 +250,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8987a8a777ef17b44bb0a24113065353
-      internalID: -2066638598
+      spriteID: ae04f22f6db474114801807da0dfe969
+      internalID: -158857302
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Stand 0
+      name: Farmer 3_Stand 0
       rect:
         serializedVersion: 2
         x: 0
@@ -271,14 +271,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 153147a80e7052d40a3281cea89791f3
-      internalID: 938132271
+      spriteID: 94c41b638289b4363ac978735c168731
+      internalID: -943318697
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Stand 1
+      name: Farmer 3_Stand 1
       rect:
         serializedVersion: 2
         x: 19
@@ -292,14 +292,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 11e7dae28fc0ec145a9535c13aabd657
-      internalID: -791905833
+      spriteID: dc545a6c129b849bbb980e0545b16578
+      internalID: 1579876515
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Stand 2
+      name: Farmer 3_Stand 2
       rect:
         serializedVersion: 2
         x: 38
@@ -313,14 +313,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f07a3ecb7a76bbe439e343722bef9210
-      internalID: 1684076649
+      spriteID: 95b50438d5b214ff39edf3dae95b4163
+      internalID: -1155953167
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Stand 3
+      name: Farmer 3_Stand 3
       rect:
         serializedVersion: 2
         x: 0
@@ -334,14 +334,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fb23b9d4f463a944289e397aa43f4c0d
-      internalID: 1883720508
+      spriteID: 36def01bbbc124de7876491559b21ff2
+      internalID: -2027536358
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Dead 0
+      name: Farmer 3_Dead 0
       rect:
         serializedVersion: 2
         x: 19
@@ -355,14 +355,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9449f4559947b3942a7ade3dc0346119
-      internalID: 369909130
+      spriteID: 4eab54fc4298c46c8ace6833a13eb0a0
+      internalID: -540631710
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Dead 1
+      name: Farmer 3_Dead  1
       rect:
         serializedVersion: 2
         x: 38
@@ -376,8 +376,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2ed8cb88237c453409ff0d3733ab146a
-      internalID: 1773231339
+      spriteID: 2359beb3e1d8b461e8c9b3f91cb0f22f
+      internalID: 1121420355
       vertices: []
       indices: 
       edges: []
@@ -393,18 +393,18 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Dead 0: 369909130
-      Run 0: -2088749509
-      Run 5: -2066638598
-      Stand 3: 1883720508
-      Run 2: -198311514
-      Run 3: -1997520891
-      Stand 0: 938132271
-      Stand 2: 1684076649
-      Run 4: -1017442464
-      Run 1: -1836318166
-      Dead 1: 1773231339
-      Stand 1: -791905833
+      Farmer 3_Dead  1: 1121420355
+      Farmer 3_Dead 0: -540631710
+      Farmer 3_Run 0: 206724118
+      Farmer 3_Run 1: -1608882692
+      Farmer 3_Run 2: -683240513
+      Farmer 3_Run 3: 620627831
+      Farmer 3_Run 4: -1256130028
+      Farmer 3_Run 5: -158857302
+      Farmer 3_Stand 0: -943318697
+      Farmer 3_Stand 1: 1579876515
+      Farmer 3_Stand 2: -1155953167
+      Farmer 3_Stand 3: -2027536358
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

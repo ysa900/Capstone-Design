@@ -1,3 +1,4 @@
+using System.Diagnostics.Contracts;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
@@ -15,6 +16,10 @@ public class Player : MonoBehaviour, IPlayer
     public int level;
     public int[] nextExp;
 
+    // 플레이어 패시브 효과 관련 변수
+    public float damageReductionValue = 1f; // 뎀감
+    public float magnetRange = 0f; // 자석 범위
+
     //킬 수
     public int kill;
 
@@ -27,6 +32,7 @@ public class Player : MonoBehaviour, IPlayer
     Rigidbody2D rigid; // 물리 입력을 받기위한 변수
     SpriteRenderer spriteRenderer; // 플레이어 방향을 바꾸기 위해 flipX를 가져오기 위한 변수
     Animator animator; // 애니메이션 관리를 위한 변수
+    CircleCollider2D absorberCollider; // Absorber의 Collider - 자석 효과 범위를 바꾸기 위한 변수
 
     // 플레이어가 죽었을 시 GameManager에게 알려주기 위한 delegate
     public delegate void OnPlayerWasKilled(Player player);
@@ -49,6 +55,7 @@ public class Player : MonoBehaviour, IPlayer
         rigid = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
+        absorberCollider = gameObject.GetComponentInChildren<CircleCollider2D>();
 
         nextExp = new int[100];
         int num = 0;
@@ -135,6 +142,12 @@ public class Player : MonoBehaviour, IPlayer
 
     }
 
+    // 자석 범위를 변경하는 함수
+    public void ChangeMagnetRange()
+    {
+        absorberCollider.radius = magnetRange;
+    }
+
     // 플레이어가 무언가와 충돌하면 데미지를 입는다
     private void OnCollisionStay2D(Collision2D collision)
     {
@@ -145,7 +158,7 @@ public class Player : MonoBehaviour, IPlayer
         {
             if (!isPlayerShielded)
             {
-                hp -= Time.deltaTime * 5;
+                hp -= Time.deltaTime * 5 * damageReductionValue;
                 gameAudioManager.PlaySfx(GameAudioManager.Sfx.Melee); // 피격  효과음
             }
 
@@ -170,7 +183,7 @@ public class Player : MonoBehaviour, IPlayer
         {
             if (!isPlayerShielded)
             {
-                hp -= damage;
+                hp -= damage * damageReductionValue;
                 gameAudioManager.PlaySfx(GameAudioManager.Sfx.Melee); // 피격  효과음
             }
 
