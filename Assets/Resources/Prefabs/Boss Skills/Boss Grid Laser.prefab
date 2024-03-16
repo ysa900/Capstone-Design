@@ -181,7 +181,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 11.71875, y: 0.8}
+  m_Size: {x: 11.2, y: 0.6}
   m_EdgeRadius: 0
 --- !u!114 &1930705433329540371
 MonoBehaviour:
@@ -195,9 +195,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae97ac20992177e4bbe9e4b07f175cac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  enemy: {fileID: 0}
   boss: {fileID: 0}
-  isRightTop: 0
-  isRightBottom: 0
-  aliveTime: 3
+  player: {fileID: 0}
+  damage: 0
+  index: 0
   laserTurnNum: 0
+  isRightTop: 0
+  aliveTime: 3

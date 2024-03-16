@@ -176,7 +176,9 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Light_Footsteps_Icon_0: -4109743668327233128
+      Light_Footsteps_Icon_1: 5261501134426675830
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

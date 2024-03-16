@@ -138,9 +138,9 @@ public class Enemy : Object, IDamageable, IPullingObject
         Vector2 playerPosition = player.transform.position;
         Vector2 myPosition = transform.position;
 
-        Vector2 direction = playerPosition - myPosition;
+        float distance = Vector2.Distance(myPosition, playerPosition);
 
-        bool isToFar = Mathf.Sqrt(Mathf.Pow(direction.x, 2) + Mathf.Pow(direction.y, 2)) > 100f;
+        bool isToFar = distance > 100f;
 
         if (isToFar)
         {

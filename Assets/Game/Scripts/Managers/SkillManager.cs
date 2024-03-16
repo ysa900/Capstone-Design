@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
@@ -9,7 +8,8 @@ public class SkillManager : MonoBehaviour
     public Player player;
     private GameAudioManager gameAudioManager;
 
-    private float attackRange = 12.5f; // 플레이어 공격 사거리
+    private float attackRange = 17.5f; // 플레이어 공격 사거리
+    private float nearAttackRange = 7.5f; // 플레이어 근접 우선 공격 사거리
 
     public bool isBossAppear; // 보스가 소환됐는지를 판단하는 변수
 
@@ -91,21 +91,21 @@ public class SkillManager : MonoBehaviour
         // Skill Data 초기화
         for (int i = 0; i < skillData.level.Length; i++) { skillData.level[i] = 0; }
 
-        skillData.Damage[0] = 30f;
+        skillData.Damage[0] = 23f;
         skillData.Damage[1] = 20f;
-        skillData.Damage[2] = 2.0f;
+        skillData.Damage[2] = 1.3f;
         skillData.Damage[3] = 20f;
         skillData.Damage[4] = 15f;
         skillData.Damage[5] = 0f;
-        skillData.Damage[6] = 60f;
+        skillData.Damage[6] = 120f;
         skillData.Damage[7] = 3.0f;
-        skillData.Damage[8] = 2.0f;
-        skillData.Damage[9] = 40f;
+        skillData.Damage[8] = 1.3f;
+        skillData.Damage[9] = 200f;
         skillData.Damage[10] = 40f;
         skillData.Damage[11] = 2.0f;
 
-        skillData.Delay[0] = 0.8f;
-        skillData.Delay[1] = 1;
+        skillData.Delay[0] = 0.75f;
+        skillData.Delay[1] = 0.75f;
         skillData.Delay[2] = 1.5f;
         skillData.Delay[3] = 3;
         skillData.Delay[4] = 14;
@@ -139,7 +139,7 @@ public class SkillManager : MonoBehaviour
         passiveSkillData.Damage[1] = 1.2f;
         passiveSkillData.Damage[2] = 1.2f;
         passiveSkillData.Damage[3] = 0.9f;
-        passiveSkillData.Damage[4] = 1.2f;
+        passiveSkillData.Damage[4] = 1.15f;
         passiveSkillData.Damage[5] = 0.5f;
         for (int i = 0; i < passiveSkillData.skillSelected.Length; i++) { passiveSkillData.skillSelected[i] = false; }
     }
@@ -197,7 +197,7 @@ public class SkillManager : MonoBehaviour
                             {
                                 float distance = Vector2.Distance(enemy.transform.position, player.transform.position);
                                 
-                                isInAttackRange = distance <= attackRange; // 적이 사거리 내에 있을때만 공격이 나간다
+                                isInAttackRange = distance <= nearAttackRange; // 적이 사거리 내에 있을때만 공격이 나간다
 
                                 if (isInAttackRange)
                                     break;
@@ -209,10 +209,41 @@ public class SkillManager : MonoBehaviour
                         }
                         if (enemy == null) return; // 적이 없으면 공격 X
 
-                        if(isInAttackRange)
+                        if (isInAttackRange) { 
+                            CastSkill(enemy, index);
+                        } else { // 근접 우선 사거리 내에 적이 없으면 원거리 범위 적을 찾는다
+
+                            breakNum = 0; // while문 탈출을 위한 num
+                            isInAttackRange = false;
+
+                            while (true)
+                            {
+                                int ranNum = UnityEngine.Random.Range(0, enemies.Count);
+
+                                enemy = enemies[ranNum];
+
+                                if (!(enemy == null))
+                                {
+                                    float distance = Vector2.Distance(enemy.transform.position, player.transform.position);
+
+                                    isInAttackRange = distance <= attackRange; // 적이 사거리 내에 있을때만 공격이 나간다
+
+                                    if (isInAttackRange)
+                                        break;
+                                }
+
+                                breakNum++;
+                                if (breakNum >= 1000) // 1000회 반복 내에 마땅한 적을 찾지 못했다면 그냥 break;
+                                    break;
+                            }
+                        }
+
+                        if (enemy == null) return; // 적이 없으면 공격 X
+
+                        if (isInAttackRange)
                             CastSkill(enemy, index);
 
-                        break;
+                        break; // switch 문의 break
                     }
             }
         }
@@ -296,7 +327,7 @@ public class SkillManager : MonoBehaviour
 
                     //enemyTrackingSkill.enemy = enemy; 현재 enemy는 PoolManager에서 Init시키기 전에 할당해주는 중
 
-                    enemyTrackingSkill.speed = 20;
+                    enemyTrackingSkill.speed = 25;
                     enemyTrackingSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[0];
 
                     SetScale(enemyTrackingSkill.gameObject, index);
@@ -354,7 +385,7 @@ public class SkillManager : MonoBehaviour
                     // enemyTrackingSkill.boss = boss;
                     enemyTrackingSkill.isBossAppear = true;
 
-                    enemyTrackingSkill.speed = 20;
+                    enemyTrackingSkill.speed = 25;
                     enemyTrackingSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[0];
 
                     SetScale(enemyTrackingSkill.gameObject, index);
@@ -520,7 +551,7 @@ public class SkillManager : MonoBehaviour
 
                     //playerAttachSkill.player = player;
 
-                    playerAttachSkill.xPositionNum = 8.5f;
+                    playerAttachSkill.xPositionNum = 11f;
                     playerAttachSkill.yPositionNum = -0.2f;
 
                     playerAttachSkill.X = 999f;
@@ -538,7 +569,7 @@ public class SkillManager : MonoBehaviour
                     Transform parent = playerAttachSkill.transform.parent;
 
                     playerAttachSkill.transform.parent = null;
-                    playerAttachSkill.transform.localScale = new Vector3(3, skillData.scale[index], 0);
+                    playerAttachSkill.transform.localScale = new Vector3(playerAttachSkill.transform.localScale.x, skillData.scale[index], 0);
                     playerAttachSkill.transform.parent = parent;
 
                     break;
@@ -777,6 +808,7 @@ public class SkillManager : MonoBehaviour
     private void CastElectricBall()
     {
         float tmpDegree = 0f;
+        float circleSpeed = 6f;
 
         if (skillData.level[4] == 5)
         {
@@ -800,6 +832,7 @@ public class SkillManager : MonoBehaviour
                 playerAttachSkill.yPositionNum = 0f;
 
                 playerAttachSkill.isCircleSkill = true;
+                playerAttachSkill.speed = circleSpeed;
 
                 playerAttachSkill.damage = skillData.Damage[4] * passiveSkillData.Damage[1];
 
@@ -828,6 +861,7 @@ public class SkillManager : MonoBehaviour
                 playerAttachSkill.yPositionNum = 0f;
 
                 playerAttachSkill.isCircleSkill = true;
+                playerAttachSkill.speed = circleSpeed;
 
                 playerAttachSkill.damage = skillData.Damage[4] * passiveSkillData.Damage[1];
 
@@ -853,6 +887,7 @@ public class SkillManager : MonoBehaviour
             playerAttachSkill.yPositionNum = 0f;
 
             playerAttachSkill.isCircleSkill = true;
+            playerAttachSkill.speed = circleSpeed;
 
             playerAttachSkill.damage = skillData.Damage[4] * passiveSkillData.Damage[1];
 

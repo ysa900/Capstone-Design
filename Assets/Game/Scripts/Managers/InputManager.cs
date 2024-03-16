@@ -1,32 +1,32 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class InputManager: MonoBehaviour
+public class InputManager : MonoBehaviour
 {
-    // GameoVer_GoTOLobby ¹öÆ°
+    // GameoVer_GoTOLobby ë²„íŠ¼
     public UnityEngine.UI.Button GVGoToLobbyButtonObject;
 
-    // GameoVer_Restart ¹öÆ°
+    // GameoVer_Restart ë²„íŠ¼
     public UnityEngine.UI.Button GVRestartButtonObject;
 
-    // GameClear_GoTOLobby ¹öÆ°
+    // GameClear_GoTOLobby ë²„íŠ¼
     public UnityEngine.UI.Button GCGoToLobbyButtonObject;
 
-    // Pause ¹öÆ°
+    // Pause ë²„íŠ¼
     public UnityEngine.UI.Button PauseButtonObject;
 
-    // Pause_GoTOLobby ¹öÆ°
+    // Pause_GoTOLobby ë²„íŠ¼
     public UnityEngine.UI.Button PGoToLobbyButtonObject;
 
-    // Pause_Restart ¹öÆ°
+    // Pause_Restart ë²„íŠ¼
     public UnityEngine.UI.Button PRestartButtonObject;
 
-    // Play ¹öÆ°
+    // Play ë²„íŠ¼
     public UnityEngine.UI.Button PlayButtonObject;
 
     private GameAudioManager gameAudioManager;
 
-    // GameManager¿¡°Ô Á¤º¸ Àü´ŞÀ» ÇÏ±â À§ÇÑ Delegateµé
+    // GameManagerì—ê²Œ ì •ë³´ ì „ë‹¬ì„ í•˜ê¸° ìœ„í•œ Delegateë“¤
     public delegate void OnPauseButtonClicked();
     public OnPauseButtonClicked onPauseButtonClicked;
 
@@ -41,70 +41,70 @@ public class InputManager: MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // GameoVer_Restart ¹öÆ° ´­·¶À» ¶§
+        // GameoVer_Restart ë²„íŠ¼ ëˆŒë €ì„ ë•Œ
         UnityEngine.UI.Button GVRestartButton = GVRestartButtonObject.GetComponent<UnityEngine.UI.Button>();
         GVRestartButton.onClick.AddListener(RestartButtonClicked);
 
-        // GameoVer_GoTOLobby ¹öÆ° ´­·¶À» ¶§
+        // GameoVer_GoTOLobby ë²„íŠ¼ ëˆŒë €ì„ ë•Œ
         UnityEngine.UI.Button GVGoToLobbyButton = GVGoToLobbyButtonObject.GetComponent<UnityEngine.UI.Button>();
         GVGoToLobbyButton.onClick.AddListener(goToLobbyButtonClicked);
 
-        // GameClear_GoTOLobby ¹öÆ° ´­·¶À» ¶§
+        // GameClear_GoTOLobby ë²„íŠ¼ ëˆŒë €ì„ ë•Œ
         UnityEngine.UI.Button GCGoToLobbyButton = GCGoToLobbyButtonObject.GetComponent<UnityEngine.UI.Button>();
         GCGoToLobbyButton.onClick.AddListener(goToLobbyButtonClicked);
 
-        // Pause ¹öÆ° ´­·¶À» ¶§
+        // Pause ë²„íŠ¼ ëˆŒë €ì„ ë•Œ
         UnityEngine.UI.Button PauseButton = PauseButtonObject.GetComponent<UnityEngine.UI.Button>();
         PauseButton.onClick.AddListener(PauseButtonClicked);
 
-        // Pause_Restart ¹öÆ° ´­·¶À» ¶§
+        // Pause_Restart ë²„íŠ¼ ëˆŒë €ì„ ë•Œ
         UnityEngine.UI.Button PRestartButto = PRestartButtonObject.GetComponent<UnityEngine.UI.Button>();
         PRestartButto.onClick.AddListener(RestartButtonClicked);
 
-        // Pause_GoTOLobby ¹öÆ° ´­·¶À» ¶§
+        // Pause_GoTOLobby ë²„íŠ¼ ëˆŒë €ì„ ë•Œ
         UnityEngine.UI.Button PGoToLobbyButton = PGoToLobbyButtonObject.GetComponent<UnityEngine.UI.Button>();
         PGoToLobbyButton.onClick.AddListener(goToLobbyButtonClicked);
 
-        // Play ¹öÆ° ´­·¶À» ¶§
+        // Play ë²„íŠ¼ ëˆŒë €ì„ ë•Œ
         UnityEngine.UI.Button PlayButton = PlayButtonObject.GetComponent<UnityEngine.UI.Button>();
         PlayButton.onClick.AddListener(PlayButtonClicked);
     }
 
-    // RestartButtonÀÌ ´­·¶À» ¶§
+    // RestartButtonì´ ëˆŒë €ì„ ë•Œ
     private void RestartButtonClicked()
     {
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // ¹öÆ° ¼±ÅÃ ½Ã È¿°úÀ½
+        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // ë²„íŠ¼ ì„ íƒ ì‹œ íš¨ê³¼ìŒ
         SceneManager.LoadScene("Game");
         Time.timeScale = 1;
     }
 
-    // goToLobbyButtonÀÌ ´­·¶À» ¶§
+    // goToLobbyButtonì´ ëˆŒë €ì„ ë•Œ
     private void goToLobbyButtonClicked()
     {
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // ¹öÆ° ¼±ÅÃ ½Ã È¿°úÀ½
+        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // ë²„íŠ¼ ì„ íƒ ì‹œ íš¨ê³¼ìŒ
         SceneManager.LoadScene("Lobby");
         Time.timeScale = 1;
     }
 
-    // PauseButtonÀÌ ´­·¶À» ¶§
+    // PauseButtonì´ ëˆŒë €ì„ ë•Œ
     private void PauseButtonClicked()
     {
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // ¹öÆ° ¼±ÅÃ ½Ã È¿°úÀ½
+        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // ë²„íŠ¼ ì„ íƒ ì‹œ íš¨ê³¼ìŒ
 
-        if (Time.timeScale == 0) // Pause ´©¸¥ »óÅÂ¿¡¼­ ÇÑ¹ø ´õ ´©¸£¸é Pause Ç®¸®°Ô ÇÏ·Á°í
+        if (Time.timeScale == 0) // Pause ëˆ„ë¥¸ ìƒíƒœì—ì„œ í•œë²ˆ ë” ëˆ„ë¥´ë©´ Pause í’€ë¦¬ê²Œ í•˜ë ¤ê³ 
             PlayButtonClicked();
         else
         {
             Time.timeScale = 0;
-            onPauseButtonClicked(); // delegate È£Ãâ
+            onPauseButtonClicked(); // delegate í˜¸ì¶œ
         }
     }
 
-    // PlayButtonÀÌ ´­·¶À» ¶§
+    // PlayButtonì´ ëˆŒë €ì„ ë•Œ
     private void PlayButtonClicked()
     {
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // ¹öÆ° ¼±ÅÃ ½Ã È¿°úÀ½
+        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // ë²„íŠ¼ ì„ íƒ ì‹œ íš¨ê³¼ìŒ
         Time.timeScale = 1;
-        onPlayButtonClicked(); // delegate È£Ãâ
+        onPlayButtonClicked(); // delegate í˜¸ì¶œ
     }
 }

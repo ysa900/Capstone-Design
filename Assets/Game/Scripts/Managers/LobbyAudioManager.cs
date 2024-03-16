@@ -1,88 +1,39 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using UnityEditor.Rendering.LookDev;
 using UnityEngine;
-using UnityEngine.Analytics;
+using UnityEngine.Audio;
+using UnityEngine.UI;
 
 public class LobbyAudioManager : MonoBehaviour
 {
-    // BGM
-    [Header("#BGM")]
-    public AudioClip bgmClip; // BGM 관련 클립
-    public float bgmVolume; // BGM 관련 볼륨
-    AudioSource bgmPlayer; // BGM 관련 오디오소스
-    AudioHighPassFilter bgmEffect;
-
-    // SFX(효과음)
-    [Header("#SFX")]
-    public AudioClip[] sfxClips; // SFX 관련 클립 배열
-    public float SfxVolume; // SFX 관련 볼륨
-
-    // 오디오 채널 시스템
-    public int channels; // 다량의 효과음을 내기 위해 채널 개수 배열 선언
-    int channelIndex; // 채널 인덱스
-    AudioSource[] sfxPlayers; // BGM 관련 오디오소스
-
-    public enum Sfx { Select }
+    [SerializeField] private AudioMixer m_AudioMixer;
+    [SerializeField] private Slider m_MusicMasterSlider;
+    [SerializeField] private Slider m_MusicBGMSlider;
+    [SerializeField] private Slider m_MusicSFXSlider;
 
     private void Awake()
     {
-        Init();
+        m_MusicMasterSlider.onValueChanged.AddListener(SetMasterVolume);
+        m_MusicBGMSlider.onValueChanged.AddListener(SetMusicVolume);
+        m_MusicSFXSlider.onValueChanged.AddListener(SetSFXVolume);
+
     }
 
-
-    private void Init()
+    public void SetMasterVolume(float volume)
     {
-        // 배경음 플레이어 초기화
-        GameObject bgmObject = new GameObject("BgmPlayer");
-        bgmObject.transform.parent = transform; // 배경음을 담당하는 자식 오브젝트 생성
-        bgmPlayer =bgmObject.AddComponent<AudioSource>();
-        bgmPlayer.playOnAwake = true; // Game 시작되자마자 켜기
-        bgmPlayer.loop = true; // BGM 무한반복
-        bgmPlayer.volume = bgmVolume;
-        bgmPlayer.clip = bgmClip;
-
-        // 효과음 플레이어 초기화
-        GameObject sfxObject = new GameObject("SfxPlayer");
-        sfxObject.transform.parent = transform; // 효과음을 담당하는 자식 오브젝트 생성
-        sfxPlayers = new AudioSource[channels];
-
-        for(int index=0; index<sfxPlayers.Length; index++)
-        {
-            sfxPlayers[index] = sfxObject.AddComponent<AudioSource>();
-            sfxPlayers[index].playOnAwake = false;
-            sfxPlayers[index].bypassListenerEffects = true;
-            sfxPlayers[index].volume = SfxVolume;
-        }
+        m_AudioMixer.SetFloat("Master", Mathf.Log10(volume) * 20);
     }
 
-    public void PlayBGM(bool isPlay)
+    public void SetMusicVolume(float volume)
     {
-        if (isPlay)
-        {
-            bgmPlayer.Play();
-        }
-        else {
-            bgmPlayer.Stop();
-        }
+        m_AudioMixer.SetFloat("BGM", Mathf.Log10(volume) * 20);
     }
 
-    public void PlaySfx(Sfx sfx)
+    public void SetSFXVolume(float volume)
     {
-        for(int index=0; index<sfxPlayers.Length; index++)
-        {
-            int loopIndex=(index+channelIndex) % sfxPlayers.Length;
+        m_AudioMixer.SetFloat("SFX", Mathf.Log10(volume) * 20);
+    }
 
-            if (sfxPlayers[loopIndex].isPlaying)
-            {
-                continue;
-            }
-
-            channelIndex = loopIndex;
-            sfxPlayers[loopIndex].clip = sfxClips[(int)sfx];
-            sfxPlayers[loopIndex].Play();
-            break;
-        }
+    public void ToggleAudioVolume()
+    {
+        AudioListener.volume = AudioListener.volume == 0 ? 1 : 0;
     }
 }

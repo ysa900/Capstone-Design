@@ -152,7 +152,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Body_Strengthening_Icon_0: 5437184911584266826
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

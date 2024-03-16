@@ -1,26 +1,24 @@
-using System;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class PoolManager : MonoBehaviour
 {
     const int ENEMY_NUM = 4;
     const int EXP_NUM = 3;
-    const int SKILL_NUM = 15; // ºÒ: 0 ~ 6, Àü±â: 7 ~ 10, ¹°: 11 ~ 14
+    const int SKILL_NUM = 15; // ë¶ˆ: 0 ~ 6, ì „ê¸°: 7 ~ 10, ë¬¼: 11 ~ 14
     const int BOSS_SKILL_NUM = 4;
 
-    // »ç¿ëÇÒ Å¬·¡½º °´Ã¼µé
+    // ì‚¬ìš©í•  í´ë˜ìŠ¤ ê°ì²´ë“¤
     public EnemyManager enemyManager;
     public Player player;
 
-    // ÇÁ¸®ÆÕ º¸°üÇÒ º¯¼ö
+    // í”„ë¦¬íŒ¹ ë³´ê´€í•  ë³€ìˆ˜
     public Enemy[] Enemy_prefabs = new Enemy[ENEMY_NUM]; // ENEMY_NUM = 4
     public EXP[] Exp_prefabs = new EXP[EXP_NUM]; // EXP_NUM = 3
     public Skill[] Skill_prefabs = new Skill[SKILL_NUM]; // SKILL_NUM = 15
     public BossSkill[] Boss_Skill_prefabs = new BossSkill[BOSS_SKILL_NUM]; // BOSS_SKILL_NUM = 4
 
-    // Ç® ´ã´çÀ» ÇÏ´Â ¸®½ºÆ®µé
+    // í’€ ë‹´ë‹¹ì„ í•˜ëŠ” ë¦¬ìŠ¤íŠ¸ë“¤
     List<Enemy>[] Enemy_pools;
     List<EXP>[] Exp_pools;
     List<Skill>[] Skill_pools;
@@ -28,11 +26,11 @@ public class PoolManager : MonoBehaviour
 
     private void Awake()
     {
-        // Å¬·¡½º °´Ã¼µé ÃÊ±âÈ­
+        // í´ë˜ìŠ¤ ê°ì²´ë“¤ ì´ˆê¸°í™”
         enemyManager = FindAnyObjectByType<EnemyManager>();
 
         Enemy_pools = new List<Enemy>[Enemy_prefabs.Length];
-        for(int index = 0; index < Enemy_pools.Length; index++)
+        for (int index = 0; index < Enemy_pools.Length; index++)
         {
             Enemy_pools[index] = new List<Enemy>();
         }
@@ -60,14 +58,15 @@ public class PoolManager : MonoBehaviour
     {
         Enemy select = null;
 
-        // ¼±ÅÃÇÑ Ç®ÀÇ ³î°íÀÖ´Â(ºñÈ°¼ºÈ­µÈ) °ÔÀÓ ¿ÀºêÁ§Æ® Á¢±Ù    
-        foreach(Enemy item in Enemy_pools[index]) { 
+        // ì„ íƒí•œ í’€ì˜ ë†€ê³ ìˆëŠ”(ë¹„í™œì„±í™”ëœ) ê²Œì„ ì˜¤ë¸Œì íŠ¸ ì ‘ê·¼    
+        foreach (Enemy item in Enemy_pools[index])
+        {
 
-            if(!item.gameObject.activeSelf)
+            if (!item.gameObject.activeSelf)
             {
-                // ¹ß°ßÇÏ¸é select º¯¼ö¿¡ ÇÒ´ç
+                // ë°œê²¬í•˜ë©´ select ë³€ìˆ˜ì— í• ë‹¹
                 select = item;
-                if(select.GetComponent<IPullingObject>() != null)
+                if (select.GetComponent<IPullingObject>() != null)
                 {
                     enemyManager.SetEnemyInfo(select, player, index);
                     select.GetComponent<IPullingObject>().Init();
@@ -77,16 +76,16 @@ public class PoolManager : MonoBehaviour
             }
         }
 
-        // ¸ø Ã£¾ÒÀ¸¸é?      
-        if(!select)
+        // ëª» ì°¾ì•˜ìœ¼ë©´?      
+        if (!select)
         {
-            // »õ·Ó°Ô »ı¼ºÇÏ°í select º¯¼ö¿¡ ÇÒ´ç
-            // ÀÚ±â ÀÚ½Å(transform) Ãß°¡ ÀÌÀ¯: hierarchyÃ¢ ÁöÀúºĞÇØÁö´Â °Å ¹æÁö
+            // ìƒˆë¡­ê²Œ ìƒì„±í•˜ê³  select ë³€ìˆ˜ì— í• ë‹¹
+            // ìê¸° ìì‹ (transform) ì¶”ê°€ ì´ìœ : hierarchyì°½ ì§€ì €ë¶„í•´ì§€ëŠ” ê±° ë°©ì§€
             select = Instantiate(Enemy_prefabs[index]);
 
             enemyManager.SetEnemyInfo(select, player, index);
 
-            select.Init(); // ¾ê´Â Init ÇØÁà¾ßµÊ
+            select.Init(); // ì–˜ëŠ” Init í•´ì¤˜ì•¼ë¨
 
             select.transform.SetParent(this.gameObject.transform.GetChild(0));
             Enemy_pools[index].Add(select);
@@ -101,14 +100,14 @@ public class PoolManager : MonoBehaviour
         Enemy_pools[index].Add(obj);
     }
 
-    // Enemy¸¦ »õ·Ó°Ô »ı¼º
+    // Enemyë¥¼ ìƒˆë¡­ê²Œ ìƒì„±
     void CreateEnemies(int index, int num)
     {
-        for(int i = 0; i < num; i++)
+        for (int i = 0; i < num; i++)
         {
             Enemy enemy = Instantiate(Enemy_prefabs[index]);
 
-            enemy.transform.SetParent(this.gameObject.transform.GetChild(0)); // ÀÚ±â ÀÚ½Å(transform) Ãß°¡ ÀÌÀ¯: hierarchyÃ¢ ÁöÀúºĞÇØÁö´Â °Å ¹æÁö
+            enemy.transform.SetParent(this.gameObject.transform.GetChild(0)); // ìê¸° ìì‹ (transform) ì¶”ê°€ ì´ìœ : hierarchyì°½ ì§€ì €ë¶„í•´ì§€ëŠ” ê±° ë°©ì§€
             Enemy_pools[index].Add(enemy);
 
             enemy.gameObject.SetActive(false);
@@ -119,27 +118,27 @@ public class PoolManager : MonoBehaviour
     {
         EXP select = null;
 
-        // ¼±ÅÃÇÑ Ç®ÀÇ ³î°íÀÖ´Â(ºñÈ°¼ºÈ­µÈ) °ÔÀÓ ¿ÀºêÁ§Æ® Á¢±Ù    
+        // ì„ íƒí•œ í’€ì˜ ë†€ê³ ìˆëŠ”(ë¹„í™œì„±í™”ëœ) ê²Œì„ ì˜¤ë¸Œì íŠ¸ ì ‘ê·¼    
         foreach (EXP item in Exp_pools[index])
         {
             if (!item.gameObject.activeSelf)
             {
-                // ¹ß°ßÇÏ¸é select º¯¼ö¿¡ ÇÒ´ç
+                // ë°œê²¬í•˜ë©´ select ë³€ìˆ˜ì— í• ë‹¹
                 select = item;
 
                 if (select.GetComponent<IPullingObject>() != null)
                     select.GetComponent<IPullingObject>().Init();
-                
+
                 select.gameObject.SetActive(true);
                 break;
             }
         }
 
-        // ¸ø Ã£¾ÒÀ¸¸é?      
+        // ëª» ì°¾ì•˜ìœ¼ë©´?      
         if (!select)
         {
-            // »õ·Ó°Ô »ı¼ºÇÏ°í select º¯¼ö¿¡ ÇÒ´ç
-            // ÀÚ±â ÀÚ½Å(transform) Ãß°¡ ÀÌÀ¯: hierarchyÃ¢ ÁöÀúºĞÇØÁö´Â °Å ¹æÁö
+            // ìƒˆë¡­ê²Œ ìƒì„±í•˜ê³  select ë³€ìˆ˜ì— í• ë‹¹
+            // ìê¸° ìì‹ (transform) ì¶”ê°€ ì´ìœ : hierarchyì°½ ì§€ì €ë¶„í•´ì§€ëŠ” ê±° ë°©ì§€
             select = Instantiate(Exp_prefabs[index]);
 
             //select.Init();
@@ -157,14 +156,14 @@ public class PoolManager : MonoBehaviour
         Exp_pools[index].Add(obj);
     }
 
-    // Exp¸¦ »õ·Ó°Ô »ı¼º
+    // Expë¥¼ ìƒˆë¡­ê²Œ ìƒì„±
     void CreateExps(int index, int num)
     {
         for (int i = 0; i < num; i++)
         {
             EXP exp = Instantiate(Exp_prefabs[index]);
 
-            exp.transform.SetParent(this.gameObject.transform.GetChild(1)); // ÀÚ±â ÀÚ½Å(transform) Ãß°¡ ÀÌÀ¯: hierarchyÃ¢ ÁöÀúºĞÇØÁö´Â °Å ¹æÁö
+            exp.transform.SetParent(this.gameObject.transform.GetChild(1)); // ìê¸° ìì‹ (transform) ì¶”ê°€ ì´ìœ : hierarchyì°½ ì§€ì €ë¶„í•´ì§€ëŠ” ê±° ë°©ì§€
             Exp_pools[index].Add(exp);
 
             exp.gameObject.SetActive(false);
@@ -175,17 +174,17 @@ public class PoolManager : MonoBehaviour
     {
         Skill select = null;
 
-        // ¼±ÅÃÇÑ Ç®ÀÇ ³î°íÀÖ´Â(ºñÈ°¼ºÈ­µÈ) °ÔÀÓ ¿ÀºêÁ§Æ® Á¢±Ù    
+        // ì„ íƒí•œ í’€ì˜ ë†€ê³ ìˆëŠ”(ë¹„í™œì„±í™”ëœ) ê²Œì„ ì˜¤ë¸Œì íŠ¸ ì ‘ê·¼    
         foreach (Skill item in Skill_pools[index])
         {
             if (!item.gameObject.activeSelf)
             {
-                // ¹ß°ßÇÏ¸é select º¯¼ö¿¡ ÇÒ´ç
+                // ë°œê²¬í•˜ë©´ select ë³€ìˆ˜ì— í• ë‹¹
                 select = item;
 
                 if (select.GetComponent<IPullingObject>() != null)
                 {
-                    if (target is Enemy)// »ó¼Ó Çüº¯È¯ È°¿ë
+                    if (target is Enemy)// ìƒì† í˜•ë³€í™˜ í™œìš©
                     {
                         select.enemy = target as Enemy;
                     }
@@ -193,7 +192,7 @@ public class PoolManager : MonoBehaviour
                         select.boss = target as Boss;
 
                     select.player = player;
-                    select.index = index; // returnÀ» À§ÇØ index ºÎ¿©
+                    select.index = index; // returnì„ ìœ„í•´ index ë¶€ì—¬
 
                     select.GetComponent<IPullingObject>().Init();
                 }
@@ -202,15 +201,15 @@ public class PoolManager : MonoBehaviour
             }
         }
 
-        // ¸ø Ã£¾ÒÀ¸¸é?      
+        // ëª» ì°¾ì•˜ìœ¼ë©´?      
         if (!select)
         {
-            // »õ·Ó°Ô »ı¼ºÇÏ°í select º¯¼ö¿¡ ÇÒ´ç
+            // ìƒˆë¡­ê²Œ ìƒì„±í•˜ê³  select ë³€ìˆ˜ì— í• ë‹¹
             select = Instantiate(Skill_prefabs[index]);
 
             if (select.GetComponent<IPullingObject>() != null)
             {
-                if (target is Enemy) // »ó¼Ó Çüº¯È¯ È°¿ë
+                if (target is Enemy) // ìƒì† í˜•ë³€í™˜ í™œìš©
                 {
                     select.enemy = target as Enemy;
                 }
@@ -220,7 +219,7 @@ public class PoolManager : MonoBehaviour
                 }
 
                 select.player = player;
-                select.index = index; // returnÀ» À§ÇØ index ºÎ¿©
+                select.index = index; // returnì„ ìœ„í•´ index ë¶€ì—¬
 
                 //select.GetComponent<IPullingObject>().Init();
             }
@@ -236,18 +235,18 @@ public class PoolManager : MonoBehaviour
     {
         Skill select = null;
 
-        // ¼±ÅÃÇÑ Ç®ÀÇ ³î°íÀÖ´Â(ºñÈ°¼ºÈ­µÈ) °ÔÀÓ ¿ÀºêÁ§Æ® Á¢±Ù    
+        // ì„ íƒí•œ í’€ì˜ ë†€ê³ ìˆëŠ”(ë¹„í™œì„±í™”ëœ) ê²Œì„ ì˜¤ë¸Œì íŠ¸ ì ‘ê·¼    
         foreach (Skill item in Skill_pools[index])
         {
             if (!item.gameObject.activeSelf)
             {
-                // ¹ß°ßÇÏ¸é select º¯¼ö¿¡ ÇÒ´ç
+                // ë°œê²¬í•˜ë©´ select ë³€ìˆ˜ì— í• ë‹¹
                 select = item;
 
                 if (select.GetComponent<IPullingObject>() != null)
                 {
                     select.player = player;
-                    select.index = index; // returnÀ» À§ÇØ index ºÎ¿©
+                    select.index = index; // returnì„ ìœ„í•´ index ë¶€ì—¬
 
                     select.GetComponent<IPullingObject>().Init();
                 }
@@ -256,16 +255,16 @@ public class PoolManager : MonoBehaviour
             }
         }
 
-        // ¸ø Ã£¾ÒÀ¸¸é?      
+        // ëª» ì°¾ì•˜ìœ¼ë©´?      
         if (!select)
         {
-            // »õ·Ó°Ô »ı¼ºÇÏ°í select º¯¼ö¿¡ ÇÒ´ç
+            // ìƒˆë¡­ê²Œ ìƒì„±í•˜ê³  select ë³€ìˆ˜ì— í• ë‹¹
             select = Instantiate(Skill_prefabs[index]);
 
             if (select.GetComponent<IPullingObject>() != null)
             {
                 select.player = player;
-                select.index = index; // returnÀ» À§ÇØ index ºÎ¿©
+                select.index = index; // returnì„ ìœ„í•´ index ë¶€ì—¬
 
                 //select.GetComponent<IPullingObject>().Init();
             }
@@ -284,14 +283,14 @@ public class PoolManager : MonoBehaviour
         Skill_pools[index].Add(obj);
     }
 
-    // SkillÀ» »õ·Ó°Ô »ı¼º
+    // Skillì„ ìƒˆë¡­ê²Œ ìƒì„±
     void CreateSkills(int index, int num)
     {
         for (int i = 0; i < num; i++)
         {
             Skill skill = Instantiate(Skill_prefabs[index]);
 
-            skill.transform.SetParent(this.gameObject.transform.GetChild(2)); // ÀÚ±â ÀÚ½Å(transform) Ãß°¡ ÀÌÀ¯: hierarchyÃ¢ ÁöÀúºĞÇØÁö´Â °Å ¹æÁö
+            skill.transform.SetParent(this.gameObject.transform.GetChild(2)); // ìê¸° ìì‹ (transform) ì¶”ê°€ ì´ìœ : hierarchyì°½ ì§€ì €ë¶„í•´ì§€ëŠ” ê±° ë°©ì§€
             Skill_pools[index].Add(skill);
 
             skill.gameObject.SetActive(false);
@@ -302,17 +301,17 @@ public class PoolManager : MonoBehaviour
     {
         BossSkill select = null;
 
-        // ¼±ÅÃÇÑ Ç®ÀÇ ³î°íÀÖ´Â(ºñÈ°¼ºÈ­µÈ) °ÔÀÓ ¿ÀºêÁ§Æ® Á¢±Ù
+        // ì„ íƒí•œ í’€ì˜ ë†€ê³ ìˆëŠ”(ë¹„í™œì„±í™”ëœ) ê²Œì„ ì˜¤ë¸Œì íŠ¸ ì ‘ê·¼
         foreach (BossSkill item in Boss_Skill_pools[index])
         {
             if (!item.gameObject.activeSelf)
             {
-                // ¹ß°ßÇÏ¸é select º¯¼ö¿¡ ÇÒ´ç
+                // ë°œê²¬í•˜ë©´ select ë³€ìˆ˜ì— í• ë‹¹
                 select = item;
 
                 if (select.GetComponent<IPullingObject>() != null)
                 {
-                    select.index = index; // returnÀ» À§ÇØ index ºÎ¿©
+                    select.index = index; // returnì„ ìœ„í•´ index ë¶€ì—¬
 
                     select.GetComponent<IPullingObject>().Init();
                 }
@@ -321,16 +320,16 @@ public class PoolManager : MonoBehaviour
             }
         }
 
-        // ¸ø Ã£¾ÒÀ¸¸é?      
+        // ëª» ì°¾ì•˜ìœ¼ë©´?      
         if (!select)
         {
-            // »õ·Ó°Ô »ı¼ºÇÏ°í select º¯¼ö¿¡ ÇÒ´ç
+            // ìƒˆë¡­ê²Œ ìƒì„±í•˜ê³  select ë³€ìˆ˜ì— í• ë‹¹
             select = Instantiate(Boss_Skill_prefabs[index]);
 
             if (select.GetComponent<IPullingObject>() != null)
             {
                 select.player = player;
-                select.index = index; // returnÀ» À§ÇØ index ºÎ¿©
+                select.index = index; // returnì„ ìœ„í•´ index ë¶€ì—¬
 
                 //select.GetComponent<IPullingObject>().Init();
             }
@@ -342,21 +341,21 @@ public class PoolManager : MonoBehaviour
         return select;
     }
 
-    public BossSkill GetBossSkill(int index, float num) // Boss Laser ¶§¹®¿¡ ¸¸µç °Í
+    public BossSkill GetBossSkill(int index, float num) // Boss Laser ë•Œë¬¸ì— ë§Œë“  ê²ƒ
     {
         BossSkill select = null;
 
-        // ¼±ÅÃÇÑ Ç®ÀÇ ³î°íÀÖ´Â(ºñÈ°¼ºÈ­µÈ) °ÔÀÓ ¿ÀºêÁ§Æ® Á¢±Ù
+        // ì„ íƒí•œ í’€ì˜ ë†€ê³ ìˆëŠ”(ë¹„í™œì„±í™”ëœ) ê²Œì„ ì˜¤ë¸Œì íŠ¸ ì ‘ê·¼
         foreach (BossSkill item in Boss_Skill_pools[index])
         {
             if (!item.gameObject.activeSelf)
             {
-                // ¹ß°ßÇÏ¸é select º¯¼ö¿¡ ÇÒ´ç
+                // ë°œê²¬í•˜ë©´ select ë³€ìˆ˜ì— í• ë‹¹
                 select = item;
 
                 if (select.GetComponent<IPullingObject>() != null)
                 {
-                    select.index = index; // returnÀ» À§ÇØ index ºÎ¿©
+                    select.index = index; // returnì„ ìœ„í•´ index ë¶€ì—¬
                     select.laserTurnNum = num;
 
                     select.GetComponent<IPullingObject>().Init();
@@ -366,16 +365,16 @@ public class PoolManager : MonoBehaviour
             }
         }
 
-        // ¸ø Ã£¾ÒÀ¸¸é?      
+        // ëª» ì°¾ì•˜ìœ¼ë©´?      
         if (!select)
         {
-            // »õ·Ó°Ô »ı¼ºÇÏ°í select º¯¼ö¿¡ ÇÒ´ç
+            // ìƒˆë¡­ê²Œ ìƒì„±í•˜ê³  select ë³€ìˆ˜ì— í• ë‹¹
             select = Instantiate(Boss_Skill_prefabs[index]);
 
             if (select.GetComponent<IPullingObject>() != null)
             {
                 select.player = player;
-                select.index = index; // returnÀ» À§ÇØ index ºÎ¿©
+                select.index = index; // returnì„ ìœ„í•´ index ë¶€ì—¬
                 select.laserTurnNum = num;
 
                 //select.GetComponent<IPullingObject>().Init();
@@ -388,21 +387,21 @@ public class PoolManager : MonoBehaviour
         return select;
     }
 
-    public BossSkill GetBossSkill(int index, float x, float y, bool b) // Grid laser ¶§¹®¿¡ ¸¸µç °Í
+    public BossSkill GetBossSkill(int index, float x, float y, bool b) // Grid laser ë•Œë¬¸ì— ë§Œë“  ê²ƒ
     {
         BossSkill select = null;
 
-        // ¼±ÅÃÇÑ Ç®ÀÇ ³î°íÀÖ´Â(ºñÈ°¼ºÈ­µÈ) °ÔÀÓ ¿ÀºêÁ§Æ® Á¢±Ù
+        // ì„ íƒí•œ í’€ì˜ ë†€ê³ ìˆëŠ”(ë¹„í™œì„±í™”ëœ) ê²Œì„ ì˜¤ë¸Œì íŠ¸ ì ‘ê·¼
         foreach (BossSkill item in Boss_Skill_pools[index])
         {
             if (!item.gameObject.activeSelf)
             {
-                // ¹ß°ßÇÏ¸é select º¯¼ö¿¡ ÇÒ´ç
+                // ë°œê²¬í•˜ë©´ select ë³€ìˆ˜ì— í• ë‹¹
                 select = item;
 
                 if (select.GetComponent<IPullingObject>() != null)
                 {
-                    select.index = index; // returnÀ» À§ÇØ index ºÎ¿©
+                    select.index = index; // returnì„ ìœ„í•´ index ë¶€ì—¬
                     select.X = x;
                     select.Y = y;
                     select.isRightTop = b;
@@ -414,16 +413,16 @@ public class PoolManager : MonoBehaviour
             }
         }
 
-        // ¸ø Ã£¾ÒÀ¸¸é?      
+        // ëª» ì°¾ì•˜ìœ¼ë©´?      
         if (!select)
         {
-            // »õ·Ó°Ô »ı¼ºÇÏ°í select º¯¼ö¿¡ ÇÒ´ç
+            // ìƒˆë¡­ê²Œ ìƒì„±í•˜ê³  select ë³€ìˆ˜ì— í• ë‹¹
             select = Instantiate(Boss_Skill_prefabs[index]);
 
             if (select.GetComponent<IPullingObject>() != null)
             {
                 select.player = player;
-                select.index = index; // returnÀ» À§ÇØ index ºÎ¿©
+                select.index = index; // returnì„ ìœ„í•´ index ë¶€ì—¬
                 select.X = x;
                 select.Y = y;
                 select.isRightTop = b;

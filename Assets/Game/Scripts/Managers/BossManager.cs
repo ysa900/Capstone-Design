@@ -1,9 +1,8 @@
-using System.Collections;
 using UnityEngine;
 
 public class BossManager : MonoBehaviour
 {
-    // Àû ÃÖ¼Ò »ı¼º °Å¸®
+    // ì  ìµœì†Œ ìƒì„± ê±°ë¦¬
     //private float minBossSpawnRange = 20;
 
     public Boss boss;
@@ -22,13 +21,13 @@ public class BossManager : MonoBehaviour
 
     Boss_Genesis bossGenesis;
 
-    // GameManger¿¡°Ô º¸½º°¡ Á×¾ú´Ù°í ¾Ë·ÁÁÖ±â À§ÇÑ delegate
+    // GameMangerì—ê²Œ ë³´ìŠ¤ê°€ ì£½ì—ˆë‹¤ê³  ì•Œë ¤ì£¼ê¸° ìœ„í•œ delegate
     public delegate void OnBossHasKilled();
     public OnBossHasKilled onBossHasKilled;
 
     private void Start()
     {
-        bossBullet_ML = Instantiate(bossBulletPrefab_ML); // ¸ğµ¨ Àû¿ëÀ» À§ÇØ ¾ß¸Å·Î ÇÔ
+        bossBullet_ML = Instantiate(bossBulletPrefab_ML); // ëª¨ë¸ ì ìš©ì„ ìœ„í•´ ì•¼ë§¤ë¡œ í•¨
         Destroy(bossBullet_ML.gameObject);
     }
 
@@ -91,7 +90,7 @@ public class BossManager : MonoBehaviour
         CastWithDelay(30);
     }
 
-    // bossGenesis ½ºÅ³ ¾µ ¶§ ÀÏÁ¤ µô·¹ÀÌ·Î ½ºÅ³ castÇÏ±â À§ÇÔ
+    // bossGenesis ìŠ¤í‚¬ ì“¸ ë•Œ ì¼ì • ë”œë ˆì´ë¡œ ìŠ¤í‚¬ castí•˜ê¸° ìœ„í•¨
     private void CastWithDelay(int num)
     {
         for (int i = 0; i < num; i++)

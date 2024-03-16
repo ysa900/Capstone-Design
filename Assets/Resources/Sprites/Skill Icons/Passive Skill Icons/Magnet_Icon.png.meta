@@ -152,7 +152,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Magnet_Icon_0: -5244987416966198153
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

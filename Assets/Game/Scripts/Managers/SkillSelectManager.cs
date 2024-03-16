@@ -1,9 +1,6 @@
-﻿using Google.Protobuf.WellKnownTypes;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -99,7 +96,7 @@ public class SkillSelectManager: MonoBehaviour
     // 패시브 스킬 레벨업시 수치 증가 값(뎀감만 감소함)
     float masterySkill_IncrementValue = 0.2f;
     float damageReductionSkill_IncrementValue = 0.1f; // 이건 뎀감 수치 (레벨업 시 1 -> 0.9 -> 0.8 -> 0.7로 감소함)
-    float speedUpSkill_IncrementValue = 0.2f;
+    float speedUpSkill_IncrementValue = 0.15f;
     float magnetSkill_IncrementValue = 0.5f;
 
     // GameManager에게 알려주기 위한 delegate들
