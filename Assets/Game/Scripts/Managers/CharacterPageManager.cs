@@ -4,6 +4,10 @@ using System.Net.Sockets;
 using UnityEditor.U2D.Animation;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+#if UNITY_EDITOR
+using UnityEditor.U2D;
+#endif
+
 
 public class CharacterPageManager : MonoBehaviour
 {

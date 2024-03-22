@@ -31,8 +31,11 @@ public class LobbyManager : MonoBehaviour
     // Character Page Option 버튼
     public UnityEngine.UI.Button CharacterPageOptionButtonObject;
 
-    // SettingPage의 Save 버튼
-    public UnityEngine.UI.Button SaveButtonObject;
+    // SettingPage 내 해상도 Save 버튼
+    public UnityEngine.UI.Button resolutionSaveButtonObject;
+
+    // SettingPage 내 사운드 Save 버튼
+    public UnityEngine.UI.Button soundSaveButtonObject;
 
     // 캐릭터 선택창 관련
     // 캐릭터 선택 및 스토리 패널

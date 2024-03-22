@@ -13,10 +13,6 @@ public class SettingPageManager : MonoBehaviour
     
     void Start()
     {
-        // SettingPage Save 버튼 눌렸을 때
-        UnityEngine.UI.Button SaveButton = lobbyManager.SaveButtonObject.GetComponent<UnityEngine.UI.Button>();
-        SaveButton.onClick.AddListener(SaveButtonClicked);
-
         // SettingPage 뒤로가기 버튼 눌렀을 때
         UnityEngine.UI.Button SettingPageBackButton = lobbyManager.SettingPageBackButtonObject.GetComponent<UnityEngine.UI.Button>();
         SettingPageBackButton.onClick.AddListener(SettingPageBackButtonClicked);
@@ -68,11 +64,5 @@ public class SettingPageManager : MonoBehaviour
                 lobbyManager.gameStartButtonObject.interactable = true;
             }
         }
-    }
-
-    // SettingPage의 Save 버튼 클릭 시(미구현)
-    private void SaveButtonClicked()
-    {
-
     }
 }
