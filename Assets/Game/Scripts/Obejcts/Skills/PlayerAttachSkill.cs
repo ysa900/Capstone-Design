@@ -49,7 +49,10 @@ public class PlayerAttachSkill : Skill, IPullingObject
             if (isShieldSkill)
                 onShieldSkillDestroyed(); // 쉴드 스킬이 파괴될 땐 SkillManager에 알려준다
 
-            GameManager.instance.poolManager.ReturnSkill(this, index);
+            if (onSkillFinished != null)
+                onSkillFinished(skillIndex); // skillManager에게 delegate로 알려줌
+
+            GameManager.instance.poolManager.ReturnSkill(this, returnIndex);
             return;
         }
         else if (isCircleSkill)

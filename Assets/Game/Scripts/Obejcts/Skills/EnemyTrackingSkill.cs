@@ -50,7 +50,10 @@ public class EnemyTrackingSkill : Skill, IPullingObject
 
         if (destroySkill)
         {
-            GameManager.instance.poolManager.ReturnSkill(this, index);
+            if (onSkillFinished != null)
+                onSkillFinished(skillIndex); // skillManager에게 delegate로 알려줌
+
+            GameManager.instance.poolManager.ReturnSkill(this, returnIndex);
             return;
         }
         else if(!isBossAppear)

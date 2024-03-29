@@ -192,7 +192,7 @@ public class PoolManager : MonoBehaviour
                         select.boss = target as Boss;
 
                     select.player = player;
-                    select.index = index; // return을 위해 index 부여
+                    select.returnIndex = index; // return을 위해 index 부여
 
                     select.GetComponent<IPullingObject>().Init();
                 }
@@ -219,7 +219,7 @@ public class PoolManager : MonoBehaviour
                 }
 
                 select.player = player;
-                select.index = index; // return을 위해 index 부여
+                select.returnIndex = index; // return을 위해 index 부여
 
                 //select.GetComponent<IPullingObject>().Init();
             }
@@ -246,7 +246,7 @@ public class PoolManager : MonoBehaviour
                 if (select.GetComponent<IPullingObject>() != null)
                 {
                     select.player = player;
-                    select.index = index; // return을 위해 index 부여
+                    select.returnIndex = index; // return을 위해 index 부여
 
                     select.GetComponent<IPullingObject>().Init();
                 }
@@ -264,7 +264,7 @@ public class PoolManager : MonoBehaviour
             if (select.GetComponent<IPullingObject>() != null)
             {
                 select.player = player;
-                select.index = index; // return을 위해 index 부여
+                select.returnIndex = index; // return을 위해 index 부여
 
                 //select.GetComponent<IPullingObject>().Init();
             }

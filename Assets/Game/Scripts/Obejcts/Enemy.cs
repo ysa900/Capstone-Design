@@ -140,12 +140,20 @@ public class Enemy : Object, IDamageable, IPullingObject
 
         float distance = Vector2.Distance(myPosition, playerPosition);
 
-        bool isToFar = distance > 100f;
+        bool isToFar = distance > 50f;
 
         if (isToFar)
         {
-            onEnemyWasKilled(this, false); // 대리자 호출
-            GameManager.instance.poolManager.ReturnEnemy(this, index);
+            // 플레이어가 너무 멀리 가면 enemy를 플레이어를 중심으로 점 대칭 이동
+            float xDiff = myPosition.x - playerPosition.x;
+            float yDiff = myPosition.y - playerPosition.y;
+
+            // toFar 범위에 계속 걸치는 문제를 방지하기 위해 안쪽으로 넣어줌
+            xDiff = xDiff > 0 ? xDiff - 10 : xDiff + 10; 
+            yDiff = yDiff > 0 ? yDiff - 10 : yDiff + 10;
+
+            Vector2 vector2 = new Vector2(playerPosition.x - xDiff, playerPosition.y - yDiff);
+            transform.position = vector2;
         }
 
     }

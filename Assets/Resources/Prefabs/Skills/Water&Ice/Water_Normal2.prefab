@@ -73,7 +73,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 1
   m_Sprite: {fileID: 256816981897751139, guid: 2e55fb96dcf6644f8b1602999d3951c0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -282,9 +282,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemy: {fileID: 0}
+  boss: {fileID: 0}
   player: {fileID: 0}
   speed: 0
   damage: 0
+  skillIndex: 0
+  returnIndex: 0
   randomSkill: {fileID: 0}
   impactPonitX: 0
   impactPonitY: 0
@@ -292,7 +295,7 @@ MonoBehaviour:
   isMeteor: 0
   isIceSpike: 0
   isStaySkill: 0
-  fireNormal2ExplodePrefab: {fileID: 0}
+  scale: 0
 --- !u!95 &798621046198259757
 Animator:
   serializedVersion: 7

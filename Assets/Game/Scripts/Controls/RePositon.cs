@@ -16,9 +16,8 @@ public class RePositon : MonoBehaviour
         float diffX = Mathf.Abs(playerPosition.x - myPosition.x);
         float diffY = Mathf.Abs(playerPosition.y - myPosition.y);
 
-        Vector3 playerDirection = GameManager.instance.player.inputVec;
-        float dirtionX = playerDirection.x < 0 ? -1 : 1; // playerDirection이 마이너스면 -1, 플러스면 1
-        float dirtionY = playerDirection.y < 0 ? -1 : 1;
+        float dirtionX = myPosition.x < playerPosition.x ? 1 : -1; // playerDirection이 마이너스면 -1, 플러스면 1
+        float dirtionY = myPosition.y < playerPosition.y ? 1 : -1;
 
         switch (transform.tag)
         {
@@ -31,9 +30,6 @@ public class RePositon : MonoBehaviour
                 {
                     transform.Translate(Vector3.up * dirtionY * 80);// 윗 방향 * (-1 or 1) * 거리
                 }
-                break;
-            case "Enemy":
-
                 break;
         }
     }

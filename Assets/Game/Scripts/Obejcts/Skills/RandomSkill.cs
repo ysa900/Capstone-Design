@@ -73,7 +73,10 @@ public class RandomSkill : Skill, IPullingObject
             }
             else
             {
-                GameManager.instance.poolManager.ReturnSkill(this, index);
+                if (onSkillFinished != null)
+                    onSkillFinished(skillIndex); // skillManager에게 delegate로 알려줌
+
+                GameManager.instance.poolManager.ReturnSkill(this, returnIndex);
             }
             
             return;
@@ -164,8 +167,11 @@ public class RandomSkill : Skill, IPullingObject
         isCoroutineNow = true;
         
         yield return new WaitForSeconds(0.2f); // 지정한 초 만큼 쉬기
-        
-        GameManager.instance.poolManager.ReturnSkill(this, index);
+
+        if (onSkillFinished != null)
+            onSkillFinished(skillIndex); // skillManager에게 delegate로 알려줌
+
+        GameManager.instance.poolManager.ReturnSkill(this, returnIndex);
 
         isCoroutineNow = false;
     }
