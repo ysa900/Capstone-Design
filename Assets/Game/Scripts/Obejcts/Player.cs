@@ -1,5 +1,4 @@
-using System.Diagnostics.Contracts;
-using UnityEditor.Experimental.GraphView;
+using Unity.Collections;
 using UnityEngine;
 
 public class Player : MonoBehaviour, IPlayer
@@ -18,7 +17,7 @@ public class Player : MonoBehaviour, IPlayer
 
     // 플레이어 패시브 효과 관련 변수
     public float damageReductionValue = 1f; // 뎀감
-    public float magnetRange = 0f; // 자석 범위
+    public float magnetRange; // 자석 범위
 
     //킬 수
     public int kill;

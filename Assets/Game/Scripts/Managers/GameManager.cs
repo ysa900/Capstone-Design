@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour
     public GameObject CharacterProfileObject;
     // Boss HP
     public GameObject BossHPObject;
-
+    
     private void Awake()
     {
         instance = this; // GameManager를 인스턴스화
@@ -206,7 +206,7 @@ public class GameManager : MonoBehaviour
             SpawnEnemies(1, 4); // Spitter 몬스터 소환
             SpawnEnemies(2, 6); // Summoner 몬스터 소환
             SpawnEnemies(3, 20); // BloodKing 몬스터 소환
-            CoolTime = 1f;
+            CoolTime = 0.5f;
             CoolTimer = 0f;
         }
     }
@@ -251,6 +251,7 @@ public class GameManager : MonoBehaviour
     {
         isGameOver = true;
         gameOverObject.SetActive(true);
+        HpBarObject.SetActive(false);
 
         yield return new WaitForSeconds(0.5f); // 0.5초 이후 시간 차 두기
         gameAudioManager.PlaySfx(GameAudioManager.Sfx.Lose); // 캐릭터 사망 시 효과음
@@ -269,6 +270,7 @@ public class GameManager : MonoBehaviour
         player.isPlayerShielded = true;
         isGameOver = true;
         gameClearObject.SetActive(true);
+        HpBarObject.SetActive(false);
 
         yield return new WaitForSeconds(0.5f); // 0.5초 이후 시간 차 두기
         gameAudioManager.PlaySfx(GameAudioManager.Sfx.Win); // 승리시 효과음
@@ -337,6 +339,7 @@ public class GameManager : MonoBehaviour
 
                 exp.expAmount = 1;
                 exp.index = 0;
+                exp.player = player;
 
                 exp.X = killedEnemy.X;
                 exp.Y = killedEnemy.Y + 1f;
@@ -347,6 +350,7 @@ public class GameManager : MonoBehaviour
 
                 exp.expAmount = 2;
                 exp.index = 1;
+                exp.player = player;
 
                 exp.X = killedEnemy.X;
                 exp.Y = killedEnemy.Y + 1f;
@@ -357,6 +361,7 @@ public class GameManager : MonoBehaviour
 
                 exp.expAmount = 3;
                 exp.index = 1;
+                exp.player = player;
 
                 exp.X = killedEnemy.X;
                 exp.Y = killedEnemy.Y + 1f;
@@ -367,6 +372,7 @@ public class GameManager : MonoBehaviour
 
                 exp.expAmount = 4;
                 exp.index = 2;
+                exp.player = player;
 
                 exp.X = killedEnemy.X;
                 exp.Y = killedEnemy.Y + 1f;

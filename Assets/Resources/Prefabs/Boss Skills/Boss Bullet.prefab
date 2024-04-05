@@ -172,7 +172,7 @@ CapsuleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0.08, y: 0}
-  m_Size: {x: 0.4, y: 0.25}
+  m_Size: {x: 0.3, y: 0.2}
   m_Direction: 1
 --- !u!114 &-1771623486371533203
 MonoBehaviour:
@@ -186,6 +186,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f691c28921822864c9142347772037db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemy: {fileID: 0}
+  boss: {fileID: 0}
   player: {fileID: 0}
-  target: {fileID: 0}
   damage: 10
+  index: 0
+  laserTurnNum: 0
+  isRightTop: 0
+  target: {fileID: 0}
