@@ -6,6 +6,10 @@ using UnityEngine.UI;
 
 public class SkillSelectManager: MonoBehaviour
 {
+    // 개발용 (스킬 테스트용)
+    bool isSkillTest = false;
+    int testSkillIndex = 8;
+
     // 현재 고를 수 있는 스킬 번호 (0 ~ 4 레벨: 5번까지 / 5 ~ 9 레벨: 8번까지 / 10레벨 이상 : 11번까지)
     // 12번은 Blood임
     private int skillCount = 6; // 이건 개수라서 5번까지 나오게 할려면 6개임
@@ -93,6 +97,12 @@ public class SkillSelectManager: MonoBehaviour
     float maxDelayCoefficient = 0.8f;
     float maxscaleCoefficient = 1.5f;
 
+    // 패시브 스킬 1레벨 값
+    float masterySkill_StartValue = 1.2f;
+    float damageReductionSkill_StartValue = 0.9f;
+    float speedUpSkill_StartValue = 1.15f;
+    float magnetSkill_StartValue = 0.5f;
+
     // 패시브 스킬 레벨업시 수치 증가 값(뎀감만 감소함)
     float masterySkill_IncrementValue = 0.2f;
     float damageReductionSkill_IncrementValue = 0.1f; // 이건 뎀감 수치 (레벨업 시 1 -> 0.9 -> 0.8 -> 0.7로 감소함)
@@ -158,6 +168,75 @@ public class SkillSelectManager: MonoBehaviour
 
         levelUpTextObject.GetComponent<TextMeshProUGUI>().text = "Choose Start Skill";
 
+        // 개발용 (시작 스킬에 테스트 스킬 추가)
+        if (isSkillTest)
+        {
+            int i = 2;
+
+            icon = skill_Icon[i].GetComponent<Image>();
+            icon.sprite = skillData.skillicon[testSkillIndex];
+
+            string color;
+
+            if (i % 3 == 0) { color = "#FF0000"; }
+            else if (i % 3 == 1) { color = "#D2F7FF"; }
+            else { color = "#0000FF"; }
+
+            textName = skill_TextName[i].GetComponent<TextMeshProUGUI>();
+            textName.text = "<color=" + color + ">" + skillData.skillName[testSkillIndex] + "</color>";
+
+            textDescription = skill_TextDescription[i].GetComponent<TextMeshProUGUI>();
+            textDescription.text = "<color=" + color + ">" + skillData.skillDescription[testSkillIndex] + "</color>";
+
+            Image[] img = levelObject[i].GetComponentsInChildren<Image>();
+
+            for (int num = 4 - skillData.level[testSkillIndex]; num >= 0; num--)
+            {
+                UnityEngine.Color col = img[num].color;
+                col.a = 0.3f;
+                img[num].color = col;
+            }
+            for (int num = 0; num < skillData.level[testSkillIndex]; num++)
+            {
+                UnityEngine.Color col = img[num].color;
+                col.a = 1f;
+                img[num].color = col;
+            }
+
+            for (i = 0; i < 2; i++)
+            {
+                icon = skill_Icon[i].GetComponent<Image>();
+                icon.sprite = skillData.skillicon[i];
+
+                if (i % 3 == 0) { color = "#FF0000"; }
+                else if (i % 3 == 1) { color = "#D2F7FF"; }
+                else { color = "#0000FF"; }
+
+                textName = skill_TextName[i].GetComponent<TextMeshProUGUI>();
+                textName.text = "<color=" + color + ">" + skillData.skillName[i] + "</color>";
+
+                textDescription = skill_TextDescription[i].GetComponent<TextMeshProUGUI>();
+                textDescription.text = "<color=" + color + ">" + skillData.skillDescription[i] + "</color>";
+
+                img = levelObject[i].GetComponentsInChildren<Image>();
+
+                for (int num = 4 - skillData.level[i]; num >= 0; num--)
+                {
+                    UnityEngine.Color col = img[num].color;
+                    col.a = 0.3f;
+                    img[num].color = col;
+                }
+                for (int num = 0; num < skillData.level[i]; num++)
+                {
+                    UnityEngine.Color col = img[num].color;
+                    col.a = 1f;
+                    img[num].color = col;
+                }
+            }
+            return;
+        }
+
+        // 스킬 테스트 아니고 평상시
         for (int i = 0; i < 3; i++)
         {
             icon = skill_Icon[i].GetComponent<Image>();
@@ -501,6 +580,14 @@ public class SkillSelectManager: MonoBehaviour
                     textName = panel_passive_skill_LevelText[selected_Passive_Skills_Pointer].GetComponent<TextMeshProUGUI>();
                     textName.text = "Lv " + passiveSkillData.level[ranNum[0] - 13];
 
+                    switch (ranNum[0] - 13)
+                    {
+                        case 3: { passiveSkillData.Damage[ranNum[0] - 13] = damageReductionSkill_StartValue; break; }
+                        case 4: { passiveSkillData.Damage[ranNum[0] - 13] = speedUpSkill_StartValue; break; }
+                        case 5: { passiveSkillData.Damage[ranNum[0] - 13] = magnetSkill_StartValue; break; }
+                        default: { passiveSkillData.Damage[ranNum[0] - 13] = masterySkill_StartValue; break; }
+                    }
+
                     panel_passive_skill_Icon[selected_Passive_Skills_Pointer].SetActive(true);
 
                     selected_Passive_Skills[selected_Passive_Skills_Pointer++] = ranNum[0] - 13;
@@ -635,6 +722,14 @@ public class SkillSelectManager: MonoBehaviour
                         textName = panel_passive_skill_LevelText[selected_Passive_Skills_Pointer].GetComponent<TextMeshProUGUI>();
                         textName.text = "Lv " + passiveSkillData.level[ranNum[1] - 13];
 
+                        switch (ranNum[1] - 13)
+                        {
+                            case 3: { passiveSkillData.Damage[ranNum[1] - 13] = damageReductionSkill_StartValue; break; }
+                            case 4: { passiveSkillData.Damage[ranNum[1] - 13] = speedUpSkill_StartValue; break; }
+                            case 5: { passiveSkillData.Damage[ranNum[1] - 13] = magnetSkill_StartValue; break; }
+                            default: { passiveSkillData.Damage[ranNum[1] - 13] = masterySkill_StartValue; break; }
+                        }
+
                         panel_passive_skill_Icon[selected_Passive_Skills_Pointer].SetActive(true);
 
                         selected_Passive_Skills[selected_Passive_Skills_Pointer++] = ranNum[1] - 13;
@@ -684,20 +779,40 @@ public class SkillSelectManager: MonoBehaviour
     {
         if (ischoosingStartSkill)
         {
-            skillData.skillSelected[2] = true;
-            skillData.level[2] = 1;
+            if (isSkillTest) // 스킬 테스트 중일 때
+            {
+                skillData.skillSelected[testSkillIndex] = true;
+                skillData.level[testSkillIndex] = 1;
 
-            icon = panel_skill_Icon[selected_Skills_Pointer].GetComponent<Image>();
-            icon.sprite = skillData.skillicon[2];
+                icon = panel_skill_Icon[selected_Skills_Pointer].GetComponent<Image>();
+                icon.sprite = skillData.skillicon[testSkillIndex];
 
-            textName = panel_skill_LevelText[selected_Skills_Pointer].GetComponent<TextMeshProUGUI>();
-            textName.text = "Lv " + skillData.level[2];
+                textName = panel_skill_LevelText[selected_Skills_Pointer].GetComponent<TextMeshProUGUI>();
+                textName.text = "Lv " + skillData.level[testSkillIndex];
 
-            panel_skill_Icon[selected_Skills_Pointer].SetActive(true);
+                panel_skill_Icon[selected_Skills_Pointer].SetActive(true);
 
-            selected_Skills[selected_Skills_Pointer++] = 2;
+                selected_Skills[selected_Skills_Pointer++] = testSkillIndex;
 
-            ischoosingStartSkill = false;
+                ischoosingStartSkill = false;
+            }
+            else // 스킬 테스트 중이 아닌 평소일 때
+            {
+                skillData.skillSelected[2] = true;
+                skillData.level[2] = 1;
+
+                icon = panel_skill_Icon[selected_Skills_Pointer].GetComponent<Image>();
+                icon.sprite = skillData.skillicon[2];
+
+                textName = panel_skill_LevelText[selected_Skills_Pointer].GetComponent<TextMeshProUGUI>();
+                textName.text = "Lv " + skillData.level[2];
+
+                panel_skill_Icon[selected_Skills_Pointer].SetActive(true);
+
+                selected_Skills[selected_Skills_Pointer++] = 2;
+
+                ischoosingStartSkill = false;
+            }
         }
         else
         {
@@ -771,6 +886,14 @@ public class SkillSelectManager: MonoBehaviour
 
                     textName = panel_passive_skill_LevelText[selected_Passive_Skills_Pointer].GetComponent<TextMeshProUGUI>();
                     textName.text = "Lv " + passiveSkillData.level[ranNum[2] - 13];
+
+                    switch (ranNum[2] - 13)
+                    {
+                        case 3: { passiveSkillData.Damage[ranNum[2] - 13] = damageReductionSkill_StartValue; break; }
+                        case 4: { passiveSkillData.Damage[ranNum[2] - 13] = speedUpSkill_StartValue; break; }
+                        case 5: { passiveSkillData.Damage[ranNum[2] - 13] = magnetSkill_StartValue; break; }
+                        default: { passiveSkillData.Damage[ranNum[2] - 13] = masterySkill_StartValue; break; }
+                    }
 
                     panel_passive_skill_Icon[selected_Passive_Skills_Pointer].SetActive(true);
 

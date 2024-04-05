@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class PlayerAttachSkill : Skill, IPullingObject
 {
@@ -13,8 +14,6 @@ public class PlayerAttachSkill : Skill, IPullingObject
     public bool isShieldSkill; // Damage가 없는 Shield 스킬이냐
     public bool isDelaySkill; // 잠깐의 Delay 후 발사되는 스킬이냐
     public bool isYFlipped; // 스킬을 y축으로 뒤집어야되냐
-
-    public bool isStaySkill; // 스킬이 유지되는 동안 계속 데미지가 들어가야되는 스킬이냐
 
     public float degree = 0f;
     private float tmpX; // Cirle을 계산할 때 0,0을 기준으로 생각한 X
@@ -33,6 +32,8 @@ public class PlayerAttachSkill : Skill, IPullingObject
     public new void Init()
     {
         aliveTimer = 0;
+        DotDelayTimers.Clear();
+        DotDamagedEnemies_Name.Clear();
     }
 
     private void Start()
@@ -71,6 +72,15 @@ public class PlayerAttachSkill : Skill, IPullingObject
 
         aliveTimer += Time.fixedDeltaTime;
         delayTimer += Time.fixedDeltaTime;
+
+        if (isDotDamageSkill)
+        {
+            for(int i = 0; i < DotDelayTimers.Count; i++)
+            {
+                DotDelayTimers[i] += Time.fixedDeltaTime;
+            }
+        }
+            
     }
 
     // 플레이어에 붙어다니는 스킬
@@ -139,73 +149,125 @@ public class PlayerAttachSkill : Skill, IPullingObject
 
         if (damageable != null)
         {
+            if(isShieldSkill) { return; }
+
             if (isDelaySkill)
             {
                 if (delayTimer >= delay)
                 {
                     damageable.TakeDamage(gameObject, damage);
+
+                    return;
                 }
             }
-            else if (!isShieldSkill)
+            else
+            {
                 damageable.TakeDamage(gameObject, damage);
 
-            return;
+                return;
+            }
         }
 
         IDamageableSkill damageableSkill = collision.GetComponent<IDamageableSkill>();
 
         if (damageableSkill != null)
         {
+            if (isShieldSkill) { return; }
+
             if (isDelaySkill)
             {
                 if (delayTimer >= delay)
                 {
-                    damageableSkill.TakeDamage(damage);
+                    damageable.TakeDamage(gameObject, damage);
+
+                    return;
                 }
             }
-            else if (!isShieldSkill)
-                damageableSkill.TakeDamage(damage);
+            else
+            {
+                damageable.TakeDamage(gameObject, damage);
 
-            return;
+                return;
+            }
         }
     }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (isStaySkill)
+        if (isDotDamageSkill)
         {
             IDamageable damageable = collision.GetComponent<IDamageable>();
 
             if (damageable != null)
             {
-                if (isDelaySkill)
+                int enemyIndex = DotDamagedEnemies_Name.FindIndex(x => x == collision.gameObject.name);
+
+                if(enemyIndex == -1)
                 {
-                    if (delayTimer >= delay)
+                    DotDamagedEnemies_Name.Add(collision.gameObject.name);
+                    DotDelayTimers.Add(1f);
+
+                    enemyIndex = DotDamagedEnemies_Name.Count - 1;
+                }
+
+                if (DotDelayTimers[enemyIndex] < dotDelayTime) { return; }
+                else
+                {
+                    if (isDelaySkill)
+                    {
+                        if (delayTimer >= delay)
+                        {
+                            damageable.TakeDamage(gameObject, damage);
+
+                            DotDelayTimers[enemyIndex] = 0;
+                        }
+                    }
+                    else
                     {
                         damageable.TakeDamage(gameObject, damage);
-                    }
-                }
-                else if (!isShieldSkill)
-                    damageable.TakeDamage(gameObject, damage);
 
-                return;
+                        DotDelayTimers[enemyIndex] = 0;
+                    }
+
+                    return;
+                }
             }
 
             IDamageableSkill damageableSkill = collision.GetComponent<IDamageableSkill>();
 
-            if (damageableSkill != null)
+            if (damageableSkill != null && isDotDamageSkill)
             {
-                if (isDelaySkill)
-                {
-                    if (delayTimer >= delay)
-                    {
-                        damageableSkill.TakeDamage(damage);
-                    }
-                }
-                else if (!isShieldSkill)
-                    damageableSkill.TakeDamage(damage);
+                int enemyIndex = DotDamagedEnemies_Name.FindIndex(x => x == collision.gameObject.name);
 
-                return;
+                if (enemyIndex == -1)
+                {
+                    DotDamagedEnemies_Name.Add(collision.gameObject.name);
+                    DotDelayTimers.Add(1f);
+
+                    enemyIndex = DotDamagedEnemies_Name.Count - 1;
+                }
+
+                if (DotDelayTimers[enemyIndex] < dotDelayTime) { return; }
+                else
+                {
+                    if (isDelaySkill)
+                    {
+                        if (delayTimer >= delay)
+                        {
+                            damageable.TakeDamage(gameObject, damage);
+
+                            DotDelayTimers[enemyIndex] = 0;
+                        }
+                    }
+                    else
+                    {
+                        damageable.TakeDamage(gameObject, damage);
+
+                        DotDelayTimers[enemyIndex] = 0;
+                    }
+
+                    return;
+                }
             }
 
             

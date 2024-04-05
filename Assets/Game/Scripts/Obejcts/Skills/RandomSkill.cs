@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class RandomSkill : Skill, IPullingObject
@@ -27,6 +28,10 @@ public class RandomSkill : Skill, IPullingObject
     public new void Init()
     {
         aliveTimer = 0;
+
+        DotDelayTimers.Clear();
+        DotDamagedEnemies_Name.Clear();
+
         if (isIceSpike)
         {
             animator_ground = transform.Find("ground").GetComponent<Animator>();
@@ -87,6 +92,14 @@ public class RandomSkill : Skill, IPullingObject
         }
 
         aliveTimer += Time.fixedDeltaTime;
+
+        if (isDotDamageSkill)
+        {
+            for (int i = 0; i < DotDelayTimers.Count; i++)
+            {
+                DotDelayTimers[i] += Time.fixedDeltaTime;
+            }
+        }
     }
 
     // 날아갈 방향을 정하는 함수
@@ -128,7 +141,7 @@ public class RandomSkill : Skill, IPullingObject
 
             if (damageableSkill != null)
             {
-                damageableSkill.TakeDamage(damage);
+                damageable.TakeDamage(gameObject, damage);
 
                 return;
             }
@@ -137,14 +150,30 @@ public class RandomSkill : Skill, IPullingObject
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (!isMeteor && isStaySkill)
+        if (isDotDamageSkill)
         {
             IDamageable damageable = collision.GetComponent<IDamageable>();
 
             if (damageable != null)
             {
-                damageable.TakeDamage(gameObject, damage);
+                int enemyIndex = DotDamagedEnemies_Name.FindIndex(x => x == collision.gameObject.name);
 
+                if (enemyIndex == -1)
+                {
+                    DotDamagedEnemies_Name.Add(collision.gameObject.name);
+                    DotDelayTimers.Add(1f);
+
+                    enemyIndex = DotDamagedEnemies_Name.Count - 1;
+                }
+
+                if (DotDelayTimers[enemyIndex] < dotDelayTime) { return; }
+                else
+                {
+                    damageable.TakeDamage(gameObject, damage);
+
+                    DotDelayTimers[enemyIndex] = 0;
+                }
+                
                 return;
             }
 
@@ -152,7 +181,22 @@ public class RandomSkill : Skill, IPullingObject
 
             if (damageableSkill != null)
             {
-                damageableSkill.TakeDamage(damage);
+                int enemyIndex = DotDamagedEnemies_Name.FindIndex(x => x == collision.gameObject.name);
+
+                if (enemyIndex == -1)
+                {
+                    DotDamagedEnemies_Name.Add(collision.gameObject.name);
+                    DotDelayTimers.Add(1f);
+
+                    enemyIndex = DotDamagedEnemies_Name.Count - 1;
+                }
+                if (DotDelayTimers[enemyIndex] < dotDelayTime) { return; }
+                else
+                {
+                    damageable.TakeDamage(gameObject, damage);
+
+                    DotDelayTimers[enemyIndex] = 0;
+                }
 
                 return;
             }

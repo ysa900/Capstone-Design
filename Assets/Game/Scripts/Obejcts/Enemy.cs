@@ -8,7 +8,7 @@ public class Enemy : Object, IDamageable, IPullingObject
     public Player player;
 
     // Enemy들 체력
-    int[] enemy_HP = { 15, 50, 100, 120 };
+    int[] enemy_HP = { 15, 50, 150, 300 };
 
     // enemy 정보
     public int hp;
@@ -163,6 +163,8 @@ public class Enemy : Object, IDamageable, IPullingObject
     {
         hp = hp - (int)damage;
 
+        ShowDamageText(damage); // damageText 출력
+
         if (hp <= 0 && !isDead)
         {
             StartCoroutine(Dead());
@@ -194,6 +196,19 @@ public class Enemy : Object, IDamageable, IPullingObject
         yield return new WaitForSeconds(0.5f); // 지정한 초 만큼 쉬기
 
         GameManager.instance.poolManager.ReturnEnemy(this, index);
+    }
+
+    // damageText 출력
+    void ShowDamageText(float damage)
+    {
+        GameObject hudText = GameManager.instance.poolManager.GetText(); 
+        hudText.GetComponent<DamageText>().damage = (int)damage;
+
+        float ranNumX = UnityEngine.Random.Range(-0.5f, 0.5f);
+        float ranNumY = UnityEngine.Random.Range(1.0f, 2.0f);
+
+        Vector3 vector3 = new Vector3(transform.position.x + ranNumX, transform.position.y + ranNumY, 0);
+        hudText.transform.position = vector3;
     }
 
 }

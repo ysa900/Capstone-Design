@@ -43,7 +43,7 @@ public class SkillManager : MonoBehaviour
      * 0번 스킬(fire ball), 1번 스킬(lightning), 8번 스킬(ice spike)
      * 들은 스킬 시전 중에 시전 가능, 따라서 스킬 스전 할 때 isSkillsCasted[index] = true로 안함
     */
-    [SerializeField][ReadOnly] bool[] isSkillsCasted = new bool[12];
+    bool[] isSkillsCasted = new bool[12];
 
     // delegate들
     public delegate void OnShiledSkillActivated(); // 쉴드 스킬이 켜 질때
@@ -100,18 +100,18 @@ public class SkillManager : MonoBehaviour
 
         skillData.Damage[0] = 23f;
         skillData.Damage[1] = 20f;
-        skillData.Damage[2] = 1.3f;
+        skillData.Damage[2] = 5.0f; // dot damage skill
         skillData.Damage[3] = 20f;
         skillData.Damage[4] = 15f;
         skillData.Damage[5] = 0f;
         skillData.Damage[6] = 35f;
-        skillData.Damage[7] = 3.0f;
-        skillData.Damage[8] = 1.3f;
+        skillData.Damage[7] = 20.0f; // dot damage skill
+        skillData.Damage[8] = 10.0f; // dot damage skill
         skillData.Damage[9] = 200f;
         skillData.Damage[10] = 40f;
-        skillData.Damage[11] = 2.0f;
+        skillData.Damage[11] = 10.0f; // dot damage skill
 
-        skillData.Delay[0] = 0.75f;
+        skillData.Delay[0] = 1f;
         skillData.Delay[1] = 0.75f;
         skillData.Delay[2] = 1.5f;
         skillData.Delay[3] = 3;
@@ -142,12 +142,12 @@ public class SkillManager : MonoBehaviour
         // Passive Skill Data 초기화
         for (int i = 0; i < passiveSkillData.level.Length; i++) { passiveSkillData.level[i] = 0; }
 
-        passiveSkillData.Damage[0] = 1.2f;
-        passiveSkillData.Damage[1] = 1.2f;
-        passiveSkillData.Damage[2] = 1.2f;
-        passiveSkillData.Damage[3] = 0.9f;
-        passiveSkillData.Damage[4] = 1.15f;
-        passiveSkillData.Damage[5] = 0.5f;
+        passiveSkillData.Damage[0] = 1f;
+        passiveSkillData.Damage[1] = 1f;
+        passiveSkillData.Damage[2] = 1f;
+        passiveSkillData.Damage[3] = 1f;
+        passiveSkillData.Damage[4] = 1f;
+        passiveSkillData.Damage[5] = 0.25f;
         for (int i = 0; i < passiveSkillData.skillSelected.Length; i++) { passiveSkillData.skillSelected[i] = false; }
     }
 
@@ -468,8 +468,7 @@ public class SkillManager : MonoBehaviour
 
                     playerAttachSkill.isAttachSkill = true;
                     playerAttachSkill.isFlipped = true;
-
-                    playerAttachSkill.isStaySkill = true;
+                    playerAttachSkill.isDotDamageSkill = true;
 
                     playerAttachSkill.aliveTime = 0.5f;
 
@@ -605,8 +604,7 @@ public class SkillManager : MonoBehaviour
 
                     playerAttachSkill.isAttachSkill = true;
                     playerAttachSkill.isDelaySkill = true;
-
-                    playerAttachSkill.isStaySkill = true;
+                    playerAttachSkill.isDotDamageSkill = true;
 
                     playerAttachSkill.aliveTime = 0.8f;
 
@@ -646,6 +644,7 @@ public class SkillManager : MonoBehaviour
 
                     randomSkill.isStaySkill = true;
                     randomSkill.isIceSpike = true;
+                    randomSkill.isDotDamageSkill = true;
 
                     randomSkill.aliveTime = 3f;
                     randomSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[2];
@@ -850,8 +849,8 @@ public class SkillManager : MonoBehaviour
                     playerAttachSkill.Y = 999f;
 
                     playerAttachSkill.isAttachSkill = true;
-                    playerAttachSkill.isStaySkill = true;
                     playerAttachSkill.isYFlipped = true;
+                    playerAttachSkill.isDotDamageSkill = true;
 
                     playerAttachSkill.aliveTime = 3f;
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,12 +18,14 @@ public class PoolManager : MonoBehaviour
     public EXP[] Exp_prefabs = new EXP[EXP_NUM]; // EXP_NUM = 3
     public Skill[] Skill_prefabs = new Skill[SKILL_NUM]; // SKILL_NUM = 15
     public BossSkill[] Boss_Skill_prefabs = new BossSkill[BOSS_SKILL_NUM]; // BOSS_SKILL_NUM = 4
+    public GameObject damageText;
 
     // 풀 담당을 하는 리스트들
     List<Enemy>[] Enemy_pools;
     List<EXP>[] Exp_pools;
     List<Skill>[] Skill_pools;
     List<BossSkill>[] Boss_Skill_pools;
+    List<GameObject> Damage_Text_pools = new List<GameObject>();
 
     private void Awake()
     {
@@ -230,7 +233,6 @@ public class PoolManager : MonoBehaviour
 
         return select;
     }
-
     public Skill GetSkill(int index)
     {
         Skill select = null;
@@ -275,7 +277,6 @@ public class PoolManager : MonoBehaviour
 
         return select;
     }
-
     public void ReturnSkill(Skill obj, int index)
     {
         obj.gameObject.SetActive(false);
@@ -340,7 +341,6 @@ public class PoolManager : MonoBehaviour
 
         return select;
     }
-
     public BossSkill GetBossSkill(int index, float num) // Boss Laser 때문에 만든 것
     {
         BossSkill select = null;
@@ -386,7 +386,6 @@ public class PoolManager : MonoBehaviour
 
         return select;
     }
-
     public BossSkill GetBossSkill(int index, float x, float y, bool b) // Grid laser 때문에 만든 것
     {
         BossSkill select = null;
@@ -436,11 +435,63 @@ public class PoolManager : MonoBehaviour
 
         return select;
     }
-
     public void ReturnBossSkill(BossSkill obj, int index)
     {
         obj.gameObject.SetActive(false);
         obj.transform.SetParent(this.gameObject.transform.GetChild(3));
         Boss_Skill_pools[index].Add(obj);
+    }
+
+    public GameObject GetText()
+    {
+        GameObject select = null;
+
+        // 선택한 풀의 놀고있는(비활성화된) 게임 오브젝트 접근    
+        foreach (GameObject item in Damage_Text_pools)
+        {
+            if (!item.activeSelf)
+            {
+                // 발견하면 select 변수에 할당
+                select = item;
+                if (select.GetComponent<IPullingObject>() != null)
+                {
+                    select.GetComponent<IPullingObject>().Init();
+                }
+                select.gameObject.SetActive(true);
+                break;
+            }
+        }
+
+        // 못 찾았으면?      
+        if (!select)
+        {
+            // 새롭게 생성하고 select 변수에 할당
+            // 자기 자신(transform) 추가 이유: hierarchy창 지저분해지는 거 방지
+            select = Instantiate(damageText);
+
+            select.transform.SetParent(this.gameObject.transform.GetChild(4));
+            Damage_Text_pools.Add(select);
+        }
+
+        return select;
+    }
+    public void ReturnText(GameObject obj)
+    {
+        obj.SetActive(false);
+        obj.transform.SetParent(this.gameObject.transform.GetChild(4));
+        Damage_Text_pools.Add(obj);
+    }
+
+    void CreateTexts(int num)
+    {
+        for (int i = 0; i < num; i++)
+        {
+            GameObject tmpObject = Instantiate(damageText);
+
+            tmpObject.transform.SetParent(this.gameObject.transform.GetChild(4)); // 자기 자신(transform) 추가 이유: hierarchy창 지저분해지는 거 방지
+            Damage_Text_pools.Add(tmpObject);
+
+            tmpObject.gameObject.SetActive(false);
+        }
     }
 }

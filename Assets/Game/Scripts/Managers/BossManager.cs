@@ -27,8 +27,8 @@ public class BossManager : MonoBehaviour
 
     private void Start()
     {
-        bossBullet_ML = Instantiate(bossBulletPrefab_ML); // 모델 적용을 위해 야매로 함
-        Destroy(bossBullet_ML.gameObject);
+        //bossBullet_ML = Instantiate(bossBulletPrefab_ML); // 모델 적용을 위해 야매로 함
+        //Destroy(bossBullet_ML.gameObject);
     }
 
     public void CreateBoss()
