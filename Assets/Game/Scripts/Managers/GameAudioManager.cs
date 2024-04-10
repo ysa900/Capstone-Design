@@ -19,7 +19,7 @@ public class GameAudioManager : MonoBehaviour
     // 오디오 채널 시스템
     public int channels; // 다량의 효과음을 내기 위해 채널 개수 배열 선언
     int channelIndex; // 채널 인덱스
-    public AudioSource[] sfxPlayers; // SFX 관련 오디오소스
+    AudioSource[] sfxPlayers = new AudioSource[10]; // SFX 관련 오디오소스
 
     [SerializeField] private AudioMixer m_AudioMixer;
     [SerializeField] private Slider m_MusicMasterSlider;
@@ -34,13 +34,17 @@ public class GameAudioManager : MonoBehaviour
     private float bgmVolume;
     private float sfxVolume;
 
+    private bool isHitPlaying;
+
     public enum Sfx { Dead, Hit, LevelUp = 3, Lose, Melee, Range = 7, Select, Win }
     public enum Bgm { Stage1, Stage2, Boss1, Boss2, Clear } // 필요 Bgm Clip들
 
     private void Awake()
     {
         instance = this;
-        
+
+        string OutputMixer = "Master";
+
         m_MusicMasterSlider.onValueChanged.AddListener(SetMasterVolume);
         m_MusicBGMSlider.onValueChanged.AddListener(SetMusicVolume);
         m_MusicSFXSlider.onValueChanged.AddListener(SetSFXVolume);
@@ -49,8 +53,9 @@ public class GameAudioManager : MonoBehaviour
         GameObject bgmObject = new GameObject("BgmPlayer");
         bgmObject.transform.parent = transform; // 배경음을 담당하는 자식 오브젝트 생성
         bgmPlayer = bgmObject.AddComponent<AudioSource>();
+        bgmPlayer.outputAudioMixerGroup = m_AudioMixer.FindMatchingGroups(OutputMixer)[1];
         bgmPlayer.playOnAwake = false;
-        
+
         // 효과음 플레이어 초기화
         GameObject sfxObject = new GameObject("SfxPlayer");
         sfxObject.transform.parent = transform; // 효과음을 담당하는 자식 오브젝트 생성
@@ -59,23 +64,35 @@ public class GameAudioManager : MonoBehaviour
         for (int index = 0; index < sfxPlayers.Length; index++)
         {
             sfxPlayers[index] = sfxObject.AddComponent<AudioSource>();
+            
+            sfxPlayers[index].outputAudioMixerGroup = m_AudioMixer.FindMatchingGroups(OutputMixer)[2];
             sfxPlayers[index].playOnAwake = false;
-            sfxPlayers[index].bypassListenerEffects = true;
         }
     }
 
     public void PlaySfx(Sfx sfx)
     {
+        
         for (int index = 0; index < sfxPlayers.Length; index++)
         {
             int loopIndex = (index + channelIndex) % sfxPlayers.Length;
 
             if (sfxPlayers[loopIndex].isPlaying)
-                continue;
+            {
+                if (sfx == Sfx.Hit)
+                {
+                    if (sfxPlayers[loopIndex].clip == sfxClips[(int)Sfx.Hit])
+                        break;
+                }
 
+                continue;
+            }
             channelIndex = loopIndex;
+
             sfxPlayers[loopIndex].clip = sfxClips[(int)sfx];
             sfxPlayers[loopIndex].Play();
+
+
             break;
         }
     }

@@ -4,13 +4,6 @@ public class RePositon : MonoBehaviour
 {
     public GameManager instance;
 
-   
-
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        Debug.Log(this.name + collision);
-    }
-
     private void OnTriggerExit2D(Collider2D collision)
     {
 

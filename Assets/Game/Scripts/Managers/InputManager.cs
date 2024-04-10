@@ -91,7 +91,7 @@ public class InputManager : MonoBehaviour
     // PauseButton이 눌렀을 때
     private void PauseButtonClicked()
     {
-        //gameAudioManager.testAudioSource.PlayOneShot(gameAudioManager.testClip); // 버튼 선택 시 효과음
+        GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 선택 시 효과음
 
         if (Time.timeScale == 0) // Pause 누른 상태에서 한번 더 누르면 Pause 풀리게 하려고
             PlayButtonClicked();

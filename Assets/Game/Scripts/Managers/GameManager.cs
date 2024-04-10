@@ -147,7 +147,7 @@ public class GameManager : MonoBehaviour
         GameAudioManager.instance.bgmPlayer.clip = GameAudioManager.instance.bgmClips[(int)Bgm.Stage1];
         GameAudioManager.instance.bgmPlayer.Play();
 
-        SpawnEnemies(0, 50); // 시작 적 소환
+        SpawnEnemies(0, 50); // 시작, 적 소환
 
         skillSelectManager.ChooseStartSkill(); // 시작 스킬 선택
     }
