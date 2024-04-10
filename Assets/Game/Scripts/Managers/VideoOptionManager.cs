@@ -9,9 +9,9 @@ public class VideoOptionManager : MonoBehaviour
 
     // 가능한 해상도 목록
     List<string> resolutionOptions = new List<string>() {
-        "1280x800",
+        "1152x648", // 시작 해상도를 1152x648로 설정
         "1366x768",
-        "1152x864",
+        "1280x800",
         "1280x1024",
         "1280x720"
     };
@@ -37,7 +37,7 @@ public class VideoOptionManager : MonoBehaviour
         lobbyManager.SettingPageBackButtonObject.onClick.AddListener(RestoreSettings); // Back 버튼에 클릭 리스너 추가
 
         // 이전 설정 값 불러오기
-        prevResolution = PlayerPrefs.GetString("PreviousResolution", "1280x720");
+        prevResolution = PlayerPrefs.GetString("PreviousResolution", "1152x648");
         prevFullScreen = PlayerPrefs.GetInt("PreviousFullScreen", 1) == 1 ? true : false;
 
         // 이전 설정으로 UI 초기화

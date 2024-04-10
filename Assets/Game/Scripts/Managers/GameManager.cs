@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
+using static GameAudioManager;
 
 // Pause 걸면 이전에는 인게임 속 UI들(피통, 스킬 패널, 프로필)이 안사라져서
 // 사라지게 하려고 gameObject로 선언한거랑
@@ -36,7 +37,6 @@ public class GameManager : MonoBehaviour
     // 사용할 클래스 객체들
     public Player player;
     public Boss boss;
-    private GameAudioManager gameAudioManager;
     private FollowCam followCam;
     private InputManager inputManager;
     private SkillManager skillManager;
@@ -74,9 +74,16 @@ public class GameManager : MonoBehaviour
     // Boss HP
     public GameObject BossHPObject;
 
+    // Option창 버튼
+    // Setting Page(옵션 창)의 Back 버튼
+    public UnityEngine.UI.Button SettingPageBackButtonObject;
+    // SettingPage 내 사운드 Save 버튼
+    public UnityEngine.UI.Button soundSaveButtonObject;
+
     private void Awake()
     {
         instance = this; // GameManager를 인스턴스화
+
 
         // 시작 시 비활성화
         gameOverObject.SetActive(false);
@@ -88,7 +95,6 @@ public class GameManager : MonoBehaviour
         // 클래스 객체들 초기화
         CreatePlayer();
         inputManager = FindAnyObjectByType<InputManager>();
-        gameAudioManager = FindAnyObjectByType<GameAudioManager>();
         followCam = FindAnyObjectByType<FollowCam>();
         skillManager = FindAnyObjectByType<SkillManager>();
         skillSelectManager = FindAnyObjectByType<SkillSelectManager>();
@@ -126,6 +132,10 @@ public class GameManager : MonoBehaviour
         // BossManager delegate 할당
         bossManager.onBossHasKilled = OnBossHasKilled;
 
+        // Option 창 버튼 초기화
+        SettingPageBackButtonObject = GetComponent<UnityEngine.UI.Button>();
+        SettingPageBackButtonObject = GetComponent<UnityEngine.UI.Button>();
+        
         //gameTime = maxGameTime;
         //player.isPlayerShielded = true;
         //player.level = 20;
@@ -133,8 +143,9 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // GameStart 선택 효과음
-        gameAudioManager.PlayBGM(0, true); // 배경음 시작
+        // Stage1 배경음 플레이
+        GameAudioManager.instance.bgmPlayer.clip = GameAudioManager.instance.bgmClips[(int)Bgm.Stage1];
+        GameAudioManager.instance.bgmPlayer.Play();
 
         SpawnEnemies(0, 50); // 시작 적 소환
 
@@ -159,6 +170,14 @@ public class GameManager : MonoBehaviour
         }
 
         skillManager.enemies = enemies;
+    }
+
+    // BGM 바꿔야 될 때 실행하는 함수
+    private void SwitchBGM(int clipIndex)
+    {
+        GameAudioManager.instance.bgmPlayer.Stop(); // 기존 배경음 종료
+        GameAudioManager.instance.bgmPlayer.clip = GameAudioManager.instance.bgmClips[clipIndex];
+        GameAudioManager.instance.bgmPlayer.Play(); // 원하는 배경음 시작
     }
 
     // Player 생성 함수
@@ -230,13 +249,12 @@ public class GameManager : MonoBehaviour
 
             skillManager.isBossAppear = true;
             skillManager.boss = bossManager.boss;
-
+            
             // 보스 HP바 active
             BossHPObject.SetActive(true);
 
-            // 보스 BGM ON
-            gameAudioManager.PlayBGM(0, false); // 기본 배경음 종료
-            gameAudioManager.PlayBGM(1, true); // 보스 배경음 실행
+            // Stage2 BGM 종료 후 보스 BGM ON
+            SwitchBGM((int)Bgm.Boss1);
 
             isBossSpawned = true;
         }
@@ -247,15 +265,16 @@ public class GameManager : MonoBehaviour
     {
         StartCoroutine(PlayerHasKilled()); // 효과음 넣기 위한 코루틴 생성 및 사용
     }
+
     IEnumerator PlayerHasKilled()
     {
         isGameOver = true;
         gameOverObject.SetActive(true);
 
         yield return new WaitForSeconds(0.5f); // 0.5초 이후 시간 차 두기
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Lose); // 캐릭터 사망 시 효과음
+        GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Dead); // 캐릭터 사망 시 효과음
         inputManager.PauseButtonObject.interactable = false; // Pause버튼 비활성화
-        gameAudioManager.PlayBGM(0, false); // 배경음 종료
+        GameAudioManager.instance.bgmPlayer.Stop(); // 배경음 멈추ㄱ
         Time.timeScale = 0; // 화면 멈추기
     }
 
@@ -264,6 +283,7 @@ public class GameManager : MonoBehaviour
     {
         StartCoroutine(BossHasKilled()); // 효과음 넣기 위한 코루틴 생성 및 사용
     }
+
     IEnumerator BossHasKilled()
     {
         player.isPlayerShielded = true;
@@ -271,9 +291,9 @@ public class GameManager : MonoBehaviour
         gameClearObject.SetActive(true);
 
         yield return new WaitForSeconds(0.5f); // 0.5초 이후 시간 차 두기
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Win); // 승리시 효과음
+        GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Win); // 승리시 효과음
         inputManager.PauseButtonObject.interactable = false; // Pause버튼 비활성화
-        gameAudioManager.PlayBGM(0, false); // 배경음 종료
+        SwitchBGM((int)GameAudioManager.Bgm.Clear);
         Time.timeScale = 0; // 화면 멈추기
     }
 
@@ -281,7 +301,8 @@ public class GameManager : MonoBehaviour
     private void OnPauseButtonClicked()
     {
         pauseObject.SetActive(true);
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 클릭 효과음
+        // 버튼 클릭 효과음 -> 인스펙터 창으로
+
         // UI 비활성화
         HpBarObject.SetActive(false);
         HpStatusLetteringObject.SetActive(false);
@@ -293,7 +314,8 @@ public class GameManager : MonoBehaviour
     private void onPlayButtonClicked()
     {
         pauseObject.SetActive(false);
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 클릭 효과음
+        // 버튼 클릭 효과음 -> 인스펙터 창으로
+
         // UI 활성화
         HpBarObject.SetActive(true);
         HpStatusLetteringObject.SetActive(true);
@@ -378,8 +400,8 @@ public class GameManager : MonoBehaviour
     private void OnPlayerLevelUP()
     {
         skillSelectManager.DisplayLevelupPanel();
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.LevelUp); // 레벨업 시 효과음
-        gameAudioManager.EffectBGM(true); // AudioFilter 켜기
+        GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.LevelUp); // 레벨업 시 효과음
+        //gameAudioManager.EffectBGM(true); // AudioFilter 켜기
     }
 
     private void OnSkillSelectObjectDisplayed()

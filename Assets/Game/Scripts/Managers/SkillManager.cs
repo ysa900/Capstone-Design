@@ -45,6 +45,7 @@ public class SkillManager : MonoBehaviour
     public delegate void OnShiledSkillUnActivated(); // 쉴드 스킬이 꺼 질때
     public OnShiledSkillUnActivated onShiledSkillUnActivated;
 
+
     private void Awake()
     {
         Init(); // skillData 초기화
@@ -278,7 +279,7 @@ public class SkillManager : MonoBehaviour
             case 0:
                 {
                     enemyTrackingSkill = GameManager.instance.poolManager.GetSkill(0, enemy) as EnemyTrackingSkill;
-                    gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+                    GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                     Vector2 playerPosition = player.transform.position;
                     Vector2 enemyPosition = enemy.transform.position;
@@ -306,7 +307,7 @@ public class SkillManager : MonoBehaviour
             case 1:
                 {
                     enemyOnSkill = GameManager.instance.poolManager.GetSkill(7, enemy) as EnemyOnSkill;
-                    gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+                    GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                     Vector2 enemyPosition = enemy.transform.position;
 
@@ -335,7 +336,7 @@ public class SkillManager : MonoBehaviour
             case 0:
                 {
                     enemyTrackingSkill = GameManager.instance.poolManager.GetSkill(0, boss) as EnemyTrackingSkill;
-                    gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+                    GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                     Vector2 playerPosition = player.transform.position;
                     Vector2 bossPosition = boss.transform.position;
@@ -364,7 +365,7 @@ public class SkillManager : MonoBehaviour
             case 1:
                 {
                     enemyOnSkill = GameManager.instance.poolManager.GetSkill(7, boss) as EnemyOnSkill;
-                    gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+                    GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                     Vector2 bossPosition = boss.transform.position;
 
@@ -391,7 +392,7 @@ public class SkillManager : MonoBehaviour
             case 2:
                 {
                     playerAttachSkill = GameManager.instance.poolManager.GetSkill(11) as PlayerAttachSkill;
-                    gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+                    GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                     //playerAttachSkill.player = player; player는 현재 PoolManager에서 할당중
 
@@ -427,7 +428,7 @@ public class SkillManager : MonoBehaviour
             case 3:
                 {
                     playerAttachSkill = GameManager.instance.poolManager.GetSkill(1) as PlayerAttachSkill;
-                    gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+                    GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                     playerAttachSkill.player = player;
 
@@ -454,7 +455,7 @@ public class SkillManager : MonoBehaviour
             case 5:
                 {
                     playerAttachSkill = GameManager.instance.poolManager.GetSkill(12) as PlayerAttachSkill;
-                    gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+                    GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                     //playerAttachSkill.player = player;
 
@@ -475,7 +476,7 @@ public class SkillManager : MonoBehaviour
             case 6:
                 {
                     randomSkill = GameManager.instance.poolManager.GetSkill(3) as RandomSkill;
-                    gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+                    GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                     float tmpX = player.transform.position.x;
                     float tmpY = player.transform.position.y;
@@ -516,7 +517,7 @@ public class SkillManager : MonoBehaviour
             case 7:
                 {
                     playerAttachSkill = GameManager.instance.poolManager.GetSkill(9) as PlayerAttachSkill;
-                    gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+                    GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                     //playerAttachSkill.player = player;
 
@@ -546,7 +547,7 @@ public class SkillManager : MonoBehaviour
             case 8:
                 {
                     randomSkill = GameManager.instance.poolManager.GetSkill(13) as RandomSkill;
-                    gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+                    GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                     float tmpX = player.transform.position.x;
                     float tmpY = player.transform.position.y;
@@ -578,7 +579,7 @@ public class SkillManager : MonoBehaviour
                         for (int i = 0; i < 2; i++)
                         {
                             playerAttachSkill = GameManager.instance.poolManager.GetSkill(6) as PlayerAttachSkill;
-                            gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+                            GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                             if (i == 0)
                             {
@@ -646,7 +647,7 @@ public class SkillManager : MonoBehaviour
                         for (int i = 0; i < 2; i++)
                         {
                             playerAttachSkill = GameManager.instance.poolManager.GetSkill(5) as PlayerAttachSkill;
-                            gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+                            GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                             if (i == 0)
                             {
@@ -717,13 +718,13 @@ public class SkillManager : MonoBehaviour
                 {
                     StartCoroutine(CastJudgement(index, 10));
 
-                    gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+                    GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
                     break;
                 }
             case 11:
                 {
                     playerAttachSkill = GameManager.instance.poolManager.GetSkill(14) as PlayerAttachSkill;
-                    gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+                    GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                     //playerAttachSkill.player = player;
 
@@ -790,7 +791,7 @@ public class SkillManager : MonoBehaviour
                 playerAttachSkill.xPositionNum = 4f;
                 playerAttachSkill.aliveTime = 5f * 1.5f;
 
-                gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+                GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                 //playerAttachSkill.player = player;
 
@@ -818,7 +819,7 @@ public class SkillManager : MonoBehaviour
                 playerAttachSkill.xPositionNum = 3.5f;
                 playerAttachSkill.aliveTime = 5f * 1.25f;
 
-                gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+                GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                 //playerAttachSkill.player = player;
 
@@ -843,7 +844,7 @@ public class SkillManager : MonoBehaviour
             playerAttachSkill.xPositionNum = 3f;
             playerAttachSkill.aliveTime = 5f;
 
-            gameAudioManager.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+            GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
             //playerAttachSkill.player = player;
 

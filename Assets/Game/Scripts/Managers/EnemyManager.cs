@@ -13,8 +13,6 @@ public class EnemyManager : MonoBehaviour
     // Enemy 클래스 객체
     Enemy enemy;
 
-    private GameAudioManager gameAudioManager;
-
     // Enemy들이 생성되었을 때에 GameManager에게 Enemy 리스트를 전달해주기 위한 delegate
     public delegate void OnEnemiesChanged(List<Enemy> enemies);
     public OnEnemiesChanged onEnemiesChanged;
@@ -22,11 +20,6 @@ public class EnemyManager : MonoBehaviour
     // Enemy가 죽었을 때 GameManager에게 알려주기 위한 delegate
     public delegate void OnEnemyKilled(Enemy killedEnemy);
     public OnEnemyKilled onEnemyKilled;
-
-    private void Awake()
-    {
-        gameAudioManager = FindAnyObjectByType<GameAudioManager>();
-    }
 
     // 적 정보를 입력하고 적을 생성하는 함수
     public void SetEnemyInfo(Enemy select, Player player, int index)
@@ -52,7 +45,7 @@ public class EnemyManager : MonoBehaviour
 
             if (!GameManager.instance.isGameOver) //  캐릭터 사망하기 전까지만 실행
             {
-                gameAudioManager.PlaySfx(GameAudioManager.Sfx.Dead); // Enemy 사망 시 효과음
+                GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Melee); // Enemy 사망 시 효과음
             }
         }
 

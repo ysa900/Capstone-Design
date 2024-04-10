@@ -159,7 +159,7 @@ public class Player : MonoBehaviour, IPlayer
             if (!isPlayerShielded)
             {
                 hp -= Time.deltaTime * 5 * damageReductionValue;
-                gameAudioManager.PlaySfx(GameAudioManager.Sfx.Melee); // 피격  효과음
+                GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Hit); // 피격 시 효과음
             }
 
             if (hp <= 0)
@@ -184,7 +184,7 @@ public class Player : MonoBehaviour, IPlayer
             if (!isPlayerShielded)
             {
                 hp -= damage * damageReductionValue;
-                gameAudioManager.PlaySfx(GameAudioManager.Sfx.Melee); // 피격  효과음
+                GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Hit); // 피격 시 효과음
             }
 
             if (hp <= 0)

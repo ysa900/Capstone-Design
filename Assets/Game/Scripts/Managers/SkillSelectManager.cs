@@ -535,8 +535,7 @@ public class SkillSelectManager: MonoBehaviour
                 }
             }
         }
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 선택 시 효과음
-        gameAudioManager.EffectBGM(false); // AudioFilter 끄기
+        // 선택 시 효과음 -> 인스펙터 창으로
         skillSelectObject.SetActive(false);
 
         onSkillSelectObjectHided();
@@ -674,8 +673,8 @@ public class SkillSelectManager: MonoBehaviour
         {
             onPlayerHealed();
         }
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 선택 시 효과음
-        gameAudioManager.EffectBGM(false); // AudioFilter 끄기
+        // 선택 시 효과음 -> 인스펙터 창으로
+
         skillSelectObject.SetActive(false);
 
         onSkillSelectObjectHided();
@@ -806,8 +805,8 @@ public class SkillSelectManager: MonoBehaviour
                 }
             }
         }
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 선택 시 효과음
-        gameAudioManager.EffectBGM(false); // AudioFilter 끄기
+        // 선택 시 효과음 -> 인스펙터 창으로
+
         skillSelectObject.SetActive(false);
 
         onSkillSelectObjectHided();
