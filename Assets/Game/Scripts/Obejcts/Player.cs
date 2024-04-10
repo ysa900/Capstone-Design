@@ -28,6 +28,10 @@ public class Player : MonoBehaviour, IPlayer
 
     public bool isPlayerShielded; // 플레이어가 보호막의 보호를 받고있냐
 
+    // 플레이어 피격음 딜레이
+    float hitDelayTime = 0.1f;
+    float hitDelayTimer = 0.1f;
+
     Rigidbody2D rigid; // 물리 입력을 받기위한 변수
     SpriteRenderer spriteRenderer; // 플레이어 방향을 바꾸기 위해 flipX를 가져오기 위한 변수
     Animator animator; // 애니메이션 관리를 위한 변수
@@ -86,6 +90,8 @@ public class Player : MonoBehaviour, IPlayer
     private void FixedUpdate()
     {
         MovePlayer();
+
+        hitDelayTimer += Time.fixedDeltaTime;
     }
 
     // 프레임이 끝나기 직전에 실행되는 함수
@@ -158,7 +164,13 @@ public class Player : MonoBehaviour, IPlayer
             if (!isPlayerShielded)
             {
                 hp -= Time.deltaTime * 5 * damageReductionValue;
-                gameAudioManager.PlaySfx(GameAudioManager.Sfx.Melee); // 피격  효과음
+
+                bool isHitDelayOK = hitDelayTimer >= hitDelayTime;
+                if (isHitDelayOK)
+                {
+                    gameAudioManager.PlaySfx(GameAudioManager.Sfx.Melee); // 피격  효과음
+                    hitDelayTimer = 0;
+                }
             }
 
             if (hp <= 0)

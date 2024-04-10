@@ -16,8 +16,6 @@ public class SkillSelectManager: MonoBehaviour
 
     // 패시브 스킬을 3개까지 가지고 있을 수 있음
     private int passiveSkillCount = 19; // 패시브 스킬은 13 ~ 18까지 6개
-    
-    private GameAudioManager gameAudioManager;
 
     // 스킬 선택 버튼들
     public UnityEngine.UI.Button SkillSelectButton1;
@@ -127,8 +125,6 @@ public class SkillSelectManager: MonoBehaviour
 
     private void Awake()
     {
-        gameAudioManager = FindAnyObjectByType<GameAudioManager>();
-
         skillSelectObject.SetActive(false);
         closedSkillObject1.SetActive(false);
         closedSkillObject2.SetActive(false);
@@ -619,8 +615,7 @@ public class SkillSelectManager: MonoBehaviour
                 }
             }
         }
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 선택 시 효과음
-        gameAudioManager.EffectBGM(false); // AudioFilter 끄기
+        GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 선택 시 효과음
         skillSelectObject.SetActive(false);
 
         onSkillSelectObjectHided();
@@ -766,8 +761,7 @@ public class SkillSelectManager: MonoBehaviour
         {
             onPlayerHealed();
         }
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 선택 시 효과음
-        gameAudioManager.EffectBGM(false); // AudioFilter 끄기
+        GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 선택 시 효과음
         skillSelectObject.SetActive(false);
 
         onSkillSelectObjectHided();
@@ -926,8 +920,7 @@ public class SkillSelectManager: MonoBehaviour
                 }
             }
         }
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 선택 시 효과음
-        gameAudioManager.EffectBGM(false); // AudioFilter 끄기
+        GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 선택 시 효과음
         skillSelectObject.SetActive(false);
 
         onSkillSelectObjectHided();

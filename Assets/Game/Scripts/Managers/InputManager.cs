@@ -41,11 +41,11 @@ public class InputManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // GameoVer_Restart 버튼 눌렀을 때
+        // GameOver_Restart 버튼 눌렀을 때
         UnityEngine.UI.Button GVRestartButton = GVRestartButtonObject.GetComponent<UnityEngine.UI.Button>();
         GVRestartButton.onClick.AddListener(RestartButtonClicked);
 
-        // GameoVer_GoTOLobby 버튼 눌렀을 때
+        // GameOver_GoTOLobby 버튼 눌렀을 때
         UnityEngine.UI.Button GVGoToLobbyButton = GVGoToLobbyButtonObject.GetComponent<UnityEngine.UI.Button>();
         GVGoToLobbyButton.onClick.AddListener(goToLobbyButtonClicked);
 
@@ -73,7 +73,7 @@ public class InputManager : MonoBehaviour
     // RestartButton이 눌렀을 때
     private void RestartButtonClicked()
     {
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 선택 시 효과음
+        //gameAudioManager.testAudioSource.PlayOneShot(gameAudioManager.testClip); // 버튼 선택 시 효과음
         SceneManager.LoadScene("Game");
         Time.timeScale = 1;
     }
@@ -81,7 +81,9 @@ public class InputManager : MonoBehaviour
     // goToLobbyButton이 눌렀을 때
     private void goToLobbyButtonClicked()
     {
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 선택 시 효과음
+        //gameAudioManager.testAudioSource.PlayOneShot(gameAudioManager.testClip); // 버튼 선택 시 효과음
+        gameAudioManager.bgmPlayer.Stop(); // 현재 BGM 종료
+
         SceneManager.LoadScene("Lobby");
         Time.timeScale = 1;
     }
@@ -89,7 +91,7 @@ public class InputManager : MonoBehaviour
     // PauseButton이 눌렀을 때
     private void PauseButtonClicked()
     {
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 선택 시 효과음
+        GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 선택 시 효과음
 
         if (Time.timeScale == 0) // Pause 누른 상태에서 한번 더 누르면 Pause 풀리게 하려고
             PlayButtonClicked();
@@ -103,7 +105,7 @@ public class InputManager : MonoBehaviour
     // PlayButton이 눌렀을 때
     private void PlayButtonClicked()
     {
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 선택 시 효과음
+        //gameAudioManager.testAudioSource.PlayOneShot(gameAudioManager.testClip); // 버튼 선택 시 효과음
         Time.timeScale = 1;
         onPlayButtonClicked(); // delegate 호출
     }
