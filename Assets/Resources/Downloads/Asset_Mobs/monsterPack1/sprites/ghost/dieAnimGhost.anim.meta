@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: e56c60fd385f34b0f8e39bc2e23374be
+timeCreated: 1509019446
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103431
+  packageName: Monsters Pack 1 Enemies Pixel Art
+  packageVersion: 1.0
+  assetPath: Assets/monsterPack1/sprites/ghost/dieAnimGhost.anim
+  uploadId: 208547

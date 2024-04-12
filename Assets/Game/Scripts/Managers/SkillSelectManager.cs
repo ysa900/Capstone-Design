@@ -615,7 +615,6 @@ public class SkillSelectManager: MonoBehaviour
                 }
             }
         }
-        GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 선택 시 효과음
         skillSelectObject.SetActive(false);
 
         onSkillSelectObjectHided();
@@ -761,7 +760,6 @@ public class SkillSelectManager: MonoBehaviour
         {
             onPlayerHealed();
         }
-        GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 선택 시 효과음
         skillSelectObject.SetActive(false);
 
         onSkillSelectObjectHided();
@@ -920,7 +918,6 @@ public class SkillSelectManager: MonoBehaviour
                 }
             }
         }
-        GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 선택 시 효과음
         skillSelectObject.SetActive(false);
 
         onSkillSelectObjectHided();

@@ -1,0 +1,30 @@
+fileFormatVersion: 2
+guid: 523e3e3bae9f75d43a0bae3c535d31eb
+AudioImporter:
+  externalObjects: {}
+  serializedVersion: 6
+  defaultSettings:
+    loadType: 0
+    sampleRateSetting: 0
+    sampleRateOverride: 44100
+    compressionFormat: 1
+    quality: 1
+    conversionMode: 0
+  platformSettingOverrides: {}
+  forceToMono: 0
+  normalize: 1
+  preloadAudioData: 1
+  loadInBackground: 0
+  ambisonic: 0
+  3D: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 254786
+  packageName: Epic Medieval Music Bundle
+  packageVersion: 1.0.0
+  assetPath: Assets/ElvGames/Epic Medieval Complete Bundle/MP3/Epic Medieval - Follow
+    The Light.mp3
+  uploadId: 584213

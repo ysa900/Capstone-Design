@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: e70eecfc5d5ec4d87adbf065a5f77405
+timeCreated: 1509019335
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103431
+  packageName: Monsters Pack 1 Enemies Pixel Art
+  packageVersion: 1.0
+  assetPath: Assets/monsterPack1/sprites/ghost/Ghost.controller
+  uploadId: 208547

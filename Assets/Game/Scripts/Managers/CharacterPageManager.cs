@@ -54,9 +54,6 @@ public class CharacterPageManager : MonoBehaviour
 
             lobbyManager.isMainPageOn = true;
             lobbyManager.isSettingPageOn = false;
-
-            lobbyManager.MainPageAudio.Play();
-            lobbyManager.CharacterPageAudio.Stop();
         }
 
         // 캐릭터 선택되어 있지 않고 옵션창만 떠있는 상황

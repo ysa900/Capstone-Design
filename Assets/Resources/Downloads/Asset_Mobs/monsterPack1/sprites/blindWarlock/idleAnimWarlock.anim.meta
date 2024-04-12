@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c52efe2b3cd754c8dbe991ca48e33c8f
+timeCreated: 1509032926
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103431
+  packageName: Monsters Pack 1 Enemies Pixel Art
+  packageVersion: 1.0
+  assetPath: Assets/monsterPack1/sprites/blindWarlock/idleAnimWarlock.anim
+  uploadId: 208547

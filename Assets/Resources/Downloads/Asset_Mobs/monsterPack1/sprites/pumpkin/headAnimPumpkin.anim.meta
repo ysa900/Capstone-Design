@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 31ce2f2aefec1426bb202c7d2589b71d
+timeCreated: 1509017675
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103431
+  packageName: Monsters Pack 1 Enemies Pixel Art
+  packageVersion: 1.0
+  assetPath: Assets/monsterPack1/sprites/pumpkin/headAnimPumpkin.anim
+  uploadId: 208547

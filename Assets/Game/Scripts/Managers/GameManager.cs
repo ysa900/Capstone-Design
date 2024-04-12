@@ -57,9 +57,10 @@ public class GameManager : MonoBehaviour
     public GameObject gameOverObject;
     // GameClear 오브젝트
     public GameObject gameClearObject;
-
     // Pause 오브젝트
     public GameObject pauseObject;
+    // GameOption 오브젝트
+    public GameObject optionObject;
 
     // HpBar
     public GameObject HpBarObject;
@@ -73,12 +74,8 @@ public class GameManager : MonoBehaviour
     public GameObject CharacterProfileObject;
     // Boss HP
     public GameObject BossHPObject;
-    
-    // Option창 버튼
-    // Setting Page(옵션 창)의 Back 버튼
-    public UnityEngine.UI.Button SettingPageBackButtonObject;
-    // SettingPage 내 사운드 Save 버튼
-    public UnityEngine.UI.Button soundSaveButtonObject;
+    // SettingPAge
+    public GameObject SettingPageObject;
 
     private void Awake()
     {
@@ -88,8 +85,10 @@ public class GameManager : MonoBehaviour
         gameOverObject.SetActive(false);
         gameClearObject.SetActive(false);
         pauseObject.SetActive(false);
-        HpBarObject.SetActive(true);
+        optionObject.SetActive(true);
+        HpBarObject.SetActive(false);
         BossHPObject.SetActive(false);
+        SettingPageObject.SetActive(false);
 
         // 클래스 객체들 초기화
         CreatePlayer();
@@ -131,8 +130,8 @@ public class GameManager : MonoBehaviour
         // BossManager delegate 할당
         bossManager.onBossHasKilled = OnBossHasKilled;
 
-        //gameTime = maxGameTime;
-        //player.isPlayerShielded = true;
+        gameTime = maxGameTime;
+        player.isPlayerShielded = true;
         //player.level = 20;
     }
 
@@ -292,7 +291,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0; // 화면 멈추기
     }
 
-    // Pause버튼이 클릭됐을 시 실행됨
+    // Pause 버튼이 클릭됐을 시 실행됨
     private void OnPauseButtonClicked()
     {
         pauseObject.SetActive(true);
@@ -305,6 +304,7 @@ public class GameManager : MonoBehaviour
         CharacterProfileObject.SetActive(false);
     }
 
+    // Play 버튼이 클릭됐을 시 실행됨
     private void onPlayButtonClicked()
     {
         pauseObject.SetActive(false);

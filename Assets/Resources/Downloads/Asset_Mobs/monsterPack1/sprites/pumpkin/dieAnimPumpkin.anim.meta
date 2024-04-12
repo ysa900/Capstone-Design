@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 8084f722509b64959a556a3399748035
+timeCreated: 1509018269
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103431
+  packageName: Monsters Pack 1 Enemies Pixel Art
+  packageVersion: 1.0
+  assetPath: Assets/monsterPack1/sprites/pumpkin/dieAnimPumpkin.anim
+  uploadId: 208547

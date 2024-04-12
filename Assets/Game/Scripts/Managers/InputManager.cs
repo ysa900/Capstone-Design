@@ -24,7 +24,10 @@ public class InputManager : MonoBehaviour
     // Play 버튼
     public UnityEngine.UI.Button PlayButtonObject;
 
-    private GameAudioManager gameAudioManager;
+    // Option 관련 버튼
+    public UnityEngine.UI.Button OptionButtonObject; // 프레이 화면의 Option 버튼
+    public UnityEngine.UI.Button SettingPageBackButtonObject; // Setting Page(옵션 창)의 Back 버튼
+
 
     // GameManager에게 정보 전달을 하기 위한 Delegate들
     public delegate void OnPauseButtonClicked();
@@ -32,11 +35,6 @@ public class InputManager : MonoBehaviour
 
     public delegate void OnPlayButtonClicked();
     public OnPlayButtonClicked onPlayButtonClicked;
-
-    private void Awake()
-    {
-        gameAudioManager = FindAnyObjectByType<GameAudioManager>();
-    }
 
     // Start is called before the first frame update
     void Start()
@@ -58,8 +56,8 @@ public class InputManager : MonoBehaviour
         PauseButton.onClick.AddListener(PauseButtonClicked);
 
         // Pause_Restart 버튼 눌렀을 때
-        UnityEngine.UI.Button PRestartButto = PRestartButtonObject.GetComponent<UnityEngine.UI.Button>();
-        PRestartButto.onClick.AddListener(RestartButtonClicked);
+        UnityEngine.UI.Button PRestartButton = PRestartButtonObject.GetComponent<UnityEngine.UI.Button>();
+        PRestartButton.onClick.AddListener(RestartButtonClicked);
 
         // Pause_GoTOLobby 버튼 눌렀을 때
         UnityEngine.UI.Button PGoToLobbyButton = PGoToLobbyButtonObject.GetComponent<UnityEngine.UI.Button>();
@@ -68,31 +66,37 @@ public class InputManager : MonoBehaviour
         // Play 버튼 눌렀을 때
         UnityEngine.UI.Button PlayButton = PlayButtonObject.GetComponent<UnityEngine.UI.Button>();
         PlayButton.onClick.AddListener(PlayButtonClicked);
+
+        // Option 버튼 눌렀을 때
+        UnityEngine.UI.Button OptionButton = OptionButtonObject.GetComponent<UnityEngine.UI.Button>();
+        OptionButton.onClick.AddListener(OptionButtonClicked);
+
+        // SettingPage의 BackButton 눌렀을 때
+        UnityEngine.UI.Button SettingPageBackButton = SettingPageBackButtonObject.GetComponent<UnityEngine.UI.Button>();
+        SettingPageBackButton.onClick.AddListener(SettingPageBackButtonClicked);
     }
 
     // RestartButton이 눌렀을 때
     private void RestartButtonClicked()
     {
-        //gameAudioManager.testAudioSource.PlayOneShot(gameAudioManager.testClip); // 버튼 선택 시 효과음
-        SceneManager.LoadScene("Game");
+        GameAudioManager.instance.bgmPlayer.Stop(); // 현재 BGM 종료
+
+        SceneManager.LoadScene("Game"); // Stage1 으로 돌아가기(해당 씬 Load), 현재는 "Game" 씬 
         Time.timeScale = 1;
     }
 
     // goToLobbyButton이 눌렀을 때
     private void goToLobbyButtonClicked()
     {
-        //gameAudioManager.testAudioSource.PlayOneShot(gameAudioManager.testClip); // 버튼 선택 시 효과음
-        gameAudioManager.bgmPlayer.Stop(); // 현재 BGM 종료
+        GameAudioManager.instance.bgmPlayer.Stop(); // 현재 BGM 종료
 
         SceneManager.LoadScene("Lobby");
         Time.timeScale = 1;
     }
-
+    
     // PauseButton이 눌렀을 때
     private void PauseButtonClicked()
     {
-        GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 선택 시 효과음
-
         if (Time.timeScale == 0) // Pause 누른 상태에서 한번 더 누르면 Pause 풀리게 하려고
             PlayButtonClicked();
         else
@@ -105,8 +109,24 @@ public class InputManager : MonoBehaviour
     // PlayButton이 눌렀을 때
     private void PlayButtonClicked()
     {
-        //gameAudioManager.testAudioSource.PlayOneShot(gameAudioManager.testClip); // 버튼 선택 시 효과음
         Time.timeScale = 1;
         onPlayButtonClicked(); // delegate 호출
+    }
+
+
+    private void OptionButtonClicked()
+    {
+        Time.timeScale = 0;
+        GameManager.instance.HpBarObject.SetActive(false);
+        GameManager.instance.SettingPageObject.SetActive(true);
+        OptionButtonObject.interactable = false;
+    }
+
+    private void SettingPageBackButtonClicked()
+    {
+        Time.timeScale = 1;
+        GameManager.instance.HpBarObject.SetActive(true);
+        GameManager.instance.SettingPageObject.SetActive(false);
+        OptionButtonObject.interactable = true;
     }
 }

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 53ae7ec36e4d546129c9fdbd252ad1d6
+timeCreated: 1509023038
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103431
+  packageName: Monsters Pack 1 Enemies Pixel Art
+  packageVersion: 1.0
+  assetPath: Assets/monsterPack1/sprites/evilTree/flyAnimBat.anim
+  uploadId: 208547
