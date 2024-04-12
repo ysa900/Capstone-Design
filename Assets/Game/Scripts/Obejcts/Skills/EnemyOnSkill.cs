@@ -18,11 +18,17 @@ public class EnemyOnSkill : Skill, IPullingObject
 
     private void FixedUpdate()
     {
-        bool destroySkill = aliveTime > 1.5f || enemy == null;
+        bool destroySkill;
+
+        if (!isBossAppear) { destroySkill = aliveTime > 1.5f || enemy == null; }
+        else { destroySkill = aliveTime > 1.5f || boss == null; }
 
         if (destroySkill)
         {
-            GameManager.instance.poolManager.ReturnSkill(this, index);
+            if (onSkillFinished != null)
+                onSkillFinished(skillIndex); // skillManager에게 delegate로 알려줌
+
+            GameManager.instance.poolManager.ReturnSkill(this, returnIndex);
             return;
         }
 
@@ -32,7 +38,7 @@ public class EnemyOnSkill : Skill, IPullingObject
     private void OnTriggerEnter2D(Collider2D collision)
     {
         IDamageable damageable = collision.GetComponent<IDamageable>();
-
+        
         if (damageable != null)
         {
             damageable.TakeDamage(gameObject, damage);
@@ -58,7 +64,10 @@ public class EnemyOnSkill : Skill, IPullingObject
     {
         yield return new WaitForSeconds(delayTime); // 지정한 초 만큼 쉬기
 
-        GameManager.instance.poolManager.ReturnSkill(this, index);
+        if (onSkillFinished != null)
+            onSkillFinished(skillIndex); // skillManager에게 delegate로 알려줌
+
+        GameManager.instance.poolManager.ReturnSkill(this, returnIndex);
     }
 }
 

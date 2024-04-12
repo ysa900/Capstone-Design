@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class LobbyManager : MonoBehaviour
 {
@@ -31,11 +30,8 @@ public class LobbyManager : MonoBehaviour
     // Character Page Option 버튼
     public UnityEngine.UI.Button CharacterPageOptionButtonObject;
 
-    // SettingPage 내 해상도 Save 버튼
-    public UnityEngine.UI.Button resolutionSaveButtonObject;
-
-    // SettingPage 내 사운드 Save 버튼
-    public UnityEngine.UI.Button soundSaveButtonObject;
+    // SettingPage의 Save 버튼
+    public UnityEngine.UI.Button SaveButtonObject;
 
     // 캐릭터 선택창 관련
     // 캐릭터 선택 및 스토리 패널
@@ -45,10 +41,6 @@ public class LobbyManager : MonoBehaviour
     public UnityEngine.UI.Button SelectAssassinButtonObject; // Assasin
     public UnityEngine.UI.Button SelectMageButtonObject; // Mage
     public UnityEngine.UI.Button SelectWarriorButtonObject; // Warrior
-
-
-    public AudioSource MainPageAudio;
-    public AudioSource CharacterPageAudio;
 
     // 페이지 모음
     // Main Page 오브젝트
@@ -73,9 +65,6 @@ public class LobbyManager : MonoBehaviour
 
     private void Start()
     {
-
-        MainPageAudio = MainPage.GetComponentInChildren<AudioSource>();
-        CharacterPageAudio = CharacterPage.GetComponentInChildren<AudioSource>();
         // 시작 시 비활성화
         CharacterPage.SetActive(false);
         ItemPage.SetActive(false);

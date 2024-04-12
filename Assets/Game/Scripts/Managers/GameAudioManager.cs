@@ -46,7 +46,7 @@ public class GameAudioManager : MonoBehaviour
         string OutputMixer = "Master";
 
         m_MusicMasterSlider.onValueChanged.AddListener(SetMasterVolume);
-        m_MusicBGMSlider.onValueChanged.AddListener(SetMusicVolume);
+        m_MusicBGMSlider.onValueChanged.AddListener(SetBGMVolume);
         m_MusicSFXSlider.onValueChanged.AddListener(SetSFXVolume);
 
         // 배경음 플레이어 초기화
@@ -64,7 +64,7 @@ public class GameAudioManager : MonoBehaviour
         for (int index = 0; index < sfxPlayers.Length; index++)
         {
             sfxPlayers[index] = sfxObject.AddComponent<AudioSource>();
-            
+
             sfxPlayers[index].outputAudioMixerGroup = m_AudioMixer.FindMatchingGroups(OutputMixer)[2];
             sfxPlayers[index].playOnAwake = false;
         }
@@ -72,7 +72,7 @@ public class GameAudioManager : MonoBehaviour
 
     public void PlaySfx(Sfx sfx)
     {
-        
+
         for (int index = 0; index < sfxPlayers.Length; index++)
         {
             int loopIndex = (index + channelIndex) % sfxPlayers.Length;
@@ -99,22 +99,34 @@ public class GameAudioManager : MonoBehaviour
 
     public void SetMasterVolume(float volume)
     {
-        m_AudioMixer.SetFloat("Master", Mathf.Log10(volume) * 20);
         masterVolume = volume;
+
+        if (masterVolume == 0.001f)
+            m_AudioMixer.SetFloat("Master", -80);
+        else
+            m_AudioMixer.SetFloat("Master", Mathf.Log10(volume) * 20);
         masterSoundLabel.text = (volume * 100).ToString("F0");
     }
 
-    public void SetMusicVolume(float volume)
+    public void SetBGMVolume(float volume)
     {
-        m_AudioMixer.SetFloat("BGM", Mathf.Log10(volume) * 20);
         bgmVolume = volume;
+
+        if (masterVolume == 0.001f)
+            m_AudioMixer.SetFloat("BGM", -80);
+        else
+            m_AudioMixer.SetFloat("BGM", Mathf.Log10(volume) * 20);
         BGMSoundLabel.text = (volume * 100).ToString("F0");
     }
 
     public void SetSFXVolume(float volume)
     {
-        m_AudioMixer.SetFloat("SFX", Mathf.Log10(volume) * 20);
         sfxVolume = volume;
+
+        if (masterVolume == 0.001f)
+            m_AudioMixer.SetFloat("SFX", -80);
+        else
+            m_AudioMixer.SetFloat("SFX", Mathf.Log10(volume) * 20);
         SFXSoundLabel.text = (volume * 100).ToString("F0");
     }
 

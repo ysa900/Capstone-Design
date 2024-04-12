@@ -10,7 +10,7 @@ public class SettingPageManager : MonoBehaviour
     {
         lobbyManager = FindAnyObjectByType<LobbyManager>();
     }
-    
+
     void Start()
     {
         // SettingPage 뒤로가기 버튼 눌렀을 때

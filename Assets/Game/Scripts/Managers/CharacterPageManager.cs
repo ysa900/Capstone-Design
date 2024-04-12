@@ -1,13 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Net.Sockets;
-using UnityEditor.U2D.Animation;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-#if UNITY_EDITOR
-using UnityEditor.U2D;
-#endif
-
 
 public class CharacterPageManager : MonoBehaviour
 {
@@ -62,9 +54,6 @@ public class CharacterPageManager : MonoBehaviour
 
             lobbyManager.isMainPageOn = true;
             lobbyManager.isSettingPageOn = false;
-
-            lobbyManager.MainPageAudio.Play();
-            lobbyManager.CharacterPageAudio.Stop();
         }
 
         // 캐릭터 선택되어 있지 않고 옵션창만 떠있는 상황

@@ -57,9 +57,10 @@ public class GameManager : MonoBehaviour
     public GameObject gameOverObject;
     // GameClear 오브젝트
     public GameObject gameClearObject;
-
     // Pause 오브젝트
     public GameObject pauseObject;
+    // GameOption 오브젝트
+    public GameObject optionObject;
 
     // HpBar
     public GameObject HpBarObject;
@@ -73,24 +74,21 @@ public class GameManager : MonoBehaviour
     public GameObject CharacterProfileObject;
     // Boss HP
     public GameObject BossHPObject;
-
-    // Option창 버튼
-    // Setting Page(옵션 창)의 Back 버튼
-    public UnityEngine.UI.Button SettingPageBackButtonObject;
-    // SettingPage 내 사운드 Save 버튼
-    public UnityEngine.UI.Button soundSaveButtonObject;
+    // SettingPAge
+    public GameObject SettingPageObject;
 
     private void Awake()
     {
         instance = this; // GameManager를 인스턴스화
 
-
         // 시작 시 비활성화
         gameOverObject.SetActive(false);
         gameClearObject.SetActive(false);
         pauseObject.SetActive(false);
-        HpBarObject.SetActive(true);
+        optionObject.SetActive(true);
+        HpBarObject.SetActive(false);
         BossHPObject.SetActive(false);
+        SettingPageObject.SetActive(false);
 
         // 클래스 객체들 초기화
         CreatePlayer();
@@ -132,10 +130,6 @@ public class GameManager : MonoBehaviour
         // BossManager delegate 할당
         bossManager.onBossHasKilled = OnBossHasKilled;
 
-        // Option 창 버튼 초기화
-        SettingPageBackButtonObject = GetComponent<UnityEngine.UI.Button>();
-        SettingPageBackButtonObject = GetComponent<UnityEngine.UI.Button>();
-        
         //gameTime = maxGameTime;
         //player.isPlayerShielded = true;
         //player.level = 20;
@@ -147,7 +141,7 @@ public class GameManager : MonoBehaviour
         GameAudioManager.instance.bgmPlayer.clip = GameAudioManager.instance.bgmClips[(int)Bgm.Stage1];
         GameAudioManager.instance.bgmPlayer.Play();
 
-        SpawnEnemies(0, 50); // 시작, 적 소환
+        SpawnEnemies(0, 50); // 시작 적 소환
 
         skillSelectManager.ChooseStartSkill(); // 시작 스킬 선택
     }
@@ -225,7 +219,7 @@ public class GameManager : MonoBehaviour
             SpawnEnemies(1, 4); // Spitter 몬스터 소환
             SpawnEnemies(2, 6); // Summoner 몬스터 소환
             SpawnEnemies(3, 20); // BloodKing 몬스터 소환
-            CoolTime = 1f;
+            CoolTime = 0.5f;
             CoolTimer = 0f;
         }
     }
@@ -239,7 +233,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void SpawnBoss()
+     void SpawnBoss()
     {
         if (gameTime >= maxGameTime)
         {
@@ -265,16 +259,16 @@ public class GameManager : MonoBehaviour
     {
         StartCoroutine(PlayerHasKilled()); // 효과음 넣기 위한 코루틴 생성 및 사용
     }
-
     IEnumerator PlayerHasKilled()
     {
         isGameOver = true;
         gameOverObject.SetActive(true);
+        HpBarObject.SetActive(false);
 
         yield return new WaitForSeconds(0.5f); // 0.5초 이후 시간 차 두기
         GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Dead); // 캐릭터 사망 시 효과음
         inputManager.PauseButtonObject.interactable = false; // Pause버튼 비활성화
-        GameAudioManager.instance.bgmPlayer.Stop(); // 배경음 멈추ㄱ
+        GameAudioManager.instance.bgmPlayer.Stop(); // 배경음 멈추기
         Time.timeScale = 0; // 화면 멈추기
     }
 
@@ -283,12 +277,12 @@ public class GameManager : MonoBehaviour
     {
         StartCoroutine(BossHasKilled()); // 효과음 넣기 위한 코루틴 생성 및 사용
     }
-
     IEnumerator BossHasKilled()
     {
         player.isPlayerShielded = true;
         isGameOver = true;
         gameClearObject.SetActive(true);
+        HpBarObject.SetActive(false);
 
         yield return new WaitForSeconds(0.5f); // 0.5초 이후 시간 차 두기
         GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Win); // 승리시 효과음
@@ -297,12 +291,11 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0; // 화면 멈추기
     }
 
-    // Pause버튼이 클릭됐을 시 실행됨
+    // Pause 버튼이 클릭됐을 시 실행됨
     private void OnPauseButtonClicked()
     {
         pauseObject.SetActive(true);
-        // 버튼 클릭 효과음 -> 인스펙터 창으로
-
+        
         // UI 비활성화
         HpBarObject.SetActive(false);
         HpStatusLetteringObject.SetActive(false);
@@ -311,11 +304,11 @@ public class GameManager : MonoBehaviour
         CharacterProfileObject.SetActive(false);
     }
 
+    // Play 버튼이 클릭됐을 시 실행됨
     private void onPlayButtonClicked()
     {
         pauseObject.SetActive(false);
-        // 버튼 클릭 효과음 -> 인스펙터 창으로
-
+        
         // UI 활성화
         HpBarObject.SetActive(true);
         HpStatusLetteringObject.SetActive(true);
@@ -359,6 +352,7 @@ public class GameManager : MonoBehaviour
 
                 exp.expAmount = 1;
                 exp.index = 0;
+                exp.player = player;
 
                 exp.X = killedEnemy.X;
                 exp.Y = killedEnemy.Y + 1f;
@@ -369,6 +363,7 @@ public class GameManager : MonoBehaviour
 
                 exp.expAmount = 2;
                 exp.index = 1;
+                exp.player = player;
 
                 exp.X = killedEnemy.X;
                 exp.Y = killedEnemy.Y + 1f;
@@ -379,6 +374,7 @@ public class GameManager : MonoBehaviour
 
                 exp.expAmount = 3;
                 exp.index = 1;
+                exp.player = player;
 
                 exp.X = killedEnemy.X;
                 exp.Y = killedEnemy.Y + 1f;
@@ -389,6 +385,7 @@ public class GameManager : MonoBehaviour
 
                 exp.expAmount = 4;
                 exp.index = 2;
+                exp.player = player;
 
                 exp.X = killedEnemy.X;
                 exp.Y = killedEnemy.Y + 1f;
@@ -401,7 +398,6 @@ public class GameManager : MonoBehaviour
     {
         skillSelectManager.DisplayLevelupPanel();
         GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.LevelUp); // 레벨업 시 효과음
-        //gameAudioManager.EffectBGM(true); // AudioFilter 켜기
     }
 
     private void OnSkillSelectObjectDisplayed()

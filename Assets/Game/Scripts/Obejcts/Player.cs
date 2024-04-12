@@ -1,5 +1,4 @@
-using System.Diagnostics.Contracts;
-using UnityEditor.Experimental.GraphView;
+using Unity.Collections;
 using UnityEngine;
 
 public class Player : MonoBehaviour, IPlayer
@@ -18,7 +17,7 @@ public class Player : MonoBehaviour, IPlayer
 
     // 플레이어 패시브 효과 관련 변수
     public float damageReductionValue = 1f; // 뎀감
-    public float magnetRange = 0f; // 자석 범위
+    public float magnetRange; // 자석 범위
 
     //킬 수
     public int kill;
@@ -28,6 +27,10 @@ public class Player : MonoBehaviour, IPlayer
     public bool isPlayerLookLeft; // 플레이어가 보고 있는 방향을 알려주는 변수
 
     public bool isPlayerShielded; // 플레이어가 보호막의 보호를 받고있냐
+
+    // 플레이어 피격음 딜레이
+    float hitDelayTime = 0.1f;
+    float hitDelayTimer = 0.1f;
 
     Rigidbody2D rigid; // 물리 입력을 받기위한 변수
     SpriteRenderer spriteRenderer; // 플레이어 방향을 바꾸기 위해 flipX를 가져오기 위한 변수
@@ -87,6 +90,8 @@ public class Player : MonoBehaviour, IPlayer
     private void FixedUpdate()
     {
         MovePlayer();
+
+        hitDelayTimer += Time.fixedDeltaTime;
     }
 
     // 프레임이 끝나기 직전에 실행되는 함수
@@ -159,7 +164,13 @@ public class Player : MonoBehaviour, IPlayer
             if (!isPlayerShielded)
             {
                 hp -= Time.deltaTime * 5 * damageReductionValue;
-                GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Hit); // 피격 시 효과음
+
+                bool isHitDelayOK = hitDelayTimer >= hitDelayTime;
+                if (isHitDelayOK)
+                {
+                    gameAudioManager.PlaySfx(GameAudioManager.Sfx.Melee); // 피격  효과음
+                    hitDelayTimer = 0;
+                }
             }
 
             if (hp <= 0)
@@ -184,7 +195,7 @@ public class Player : MonoBehaviour, IPlayer
             if (!isPlayerShielded)
             {
                 hp -= damage * damageReductionValue;
-                GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Hit); // 피격 시 효과음
+                gameAudioManager.PlaySfx(GameAudioManager.Sfx.Melee); // 피격  효과음
             }
 
             if (hp <= 0)

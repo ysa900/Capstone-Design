@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 863e8833fad5c4d3fa6a903c1beb2456
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 7400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 244002
+  packageName: Bat Pixel Art Character
+  packageVersion: 1.0
+  assetPath: Assets/sanctum_pixel/bat_package/bat/ready.anim
+  uploadId: 554995

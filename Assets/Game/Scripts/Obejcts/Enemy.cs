@@ -8,7 +8,7 @@ public class Enemy : Object, IDamageable, IPullingObject
     public Player player;
 
     // Enemy들 체력
-    int[] enemy_HP = { 15, 50, 100, 120 };
+    int[] enemy_HP = { 15, 50, 150, 300 };
 
     // enemy 정보
     public int hp;
@@ -138,14 +138,22 @@ public class Enemy : Object, IDamageable, IPullingObject
         Vector2 playerPosition = player.transform.position;
         Vector2 myPosition = transform.position;
 
-        Vector2 direction = playerPosition - myPosition;
+        float distance = Vector2.Distance(myPosition, playerPosition);
 
-        bool isToFar = Mathf.Sqrt(Mathf.Pow(direction.x, 2) + Mathf.Pow(direction.y, 2)) > 100f;
+        bool isToFar = distance > 50f;
 
         if (isToFar)
         {
-            onEnemyWasKilled(this, false); // 대리자 호출
-            GameManager.instance.poolManager.ReturnEnemy(this, index);
+            // 플레이어가 너무 멀리 가면 enemy를 플레이어를 중심으로 점 대칭 이동
+            float xDiff = myPosition.x - playerPosition.x;
+            float yDiff = myPosition.y - playerPosition.y;
+
+            // toFar 범위에 계속 걸치는 문제를 방지하기 위해 안쪽으로 넣어줌
+            xDiff = xDiff > 0 ? xDiff - 10 : xDiff + 10; 
+            yDiff = yDiff > 0 ? yDiff - 10 : yDiff + 10;
+
+            Vector2 vector2 = new Vector2(playerPosition.x - xDiff, playerPosition.y - yDiff);
+            transform.position = vector2;
         }
 
     }
@@ -154,6 +162,8 @@ public class Enemy : Object, IDamageable, IPullingObject
     public void TakeDamage(GameObject causer, float damage)
     {
         hp = hp - (int)damage;
+
+        ShowDamageText(damage); // damageText 출력
 
         if (hp <= 0 && !isDead)
         {
@@ -186,6 +196,19 @@ public class Enemy : Object, IDamageable, IPullingObject
         yield return new WaitForSeconds(0.5f); // 지정한 초 만큼 쉬기
 
         GameManager.instance.poolManager.ReturnEnemy(this, index);
+    }
+
+    // damageText 출력
+    void ShowDamageText(float damage)
+    {
+        GameObject hudText = GameManager.instance.poolManager.GetText(); 
+        hudText.GetComponent<DamageText>().damage = (int)damage;
+
+        float ranNumX = UnityEngine.Random.Range(-0.5f, 0.5f);
+        float ranNumY = UnityEngine.Random.Range(1.0f, 2.0f);
+
+        Vector3 vector3 = new Vector3(transform.position.x + ranNumX, transform.position.y + ranNumY, 0);
+        hudText.transform.position = vector3;
     }
 
 }

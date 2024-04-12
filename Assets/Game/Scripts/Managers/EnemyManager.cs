@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
 
@@ -13,6 +12,14 @@ public class EnemyManager : MonoBehaviour
     // Enemy 클래스 객체
     Enemy enemy;
 
+    // Enemy를 구분 짓기 위한 index
+    int enemyNameIndex = 0;
+
+    // Enemy들 이름
+    string[] EnemyNames = { "Ghoul", "Spitter", "Summoner", "BloodKing" };
+
+    private GameAudioManager gameAudioManager;
+
     // Enemy들이 생성되었을 때에 GameManager에게 Enemy 리스트를 전달해주기 위한 delegate
     public delegate void OnEnemiesChanged(List<Enemy> enemies);
     public OnEnemiesChanged onEnemiesChanged;
@@ -21,12 +28,20 @@ public class EnemyManager : MonoBehaviour
     public delegate void OnEnemyKilled(Enemy killedEnemy);
     public OnEnemyKilled onEnemyKilled;
 
+    private void Awake()
+    {
+        gameAudioManager = FindAnyObjectByType<GameAudioManager>();
+    }
+
     // 적 정보를 입력하고 적을 생성하는 함수
     public void SetEnemyInfo(Enemy select, Player player, int index)
     {
         enemy = select;
 
         enemy.index = index;
+
+        enemy.name = EnemyNames[index] + enemyNameIndex; // 적들 이름 구분짓기 위한 방법
+        enemyNameIndex++;
 
         enemy.player = player;
         enemy.onEnemyWasKilled = OnEnemyWasKilled;
@@ -45,7 +60,7 @@ public class EnemyManager : MonoBehaviour
 
             if (!GameManager.instance.isGameOver) //  캐릭터 사망하기 전까지만 실행
             {
-                GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Melee); // Enemy 사망 시 효과음
+                gameAudioManager.PlaySfx(GameAudioManager.Sfx.Dead); // Enemy 사망 시 효과음
             }
         }
 

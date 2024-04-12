@@ -1,5 +1,4 @@
-﻿using Unity.VisualScripting;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class EnemyTrackingSkill : Skill, IPullingObject
 {
@@ -47,11 +46,14 @@ public class EnemyTrackingSkill : Skill, IPullingObject
 
     private void FixedUpdate()
     {
-        bool destroySkill = aliveTime > 3f;
+        bool destroySkill = aliveTime > 1f;
 
         if (destroySkill)
         {
-            GameManager.instance.poolManager.ReturnSkill(this, index);
+            if (onSkillFinished != null)
+                onSkillFinished(skillIndex); // skillManager에게 delegate로 알려줌
+
+            GameManager.instance.poolManager.ReturnSkill(this, returnIndex);
             return;
         }
         else if(!isBossAppear)
@@ -127,7 +129,7 @@ public class EnemyTrackingSkill : Skill, IPullingObject
         {
             damageable.TakeDamage(gameObject, damage);
 
-            GameManager.instance.poolManager.ReturnSkill(this, index);
+            //GameManager.instance.poolManager.ReturnSkill(this, index);
 
             return;
         }
@@ -138,7 +140,7 @@ public class EnemyTrackingSkill : Skill, IPullingObject
         {
             damageableSkill.TakeDamage(damage);
 
-            GameManager.instance.poolManager.ReturnSkill(this, index);
+            //GameManager.instance.poolManager.ReturnSkill(this, index);
 
             return;
         }
