@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class RePositon : MonoBehaviour
 {
+    public GameObject clearWall;
+
     private void OnTriggerExit2D(Collider2D collision)
     {
         // 플레이어의 Area와 충돌을 감지해 벗어났다면 실행
@@ -29,6 +31,14 @@ public class RePositon : MonoBehaviour
                 else if (diffX < diffY)
                 {
                     transform.Translate(Vector3.up * dirtionY * 80);// 윗 방향 * (-1 or 1) * 거리
+                }
+                break;
+
+            case "Corridor":
+                if(playerPosition.x >= myPosition.x)
+                {
+                    transform.Translate(Vector3.right * 85 * 2); // 오른쪽 방향 * 거리
+                    clearWall.transform.Translate(Vector3.right * 85);
                 }
                 break;
         }

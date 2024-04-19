@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using static GameAudioManager;
 
 // Pause 걸면 이전에는 인게임 속 UI들(피통, 스킬 패널, 프로필)이 안사라져서
@@ -15,6 +16,10 @@ public class GameManager : MonoBehaviour
     // 게임 시간
     public float gameTime;
     public float maxGameTime = 5 * 60f; // 보스 스폰 시간
+
+    // 씬 번호
+    // 0: splash, 1: Lobby, 2: Game, 3: Stage2
+    public int sceneNum;
 
     // 적 스폰 쿨타임
     private float CoolTime = 2f;
@@ -130,13 +135,15 @@ public class GameManager : MonoBehaviour
         // BossManager delegate 할당
         bossManager.onBossHasKilled = OnBossHasKilled;
 
-        gameTime = maxGameTime;
-        player.isPlayerShielded = true;
+        //gameTime = maxGameTime;
+        //player.isPlayerShielded = true;
         //player.level = 20;
     }
 
     void Start()
     {
+        sceneNum = SceneManager.GetActiveScene().buildIndex;
+
         // Stage1 배경음 플레이
         GameAudioManager.instance.bgmPlayer.clip = GameAudioManager.instance.bgmClips[(int)Bgm.Stage1];
         GameAudioManager.instance.bgmPlayer.Play();
@@ -184,6 +191,59 @@ public class GameManager : MonoBehaviour
 
     // Enemy 스폰 시간을 계산해 소환할 적을 지정하는 함수
     private void CalculateEnemySpawnTimeNSpawn()
+    {
+        switch (sceneNum)
+        {
+            case 2:
+                GameSceneSpawn();
+                break;
+            case 3:
+                Stage2Spawn();
+                break;
+        }
+    }
+
+    void GameSceneSpawn()
+    {
+        if (gameTime <= 60 * 1 && CoolTimer >= CoolTime)
+        {
+            SpawnEnemies(0, 10); // Ghoul 몬스터 소환
+            CoolTimer = 0f;
+        }
+        else if (gameTime <= 60 * 2 && CoolTimer >= CoolTime)
+        {
+            SpawnEnemies(0, 5); // Ghoul 몬스터 소환
+            SpawnEnemies(1, 10); // Spitter 몬스터 소환
+            CoolTimer = 0f;
+        }
+        else if (gameTime <= 60 * 3 && CoolTimer >= CoolTime)
+        {
+            SpawnEnemies(0, 2); // Ghoul 몬스터 소환
+            SpawnEnemies(1, 5); // Spitter 몬스터 소환
+            SpawnEnemies(2, 10); // Summoner 몬스터 소환
+            CoolTime = 1.5f;
+            CoolTimer = 0f;
+        }
+        else if (gameTime < 60 * 4 && CoolTimer >= CoolTime)
+        {
+            SpawnEnemies(0, 2); // Ghoul 몬스터 소환
+            SpawnEnemies(1, 5); // Spitter 몬스터 소환
+            SpawnEnemies(2, 8); // Summoner 몬스터 소환
+            SpawnEnemies(3, 15); // BloodKing 몬스터 소환
+            CoolTime = 1f;
+            CoolTimer = 0f;
+        }
+        else if (gameTime < 60 * 5 && CoolTimer >= CoolTime)
+        {
+            SpawnEnemies(0, 2); // Ghoul 몬스터 소환
+            SpawnEnemies(1, 4); // Spitter 몬스터 소환
+            SpawnEnemies(2, 6); // Summoner 몬스터 소환
+            SpawnEnemies(3, 20); // BloodKing 몬스터 소환
+            CoolTime = 0.5f;
+            CoolTimer = 0f;
+        }
+    }
+    void Stage2Spawn()
     {
         if (gameTime <= 60 * 1 && CoolTimer >= CoolTime)
         {
@@ -233,7 +293,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
-     void SpawnBoss()
+    // Boss 소환 함수
+    void SpawnBoss()
     {
         if (gameTime >= maxGameTime)
         {
@@ -449,4 +510,5 @@ public class GameManager : MonoBehaviour
                 }
         }
     }
+
 }
