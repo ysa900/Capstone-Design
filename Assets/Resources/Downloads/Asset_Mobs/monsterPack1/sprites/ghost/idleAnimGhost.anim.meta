@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: d95f1ca755387430f98078e283f5299f
+timeCreated: 1509019565
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103431
+  packageName: Monsters Pack 1 Enemies Pixel Art
+  packageVersion: 1.0
+  assetPath: Assets/monsterPack1/sprites/ghost/idleAnimGhost.anim
+  uploadId: 208547

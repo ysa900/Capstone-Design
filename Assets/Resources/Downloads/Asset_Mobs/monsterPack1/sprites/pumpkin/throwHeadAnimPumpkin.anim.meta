@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c83b94e56c0924eb0a130a973c96a243
+timeCreated: 1509017732
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103431
+  packageName: Monsters Pack 1 Enemies Pixel Art
+  packageVersion: 1.0
+  assetPath: Assets/monsterPack1/sprites/pumpkin/throwHeadAnimPumpkin.anim
+  uploadId: 208547

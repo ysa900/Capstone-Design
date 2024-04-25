@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ba618d76af0704083bdd78ff1c277f9a
+timeCreated: 1509032957
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103431
+  packageName: Monsters Pack 1 Enemies Pixel Art
+  packageVersion: 1.0
+  assetPath: Assets/monsterPack1/sprites/blindWarlock/hurtAnimWarlock.anim
+  uploadId: 208547

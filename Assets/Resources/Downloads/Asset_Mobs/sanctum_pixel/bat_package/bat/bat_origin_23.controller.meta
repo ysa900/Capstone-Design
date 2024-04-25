@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 2d4cb0c61170344459b263a993f2a985
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 244002
+  packageName: Bat Pixel Art Character
+  packageVersion: 1.0
+  assetPath: Assets/sanctum_pixel/bat_package/bat/bat_origin_23.controller
+  uploadId: 554995

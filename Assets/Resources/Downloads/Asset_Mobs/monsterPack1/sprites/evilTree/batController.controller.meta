@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 0913685782de54f53a266d16c03ede8c
+timeCreated: 1509023038
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103431
+  packageName: Monsters Pack 1 Enemies Pixel Art
+  packageVersion: 1.0
+  assetPath: Assets/monsterPack1/sprites/evilTree/batController.controller
+  uploadId: 208547

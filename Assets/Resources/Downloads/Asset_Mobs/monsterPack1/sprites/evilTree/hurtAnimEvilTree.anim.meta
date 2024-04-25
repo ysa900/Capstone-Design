@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: f8d2b407f0b0345c0b125efefc17864f
+timeCreated: 1509021727
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103431
+  packageName: Monsters Pack 1 Enemies Pixel Art
+  packageVersion: 1.0
+  assetPath: Assets/monsterPack1/sprites/evilTree/hurtAnimEvilTree.anim
+  uploadId: 208547

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ab09c0cf267de4574a58d75999843633
+timeCreated: 1509032889
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103431
+  packageName: Monsters Pack 1 Enemies Pixel Art
+  packageVersion: 1.0
+  assetPath: Assets/monsterPack1/sprites/blindWarlock/smokeAnimWarlock.anim
+  uploadId: 208547

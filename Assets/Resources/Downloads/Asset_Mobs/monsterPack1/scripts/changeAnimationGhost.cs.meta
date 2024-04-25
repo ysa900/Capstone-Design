@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 3e139b9268fc942f8bb2b3be2e8872d9
+timeCreated: 1509019139
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103431
+  packageName: Monsters Pack 1 Enemies Pixel Art
+  packageVersion: 1.0
+  assetPath: Assets/monsterPack1/scripts/changeAnimationGhost.cs
+  uploadId: 208547

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: f8bc5017cfc5c4e6f95d238491f40fde
+timeCreated: 1509041795
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103431
+  packageName: Monsters Pack 1 Enemies Pixel Art
+  packageVersion: 1.0
+  assetPath: Assets/monsterPack1/prefabs/evilTree.prefab
+  uploadId: 208547

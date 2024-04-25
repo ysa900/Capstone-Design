@@ -42,10 +42,6 @@ public class LobbyManager : MonoBehaviour
     public UnityEngine.UI.Button SelectMageButtonObject; // Mage
     public UnityEngine.UI.Button SelectWarriorButtonObject; // Warrior
 
-
-    public AudioSource MainPageAudio;
-    public AudioSource CharacterPageAudio;
-
     // 페이지 모음
     // Main Page 오브젝트
     public GameObject MainPage;
@@ -69,9 +65,6 @@ public class LobbyManager : MonoBehaviour
 
     private void Start()
     {
-
-        MainPageAudio = MainPage.GetComponentInChildren<AudioSource>();
-        CharacterPageAudio = CharacterPage.GetComponentInChildren<AudioSource>();
         // 시작 시 비활성화
         CharacterPage.SetActive(false);
         ItemPage.SetActive(false);

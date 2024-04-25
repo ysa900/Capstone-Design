@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using static GameAudioManager;
 
 // Pause 걸면 이전에는 인게임 속 UI들(피통, 스킬 패널, 프로필)이 안사라져서
 // 사라지게 하려고 gameObject로 선언한거랑
@@ -14,6 +16,10 @@ public class GameManager : MonoBehaviour
     // 게임 시간
     public float gameTime;
     public float maxGameTime = 5 * 60f; // 보스 스폰 시간
+
+    // 씬 번호
+    // 0: splash, 1: Lobby, 2: Game, 3: Stage2
+    public int sceneNum;
 
     // 적 스폰 쿨타임
     private float CoolTime = 2f;
@@ -36,7 +42,6 @@ public class GameManager : MonoBehaviour
     // 사용할 클래스 객체들
     public Player player;
     public Boss boss;
-    private GameAudioManager gameAudioManager;
     private FollowCam followCam;
     private InputManager inputManager;
     private SkillManager skillManager;
@@ -57,12 +62,11 @@ public class GameManager : MonoBehaviour
     public GameObject gameOverObject;
     // GameClear 오브젝트
     public GameObject gameClearObject;
-
     // Pause 오브젝트
     public GameObject pauseObject;
-
-    // HpBar
-    public GameObject HpBarObject;
+    // GameOption 오브젝트
+    public GameObject optionObject;
+    
     // HpStatus
     public GameObject HpStatusObject;
     // HpStatusLettering
@@ -73,7 +77,9 @@ public class GameManager : MonoBehaviour
     public GameObject CharacterProfileObject;
     // Boss HP
     public GameObject BossHPObject;
-    
+    // SettingPAge
+    public GameObject SettingPageObject;
+
     private void Awake()
     {
         instance = this; // GameManager를 인스턴스화
@@ -82,13 +88,13 @@ public class GameManager : MonoBehaviour
         gameOverObject.SetActive(false);
         gameClearObject.SetActive(false);
         pauseObject.SetActive(false);
-        HpBarObject.SetActive(true);
+        optionObject.SetActive(true);
         BossHPObject.SetActive(false);
+        SettingPageObject.SetActive(false);
 
         // 클래스 객체들 초기화
         CreatePlayer();
         inputManager = FindAnyObjectByType<InputManager>();
-        gameAudioManager = FindAnyObjectByType<GameAudioManager>();
         followCam = FindAnyObjectByType<FollowCam>();
         skillManager = FindAnyObjectByType<SkillManager>();
         skillSelectManager = FindAnyObjectByType<SkillSelectManager>();
@@ -133,8 +139,11 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // GameStart 선택 효과음
-        gameAudioManager.PlayBGM(0, true); // 배경음 시작
+        sceneNum = SceneManager.GetActiveScene().buildIndex;
+
+        // Stage1 배경음 플레이
+        GameAudioManager.instance.bgmPlayer.clip = GameAudioManager.instance.bgmClips[(int)Bgm.Stage1];
+        GameAudioManager.instance.bgmPlayer.Play();
 
         SpawnEnemies(0, 50); // 시작 적 소환
 
@@ -161,6 +170,14 @@ public class GameManager : MonoBehaviour
         skillManager.enemies = enemies;
     }
 
+    // BGM 바꿔야 될 때 실행하는 함수
+    private void SwitchBGM(int clipIndex)
+    {
+        GameAudioManager.instance.bgmPlayer.Stop(); // 기존 배경음 종료
+        GameAudioManager.instance.bgmPlayer.clip = GameAudioManager.instance.bgmClips[clipIndex];
+        GameAudioManager.instance.bgmPlayer.Play(); // 원하는 배경음 시작
+    }
+
     // Player 생성 함수
     private void CreatePlayer()
     {
@@ -171,6 +188,59 @@ public class GameManager : MonoBehaviour
 
     // Enemy 스폰 시간을 계산해 소환할 적을 지정하는 함수
     private void CalculateEnemySpawnTimeNSpawn()
+    {
+        switch (sceneNum)
+        {
+            case 2:
+                GameSceneSpawn();
+                break;
+            case 3:
+                Stage2Spawn();
+                break;
+        }
+    }
+
+    void GameSceneSpawn()
+    {
+        if (gameTime <= 60 * 1 && CoolTimer >= CoolTime)
+        {
+            SpawnEnemies(0, 10); // Ghoul 몬스터 소환
+            CoolTimer = 0f;
+        }
+        else if (gameTime <= 60 * 2 && CoolTimer >= CoolTime)
+        {
+            SpawnEnemies(0, 5); // Ghoul 몬스터 소환
+            SpawnEnemies(1, 10); // Spitter 몬스터 소환
+            CoolTimer = 0f;
+        }
+        else if (gameTime <= 60 * 3 && CoolTimer >= CoolTime)
+        {
+            SpawnEnemies(0, 2); // Ghoul 몬스터 소환
+            SpawnEnemies(1, 5); // Spitter 몬스터 소환
+            SpawnEnemies(2, 10); // Summoner 몬스터 소환
+            CoolTime = 1.5f;
+            CoolTimer = 0f;
+        }
+        else if (gameTime < 60 * 4 && CoolTimer >= CoolTime)
+        {
+            SpawnEnemies(0, 2); // Ghoul 몬스터 소환
+            SpawnEnemies(1, 5); // Spitter 몬스터 소환
+            SpawnEnemies(2, 8); // Summoner 몬스터 소환
+            SpawnEnemies(3, 15); // BloodKing 몬스터 소환
+            CoolTime = 1f;
+            CoolTimer = 0f;
+        }
+        else if (gameTime < 60 * 5 && CoolTimer >= CoolTime)
+        {
+            SpawnEnemies(0, 2); // Ghoul 몬스터 소환
+            SpawnEnemies(1, 4); // Spitter 몬스터 소환
+            SpawnEnemies(2, 6); // Summoner 몬스터 소환
+            SpawnEnemies(3, 20); // BloodKing 몬스터 소환
+            CoolTime = 0.5f;
+            CoolTimer = 0f;
+        }
+    }
+    void Stage2Spawn()
     {
         if (gameTime <= 60 * 1 && CoolTimer >= CoolTime)
         {
@@ -220,9 +290,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // Boss 소환 함수
     void SpawnBoss()
     {
-        if (gameTime >= maxGameTime)
+        bool isBossStage = sceneNum == 2;
+
+        if (gameTime >= maxGameTime && isBossStage)
         {
             // 보스 등장
             bossManager.player = player;
@@ -230,13 +303,12 @@ public class GameManager : MonoBehaviour
 
             skillManager.isBossAppear = true;
             skillManager.boss = bossManager.boss;
-
+            
             // 보스 HP바 active
             BossHPObject.SetActive(true);
 
-            // 보스 BGM ON
-            gameAudioManager.PlayBGM(0, false); // 기본 배경음 종료
-            gameAudioManager.PlayBGM(1, true); // 보스 배경음 실행
+            // Stage2 BGM 종료 후 보스 BGM ON
+            SwitchBGM((int)Bgm.Boss1);
 
             isBossSpawned = true;
         }
@@ -251,12 +323,12 @@ public class GameManager : MonoBehaviour
     {
         isGameOver = true;
         gameOverObject.SetActive(true);
-        HpBarObject.SetActive(false);
+        //HpBarObject.SetActive(false);
 
         yield return new WaitForSeconds(0.5f); // 0.5초 이후 시간 차 두기
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Lose); // 캐릭터 사망 시 효과음
+        GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Dead); // 캐릭터 사망 시 효과음
         inputManager.PauseButtonObject.interactable = false; // Pause버튼 비활성화
-        gameAudioManager.PlayBGM(0, false); // 배경음 종료
+        GameAudioManager.instance.bgmPlayer.Stop(); // 배경음 멈추기
         Time.timeScale = 0; // 화면 멈추기
     }
 
@@ -270,34 +342,35 @@ public class GameManager : MonoBehaviour
         player.isPlayerShielded = true;
         isGameOver = true;
         gameClearObject.SetActive(true);
-        HpBarObject.SetActive(false);
+        //HpBarObject.SetActive(false);
 
         yield return new WaitForSeconds(0.5f); // 0.5초 이후 시간 차 두기
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Win); // 승리시 효과음
+        GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Win); // 승리시 효과음
         inputManager.PauseButtonObject.interactable = false; // Pause버튼 비활성화
-        gameAudioManager.PlayBGM(0, false); // 배경음 종료
+        SwitchBGM((int)GameAudioManager.Bgm.Clear);
         Time.timeScale = 0; // 화면 멈추기
     }
 
-    // Pause버튼이 클릭됐을 시 실행됨
+    // Pause 버튼이 클릭됐을 시 실행됨
     private void OnPauseButtonClicked()
     {
         pauseObject.SetActive(true);
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 클릭 효과음
+        
         // UI 비활성화
-        HpBarObject.SetActive(false);
+        //HpBarObject.SetActive(false);
         HpStatusLetteringObject.SetActive(false);
         HpStatusObject.SetActive(false);
         SkillPanelObject.SetActive(false);
         CharacterProfileObject.SetActive(false);
     }
 
+    // Play 버튼이 클릭됐을 시 실행됨
     private void onPlayButtonClicked()
     {
         pauseObject.SetActive(false);
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.Select); // 버튼 클릭 효과음
+        
         // UI 활성화
-        HpBarObject.SetActive(true);
+        //HpBarObject.SetActive(true);
         HpStatusLetteringObject.SetActive(true);
         HpStatusObject.SetActive(true);
         SkillPanelObject.SetActive(true);
@@ -384,29 +457,32 @@ public class GameManager : MonoBehaviour
     private void OnPlayerLevelUP()
     {
         skillSelectManager.DisplayLevelupPanel();
-        gameAudioManager.PlaySfx(GameAudioManager.Sfx.LevelUp); // 레벨업 시 효과음
-        gameAudioManager.EffectBGM(true); // AudioFilter 켜기
+        GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.LevelUp); // 레벨업 시 효과음
     }
 
     private void OnSkillSelectObjectDisplayed()
     {
         // UI 비활성화
-        HpBarObject.SetActive(false);
+        //HpBarObject.SetActive(false);
+        /* 하단 패널 비활성화 할 이유 없음
         HpStatusLetteringObject.SetActive(false);
         HpStatusObject.SetActive(false);
         SkillPanelObject.SetActive(false);
         CharacterProfileObject.SetActive(false);
+        */
         inputManager.PauseButtonObject.interactable = false;
     }
 
     private void OnSkillSelectObjectHided()
     {
         // UI 활성화
-        HpBarObject.SetActive(true);
+        //HpBarObject.SetActive(true);
+        /* 하단 패널 비활성화 할 이유 없음
         HpStatusLetteringObject.SetActive(true);
         HpStatusObject.SetActive(true);
         SkillPanelObject.SetActive(true);
         CharacterProfileObject.SetActive(true);
+        */
         inputManager.PauseButtonObject.interactable = true;
     }
 
@@ -436,5 +512,11 @@ public class GameManager : MonoBehaviour
                     break;
                 }
         }
+    }
+
+    // Reposition에서 ClearWall의 position이 변하면 followcam에게 전해줌
+    public void SendClearWall_RightX(float xValue)
+    {
+        followCam.clearWall_RightEndX = xValue;
     }
 }
