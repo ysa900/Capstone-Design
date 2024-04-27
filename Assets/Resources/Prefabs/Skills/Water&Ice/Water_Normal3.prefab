@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 1444332819241385628}
   m_Layer: 0
   m_Name: Water_Normal3
-  m_TagString: Untagged
+  m_TagString: Water
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -195,10 +195,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06210489640f166499b171f2a7065272, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDotDamageSkill: 0
   enemy: {fileID: 0}
+  boss: {fileID: 0}
   player: {fileID: 0}
   speed: 0
   damage: 0
+  skillIndex: 0
+  returnIndex: 0
   xPositionNum: 0
   yPositionNum: 0
   isAttachSkill: 0
@@ -207,5 +211,5 @@ MonoBehaviour:
   isShieldSkill: 0
   isDelaySkill: 0
   isYFlipped: 0
-  isStaySkill: 0
+  degree: 0
   aliveTime: 0

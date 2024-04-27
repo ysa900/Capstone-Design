@@ -149,7 +149,7 @@ public class GameManager : MonoBehaviour
         GameAudioManager.instance.bgmPlayer.clip = GameAudioManager.instance.bgmClips[(int)Bgm.Stage1];
         GameAudioManager.instance.bgmPlayer.Play();
 
-        SpawnEnemies(0, 50); // 시작 적 소환
+        //SpawnEnemies(0, 50); // 시작 적 소환
 
         skillSelectManager.ChooseStartSkill(); // 시작 스킬 선택
     }
@@ -248,38 +248,36 @@ public class GameManager : MonoBehaviour
     {
         if (gameTime <= 60 * 1 && CoolTimer >= CoolTime)
         {
-            SpawnEnemies(0, 10); // Ghoul 몬스터 소환
+            SpawnEnemies(4, 10); // Skeleton_Sword 몬스터 소환
             CoolTimer = 0f;
         }
         else if (gameTime <= 60 * 2 && CoolTimer >= CoolTime)
         {
-            SpawnEnemies(0, 5); // Ghoul 몬스터 소환
-            SpawnEnemies(1, 10); // Spitter 몬스터 소환
+            SpawnEnemies(4, 5); // Skeleton_Sword 몬스터 소환
+            SpawnEnemies(5, 10); // Skeleton_Archor 몬스터 소환
             CoolTimer = 0f;
         }
         else if (gameTime <= 60 * 3 && CoolTimer >= CoolTime)
         {
-            SpawnEnemies(0, 2); // Ghoul 몬스터 소환
-            SpawnEnemies(1, 5); // Spitter 몬스터 소환
-            SpawnEnemies(2, 10); // Summoner 몬스터 소환
+            SpawnEnemies(4, 2); // Skeleton_Sword 몬스터 소환
+            SpawnEnemies(5, 5); // Skeleton_Archor 몬스터 소환
+            SpawnEnemies(6, 10); // Skeleton_Horse 몬스터 소환
             CoolTime = 1.5f;
             CoolTimer = 0f;
         }
         else if (gameTime < 60 * 4 && CoolTimer >= CoolTime)
         {
-            SpawnEnemies(0, 2); // Ghoul 몬스터 소환
-            SpawnEnemies(1, 5); // Spitter 몬스터 소환
-            SpawnEnemies(2, 8); // Summoner 몬스터 소환
-            SpawnEnemies(3, 15); // BloodKing 몬스터 소환
+            SpawnEnemies(4, 4); // Skeleton_Sword 몬스터 소환
+            SpawnEnemies(5, 8); // Skeleton_Archor 몬스터 소환
+            SpawnEnemies(6, 15); // Skeleton_Horse 몬스터 소환
             CoolTime = 1f;
             CoolTimer = 0f;
         }
         else if (gameTime < 60 * 5 && CoolTimer >= CoolTime)
         {
-            SpawnEnemies(0, 2); // Ghoul 몬스터 소환
-            SpawnEnemies(1, 4); // Spitter 몬스터 소환
-            SpawnEnemies(2, 6); // Summoner 몬스터 소환
-            SpawnEnemies(3, 20); // BloodKing 몬스터 소환
+            SpawnEnemies(4, 4); // Skeleton_Sword 몬스터 소환
+            SpawnEnemies(5, 12); // Skeleton_Archor 몬스터 소환
+            SpawnEnemies(6, 20); // Skeleton_Horse 몬스터 소환
             CoolTime = 0.5f;
             CoolTimer = 0f;
         }

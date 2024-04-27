@@ -9,20 +9,36 @@ public class DamageText : MonoBehaviour, IPullingObject
     public float alphaSpeed;
     public float destroyTime;
     public int damage;
+    public string skillTag;
 
     float delayTime = 0.5f;
     float delayTimer = 0;
+    string color;
 
     TextMeshPro text;
     Color alpha;
 
     public void Init()
     {
-        text.text = damage.ToString();
+        delayTimer = 0;
 
         alpha.a = 1.0f;
         text.color = alpha;
-        delayTimer = 0;
+        
+        switch (skillTag)
+        {
+            case "Fire":
+                color = "#FF5050";
+                break;
+            case "Electric":
+                color = "#D2F7FF";
+                break;
+            case "Water":
+                color = "#64BCFF";
+                break;
+        }
+        text.text = "<color=" + color + ">" + damage.ToString() + "</color>";
+
 
         Invoke("DestroyObject", destroyTime);
     }

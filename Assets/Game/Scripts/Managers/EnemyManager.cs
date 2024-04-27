@@ -16,7 +16,8 @@ public class EnemyManager : MonoBehaviour
     int enemyNameIndex = 0;
 
     // Enemy들 이름
-    string[] EnemyNames = { "Ghoul", "Spitter", "Summoner", "BloodKing" };
+    string[] EnemyNames = { "Ghoul", "Spitter", "Summoner", "BloodKing",
+                            "Skeleton_Sword", "Skeleton_Arrow", "Skeleton_Horse"};
 
     private GameAudioManager gameAudioManager;
 

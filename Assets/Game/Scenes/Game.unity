@@ -49749,6 +49749,7 @@ Transform:
   - {fileID: 1168837766}
   - {fileID: 223361689}
   - {fileID: 703120055}
+  - {fileID: 1580213101}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &164477060
@@ -53465,7 +53466,7 @@ MonoBehaviour:
   player: {fileID: 0}
   boss: {fileID: 0}
   poolManager: {fileID: 0}
-  playerPrefab: {fileID: 3621306853304922202, guid: a7f3985b25427964ab0e550dcf041e1a, type: 3}
+  playerPrefab: {fileID: 8857619680574137846, guid: daf2389240168c24ea3446fee54b4f80, type: 3}
   expPrefab1: {fileID: 4943057121286701193, guid: 5a0ee35ff018e304f8d573f920043e1f, type: 3}
   expPrefab2: {fileID: 4407068784877236907, guid: a43c7db6f23015d498cb42944a562c30, type: 3}
   expPrefab3: {fileID: 7329410880910408358, guid: 4c3a92ebeb9f2bd4081f0a711505aa66, type: 3}
@@ -76354,6 +76355,54 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1580213100
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1580213101}
+  - component: {fileID: 1580213102}
+  m_Layer: 0
+  m_Name: Tilemap Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1580213101
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1580213100}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 159581882}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1580213102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1580213100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6e9d4cda79dc5447b0127f8e7d0632e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Corridor1: {fileID: 0}
+  Corridor2: {fileID: 0}
+  bossRoom: {fileID: 0}
+  buildIndex: 0
 --- !u!1 &1585896127
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,7 +9,7 @@ public class Enemy : Object, IDamageable, IPullingObject
     public Player player;
 
     // Enemy들 체력
-    int[] enemy_HP = { 15, 50, 150, 300 };
+    int[] enemy_HP = { 15, 50, 150, 300, 15, 50, 150, 300 };
 
     // enemy 정보
     public int hp;
@@ -203,7 +203,7 @@ public class Enemy : Object, IDamageable, IPullingObject
     {
         hp = hp - (int)damage;
 
-        ShowDamageText(damage); // damageText 출력
+        ShowDamageText(damage, causer.tag); // damageText 출력
 
         if (hp <= 0 && !isDead)
         {
@@ -239,10 +239,9 @@ public class Enemy : Object, IDamageable, IPullingObject
     }
 
     // damageText 출력
-    void ShowDamageText(float damage)
+    void ShowDamageText(float damage, string skillTag)
     {
-        GameObject hudText = GameManager.instance.poolManager.GetText(); 
-        hudText.GetComponent<DamageText>().damage = (int)damage;
+        GameObject hudText = GameManager.instance.poolManager.GetText((int)damage, skillTag);
 
         float ranNumX = UnityEngine.Random.Range(-0.5f, 0.5f);
         float ranNumY = UnityEngine.Random.Range(1.0f, 2.0f);
