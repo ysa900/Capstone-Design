@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class RePositon : MonoBehaviour
@@ -11,7 +12,9 @@ public class RePositon : MonoBehaviour
     {
         // clearWall의 오른쪽 끝 좌표를 GameManger를 통해 FollowCam에게 전달 
         if (clearWall != null) SendClearWall_RightX();
-        sceneNum = GameManager.instance.sceneNum;
+
+        // GameManager가 초기화 할 동안 대기 후 가져오기
+        StartCoroutine(WaitForNSec(0.5f));
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -47,7 +50,7 @@ public class RePositon : MonoBehaviour
             case "Corridor":
                 // Stage2에서 5분이 지나면 Reposition이 멈추고, 보스 방으로 가는 길이 열려야 함
                 isStage2TimeOver = sceneNum == 3 && GameManager.instance.gameTime >= 5 * 60;
-
+                
                 if (isStage2TimeOver) break;
 
                 if (playerPosition.x >= myPosition.x)
@@ -67,5 +70,12 @@ public class RePositon : MonoBehaviour
     {
         float clearWall_RightX = clearWall.transform.position.x + clearWall.transform.localScale.x / 2;
         GameManager.instance.SendClearWall_RightX(clearWall_RightX);
+    }
+
+    IEnumerator WaitForNSec(float time)
+    {
+        yield return new WaitForSeconds(time);
+
+        sceneNum = GameManager.instance.sceneNum;
     }
 }

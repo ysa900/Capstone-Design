@@ -49,6 +49,7 @@ public class GameManager : MonoBehaviour
     private EXP exp;
     private BossManager bossManager;
     public PoolManager poolManager;
+    private TilemapManager tilemapManager;
 
     // GameObject에서 프리팹을 넣어주기 위해 public으로 설정
     public Player playerPrefab;
@@ -100,6 +101,7 @@ public class GameManager : MonoBehaviour
         skillSelectManager = FindAnyObjectByType<SkillSelectManager>();
         bossManager = FindAnyObjectByType<BossManager>();
         poolManager = FindAnyObjectByType<PoolManager>();
+        tilemapManager = FindAnyObjectByType<TilemapManager>();
 
         // inputManger Delegate 할당
         inputManager.onPauseButtonClicked = OnPauseButtonClicked;
@@ -132,7 +134,7 @@ public class GameManager : MonoBehaviour
         // BossManager delegate 할당
         bossManager.onBossHasKilled = OnBossHasKilled;
 
-        //gameTime = maxGameTime;
+        gameTime = maxGameTime - 5f;
         //player.isPlayerShielded = true;
         //player.level = 20;
     }
@@ -140,6 +142,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         sceneNum = SceneManager.GetActiveScene().buildIndex;
+
+        tilemapManager.buildIndex = sceneNum;
 
         // Stage1 배경음 플레이
         GameAudioManager.instance.bgmPlayer.clip = GameAudioManager.instance.bgmClips[(int)Bgm.Stage1];
