@@ -58,11 +58,7 @@ public class Enemy : Object, IDamageable, IPullingObject
         // 몬스터가 스테이지에 맞게 소환되게 함
         switch (sceneNum)
         {
-<<<<<<< HEAD
             case 1: // Stage1,3는 원형으로 소환 
-=======
-            case 2: // GameScene은 원형으로 소환
->>>>>>> fb9e122ace47cd59b98368c2d381069dfdb7632d
                 float radius = UnityEngine.Random.Range(20, 30);
                 degree = UnityEngine.Random.Range(0f, 360f);
 
@@ -71,10 +67,7 @@ public class Enemy : Object, IDamageable, IPullingObject
 
                 X = tmpX + playerX;
                 Y = tmpY + playerY;
-<<<<<<< HEAD
                 
-=======
->>>>>>> fb9e122ace47cd59b98368c2d381069dfdb7632d
 
                 if (degree <= -360)
                 {
@@ -83,11 +76,7 @@ public class Enemy : Object, IDamageable, IPullingObject
 
                 break;
 
-<<<<<<< HEAD
             case 2:// Stage2는 좌우로만 소환
-=======
-            case 3:// Stage2는 좌우로만 소환
->>>>>>> fb9e122ace47cd59b98368c2d381069dfdb7632d
                 tmpX = UnityEngine.Random.Range(20, 30);
                 tmpY = UnityEngine.Random.Range(-26, 5.5f); // 맵 y축 범위로 제한
 
@@ -97,7 +86,6 @@ public class Enemy : Object, IDamageable, IPullingObject
                 Y = tmpY;
 
                 break;
-<<<<<<< HEAD
             case 3:
                 radius = UnityEngine.Random.Range(20, 25);
                 degree = UnityEngine.Random.Range(0f, 360f);
@@ -118,8 +106,6 @@ public class Enemy : Object, IDamageable, IPullingObject
                     degree %= -360;
                 }
                 break;
-=======
->>>>>>> fb9e122ace47cd59b98368c2d381069dfdb7632d
         }
         
         rigid.constraints = RigidbodyConstraints2D.None;
@@ -204,11 +190,7 @@ public class Enemy : Object, IDamageable, IPullingObject
         {
             switch (sceneNum)
             {
-<<<<<<< HEAD
                 case 1: // 플레이어가 너무 멀리 가면 enemy를 플레이어를 중심으로 점 대칭 이동
-=======
-                case 2: // 플레이어가 너무 멀리 가면 enemy를 플레이어를 중심으로 점 대칭 이동
->>>>>>> fb9e122ace47cd59b98368c2d381069dfdb7632d
                     float xDiff = myPosition.x - playerPosition.x;
                     float yDiff = myPosition.y - playerPosition.y;
 
@@ -221,11 +203,7 @@ public class Enemy : Object, IDamageable, IPullingObject
 
                     break;
 
-<<<<<<< HEAD
                 case 2: // 플레이어가 너무 멀리 가면 enemy를 플레이어를 중심으로 y축 대칭 이동
-=======
-                case 3: // 플레이어가 너무 멀리 가면 enemy를 플레이어를 중심으로 y축 대칭 이동
->>>>>>> fb9e122ace47cd59b98368c2d381069dfdb7632d
                     xDiff = myPosition.x - playerPosition.x;
 
                     // toFar 범위에 계속 걸치는 문제를 방지하기 위해 안쪽으로 넣어줌

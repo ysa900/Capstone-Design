@@ -67,13 +67,7 @@ public class GameManager : MonoBehaviour
     public GameObject pauseObject;
     // GameOption 오브젝트
     public GameObject optionObject;
-<<<<<<< HEAD
     
-=======
-
-    // HpBar
-    public GameObject HpBarObject;
->>>>>>> fb9e122ace47cd59b98368c2d381069dfdb7632d
     // HpStatus
     public GameObject HpStatusObject;
     // HpStatusLettering
@@ -96,10 +90,6 @@ public class GameManager : MonoBehaviour
         gameClearObject.SetActive(false);
         pauseObject.SetActive(false);
         optionObject.SetActive(true);
-<<<<<<< HEAD
-=======
-        HpBarObject.SetActive(false);
->>>>>>> fb9e122ace47cd59b98368c2d381069dfdb7632d
         BossHPObject.SetActive(false);
         SettingPageObject.SetActive(false);
 
@@ -152,16 +142,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-<<<<<<< HEAD
    
         sceneNum = SceneManager.GetActiveScene().buildIndex;
-=======
-        sceneNum = SceneManager.GetActiveScene().buildIndex;
-
-        // Stage1 배경음 플레이
-        GameAudioManager.instance.bgmPlayer.clip = GameAudioManager.instance.bgmClips[(int)Bgm.Stage1];
-        GameAudioManager.instance.bgmPlayer.Play();
->>>>>>> fb9e122ace47cd59b98368c2d381069dfdb7632d
 
         tilemapManager.buildIndex = sceneNum;
 
@@ -198,20 +180,7 @@ public class GameManager : MonoBehaviour
         skillManager.enemies = enemies;
     }
 
-<<<<<<< HEAD
     private void SpawnStartEnemies()
-=======
-    // BGM 바꿔야 될 때 실행하는 함수
-    private void SwitchBGM(int clipIndex)
-    {
-        GameAudioManager.instance.bgmPlayer.Stop(); // 기존 배경음 종료
-        GameAudioManager.instance.bgmPlayer.clip = GameAudioManager.instance.bgmClips[clipIndex];
-        GameAudioManager.instance.bgmPlayer.Play(); // 원하는 배경음 시작
-    }
-
-    // Player 생성 함수
-    private void CreatePlayer()
->>>>>>> fb9e122ace47cd59b98368c2d381069dfdb7632d
     {
         switch (sceneNum)
         {
@@ -273,7 +242,6 @@ public class GameManager : MonoBehaviour
     {
         switch (sceneNum)
         {
-<<<<<<< HEAD
             case 1:
                 Stage1Spawn();
                 break;
@@ -282,62 +250,11 @@ public class GameManager : MonoBehaviour
                 break;
             case 3:
                 Stage3Spawn();
-=======
-            case 2:
-                GameSceneSpawn();
-                break;
-            case 3:
-                Stage2Spawn();
->>>>>>> fb9e122ace47cd59b98368c2d381069dfdb7632d
                 break;
         }
     }
 
-<<<<<<< HEAD
     void Stage1Spawn()
-=======
-    void GameSceneSpawn()
-    {
-        if (gameTime <= 60 * 1 && CoolTimer >= CoolTime)
-        {
-            SpawnEnemies(0, 10); // Ghoul 몬스터 소환
-            CoolTimer = 0f;
-        }
-        else if (gameTime <= 60 * 2 && CoolTimer >= CoolTime)
-        {
-            SpawnEnemies(0, 5); // Ghoul 몬스터 소환
-            SpawnEnemies(1, 10); // Spitter 몬스터 소환
-            CoolTimer = 0f;
-        }
-        else if (gameTime <= 60 * 3 && CoolTimer >= CoolTime)
-        {
-            SpawnEnemies(0, 2); // Ghoul 몬스터 소환
-            SpawnEnemies(1, 5); // Spitter 몬스터 소환
-            SpawnEnemies(2, 10); // Summoner 몬스터 소환
-            CoolTime = 1.5f;
-            CoolTimer = 0f;
-        }
-        else if (gameTime < 60 * 4 && CoolTimer >= CoolTime)
-        {
-            SpawnEnemies(0, 2); // Ghoul 몬스터 소환
-            SpawnEnemies(1, 5); // Spitter 몬스터 소환
-            SpawnEnemies(2, 8); // Summoner 몬스터 소환
-            SpawnEnemies(3, 15); // BloodKing 몬스터 소환
-            CoolTime = 1f;
-            CoolTimer = 0f;
-        }
-        else if (gameTime < 60 * 5 && CoolTimer >= CoolTime)
-        {
-            SpawnEnemies(0, 2); // Ghoul 몬스터 소환
-            SpawnEnemies(1, 4); // Spitter 몬스터 소환
-            SpawnEnemies(2, 6); // Summoner 몬스터 소환
-            SpawnEnemies(3, 20); // BloodKing 몬스터 소환
-            CoolTime = 0.5f;
-            CoolTimer = 0f;
-        }
-    }
-    void Stage2Spawn()
->>>>>>> fb9e122ace47cd59b98368c2d381069dfdb7632d
     {
         if (gameTime <= 60 * 1 && CoolTimer >= CoolTime)
         {
@@ -693,12 +610,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-<<<<<<< HEAD
     // Reposition에서 ClearWall의 position이 변하면 followcam에게 전해줌
     public void SendClearWall_RightX(float xValue)
     {
         followCam.clearWall_RightEndX = xValue;
     }
-=======
->>>>>>> fb9e122ace47cd59b98368c2d381069dfdb7632d
 }
