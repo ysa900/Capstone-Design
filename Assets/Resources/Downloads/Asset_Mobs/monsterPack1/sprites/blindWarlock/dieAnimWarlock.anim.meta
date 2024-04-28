@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: b0e1f231251c44a1e9e639053acd1a5e
+timeCreated: 1509032983
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103431
+  packageName: Monsters Pack 1 Enemies Pixel Art
+  packageVersion: 1.0
+  assetPath: Assets/monsterPack1/sprites/blindWarlock/dieAnimWarlock.anim
+  uploadId: 208547

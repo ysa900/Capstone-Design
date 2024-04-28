@@ -65,11 +65,12 @@ public class LobbyManager : MonoBehaviour
 
     private void Start()
     {
-        // 시작 시 비활성화
+        // 시작 시 비활성
         CharacterPage.SetActive(false);
         ItemPage.SetActive(false);
+        SettingPage.SetActive(false);
 
-        // 미구현:
+        // 미구현: 클래스들
         UnityEngine.UI.Button SelectAssassinButton = SelectAssassinButtonObject.GetComponent<UnityEngine.UI.Button>();
         UnityEngine.UI.Button SelectWarriorButton = SelectWarriorButtonObject.GetComponent<UnityEngine.UI.Button>();
 

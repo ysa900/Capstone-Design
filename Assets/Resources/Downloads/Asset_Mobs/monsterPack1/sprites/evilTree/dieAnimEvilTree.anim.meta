@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: def782bbb798a4ac99e83b33a8bfcf67
+timeCreated: 1509021002
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103431
+  packageName: Monsters Pack 1 Enemies Pixel Art
+  packageVersion: 1.0
+  assetPath: Assets/monsterPack1/sprites/evilTree/dieAnimEvilTree.anim
+  uploadId: 208547

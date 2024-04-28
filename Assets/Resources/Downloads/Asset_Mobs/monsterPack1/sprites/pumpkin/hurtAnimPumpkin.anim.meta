@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 6ea84778fa6e8464dbf834ffda5ee6ba
+timeCreated: 1509018211
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103431
+  packageName: Monsters Pack 1 Enemies Pixel Art
+  packageVersion: 1.0
+  assetPath: Assets/monsterPack1/sprites/pumpkin/hurtAnimPumpkin.anim
+  uploadId: 208547

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 6804d984eb7254b9ca6b370c166dcf55
+timeCreated: 1509032347
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103431
+  packageName: Monsters Pack 1 Enemies Pixel Art
+  packageVersion: 1.0
+  assetPath: Assets/monsterPack1/sprites/blindWarlock/walkAnimWarlock.anim
+  uploadId: 208547

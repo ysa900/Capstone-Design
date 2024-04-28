@@ -110,6 +110,7 @@ public class CharacterPageManager : MonoBehaviour
     // GameStart 버튼 클릭 시
     private void GameStartButtonClicked()
     {
-        SceneManager.LoadScene("Game"); // Game 씬 불러오기
+
+        SceneManager.LoadScene("Splash1"); // Splash1 씬 불러오기
     }
 }

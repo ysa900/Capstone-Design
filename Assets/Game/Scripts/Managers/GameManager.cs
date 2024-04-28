@@ -130,7 +130,7 @@ public class GameManager : MonoBehaviour
         // BossManager delegate 할당
         bossManager.onBossHasKilled = OnBossHasKilled;
 
-        //gameTime = maxGameTime;
+        gameTime = 0f;
         //player.isPlayerShielded = true;
         //player.level = 20;
     }
@@ -235,6 +235,8 @@ public class GameManager : MonoBehaviour
 
      void SpawnBoss()
     {
+
+
         if (gameTime >= maxGameTime)
         {
             // 보스 등장
@@ -246,6 +248,7 @@ public class GameManager : MonoBehaviour
             
             // 보스 HP바 active
             BossHPObject.SetActive(true);
+
 
             // Stage2 BGM 종료 후 보스 BGM ON
             SwitchBGM((int)Bgm.Boss1);
@@ -268,7 +271,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f); // 0.5초 이후 시간 차 두기
         GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Dead); // 캐릭터 사망 시 효과음
         inputManager.PauseButtonObject.interactable = false; // Pause버튼 비활성화
-        GameAudioManager.instance.bgmPlayer.Stop(); // 배경음 멈추기
+        SwitchBGM((int)GameAudioManager.Bgm.Boss2);
         Time.timeScale = 0; // 화면 멈추기
     }
 

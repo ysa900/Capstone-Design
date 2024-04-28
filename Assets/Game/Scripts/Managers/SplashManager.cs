@@ -1,68 +1,146 @@
 ﻿using System.Collections;
-using TMPro;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SplashManager : MonoBehaviour
 {
-    // 참조 사이트 링크
-    // https://cherish-my-codes.tistory.com/entry/Unity-인트로-비동기로드-씬-만들기
+    public KoreanTyperSimple[] koreanTyper;
     
-    [SerializeField] Image image = null;
-    [SerializeField] TextMeshProUGUI text = null;
+    [SerializeField] Image backgroundImage = null; // 뒷배경
+    [SerializeField] GameObject GuideTextObject;
+    [SerializeField] GameObject[] imageObjects = null;
+    [SerializeField] GameObject GuidePanel;
+    [SerializeField] UnityEngine.UI.Button goNextStageButtonObject;
+    int currentPoint = 0;
 
-    public bool isTypingFinish = false;
-    //float delay = 1f;
+    private void Awake()
+    {
+        // Text 단락 초기화
+        koreanTyper[currentPoint].gameObject.SetActive(true);
+        for (int index = 1; index < koreanTyper.Length; index++)
+        {
 
-    public delegate void OnImageShowFinish(bool isImageShowFinish);
-    public OnImageShowFinish onImageShowFinish;
+            koreanTyper[index].gameObject.SetActive(false);
+        }
+
+        // 이미지 초기화
+        for (int index = 0; index < imageObjects.Length; index++)
+        {
+            imageObjects[index].SetActive(false);
+        }
+
+        GuideTextObject.SetActive(false);
+        GuidePanel.SetActive(false);
+    }
 
     void Start()
     {
-        StartCoroutine(FadeTextToFullAlpha(1f, image, text));
+        UnityEngine.UI.Button goNextStageButton = goNextStageButtonObject.GetComponent<UnityEngine.UI.Button>();
+        goNextStageButton.onClick.AddListener(OnSelectNextStage);
+
+
+        for (int index=0; index<koreanTyper.Length; index++)
+        {
+            koreanTyper[index].onTextTypeFinish = OnTextTypeFinish;
+        }
+
+        StartCoroutine(TypingInterruptedInput()); // 처음 시작 단락
     }
 
-
-    public IEnumerator FadeTextToFullAlpha(float t, Image i, TextMeshProUGUI j)
+    private void OnShowStory()
     {
-        i.color = new Color(i.color.r, i.color.g, i.color.b, 0);
-        j.color = new Color(j.color.r, j.color.g, j.color.b, 0);
+        StopCoroutine(TypingInterruptedInput());
 
-        while (i.color.a < 1.0f)
+        if (currentPoint == koreanTyper.Length - 1) // 마지막 단락까지 왔으면
         {
-            i.color = new Color(i.color.r, i.color.g, i.color.b, i.color.a + (Time.deltaTime / t));
-            yield return null;
+            
+            StartCoroutine(TypingInterruptedInput());
+
+            GuideTextObject.SetActive(true);
+
+            switch(SceneManager.GetActiveScene().name)
+            {
+                case "Splash0": case "Splash1": // 시작화면 및 Stage1 시작 전
+                    StartCoroutine(WaitForNextScene());
+                    break;
+                default: // 나머지 (Stage2, 3 ...)
+                    StartCoroutine(WaitForGuidePanel());
+                    break;
+            }
+            
+
+            return;
         }
 
-        i.color = new Color(i.color.r, i.color.g, i.color.b, 1);
-        onImageShowFinish(true);
-
-        /*
-        while (i.color.a > 0.0f)
+        if (koreanTyper.Length > 1)
         {
-            i.color = new Color(i.color.r, i.color.g, i.color.b, i.color.a - (Time.deltaTime / t));
-            yield return null;
-        }
-        */
-        /*
-        while (j.color.a < 1.0f)
-        {
-            j.color = new Color(j.color.r, j.color.g, j.color.b, j.color.a + (Time.deltaTime / t));
-            yield return null;
-        }
-        */
-        j.color = new Color(j.color.r, j.color.g, j.color.b, 1);
+            imageObjects[currentPoint].SetActive(true);
 
-        yield return new WaitUntil(() => isTypingFinish);
-        
-        while (j.color.a > 0.0f)
-        {
-            j.color = new Color(j.color.r, j.color.g, j.color.b, j.color.a - (Time.deltaTime / t));
-            yield return null;
+            StartCoroutine(WaitForNextInput());
+            
+            StartCoroutine(TypingInterruptedInput());
         }
-
-        SceneManager.LoadScene("Lobby");
     }
 
+    IEnumerator WaitForNextInput()
+    {
+        yield return new WaitUntil(() => Input.anyKeyDown);
+
+        koreanTyper[++currentPoint].gameObject.SetActive(true);
+
+    }
+
+    IEnumerator WaitForNextScene()
+    {
+        yield return new WaitUntil(() => Input.anyKeyDown);
+
+        switch (SceneManager.GetActiveScene().name)
+        {
+            case "Splash0":
+                SceneManager.LoadScene("Lobby");
+                break;
+            case "Splash1":
+                //SceneManager.LoadScene("Stage1");
+                SceneManager.LoadScene("Game");
+                break;
+            case "Splash2":
+                //SceneManager.LoadScene("Stage2");
+                SceneManager.LoadScene("Game");
+                break;
+
+        }
+    }
+
+    IEnumerator WaitForGuidePanel()
+    {
+        yield return new WaitUntil(() => Input.anyKeyDown);
+
+        switch(SceneManager.GetActiveScene().name)
+        {
+            case "Splash2":
+                GuidePanel.SetActive(true);
+                break;
+        }
+    }
+
+    IEnumerator TypingInterruptedInput()
+    {
+        yield return new WaitForSeconds(1.2f);
+
+        yield return new WaitUntil(() => Input.GetMouseButton(0) || Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.Return));
+
+        koreanTyper[currentPoint].isInputOccured = true;
+    }
+
+    private void OnTextTypeFinish()
+    {
+        OnShowStory();
+    }
+
+    private void OnSelectNextStage()
+    {
+        StartCoroutine(WaitForNextScene());
+    }
 }

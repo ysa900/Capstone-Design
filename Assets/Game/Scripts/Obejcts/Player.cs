@@ -213,4 +213,9 @@ public class Player : MonoBehaviour, IPlayer
         }
     }
 
+    public void OnPlayerBlinded()
+    {
+
+    }
+
 }

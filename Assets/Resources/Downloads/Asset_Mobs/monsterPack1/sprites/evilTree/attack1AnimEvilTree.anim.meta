@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 1c347465bfb6d42529d7f88db2fd1964
+timeCreated: 1509020826
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103431
+  packageName: Monsters Pack 1 Enemies Pixel Art
+  packageVersion: 1.0
+  assetPath: Assets/monsterPack1/sprites/evilTree/attack1AnimEvilTree.anim
+  uploadId: 208547
