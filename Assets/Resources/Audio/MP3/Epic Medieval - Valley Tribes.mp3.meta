@@ -1,0 +1,30 @@
+fileFormatVersion: 2
+guid: b5aa65cd502f37a4c8f998d62219e147
+AudioImporter:
+  externalObjects: {}
+  serializedVersion: 6
+  defaultSettings:
+    loadType: 0
+    sampleRateSetting: 0
+    sampleRateOverride: 44100
+    compressionFormat: 1
+    quality: 1
+    conversionMode: 0
+  platformSettingOverrides: {}
+  forceToMono: 0
+  normalize: 1
+  preloadAudioData: 1
+  loadInBackground: 0
+  ambisonic: 0
+  3D: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 254786
+  packageName: Epic Medieval Music Bundle
+  packageVersion: 1.0.0
+  assetPath: Assets/ElvGames/Epic Medieval Complete Bundle/MP3/Epic Medieval - Valley
+    Tribes.mp3
+  uploadId: 584213

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 8b7741911f9e54ef8abb2e8f05c98f01
+timeCreated: 1509033540
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103431
+  packageName: Monsters Pack 1 Enemies Pixel Art
+  packageVersion: 1.0
+  assetPath: Assets/monsterPack1/sprites/blindWarlock/flyAnimCrow.anim
+  uploadId: 208547

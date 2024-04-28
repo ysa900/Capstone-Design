@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 4859099823860586685}
   m_Layer: 0
   m_Name: Fire_Normal2_Explode
-  m_TagString: Untagged
+  m_TagString: Fire
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -186,6 +186,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a953555e404b9a46989636228be6680, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDotDamageSkill: 0
   enemy: {fileID: 0}
   boss: {fileID: 0}
   player: {fileID: 0}

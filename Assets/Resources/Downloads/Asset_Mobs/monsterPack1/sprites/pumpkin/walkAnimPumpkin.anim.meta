@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 509ca766408044d1fab6d115fc619f3e
+timeCreated: 1509017620
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103431
+  packageName: Monsters Pack 1 Enemies Pixel Art
+  packageVersion: 1.0
+  assetPath: Assets/monsterPack1/sprites/pumpkin/walkAnimPumpkin.anim
+  uploadId: 208547

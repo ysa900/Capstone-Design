@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 44d417edab61745dba764baad42f256c
+timeCreated: 1509019335
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103431
+  packageName: Monsters Pack 1 Enemies Pixel Art
+  packageVersion: 1.0
+  assetPath: Assets/monsterPack1/sprites/ghost/walkAnimGhost.anim
+  uploadId: 208547

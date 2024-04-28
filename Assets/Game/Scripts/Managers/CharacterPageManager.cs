@@ -54,9 +54,6 @@ public class CharacterPageManager : MonoBehaviour
 
             lobbyManager.isMainPageOn = true;
             lobbyManager.isSettingPageOn = false;
-
-            lobbyManager.MainPageAudio.Play();
-            lobbyManager.CharacterPageAudio.Stop();
         }
 
         // 캐릭터 선택되어 있지 않고 옵션창만 떠있는 상황
@@ -113,6 +110,6 @@ public class CharacterPageManager : MonoBehaviour
     // GameStart 버튼 클릭 시
     private void GameStartButtonClicked()
     {
-        SceneManager.LoadScene("Game"); // Game 씬 불러오기
+        SceneManager.LoadScene("Stage1"); // Stage1 씬 불러오기
     }
 }

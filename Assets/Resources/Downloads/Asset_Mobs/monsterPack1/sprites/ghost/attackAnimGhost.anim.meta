@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 0ba7e4f96d9a74932b192055b21d1510
+timeCreated: 1509019504
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103431
+  packageName: Monsters Pack 1 Enemies Pixel Art
+  packageVersion: 1.0
+  assetPath: Assets/monsterPack1/sprites/ghost/attackAnimGhost.anim
+  uploadId: 208547

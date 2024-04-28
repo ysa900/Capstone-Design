@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ea830ef2382fa4187b97e4e4ae4045ec
+timeCreated: 1508950947
+licenseType: Store
+TextScriptImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103431
+  packageName: Monsters Pack 1 Enemies Pixel Art
+  packageVersion: 1.0
+  assetPath: Assets/monsterPack1/demoScene/readme.txt
+  uploadId: 208547
