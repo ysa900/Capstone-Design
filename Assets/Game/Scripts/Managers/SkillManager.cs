@@ -21,6 +21,7 @@ public class SkillManager : MonoBehaviour
     public SkillData2 skillData;
     public SkillData2 passiveSkillData;
 
+
     private bool isShadowAlive; // 그림자가 살아있으면 알파값을 조정하기 위함
     private float alpha = 0;
 

@@ -40,7 +40,6 @@ public class SplashManager : MonoBehaviour
         UnityEngine.UI.Button goNextStageButton = goNextStageButtonObject.GetComponent<UnityEngine.UI.Button>();
         goNextStageButton.onClick.AddListener(OnSelectNextStage);
 
-
         for (int index=0; index<koreanTyper.Length; index++)
         {
             koreanTyper[index].onTextTypeFinish = OnTextTypeFinish;
@@ -69,7 +68,6 @@ public class SplashManager : MonoBehaviour
                     StartCoroutine(WaitForGuidePanel());
                     break;
             }
-            
 
             return;
         }

@@ -78,12 +78,16 @@ public class GameManager : MonoBehaviour
     public GameObject CharacterProfileObject;
     // Boss HP
     public GameObject BossHPObject;
-    // SettingPAge
+    // SettingPage
     public GameObject SettingPageObject;
+
+    public PlayerData playerData;
+
 
     private void Awake()
     {
         instance = this; // GameManager를 인스턴스화
+        sceneNum = SceneManager.GetActiveScene().buildIndex;
 
         // 시작 시 비활성화
         gameOverObject.SetActive(false);
@@ -94,7 +98,12 @@ public class GameManager : MonoBehaviour
         SettingPageObject.SetActive(false);
 
         // 클래스 객체들 초기화
+        if(sceneNum == 1)
+        {
+            PlayerInit();
+        }
         player = Instantiate(playerPrefab);
+
         inputManager = FindAnyObjectByType<InputManager>();
         followCam = FindAnyObjectByType<FollowCam>();
         skillManager = FindAnyObjectByType<SkillManager>();
@@ -135,18 +144,21 @@ public class GameManager : MonoBehaviour
         // BossManager delegate 할당
         bossManager.onBossHasKilled = OnBossHasKilled;
 
-        //gameTime = maxGameTime - 5f;
+        //gameTime = maxGameTime - 2f;
         //player.isPlayerShielded = true;
         //player.level = 20;
+
+        player.playerData = playerData; // player에 playerData 할당
+        skillSelectManager.playerData = playerData;// skillSelectManager에 playerData 할당
     }
 
     void Start()
     {
-   
-        sceneNum = SceneManager.GetActiveScene().buildIndex;
+
 
         tilemapManager.buildIndex = sceneNum;
-
+        if (sceneNum == 1)
+            skillSelectManager.ChooseStartSkill(); // 시작 스킬 선택
 
         SetPlayerInfo();
 
@@ -154,10 +166,10 @@ public class GameManager : MonoBehaviour
         GameAudioManager.instance.bgmPlayer.clip = GameAudioManager.instance.bgmClips[(int)Bgm.Stage1];
         GameAudioManager.instance.bgmPlayer.Play();
 
+
         SpawnStartEnemies();
 
-        if (sceneNum == 1)
-             skillSelectManager.ChooseStartSkill(); // 시작 스킬 선택
+  
     }
 
     // Update is called once per frame
@@ -493,7 +505,7 @@ public class GameManager : MonoBehaviour
     {
         if (!player.isPlayerDead)
         {
-            player.kill++;
+            player.playerData.kill++;
         }
 
         int ranNum = UnityEngine.Random.Range(0, 11);
@@ -584,8 +596,8 @@ public class GameManager : MonoBehaviour
 
     private void OnPlayerHealed()
     {
-        player.hp += 10;
-        if (player.hp > 100) { player.hp = 100; }
+        player.playerData.hp += 10;
+        if (player.playerData.hp > 100) { player.playerData.hp = 100; }
     }
 
     // 스킬이 선택되면 즉시 스킬 쿨타임을 초기화 시킨다
@@ -599,11 +611,11 @@ public class GameManager : MonoBehaviour
     {
         switch (num)
         {
-            case 3: { player.damageReductionValue = value; break; }
-            case 4: { player.speed *= value; break; } // 얘는 플레이어 스피드에 즉시 적용
+            case 3: { player.playerData.damageReductionValue = value; break; }
+            case 4: { player.playerData.speed *= value; break; } // 얘는 플레이어 스피드에 즉시 적용
             case 5:
                 {
-                    player.magnetRange = value;
+                    player.playerData.magnetRange = value;
                     player.ChangeMagnetRange();
                     break;
                 }
@@ -614,5 +626,36 @@ public class GameManager : MonoBehaviour
     public void SendClearWall_RightX(float xValue)
     {
         followCam.clearWall_RightEndX = xValue;
+    }
+
+    
+
+    void PlayerInit()
+    {
+        playerData.speed = 6;
+        playerData.hp = 100;
+        playerData.maxHp = 100;
+        playerData.Exp = 0;
+        playerData.level = 0;
+
+        playerData.nextExp = new int[100];
+
+        int num = 0;
+        for (int i = 0; i < playerData.nextExp.Length; i++)
+        {
+            if (playerData.level >= 30)
+            {
+                num += 100;
+                playerData.nextExp[i] = num;
+            }
+            else
+            {
+                num += 5;
+                playerData.nextExp[i] = num;
+            }
+        }
+
+        playerData.damageReductionValue = 0f;
+        playerData.magnetRange = 0;
     }
 }

@@ -6,21 +6,21 @@ public class Player : MonoBehaviour, IPlayer
     // 키보드 방향키 입력을 위한 벡터
     public Vector2 inputVec;
 
-    [SerializeField]
-    // 플레이어 정보
-    public float speed;
-    public float hp;
-    public float maxHp = 100;
-    public int Exp;
-    public int level;
-    public int[] nextExp;
+    //[SerializeField]
+    //// 플레이어 정보
+    //public float speed;
+    //public float hp;
+    //public float maxHp;
+    //public float Exp;
+    //public int level;
+    //public int[] nextExp;
 
     // 플레이어 패시브 효과 관련 변수
-    public float damageReductionValue = 1f; // 뎀감
-    public float magnetRange; // 자석 범위
+    //public float damageReductionValue = 1f; // 뎀감x
+    //public float magnetRange; // 자석 범위
 
     //킬 수
-    public int kill;
+    //public int kill;
 
     public bool isPlayerDead; // 플레이어가 죽었는지 판별하는 변수
 
@@ -47,9 +47,12 @@ public class Player : MonoBehaviour, IPlayer
 
     private GameAudioManager gameAudioManager;
 
+    public PlayerData playerData; // 플레이어 데이터
+
     private void Awake()
     {
         gameAudioManager = FindAnyObjectByType<GameAudioManager>();
+        
     }
 
     void Start()
@@ -59,22 +62,6 @@ public class Player : MonoBehaviour, IPlayer
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
         absorberCollider = gameObject.GetComponentInChildren<CircleCollider2D>();
-
-        nextExp = new int[100];
-        int num = 0;
-        for (int i = 0; i < nextExp.Length; i++)
-        {
-            if (level >= 30)
-            {
-                num += 100;
-                nextExp[i] = num;
-            }
-            else
-            {
-                num += 5;
-                nextExp[i] = num;
-            }
-        }
     }
 
     // Update is called once per frame
@@ -123,7 +110,7 @@ public class Player : MonoBehaviour, IPlayer
     {
         // 플레이어의 방향벡터를 가져와서 속도를 설정
         // fixedDeltaTime은 물리 프레임 시간
-        Vector2 nextVec = inputVec.normalized * speed * Time.fixedDeltaTime;
+        Vector2 nextVec = inputVec.normalized * playerData.speed * Time.fixedDeltaTime;
 
         // 입력받은 방향으로 플레이어 위치 설정
         rigid.MovePosition(rigid.position + nextVec);
@@ -132,14 +119,14 @@ public class Player : MonoBehaviour, IPlayer
     //player 경험치 획득 함수
     public void GetExp(int expAmount)
     {
-        Exp += expAmount;
+        playerData.Exp += expAmount;
 
-        if (Exp >= nextExp[level])
+        if (playerData.Exp >= playerData.nextExp[playerData.level])
         {
             onPlayerLevelUP(); // delegate 호출
 
-            level++;
-            Exp = 0;
+            playerData.level++;
+            playerData.Exp = 0;
         }
 
     }
@@ -147,7 +134,7 @@ public class Player : MonoBehaviour, IPlayer
     // 자석 범위를 변경하는 함수
     public void ChangeMagnetRange()
     {
-        absorberCollider.radius = magnetRange;
+        absorberCollider.radius = playerData.magnetRange;
     }
 
     // 플레이어가 몬스터와 충돌하면 데미지를 입는다
@@ -163,7 +150,7 @@ public class Player : MonoBehaviour, IPlayer
         {
             if (!isPlayerShielded)
             {
-                hp -= Time.deltaTime * 5 * damageReductionValue;
+                playerData.hp -= Time.deltaTime * 5 * playerData.damageReductionValue;
 
                 bool isHitDelayOK = hitDelayTimer >= hitDelayTime;
                 if (isHitDelayOK)
@@ -173,7 +160,7 @@ public class Player : MonoBehaviour, IPlayer
                 }
             }
 
-            if (hp <= 0)
+            if (playerData.hp <= 0)
             {
                 isPlayerDead = true;
 
@@ -194,11 +181,11 @@ public class Player : MonoBehaviour, IPlayer
         {
             if (!isPlayerShielded)
             {
-                hp -= damage * damageReductionValue;
+                playerData.hp -= damage * playerData.damageReductionValue;
                 gameAudioManager.PlaySfx(GameAudioManager.Sfx.Melee); // 피격  효과음
             }
 
-            if (hp <= 0)
+            if (playerData.hp <= 0)
             {
                 isPlayerDead = true;
 

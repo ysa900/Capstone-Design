@@ -1,5 +1,12 @@
 fileFormatVersion: 2
 guid: d9b68a887502d4de1947f064acf8f286
+AssetOrigin:
+  serializedVersion: 1
+  productId: 244002
+  packageName: Bat Pixel Art Character
+  packageVersion: 1.0
+  assetPath: Assets/sanctum_pixel/bat_package/bat/bat_origin.png
+  uploadId: 554995
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -20,11 +27,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMasterTextureLimit: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -63,6 +71,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   cookieLightType: 0
   platformSettings:
   - serializedVersion: 3
@@ -715,44 +724,36 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      bat_origin_16: -291694040
-      bat_origin_18: 1939395
-      bat_origin_4: -68875642
-      bat_origin_24: -1505855857
-      bat_origin_13: -1175554551
-      bat_origin_20: -2015175780
-      bat_origin_8: 47949805
-      bat_origin_1: 713152355
-      bat_origin_15: 240954534
-      bat_origin_7: 519253798
-      bat_origin_9: -1115409612
-      bat_origin_14: 465887791
-      bat_origin_21: -94475480
-      bat_origin_27: -455932171
-      bat_origin_2: 65507562
-      bat_origin_23: 1432421454
-      bat_origin_6: 1245840968
-      bat_origin_12: 1159173215
-      bat_origin_25: 2109008190
-      bat_origin_17: 1695470310
-      bat_origin_19: -596331298
-      bat_origin_11: -2085783746
-      bat_origin_26: 191674926
-      bat_origin_10: 242182815
-      bat_origin_22: -792181461
-      bat_origin_3: -1577833200
-      bat_origin_5: -64239275
       bat_origin_0: -1387997819
-  spritePackingTag: 
+      bat_origin_1: 713152355
+      bat_origin_10: 242182815
+      bat_origin_11: -2085783746
+      bat_origin_12: 1159173215
+      bat_origin_13: -1175554551
+      bat_origin_14: 465887791
+      bat_origin_15: 240954534
+      bat_origin_16: -291694040
+      bat_origin_17: 1695470310
+      bat_origin_18: 1939395
+      bat_origin_19: -596331298
+      bat_origin_2: 65507562
+      bat_origin_20: -2015175780
+      bat_origin_21: -94475480
+      bat_origin_22: -792181461
+      bat_origin_23: 1432421454
+      bat_origin_24: -1505855857
+      bat_origin_25: 2109008190
+      bat_origin_26: 191674926
+      bat_origin_27: -455932171
+      bat_origin_3: -1577833200
+      bat_origin_4: -68875642
+      bat_origin_5: -64239275
+      bat_origin_6: 1245840968
+      bat_origin_7: 519253798
+      bat_origin_8: 47949805
+      bat_origin_9: -1115409612
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 244002
-  packageName: Bat Pixel Art Character
-  packageVersion: 1.0
-  assetPath: Assets/sanctum_pixel/bat_package/bat/bat_origin.png
-  uploadId: 554995
