@@ -1,5 +1,6 @@
 fileFormatVersion: 2
 guid: d2511737026a3594ca71de49a0d42924
+<<<<<<< HEAD
 AssetOrigin:
   serializedVersion: 1
   productId: 266966
@@ -7,6 +8,8 @@ AssetOrigin:
   packageVersion: 1.0
   assetPath: Assets/Fantasy Statues/Statues/Spritesheet/spritesheet4.png
   uploadId: 617898
+=======
+>>>>>>> fb9e122ace47cd59b98368c2d381069dfdb7632d
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -27,12 +30,19 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+<<<<<<< HEAD
     flipGreenChannel: 0
+=======
+>>>>>>> fb9e122ace47cd59b98368c2d381069dfdb7632d
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+<<<<<<< HEAD
   ignoreMipmapLimit: 0
+=======
+  ignoreMasterTextureLimit: 0
+>>>>>>> fb9e122ace47cd59b98368c2d381069dfdb7632d
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -50,12 +60,20 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
+<<<<<<< HEAD
   spriteMode: 2
+=======
+  spriteMode: 1
+>>>>>>> fb9e122ace47cd59b98368c2d381069dfdb7632d
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
+<<<<<<< HEAD
   spritePixelsToUnits: 16
+=======
+  spritePixelsToUnits: 100
+>>>>>>> fb9e122ace47cd59b98368c2d381069dfdb7632d
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -71,7 +89,10 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+<<<<<<< HEAD
   swizzle: 50462976
+=======
+>>>>>>> fb9e122ace47cd59b98368c2d381069dfdb7632d
   cookieLightType: 0
   platformSettings:
   - serializedVersion: 3
@@ -124,6 +145,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
+<<<<<<< HEAD
     sprites:
     - serializedVersion: 2
       name: spritesheet4_0
@@ -860,6 +882,9 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+=======
+    sprites: []
+>>>>>>> fb9e122ace47cd59b98368c2d381069dfdb7632d
     outline: []
     physicsShape: []
     bones: []
@@ -870,6 +895,7 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+<<<<<<< HEAD
     nameFileIdTable:
       spritesheet4_0: -68462195
       spritesheet4_1: -1528639307
@@ -911,3 +937,19 @@ TextureImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+=======
+    nameFileIdTable: {}
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 266966
+  packageName: Unique Fantasy Statues
+  packageVersion: 1.0
+  assetPath: Assets/Fantasy Statues/Statues/Spritesheet/spritesheet4.png
+  uploadId: 617898
+>>>>>>> fb9e122ace47cd59b98368c2d381069dfdb7632d

@@ -81,7 +81,11 @@ public class InputManager : MonoBehaviour
     {
         GameAudioManager.instance.bgmPlayer.Stop(); // 현재 BGM 종료
 
+<<<<<<< HEAD
         SceneManager.LoadScene("Stage1"); // Stage1 으로 돌아가기(해당 씬 Load), 현재는 "Game" 씬 
+=======
+        SceneManager.LoadScene("Game"); // Stage1 으로 돌아가기(해당 씬 Load), 현재는 "Game" 씬 
+>>>>>>> fb9e122ace47cd59b98368c2d381069dfdb7632d
         Time.timeScale = 1;
     }
 
@@ -117,7 +121,11 @@ public class InputManager : MonoBehaviour
     private void OptionButtonClicked()
     {
         Time.timeScale = 0;
+<<<<<<< HEAD
         //GameManager.instance.HpBarObject.SetActive(false);
+=======
+        GameManager.instance.HpBarObject.SetActive(false);
+>>>>>>> fb9e122ace47cd59b98368c2d381069dfdb7632d
         GameManager.instance.SettingPageObject.SetActive(true);
         OptionButtonObject.interactable = false;
     }
@@ -125,7 +133,11 @@ public class InputManager : MonoBehaviour
     private void SettingPageBackButtonClicked()
     {
         Time.timeScale = 1;
+<<<<<<< HEAD
         //GameManager.instance.HpBarObject.SetActive(true);
+=======
+        GameManager.instance.HpBarObject.SetActive(true);
+>>>>>>> fb9e122ace47cd59b98368c2d381069dfdb7632d
         GameManager.instance.SettingPageObject.SetActive(false);
         OptionButtonObject.interactable = true;
     }

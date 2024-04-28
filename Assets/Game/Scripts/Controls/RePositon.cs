@@ -6,6 +6,7 @@ public class RePositon : MonoBehaviour
 {
     public GameObject clearWall;
 
+<<<<<<< HEAD
     int sceneNum;
     bool isStage2TimeOver;
     int playerAreaSize;
@@ -20,6 +21,8 @@ public class RePositon : MonoBehaviour
         StartCoroutine(WaitForNSec(0.5f));
     }
 
+=======
+>>>>>>> fb9e122ace47cd59b98368c2d381069dfdb7632d
     private void OnTriggerExit2D(Collider2D collision)
     {
         // 플레이어의 Area와 충돌을 감지해 벗어났다면 실행
@@ -68,6 +71,14 @@ public class RePositon : MonoBehaviour
 
                     // clearWall의 오른쪽 끝 좌표를 GameManger를 통해 FollowCam에게 전달 
                     SendClearWall_RightX();
+                }
+                break;
+
+            case "Corridor":
+                if(playerPosition.x >= myPosition.x)
+                {
+                    transform.Translate(Vector3.right * 85 * 2); // 오른쪽 방향 * 거리
+                    clearWall.transform.Translate(Vector3.right * 85);
                 }
                 break;
         }
