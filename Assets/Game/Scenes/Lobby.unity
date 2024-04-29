@@ -666,102 +666,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d0390bd8b8ffd640b34fe25065ff1df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  updateType: 0
-  isSpeedBased: 0
-  hasOnStart: 0
-  hasOnPlay: 0
-  hasOnUpdate: 0
-  hasOnStepComplete: 0
-  hasOnComplete: 0
-  hasOnTweenCreated: 0
-  hasOnRewind: 0
-  onStart:
-    m_PersistentCalls:
-      m_Calls: []
-  onPlay:
-    m_PersistentCalls:
-      m_Calls: []
-  onUpdate:
-    m_PersistentCalls:
-      m_Calls: []
-  onStepComplete:
-    m_PersistentCalls:
-      m_Calls: []
-  onComplete:
-    m_PersistentCalls:
-      m_Calls: []
-  onTweenCreated:
-    m_PersistentCalls:
-      m_Calls: []
-  onRewind:
-    m_PersistentCalls:
-      m_Calls: []
-  targetIsSelf: 1
-  targetGO: {fileID: 0}
-  tweenTargetIsTargetGO: 1
-  delay: 0
-  duration: 4
-  easeType: 6
-  easeCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  loopType: 1
-  loops: -1
-  id: 
-  isRelative: 0
-  isFrom: 0
-  isIndependentUpdate: 0
-  autoKill: 1
-  autoGenerate: 1
-  isActive: 1
-  isValid: 1
-  target: {fileID: 193224710}
-  animationType: 7
-  targetType: 3
-  forcedTargetType: 0
-  autoPlay: 1
-  useTargetAsV3: 0
-  endValueFloat: 0
-  endValueV3: {x: 90, y: 90, z: 90}
-  endValueV2: {x: 0, y: 0}
-  endValueColor: {r: 1, g: 1, b: 1, a: 1}
-  endValueString: 
-  endValueRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 0
-    height: 0
-  endValueTransform: {fileID: 0}
-  optionalBool0: 1
-  optionalBool1: 1
-  optionalFloat0: 90
-  optionalInt0: 10
-  optionalRotationMode: 0
-  optionalScrambleMode: 0
-  optionalShakeRandomnessMode: 0
-  optionalString: 
 --- !u!1 &195625570
 GameObject:
   m_ObjectHideFlags: 0
@@ -852,7 +756,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &196585983
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2306,7 +2210,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: e73dd9c018a08e74e9e3b6b52eba48b4, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2680,8 +2584,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -2.1609, y: 102}
-  m_SizeDelta: {x: 390.0782, y: 50}
+  m_AnchoredPosition: {x: -2.1609, y: 0.5601}
+  m_SizeDelta: {x: 390.0782, y: 252.8798}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &599532780
 MonoBehaviour:
@@ -2703,7 +2607,17 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: "\uAE4A\uC740 \uC232\uC18D\uC5D0\uC11C \uC218\uB828 \uC911\uC774\uB358
+    \uB9C8\uBC95\uC0AC, \uC568\uB9AC\uC2A4\uB294\n\uAC1C\uAE30\uC77C\uC2DD \uC774\uD6C4
+    \uD63C\uB780\uC5D0 \uBE60\uC9C4 \uC138\uC0C1 \uD2C8\uBC14\uAD6C\uB2C8 \uC18D\n\uACE0\uD1B5\uBC1B\uB294
+    \uC778\uAC04\uB4E4\uC744 \uB3C4\uC640\uC8FC\uBA70 \uC120\uD589\uC744 \uBCA0\uD480\uC5C8\uB2E4.\n\n\uAC1C\uAE30\uC77C\uC2DD\uC740
+    100\uB144\uC774 \uB418\uB3C4\uB85D \uC9C0\uC18D\uB410\uACE0,\n\uC778\uAC04\uB4E4\uC740
+    \uC568\uB9AC\uC2A4\uC758 \uB3C4\uC6C0\uC744 \uB2F9\uC5F0\uC2DC \uC5EC\uACBC\uACE0
+    \uBAA8\uB4E0 \uAC83\uC5D0\n\uC2EB\uC99D\uC774 \uB09C \uC568\uB9AC\uC2A4\uB294
+    \uD0C0\uB77D\uD55C \uCC9C\uC0AC, \uBCA8\uB9AC\uC5D8\uC744 \uC81C\uAC70\uD558\uBA74\n\uC790\uC2E0\uB3C4
+    \uCC9C\uC0AC\uAC00 \uB420 \uC218 \uC788\uB2E4\uB294 \uC18C\uBB38\uC744 \uC811\uD55C\uB2E4.\n\n\uADF8\uB807\uAC8C
+    \uC568\uB9AC\uC2A4\uB294 \uC18C\uBB38\uC758 \uACE0\uC131\uC5D0 \uB2E4\uB2E4\uB974\uAC8C
+    \uB418\uB294\uB370.."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: afbcbe8a29efab84c827001e35a64bb7, type: 2}
   m_sharedMaterial: {fileID: -3162714131524945176, guid: afbcbe8a29efab84c827001e35a64bb7, type: 2}
@@ -2736,7 +2650,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 2
+  m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -3233,6 +3147,18 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1863497827}
+        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+        m_MethodName: PlayOneShot
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 8300000, guid: c259a932c707444f3843d6b7d0c8190d, type: 3}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -9086,9 +9012,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameStartButtonObject: {fileID: 696582761}
   CharacterButtonObject: {fileID: 868057752}
-  ItemButtonObject: {fileID: 1499602626}
   CharacterPageBackButtonObject: {fileID: 815627648}
-  ItemPageBackButtonObject: {fileID: 0}
   SettingPageBackButtonObject: {fileID: 1813147626}
   ExitButtonObject: {fileID: 2075031570}
   MainPageOptionButtonObject: {fileID: 637307110}
@@ -9100,7 +9024,6 @@ MonoBehaviour:
   SelectWarriorButtonObject: {fileID: 297372214}
   MainPage: {fileID: 449185016}
   CharacterPage: {fileID: 1504360538}
-  ItemPage: {fileID: 0}
   SettingPage: {fileID: 1295065839}
   isCharacterSelect: 0
   isCharacterPageOn: 0

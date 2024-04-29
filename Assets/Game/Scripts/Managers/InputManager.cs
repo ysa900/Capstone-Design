@@ -3,10 +3,10 @@ using UnityEngine.SceneManagement;
 
 public class InputManager : MonoBehaviour
 {
-    // GameoVer_GoTOLobby 버튼
+    // GameOver_GoTOLobby 버튼
     public UnityEngine.UI.Button GVGoToLobbyButtonObject;
 
-    // GameoVer_Restart 버튼
+    // GameOver_Restart 버튼
     public UnityEngine.UI.Button GVRestartButtonObject;
 
     // GameClear_GoTOLobby 버튼
@@ -23,6 +23,9 @@ public class InputManager : MonoBehaviour
 
     // Play 버튼
     public UnityEngine.UI.Button PlayButtonObject;
+
+    // GotoNextScene 버튼
+    public UnityEngine.UI.Button GoToNextSceneButtonObject;
 
     // Option 관련 버튼
     public UnityEngine.UI.Button OptionButtonObject; // 프레이 화면의 Option 버튼
@@ -62,6 +65,10 @@ public class InputManager : MonoBehaviour
         // Pause_GoTOLobby 버튼 눌렀을 때
         UnityEngine.UI.Button PGoToLobbyButton = PGoToLobbyButtonObject.GetComponent<UnityEngine.UI.Button>();
         PGoToLobbyButton.onClick.AddListener(goToLobbyButtonClicked);
+
+        // GoToNextScene 버튼 눌렀을 때
+        UnityEngine.UI.Button GoToNextSceneButton = GoToNextSceneButtonObject.GetComponent<UnityEngine.UI.Button>();
+        GoToNextSceneButton.onClick.AddListener(goToNextSceneButtonClicked);
 
         // Play 버튼 눌렀을 때
         UnityEngine.UI.Button PlayButton = PlayButtonObject.GetComponent<UnityEngine.UI.Button>();
@@ -128,5 +135,18 @@ public class InputManager : MonoBehaviour
         //GameManager.instance.HpBarObject.SetActive(true);
         GameManager.instance.SettingPageObject.SetActive(false);
         OptionButtonObject.interactable = true;
+    }
+
+    private void goToNextSceneButtonClicked()
+    {
+        switch(SceneManager.GetActiveScene().name)
+        {
+            case "Stage1":
+                SceneManager.LoadScene("Splash2");
+                break;
+            case "Stage2":
+                SceneManager.LoadScene("Splash3");
+                break;
+        }
     }
 }
