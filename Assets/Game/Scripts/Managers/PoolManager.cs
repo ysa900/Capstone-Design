@@ -29,9 +29,6 @@ public class PoolManager : MonoBehaviour
 
     private void Awake()
     {
-        // 클래스 객체들 초기화
-        enemyManager = FindAnyObjectByType<EnemyManager>();
-        Debug.Log(enemyManager);
         Enemy_pools = new List<Enemy>[Enemy_prefabs.Length];
         for (int index = 0; index < Enemy_pools.Length; index++)
         {

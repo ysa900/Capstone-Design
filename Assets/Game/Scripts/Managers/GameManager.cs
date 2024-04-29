@@ -129,8 +129,7 @@ public class GameManager : MonoBehaviour
         // PoolManager Player 할당
         poolManager.player = player;
 
-        // EnemyManager delegate 할(당
-      
+        // EnemyManager delegate 할당
         poolManager.enemyManager.onEnemiesChanged = OnEnemiesChanged;
         poolManager.enemyManager.onEnemyKilled = OnEnemyKilled;
 
@@ -655,7 +654,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        playerData.damageReductionValue = 0f;
-        playerData.magnetRange = 0;
+        playerData.damageReductionValue = 1f;
+        playerData.magnetRange = 0.25f;
     }
 }

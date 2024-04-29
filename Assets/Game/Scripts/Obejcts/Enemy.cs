@@ -93,11 +93,6 @@ public class Enemy : Object, IDamageable, IPullingObject
                 tmpX = (float)Math.Cos(degree) * radius;
                 tmpY = (float)Math.Sin(degree) * radius;
 
-                Debug.Log("radius: " + radius);
-                Debug.Log("degree: " + degree);
-                Debug.Log("tmpX: " + tmpX);
-                Debug.Log("tmpY: " + tmpY);
-
                 X = tmpX;
                 Y = tmpY;
 
