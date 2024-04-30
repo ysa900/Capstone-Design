@@ -81,8 +81,13 @@ public class GameManager : MonoBehaviour
     // SettingPage
     public GameObject SettingPageObject;
 
-    public PlayerData playerData;
+    public PlayerData playerData; // 플레이어 데이터 객체
 
+    public bool isSettingPageOn = false;
+    public bool isPausePageOn = false;
+    public bool isClearPageOn = false;
+    public bool isDeadPageOn = false;
+    public bool isSkillSelectPageOn = false;
 
     private void Awake()
     {
@@ -427,8 +432,8 @@ public class GameManager : MonoBehaviour
     IEnumerator PlayerHasKilled()
     {
         isGameOver = true;
+        isDeadPageOn = true;
         gameOverObject.SetActive(true);
-        //HpBarObject.SetActive(false);
 
         yield return new WaitForSeconds(0.5f); // 0.5초 이후 시간 차 두기
         GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Dead); // 캐릭터 사망 시 효과음
@@ -442,10 +447,12 @@ public class GameManager : MonoBehaviour
     {
         StartCoroutine(BossHasKilled()); // 효과음 넣기 위한 코루틴 생성 및 사용
     }
+
     IEnumerator BossHasKilled()
     {
         player.isPlayerShielded = true;
         isGameOver = true;
+        isClearPageOn = true;
         gameClearObject.SetActive(true);
         //HpBarObject.SetActive(false);
 
@@ -460,7 +467,9 @@ public class GameManager : MonoBehaviour
     private void OnPauseButtonClicked()
     {
         pauseObject.SetActive(true);
-        
+        isPausePageOn = true; 
+        inputManager.PauseButtonObject.interactable = false; // Pause버튼 비활성화
+
         // UI 비활성화
         //HpBarObject.SetActive(false);
         HpStatusLetteringObject.SetActive(false);
@@ -473,7 +482,9 @@ public class GameManager : MonoBehaviour
     private void onPlayButtonClicked()
     {
         pauseObject.SetActive(false);
-        
+        isPausePageOn = false;
+        inputManager.PauseButtonObject.interactable = true; // Pause버튼 활성화
+
         // UI 활성화
         //HpBarObject.SetActive(true);
         HpStatusLetteringObject.SetActive(true);
@@ -569,27 +580,13 @@ public class GameManager : MonoBehaviour
 
     private void OnSkillSelectObjectDisplayed()
     {
-        // UI 비활성화
-        //HpBarObject.SetActive(false);
-        /* 하단 패널 비활성화 할 이유 없음
-        HpStatusLetteringObject.SetActive(false);
-        HpStatusObject.SetActive(false);
-        SkillPanelObject.SetActive(false);
-        CharacterProfileObject.SetActive(false);
-        */
+        isSkillSelectPageOn = true;
         inputManager.PauseButtonObject.interactable = false;
     }
 
     private void OnSkillSelectObjectHided()
     {
-        // UI 활성화
-        //HpBarObject.SetActive(true);
-        /* 하단 패널 비활성화 할 이유 없음
-        HpStatusLetteringObject.SetActive(true);
-        HpStatusObject.SetActive(true);
-        SkillPanelObject.SetActive(true);
-        CharacterProfileObject.SetActive(true);
-        */
+        isSkillSelectPageOn = false;
         inputManager.PauseButtonObject.interactable = true;
     }
 

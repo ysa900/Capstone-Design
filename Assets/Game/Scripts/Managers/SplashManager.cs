@@ -1,13 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SplashManager : MonoBehaviour
 {
     public KoreanTyperSimple[] koreanTyper;
-    
+    [SerializeField] private AudioMixer m_AudioMixer;
+
     [SerializeField] Image backgroundImage = null; // 뒷배경
     [SerializeField] GameObject GuideTextObject;
     [SerializeField] GameObject[] imageObjects = null;

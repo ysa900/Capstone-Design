@@ -88,7 +88,7 @@ public class InputManager : MonoBehaviour
     {
         GameAudioManager.instance.bgmPlayer.Stop(); // 현재 BGM 종료
 
-        SceneManager.LoadScene("Stage1"); // Stage1 으로 돌아가기(해당 씬 Load), 현재는 "Game" 씬 
+        SceneManager.LoadScene("Stage1"); // Stage1 으로 돌아가기(Stage1씬 Load) 
         Time.timeScale = 1;
     }
 
@@ -123,18 +123,78 @@ public class InputManager : MonoBehaviour
 
     private void OptionButtonClicked()
     {
-        Time.timeScale = 0;
-        //GameManager.instance.HpBarObject.SetActive(false);
-        GameManager.instance.SettingPageObject.SetActive(true);
-        OptionButtonObject.interactable = false;
+        //// Pause페이지 On
+        //if(GameManager.instance.isPausePageOn && !GameManager.instance.isClearPageOn && !GameManager.instance.isSkillSelectPageOn && !GameManager.instance.isDeadPageOn)
+        //{
+        //    GameManager.instance.isSettingPageOn = true;
+        //    GameManager.instance.SettingPageObject.SetActive(true);
+        //    OptionButtonObject.interactable = false;
+        //}
+
+        //// 레벨업 후 스킬 선택할 때
+        //if (!GameManager.instance.isPausePageOn && !GameManager.instance.isClearPageOn && GameManager.instance.isSkillSelectPageOn && !GameManager.instance.isDeadPageOn)
+        //{
+        //    GameManager.instance.isSettingPageOn = true;
+        //    GameManager.instance.SettingPageObject.SetActive(true);
+        //    OptionButtonObject.interactable = false;
+        //}
+        //// 클리어 화면 On
+        //if (!GameManager.instance.isPausePageOn && !GameManager.instance.isClearPageOn && GameManager.instance.isSkillSelectPageOn && !GameManager.instance.isDeadPageOn)
+        //{
+        //    GameManager.instance.isSettingPageOn = true;
+        //    GameManager.instance.SettingPageObject.SetActive(true);
+        //    OptionButtonObject.interactable = false;
+        //}
+
+        //// 플레이어 죽은 화면 On
+        //if (!GameManager.instance.isPausePageOn && !GameManager.instance.isClearPageOn && GameManager.instance.isSkillSelectPageOn && !GameManager.instance.isDeadPageOn)
+        //{
+        //    GameManager.instance.isSettingPageOn = true;
+        //    GameManager.instance.SettingPageObject.SetActive(true);
+        //    OptionButtonObject.interactable = false;
+        //}
+
+        // 인게임 중
+        if (!GameManager.instance.isPausePageOn && !GameManager.instance.isClearPageOn && !GameManager.instance.isSkillSelectPageOn && !GameManager.instance.isDeadPageOn)
+        {
+            GameManager.instance.isSettingPageOn = true;
+            Time.timeScale = 0; // 화면 멈추기
+            GameManager.instance.SettingPageObject.SetActive(true);
+            OptionButtonObject.interactable = false;
+        }
+        else // 나머지 상황: Pause, 레벨업, 클리어, 플레이어 죽으면
+        {
+            GameManager.instance.isSettingPageOn = true;
+            GameManager.instance.SettingPageObject.SetActive(true);
+            OptionButtonObject.interactable = false;
+        }
+        
+
+        //// Pause, 레벨업, 클리어, 플레이어 죽으면
+        //if (GameManager.instance.isPausePageOn || GameManager.instance.isClearPageOn || GameManager.instance.isSkillSelectPageOn || GameManager.instance.isDeadPageOn)
+        //{
+        //    GameManager.instance.isSettingPageOn = true;
+        //    GameManager.instance.SettingPageObject.SetActive(true);
+        //    OptionButtonObject.interactable = false;
+        //}
+
+        //GameManager.instance.isSettingPageOn = true;
+        //GameManager.instance.SettingPageObject.SetActive(true);
+        //OptionButtonObject.interactable = false;
     }
 
     private void SettingPageBackButtonClicked()
     {
-        Time.timeScale = 1;
-        //GameManager.instance.HpBarObject.SetActive(true);
-        GameManager.instance.SettingPageObject.SetActive(false);
+        GameManager.instance.isSettingPageOn = false;
         OptionButtonObject.interactable = true;
+
+        // 인게임 중
+        if (!GameManager.instance.isPausePageOn && !GameManager.instance.isClearPageOn && !GameManager.instance.isSkillSelectPageOn && !GameManager.instance.isDeadPageOn)
+        {
+            Time.timeScale = 1; // 화면 풀기
+        }
+
+        GameManager.instance.SettingPageObject.SetActive(false);
     }
 
     private void goToNextSceneButtonClicked()
