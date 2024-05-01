@@ -10,7 +10,15 @@ public class Teleport:MonoBehaviour
 
         if (isPlayer)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            switch(SceneManager.GetActiveScene().name)
+            {
+                case "Stage1":
+                    SceneManager.LoadScene("Splash2"); // Stage1 -> Splash2
+                    break;
+                case "Stage2":
+                    SceneManager.LoadScene("Splash3"); // Stage2 -> Splash3
+                    break;
+            } 
         }
     }
 }

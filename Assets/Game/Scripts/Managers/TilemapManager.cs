@@ -1,10 +1,9 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TilemapManager : MonoBehaviour
 {  
-    public int buildIndex;
-
     // Stage1 오브젝트들
     bool isStage1End;
     public GameObject teleport_hole;
@@ -19,10 +18,9 @@ public class TilemapManager : MonoBehaviour
     bool isStage2End;
     bool isBossRoomAlreadyMoved;
    
-
     private void Update()
     {
-        isStage1End = buildIndex == 1 && GameManager.instance.gameTime >= 5 * 60f;
+        isStage1End = SceneManager.GetActiveScene().name == "Stage1" && GameManager.instance.gameTime >= 5 * 60f;
 
         if (isStage1End && !isTeleportHoleAlreadySpawned)
         {
@@ -33,7 +31,8 @@ public class TilemapManager : MonoBehaviour
             isTeleportHoleAlreadySpawned = true;
         }
 
-        isStage2End = buildIndex == 2 && GameManager.instance.gameTime >= 5 * 60f;
+        isStage2End = SceneManager.GetActiveScene().name == "Stage2" && GameManager.instance.gameTime >= 5 * 60f;
+
         if (isStage2End && !isBossRoomAlreadyMoved)
         {
             GameObject RightCorridor = Corridor1.transform.position.x > Corridor2.transform.position.x ? Corridor1 : Corridor2;

@@ -159,9 +159,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
 
-
-        tilemapManager.buildIndex = sceneNum;
-        if (sceneNum == 1)
+        if (SceneManager.GetActiveScene().name == "Stage1")
             skillSelectManager.ChooseStartSkill(); // 시작 스킬 선택
 
         SetPlayerInfo();
