@@ -78,12 +78,21 @@ public class GameManager : MonoBehaviour
     public GameObject CharacterProfileObject;
     // Boss HP
     public GameObject BossHPObject;
-    // SettingPAge
+    // SettingPage
     public GameObject SettingPageObject;
+
+    public PlayerData playerData; // 플레이어 데이터 객체
+
+    public bool isSettingPageOn = false;
+    public bool isPausePageOn = false;
+    public bool isClearPageOn = false;
+    public bool isDeadPageOn = false;
+    public bool isSkillSelectPageOn = false;
 
     private void Awake()
     {
         instance = this; // GameManager를 인스턴스화
+        sceneNum = SceneManager.GetActiveScene().buildIndex;
 
         // 시작 시 비활성화
         gameOverObject.SetActive(false);
@@ -94,7 +103,13 @@ public class GameManager : MonoBehaviour
         SettingPageObject.SetActive(false);
 
         // 클래스 객체들 초기화
+        if(sceneNum == 1)
+        {
+            PlayerInit();
+        }
         player = Instantiate(playerPrefab);
+        SetPlayerInfo();
+
         inputManager = FindAnyObjectByType<InputManager>();
         followCam = FindAnyObjectByType<FollowCam>();
         skillManager = FindAnyObjectByType<SkillManager>();
@@ -120,8 +135,7 @@ public class GameManager : MonoBehaviour
         // PoolManager Player 할당
         poolManager.player = player;
 
-        // EnemyManager delegate 할(당
-      
+        // EnemyManager delegate 할당
         poolManager.enemyManager.onEnemiesChanged = OnEnemiesChanged;
         poolManager.enemyManager.onEnemyKilled = OnEnemyKilled;
 
@@ -135,29 +149,30 @@ public class GameManager : MonoBehaviour
         // BossManager delegate 할당
         bossManager.onBossHasKilled = OnBossHasKilled;
 
-        //gameTime = maxGameTime - 5f;
+        //gameTime = maxGameTime - 2f;
         //player.isPlayerShielded = true;
         //player.level = 20;
+
+        player.playerData = playerData; // player에 playerData 할당
+        skillSelectManager.playerData = playerData;// skillSelectManager에 playerData 할당
     }
 
     void Start()
     {
-   
-        sceneNum = SceneManager.GetActiveScene().buildIndex;
 
-        tilemapManager.buildIndex = sceneNum;
+        if (SceneManager.GetActiveScene().name == "Stage1")
+            skillSelectManager.ChooseStartSkill(); // 시작 스킬 선택
 
-
-        SetPlayerInfo();
+    
 
         // Stage1 배경음 플레이
         GameAudioManager.instance.bgmPlayer.clip = GameAudioManager.instance.bgmClips[(int)Bgm.Stage1];
         GameAudioManager.instance.bgmPlayer.Play();
 
+
         SpawnStartEnemies();
 
-        if (sceneNum == 1)
-             skillSelectManager.ChooseStartSkill(); // 시작 스킬 선택
+  
     }
 
     // Update is called once per frame
@@ -212,7 +227,7 @@ public class GameManager : MonoBehaviour
         switch (sceneNum)
         {
             case 1:
-                Vector2 PlayerPos = new Vector2(60,60); 
+                Vector2 PlayerPos = new Vector2(40,40); 
                 player.transform.position = PlayerPos;
 
                 Vector2 AreaSize = new Vector2(120, 120);
@@ -416,8 +431,8 @@ public class GameManager : MonoBehaviour
     IEnumerator PlayerHasKilled()
     {
         isGameOver = true;
+        isDeadPageOn = true;
         gameOverObject.SetActive(true);
-        //HpBarObject.SetActive(false);
 
         yield return new WaitForSeconds(0.5f); // 0.5초 이후 시간 차 두기
         GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Dead); // 캐릭터 사망 시 효과음
@@ -431,10 +446,12 @@ public class GameManager : MonoBehaviour
     {
         StartCoroutine(BossHasKilled()); // 효과음 넣기 위한 코루틴 생성 및 사용
     }
+
     IEnumerator BossHasKilled()
     {
         player.isPlayerShielded = true;
         isGameOver = true;
+        isClearPageOn = true;
         gameClearObject.SetActive(true);
         //HpBarObject.SetActive(false);
 
@@ -449,7 +466,9 @@ public class GameManager : MonoBehaviour
     private void OnPauseButtonClicked()
     {
         pauseObject.SetActive(true);
-        
+        isPausePageOn = true; 
+        inputManager.PauseButtonObject.interactable = false; // Pause버튼 비활성화
+
         // UI 비활성화
         //HpBarObject.SetActive(false);
         HpStatusLetteringObject.SetActive(false);
@@ -462,7 +481,9 @@ public class GameManager : MonoBehaviour
     private void onPlayButtonClicked()
     {
         pauseObject.SetActive(false);
-        
+        isPausePageOn = false;
+        inputManager.PauseButtonObject.interactable = true; // Pause버튼 활성화
+
         // UI 활성화
         //HpBarObject.SetActive(true);
         HpStatusLetteringObject.SetActive(true);
@@ -493,7 +514,7 @@ public class GameManager : MonoBehaviour
     {
         if (!player.isPlayerDead)
         {
-            player.kill++;
+            player.playerData.kill++;
         }
 
         int ranNum = UnityEngine.Random.Range(0, 11);
@@ -558,34 +579,20 @@ public class GameManager : MonoBehaviour
 
     private void OnSkillSelectObjectDisplayed()
     {
-        // UI 비활성화
-        //HpBarObject.SetActive(false);
-        /* 하단 패널 비활성화 할 이유 없음
-        HpStatusLetteringObject.SetActive(false);
-        HpStatusObject.SetActive(false);
-        SkillPanelObject.SetActive(false);
-        CharacterProfileObject.SetActive(false);
-        */
+        isSkillSelectPageOn = true;
         inputManager.PauseButtonObject.interactable = false;
     }
 
     private void OnSkillSelectObjectHided()
     {
-        // UI 활성화
-        //HpBarObject.SetActive(true);
-        /* 하단 패널 비활성화 할 이유 없음
-        HpStatusLetteringObject.SetActive(true);
-        HpStatusObject.SetActive(true);
-        SkillPanelObject.SetActive(true);
-        CharacterProfileObject.SetActive(true);
-        */
+        isSkillSelectPageOn = false;
         inputManager.PauseButtonObject.interactable = true;
     }
 
     private void OnPlayerHealed()
     {
-        player.hp += 10;
-        if (player.hp > 100) { player.hp = 100; }
+        player.playerData.hp += 10;
+        if (player.playerData.hp > 100) { player.playerData.hp = 100; }
     }
 
     // 스킬이 선택되면 즉시 스킬 쿨타임을 초기화 시킨다
@@ -599,11 +606,11 @@ public class GameManager : MonoBehaviour
     {
         switch (num)
         {
-            case 3: { player.damageReductionValue = value; break; }
-            case 4: { player.speed *= value; break; } // 얘는 플레이어 스피드에 즉시 적용
+            case 3: { player.playerData.damageReductionValue = value; break; }
+            case 4: { player.playerData.speed *= value; break; } // 얘는 플레이어 스피드에 즉시 적용
             case 5:
                 {
-                    player.magnetRange = value;
+                    player.playerData.magnetRange = value;
                     player.ChangeMagnetRange();
                     break;
                 }
@@ -614,5 +621,38 @@ public class GameManager : MonoBehaviour
     public void SendClearWall_RightX(float xValue)
     {
         followCam.clearWall_RightEndX = xValue;
+    }
+
+    
+
+    void PlayerInit()
+    {
+        playerData.speed = 6;
+        playerData.hp = 100;
+        playerData.maxHp = 100;
+        playerData.Exp = 0;
+        playerData.level = 0;
+
+        playerData.nextExp = new int[100];
+
+        int num = 0;
+        for (int i = 0; i < playerData.nextExp.Length; i++)
+        {
+            if (playerData.level >= 30)
+            {
+                num += 100;
+                playerData.nextExp[i] = num;
+            }
+            else
+            {
+                num += 5;
+                playerData.nextExp[i] = num;
+            }
+        }
+
+        playerData.damageReductionValue = 1f;
+        playerData.magnetRange = 0.25f;
+
+
     }
 }

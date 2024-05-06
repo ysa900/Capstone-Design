@@ -1,14 +1,15 @@
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RePositon : MonoBehaviour
 {
     public GameObject clearWall;
 
-    int sceneNum;
     bool isStage2TimeOver;
     int playerAreaSize;
+    int GroundSize = 160;
 
     private void Start()
     {
@@ -42,22 +43,22 @@ public class RePositon : MonoBehaviour
             case "Ground":
                 if(diffX > playerAreaSize && diffY > playerAreaSize)
                 {
-                    transform.Translate(Vector3.right * dirtionX * playerAreaSize);
-                    transform.Translate(Vector3.up * dirtionY * playerAreaSize);
+                    transform.Translate(Vector3.right * dirtionX * GroundSize);
+                    transform.Translate(Vector3.up * dirtionY * GroundSize);
                 }
                 else if(diffX > diffY)
                 {
-                    transform.Translate(Vector3.right * dirtionX * playerAreaSize); // 오른쪽 방향 * (-1 or 1) * 거리
+                    transform.Translate(Vector3.right * dirtionX * GroundSize); // 오른쪽 방향 * (-1 or 1) * 거리
                 }
                 else if (diffX < diffY)
                 {
-                    transform.Translate(Vector3.up * dirtionY * playerAreaSize);// 윗 방향 * (-1 or 1) * 거리
+                    transform.Translate(Vector3.up * dirtionY * GroundSize);// 윗 방향 * (-1 or 1) * 거리
                 }
                 break;
 
             case "Corridor":
                 // Stage2에서 5분이 지나면 Reposition이 멈추고, 보스 방으로 가는 길이 열려야 함
-                isStage2TimeOver = sceneNum == 3 && GameManager.instance.gameTime >= 5 * 60;
+                isStage2TimeOver = SceneManager.GetActiveScene().name == "Stage2" && GameManager.instance.gameTime >= 5 * 60;
                 
                 if (isStage2TimeOver) break;
 
@@ -84,7 +85,6 @@ public class RePositon : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
 
-        sceneNum = GameManager.instance.sceneNum;
         playerAreaSize = (int)GameManager.instance.player.gameObject.GetComponentInChildren<BoxCollider2D>().size.x;
     }
 }

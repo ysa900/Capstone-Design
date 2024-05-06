@@ -27,11 +27,9 @@ public class PoolManager : MonoBehaviour
     List<BossSkill>[] Boss_Skill_pools;
     List<GameObject> Damage_Text_pools = new List<GameObject>();
 
+
     private void Awake()
     {
-        // 클래스 객체들 초기화
-        enemyManager = FindAnyObjectByType<EnemyManager>();
-        Debug.Log(enemyManager);
         Enemy_pools = new List<Enemy>[Enemy_prefabs.Length];
         for (int index = 0; index < Enemy_pools.Length; index++)
         {
@@ -55,6 +53,8 @@ public class PoolManager : MonoBehaviour
         {
             Boss_Skill_pools[index] = new List<BossSkill>();
         }
+
+
     }
 
     public Enemy GetEnemy(int index)

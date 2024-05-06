@@ -43,7 +43,6 @@ public class LobbyManager : MonoBehaviour
     // Character Page 오브젝트
     public GameObject CharacterPage;
 
-
     // Setting Page 오브젝트
     public GameObject SettingPage;
 
@@ -62,7 +61,5 @@ public class LobbyManager : MonoBehaviour
 
         SettingPage.SetActive(false);
 
-    }
-
-  
+    }  
 }

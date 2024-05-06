@@ -6,7 +6,20 @@ public class Teleport:MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         bool isPlayer = collision.gameObject.tag == "Player";
-        if(isPlayer) SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1); // Stage3 씬 불러오기
+
+
+        if (isPlayer)
+        {
+            switch(SceneManager.GetActiveScene().name)
+            {
+                case "Stage1":
+                    SceneManager.LoadScene("Splash2"); // Stage1 -> Splash2
+                    break;
+                case "Stage2":
+                    SceneManager.LoadScene("Splash3"); // Stage2 -> Splash3
+                    break;
+            } 
+        }
     }
 }
 
