@@ -13,7 +13,7 @@ public class MainPageManager : MonoBehaviour
     {
         // 시작 시 MainPage 제외 비활성화
         lobbyManager.CharacterPage.SetActive(false);
-        lobbyManager.ItemPage.SetActive(false);
+  
 
         // Exit 버튼 눌렀을 때
         UnityEngine.UI.Button ExitButton = lobbyManager.ExitButtonObject.GetComponent<UnityEngine.UI.Button>();
@@ -24,9 +24,7 @@ public class MainPageManager : MonoBehaviour
         // MainPage의 Option 버튼 눌렀을 때
         UnityEngine.UI.Button Main_OptionButton = lobbyManager.MainPageOptionButtonObject.GetComponent<UnityEngine.UI.Button>();
         Main_OptionButton.onClick.AddListener(Main_OptionButtonClicked);
-        // Item 버튼 눌렀을 때
-        UnityEngine.UI.Button ItemButton = lobbyManager.ItemButtonObject.GetComponent<UnityEngine.UI.Button>();
-        ItemButton.onClick.AddListener(ItemButtonClicked);
+
     }
 
     // Exit 버튼 눌렀을 때
@@ -55,18 +53,30 @@ public class MainPageManager : MonoBehaviour
     // Main Page의 Option 버튼 클릭 시
     private void Main_OptionButtonClicked()
     {
-        lobbyManager.SettingPage.SetActive(true);
+        if(!lobbyManager.isSettingPageOn) // SettingPage 열려있지 않다면
+        {
+            lobbyManager.isSettingPageOn = true;
+            lobbyManager.SettingPage.SetActive(true);
 
-        // 다른 버튼들 비활성화
-        lobbyManager.CharacterButtonObject.enabled = false; // Character 버튼 비활성화
-        lobbyManager.ExitButtonObject.enabled = false; // Exit 버튼 비활성화
-        lobbyManager.ItemPageBackButtonObject.enabled = false;
+            // 다른 버튼들 비활성화
+            lobbyManager.CharacterButtonObject.interactable = false; // Character 버튼 비활성화
+            lobbyManager.ExitButtonObject.interactable = false; // Exit 버튼 비활성화
+        }
+        else // SettingPage 열려있다면
+        {
+            lobbyManager.isSettingPageOn = false;
+            lobbyManager.SettingPage.SetActive(false);
+
+            // 다른 버튼들 비활성화
+            lobbyManager.CharacterButtonObject.interactable = true; // Character 버튼 비활성화
+            lobbyManager.ExitButtonObject.interactable = true; // Exit 버튼 비활성화
+        }
+
+        
+
+
+
     }
 
-    // Item 버튼 클릭 시
-    private void ItemButtonClicked()
-    {
-        lobbyManager.MainPage.SetActive(false);
-        lobbyManager.ItemPage.SetActive(true);
-    }
+
 }

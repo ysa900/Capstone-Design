@@ -8,13 +8,15 @@ public class PlayerData : ScriptableObject
     [Header("# Player 정보")]
     public float speed;
     public float hp;
-    public float maxHp = 100;
-    public int Exp;
+    public float maxHp;
+    public float Exp;
     public int level;
     public int[] nextExp;
 
+    public int kill; // 몬스터 킬 수
+
     // 플레이어 패시브 효과 관련 변수
     [Header("# Player 패시브 효과")]
-    public float damageReductionValue = 1f; // 뎀감
+    public float damageReductionValue; // 뎀감
     public float magnetRange; // 자석 범위
 }

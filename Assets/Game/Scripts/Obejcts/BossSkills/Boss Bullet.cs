@@ -123,3 +123,4 @@ public class Boss_Bullet : BossSkill, IPullingObject
         StartCoroutine(Dead());
     }
 }
+

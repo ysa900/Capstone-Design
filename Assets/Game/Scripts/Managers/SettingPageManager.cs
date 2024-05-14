@@ -30,12 +30,11 @@ public class SettingPageManager : MonoBehaviour
         lobbyManager.SettingPage.SetActive(false);
 
         // MainPage인 상황
-        if (lobbyManager.MainPage.activeSelf) // lobbyManager.isMainPageOn true 확인과 같은 문구
+        if (lobbyManager.MainPage.activeSelf) // lobbyManager.isMainPageOn가 true인지 확인하는 문구
         {
             // 버튼 재활성화시키기
-            lobbyManager.CharacterButtonObject.enabled = true;
-            lobbyManager.ExitButtonObject.enabled = true;
-            lobbyManager.MainPageOptionButtonObject.enabled = true;
+            lobbyManager.CharacterButtonObject.interactable = true;
+            lobbyManager.ExitButtonObject.interactable = true;
         }
         // CharacterPage인 상황
         else if (lobbyManager.isCharacterPageOn && !lobbyManager.isMainPageOn)

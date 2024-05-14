@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PoolManager : MonoBehaviour
 {
-    const int ENEMY_NUM = 4;
+    const int ENEMY_NUM = 10;
     const int EXP_NUM = 3;
     const int SKILL_NUM = 15; // 불: 0 ~ 6, 전기: 7 ~ 10, 물: 11 ~ 14
     const int BOSS_SKILL_NUM = 4;
@@ -14,7 +14,7 @@ public class PoolManager : MonoBehaviour
     public Player player;
 
     // 프리팹 보관할 변수
-    public Enemy[] Enemy_prefabs = new Enemy[ENEMY_NUM]; // ENEMY_NUM = 4
+    public Enemy[] Enemy_prefabs = new Enemy[ENEMY_NUM]; // ENEMY_NUM = 7
     public EXP[] Exp_prefabs = new EXP[EXP_NUM]; // EXP_NUM = 3
     public Skill[] Skill_prefabs = new Skill[SKILL_NUM]; // SKILL_NUM = 15
     public BossSkill[] Boss_Skill_prefabs = new BossSkill[BOSS_SKILL_NUM]; // BOSS_SKILL_NUM = 4
@@ -27,11 +27,9 @@ public class PoolManager : MonoBehaviour
     List<BossSkill>[] Boss_Skill_pools;
     List<GameObject> Damage_Text_pools = new List<GameObject>();
 
+
     private void Awake()
     {
-        // 클래스 객체들 초기화
-        enemyManager = FindAnyObjectByType<EnemyManager>();
-
         Enemy_pools = new List<Enemy>[Enemy_prefabs.Length];
         for (int index = 0; index < Enemy_pools.Length; index++)
         {
@@ -55,6 +53,8 @@ public class PoolManager : MonoBehaviour
         {
             Boss_Skill_pools[index] = new List<BossSkill>();
         }
+
+
     }
 
     public Enemy GetEnemy(int index)
@@ -442,7 +442,7 @@ public class PoolManager : MonoBehaviour
         Boss_Skill_pools[index].Add(obj);
     }
 
-    public GameObject GetText()
+    public GameObject GetText(int damage, string skillTag)
     {
         GameObject select = null;
 
@@ -455,6 +455,8 @@ public class PoolManager : MonoBehaviour
                 select = item;
                 if (select.GetComponent<IPullingObject>() != null)
                 {
+                    select.GetComponent<DamageText>().damage = damage;
+                    select.GetComponent<DamageText>().skillTag = skillTag;
                     select.GetComponent<IPullingObject>().Init();
                 }
                 select.gameObject.SetActive(true);
@@ -468,6 +470,8 @@ public class PoolManager : MonoBehaviour
             // 새롭게 생성하고 select 변수에 할당
             // 자기 자신(transform) 추가 이유: hierarchy창 지저분해지는 거 방지
             select = Instantiate(damageText);
+            select.GetComponent<DamageText>().damage = damage;
+            select.GetComponent<DamageText>().skillTag = skillTag;
 
             select.transform.SetParent(this.gameObject.transform.GetChild(4));
             Damage_Text_pools.Add(select);

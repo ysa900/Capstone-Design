@@ -140,7 +140,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      VAMM_Logo_0: -3655917454697009994
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

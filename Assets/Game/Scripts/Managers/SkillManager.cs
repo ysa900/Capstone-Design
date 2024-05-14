@@ -21,6 +21,7 @@ public class SkillManager : MonoBehaviour
     public SkillData2 skillData;
     public SkillData2 passiveSkillData;
 
+
     private bool isShadowAlive; // 그림자가 살아있으면 알파값을 조정하기 위함
     private float alpha = 0;
 
@@ -95,7 +96,7 @@ public class SkillManager : MonoBehaviour
         // Skill Data 초기화
         for (int i = 0; i < skillData.level.Length; i++) { skillData.level[i] = 0; }
 
-        skillData.Damage[0] = 230f;
+        skillData.Damage[0] = 23f;
         skillData.Damage[1] = 20f;
         skillData.Damage[2] = 5.0f; // dot damage skill
         skillData.Damage[3] = 20f;

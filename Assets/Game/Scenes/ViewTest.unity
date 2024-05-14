@@ -136,7 +136,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!156049354 &136179132
 Grid:
   m_ObjectHideFlags: 0
@@ -531,6 +531,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1158786266}
+  clearWall_RightEndX: 0
 --- !u!1 &353195518
 GameObject:
   m_ObjectHideFlags: 0
@@ -608,7 +609,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -2
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
@@ -16735,7 +16736,45 @@ CompositeCollider2D:
   m_GeometryType: 0
   m_GenerationType: 0
   m_EdgeRadius: 0
-  m_ColliderPaths: []
+  m_ColliderPaths:
+  - m_Collider: {fileID: 353195524}
+    m_ColliderPaths:
+    - - X: 390000000
+        Y: 330000000
+      - X: 400000000
+        Y: 330000000
+      - X: 400000000
+        Y: 390000000
+      - X: 280000000
+        Y: 390000000
+      - X: 280000000
+        Y: 340000000
+      - X: 340000000
+        Y: 340000000
+      - X: 340000000
+        Y: 330000000
+      - X: 380000000
+        Y: 330000000
+      - X: 380000000
+        Y: 320000000
+      - X: 390000000
+        Y: 320000000
+    - - X: 300000000
+        Y: 360000000
+      - X: 300000000
+        Y: 370000000
+      - X: 310000000
+        Y: 370000000
+      - X: 310000000
+        Y: 360000000
+    - - X: 350000000
+        Y: 340000000
+      - X: 350000000
+        Y: 350000000
+      - X: 360000000
+        Y: 350000000
+      - X: 360000000
+        Y: 340000000
   m_CompositePaths:
     m_Paths:
     - - {x: 38.999973, y: 32}
@@ -16837,6 +16876,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 683f8c6edff6e0e4a84974b2af22030c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  clearWall: {fileID: 0}
 --- !u!114 &557740851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17167,12 +17207,24 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1158786266}
     - target: {fileID: 4877174451190951567, guid: c9248b3a6f9f64a6aab06d752e5fab9a, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4877174451190951567, guid: c9248b3a6f9f64a6aab06d752e5fab9a, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4877174451190951567, guid: c9248b3a6f9f64a6aab06d752e5fab9a, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4877174451190951567, guid: c9248b3a6f9f64a6aab06d752e5fab9a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -7.71
+      value: -5.34
       objectReference: {fileID: 0}
     - target: {fileID: 4877174451190951567, guid: c9248b3a6f9f64a6aab06d752e5fab9a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.3347521
+      value: 2.37
       objectReference: {fileID: 0}
     - target: {fileID: 4877174451190951567, guid: c9248b3a6f9f64a6aab06d752e5fab9a, type: 3}
       propertyPath: m_LocalPosition.z
@@ -17205,6 +17257,10 @@ PrefabInstance:
     - target: {fileID: 4877174451190951567, guid: c9248b3a6f9f64a6aab06d752e5fab9a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4877174451190951567, guid: c9248b3a6f9f64a6aab06d752e5fab9a, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3870345909828825760, guid: c9248b3a6f9f64a6aab06d752e5fab9a, type: 3}
@@ -17815,7 +17871,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -2
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
@@ -33942,7 +33998,25 @@ CompositeCollider2D:
   m_GeometryType: 0
   m_GenerationType: 0
   m_EdgeRadius: 0
-  m_ColliderPaths: []
+  m_ColliderPaths:
+  - m_Collider: {fileID: 1451075131}
+    m_ColliderPaths:
+    - - X: 100000000
+        Y: 40000000
+      - X: 110000000
+        Y: 40000000
+      - X: 110000000
+        Y: 100000000
+      - X: 100000000
+        Y: 100000000
+      - X: 100000000
+        Y: 110000000
+      - X: 0
+        Y: 110000000
+      - X: 0
+        Y: -10000000
+      - X: 100000000
+        Y: -10000000
   m_CompositePaths:
     m_Paths:
     - - {x: 9.99997, y: -1}
@@ -34034,6 +34108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 683f8c6edff6e0e4a84974b2af22030c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  clearWall: {fileID: 0}
 --- !u!1 &1574215247 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2110891535414820578, guid: c9248b3a6f9f64a6aab06d752e5fab9a, type: 3}
@@ -34364,7 +34439,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -2
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
@@ -50491,7 +50566,73 @@ CompositeCollider2D:
   m_GeometryType: 0
   m_GenerationType: 0
   m_EdgeRadius: 0
-  m_ColliderPaths: []
+  m_ColliderPaths:
+  - m_Collider: {fileID: 1806926232}
+    m_ColliderPaths:
+    - - X: 400000000
+        Y: 110000000
+      - X: 370000000
+        Y: 110000000
+      - X: 370000000
+        Y: 100000000
+      - X: 340000000
+        Y: 100000000
+      - X: 340000000
+        Y: 110000000
+      - X: 320000000
+        Y: 110000000
+      - X: 320000000
+        Y: 100000000
+      - X: 310000000
+        Y: 100000000
+      - X: 310000000
+        Y: 80000000
+      - X: 320000000
+        Y: 80000000
+      - X: 320000000
+        Y: 90000000
+      - X: 350000000
+        Y: 90000000
+      - X: 350000000
+        Y: 80000000
+      - X: 360000000
+        Y: 80000000
+      - X: 360000000
+        Y: 70000000
+      - X: 370000000
+        Y: 70000000
+      - X: 370000000
+        Y: 60000000
+      - X: 330000000
+        Y: 60000000
+      - X: 330000000
+        Y: 50000000
+      - X: 320000000
+        Y: 50000000
+      - X: 320000000
+        Y: 60000000
+      - X: 300000000
+        Y: 60000000
+      - X: 300000000
+        Y: 40000000
+      - X: 290000000
+        Y: 40000000
+      - X: 290000000
+        Y: 20000000
+      - X: 300000000
+        Y: 20000000
+      - X: 300000000
+        Y: 10000000
+      - X: 290000000
+        Y: 10000000
+      - X: 290000000
+        Y: 0
+      - X: 300000000
+        Y: 0
+      - X: 300000000
+        Y: -10000000
+      - X: 400000000
+        Y: -10000000
   m_CompositePaths:
     m_Paths:
     - - {x: 39.999973, y: -1}
@@ -50607,6 +50748,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 683f8c6edff6e0e4a84974b2af22030c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  clearWall: {fileID: 0}
 --- !u!1 &1974881286
 GameObject:
   m_ObjectHideFlags: 0
@@ -50684,7 +50826,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -2
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
@@ -66811,7 +66953,53 @@ CompositeCollider2D:
   m_GeometryType: 0
   m_GenerationType: 0
   m_EdgeRadius: 0
-  m_ColliderPaths: []
+  m_ColliderPaths:
+  - m_Collider: {fileID: 1974881292}
+    m_ColliderPaths:
+    - - X: 120000000
+        Y: 330000000
+      - X: 110000000
+        Y: 330000000
+      - X: 110000000
+        Y: 340000000
+      - X: 120000000
+        Y: 340000000
+      - X: 120000000
+        Y: 390000000
+      - X: 0
+        Y: 390000000
+      - X: 0
+        Y: 320000000
+      - X: 20000000
+        Y: 320000000
+      - X: 20000000
+        Y: 310000000
+      - X: 120000000
+        Y: 310000000
+    - - X: 100000000
+        Y: 360000000
+      - X: 100000000
+        Y: 380000000
+      - X: 110000000
+        Y: 380000000
+      - X: 110000000
+        Y: 360000000
+    - - X: 60000000
+        Y: 340000000
+      - X: 60000000
+        Y: 350000000
+      - X: 100000000
+        Y: 350000000
+      - X: 100000000
+        Y: 340000000
+    - - X: 70000000
+        Y: 330000000
+      - X: 70000000
+        Y: 320000000
+      - X: 20000000
+        Y: 320000000
+      - X: 20000000
+        Y: 330000000
   m_CompositePaths:
     m_Paths:
     - - {x: 11.99997, y: 31}
@@ -66917,6 +67105,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 683f8c6edff6e0e4a84974b2af22030c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  clearWall: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

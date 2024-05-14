@@ -33,7 +33,6 @@ public class CharacterPageManager : MonoBehaviour
     {
         lobbyManager.CharacterExplainGroup.SetActive(true);
 
-        //lobbyManager.isGameStartEnabled = true;
         lobbyManager.isCharacterSelect = true;
         lobbyManager.SelectAssassinButtonObject.enabled = false;
         lobbyManager.SelectWarriorButtonObject.enabled = false;
@@ -44,9 +43,9 @@ public class CharacterPageManager : MonoBehaviour
     // Character Page 뒤로가기 버튼 클릭 시
     private void CharacterPage_BackButtonClicked()
     {
-        lobbyManager.CharacterPageOptionButtonObject.enabled = true; // 옵션 버튼 재활성화
+        //lobbyManager.CharacterPageOptionButtonObject.enabled = true; // 옵션 버튼 재활성화
 
-        // 캐릭터 선택도 안하고 옵션창도 떠있지 않은 상황
+        // 캐릭터 선택도 안하고 옵션창도 떠있지 않은 상황 -> Main Lobby 화면으로..
         if (!lobbyManager.isCharacterSelect && !lobbyManager.isSettingPageOn)
         {
             lobbyManager.CharacterPage.SetActive(false);
@@ -55,13 +54,7 @@ public class CharacterPageManager : MonoBehaviour
             lobbyManager.isMainPageOn = true;
             lobbyManager.isSettingPageOn = false;
         }
-
-        // 캐릭터 선택되어 있지 않고 옵션창만 떠있는 상황
-        else if (!lobbyManager.isCharacterSelect && lobbyManager.isSettingPageOn)
-        {
-            // 어차피 뒤로가기 버튼 비활성화 되어있음
-        }
-        // 캐릭터 선택되어 있고 옵션창은 안떠있는 상황
+        // 캐릭터 선택되어 있고 옵션창은 안떠있는 상황 -> 다시 클래스 선택창으로
         else if(lobbyManager.isCharacterSelect && !lobbyManager.isSettingPageOn)
         {
             lobbyManager.CharacterExplainGroup.SetActive(false);
@@ -73,7 +66,7 @@ public class CharacterPageManager : MonoBehaviour
             lobbyManager.isCharacterSelect = false;
             lobbyManager.gameStartButtonObject.interactable = false;
         }
-        // 캐릭터 선택되어 있고 옵션창도 떠있는 상황
+        // 캐릭터 선택되어 있고 옵션창도 떠있는 상황 & 캐릭터 선택되어 있지 않고 옵션창만 떠있는 상황
         else
         {
             // 어차피 뒤로가기 버튼 비활성화 되어있음
@@ -82,35 +75,60 @@ public class CharacterPageManager : MonoBehaviour
 
     private void CharacterPage_OptionButtonClicked()
     {
-        lobbyManager.SettingPage.SetActive(true);
-        lobbyManager.CharacterPageBackButtonObject.enabled = false; // CharacterPage의 뒤로가기 버튼 무효화
-
-        // 캐릭터 선택 버튼들 무효화
-        lobbyManager.SelectAssassinButtonObject.enabled = false;
-        lobbyManager.SelectWarriorButtonObject.enabled = false;
-        lobbyManager.SelectMageButtonObject.enabled = false;
-
-        // Character Page에서
-        // 캐릭터 선택하지 않은 상황에서 Option 버튼 누르기
-        if (!lobbyManager.isCharacterSelect && lobbyManager.isCharacterPageOn)
+        if(!lobbyManager.isSettingPageOn) // SettingPage 열려있지 않다면
         {
-            lobbyManager.isSettingPageOn = true;
-            lobbyManager.gameStartButtonObject.interactable = false;
-            lobbyManager.CharacterPageOptionButtonObject.enabled = false;
+            lobbyManager.SettingPage.SetActive(true);
+            lobbyManager.CharacterPageBackButtonObject.interactable = false; // CharacterPage의 뒤로가기 버튼 무효화
+
+            // 캐릭터 선택 버튼들 무효화
+            lobbyManager.SelectAssassinButtonObject.enabled = false;
+            lobbyManager.SelectWarriorButtonObject.enabled = false;
+            lobbyManager.SelectMageButtonObject.enabled = false;
+
+            // 캐릭터 선택하지 않은 상황에서 Option 버튼 누르기
+            if (!lobbyManager.isCharacterSelect && lobbyManager.isCharacterPageOn)
+            {
+                lobbyManager.isSettingPageOn = true;
+                lobbyManager.gameStartButtonObject.interactable = false;
+            }
+            // 캐릭터 선택한 상황에서 Option 버튼 누르기
+            else if (lobbyManager.isCharacterSelect && lobbyManager.isCharacterPageOn)
+            {
+                lobbyManager.isSettingPageOn = true;
+                lobbyManager.gameStartButtonObject.interactable = false;
+            }
         }
-        // 캐릭터 선택한 상황에서 Option 버튼 누르기
-        else if(lobbyManager.isCharacterSelect && lobbyManager.isCharacterPageOn)
+        else // SettingPage 열려 있다면
         {
-            lobbyManager.CharacterPageOptionButtonObject.enabled = false;
-            lobbyManager.isSettingPageOn = true;
-            lobbyManager.gameStartButtonObject.interactable = false;
+            lobbyManager.SettingPage.SetActive(false);
+            lobbyManager.CharacterPageBackButtonObject.interactable = true; // CharacterPage의 뒤로가기 버튼 무효화
+
+            // 캐릭터 선택 버튼들 재활성화
+            lobbyManager.SelectAssassinButtonObject.enabled = true;
+            lobbyManager.SelectWarriorButtonObject.enabled = true;
+            lobbyManager.SelectMageButtonObject.enabled = true;
+            lobbyManager.isSettingPageOn = false;
+
+            // 캐릭터 선택하지 않은 상황에서 Option 버튼 누르기
+            if (lobbyManager.isCharacterSelect && lobbyManager.isCharacterPageOn)
+            {
+                lobbyManager.gameStartButtonObject.interactable = true;
+            }
+            //// 캐릭터 선택한 상황에서 Option 버튼 누르기
+            //else if (lobbyManager.isCharacterSelect && lobbyManager.isCharacterPageOn)
+            //{
+            //    lobbyManager.gameStartButtonObject.interactable = true;
+            //}
+            //else
+            //{
+
+            //}
         }
     }
 
     // GameStart 버튼 클릭 시
     private void GameStartButtonClicked()
     {
-
-        SceneManager.LoadScene("Splash1"); // Splash1 씬 불러오기
+        SceneManager.LoadScene("Stage1"); // Stage1 씬 불러오기
     }
 }

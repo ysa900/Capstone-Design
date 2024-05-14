@@ -25,7 +25,7 @@ public class EXP : Object, IPullingObject
         Vector2 myPosition = transform.position;
 
         float distance = Vector2.Distance(myPosition, playerPosition);
-        isInMagnetRange = distance <= player.magnetRange * player.transform.localScale.x; // 플레이어 사이즈 만큼 보정
+        isInMagnetRange = distance <= player.playerData.magnetRange * player.transform.localScale.x; // 플레이어 사이즈 만큼 보정
 
         // Absorber가 감지됐으면 잠금 풀기
         if (isInMagnetRange) { rigid.constraints = RigidbodyConstraints2D.FreezeRotation; } 

@@ -1,5 +1,7 @@
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "Skills", menuName = "Scriptable Object/SkillData")]
+
 public class SkillData : ScriptableObject
 {
     public enum SkillType { Fire1, Fire2, Fire3, Fire4,
@@ -8,6 +10,7 @@ public class SkillData : ScriptableObject
                             Wind1, Wind2, Wind3, Wind4 }
 
 
+    // Start is called before the first frame update
     [Header("# Main Info")]
     public SkillType skillType;
     public int skillId;

@@ -1,13 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SplashManager : MonoBehaviour
 {
     public KoreanTyperSimple[] koreanTyper;
-    
+    [SerializeField] private AudioMixer m_AudioMixer;
+
     [SerializeField] Image backgroundImage = null; // 뒷배경
     [SerializeField] GameObject GuideTextObject;
     [SerializeField] GameObject[] imageObjects = null;
@@ -40,7 +42,6 @@ public class SplashManager : MonoBehaviour
         UnityEngine.UI.Button goNextStageButton = goNextStageButtonObject.GetComponent<UnityEngine.UI.Button>();
         goNextStageButton.onClick.AddListener(OnSelectNextStage);
 
-
         for (int index=0; index<koreanTyper.Length; index++)
         {
             koreanTyper[index].onTextTypeFinish = OnTextTypeFinish;
@@ -69,7 +70,6 @@ public class SplashManager : MonoBehaviour
                     StartCoroutine(WaitForGuidePanel());
                     break;
             }
-            
 
             return;
         }
@@ -103,11 +103,11 @@ public class SplashManager : MonoBehaviour
                 break;
             case "Splash1":
                 //SceneManager.LoadScene("Stage1");
-                SceneManager.LoadScene("Game");
+                SceneManager.LoadScene("Stage1");
                 break;
             case "Splash2":
                 //SceneManager.LoadScene("Stage2");
-                SceneManager.LoadScene("Game");
+                SceneManager.LoadScene("Stage2");
                 break;
 
         }

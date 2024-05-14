@@ -8,7 +8,7 @@ public class SkillSelectManager: MonoBehaviour
 {
     // 개발용 (스킬 테스트용)
     bool isSkillTest = false;
-    int testSkillIndex = 9;
+    int testSkillIndex = 8;
 
     // 현재 고를 수 있는 스킬 번호 (0 ~ 4 레벨: 5번까지 / 5 ~ 9 레벨: 8번까지 / 10레벨 이상 : 11번까지)
     // 12번은 Blood임
@@ -62,6 +62,8 @@ public class SkillSelectManager: MonoBehaviour
 
     public SkillData2 skillData; // 스킬 데이터
     public SkillData2 passiveSkillData; // 패시브 스킬 데이터
+    public PlayerData playerData; // 플레이어 데이터
+
 
     // skillSelectObject의 아이콘, 스킬이름, 스킬 설명
     Image icon;
@@ -122,6 +124,7 @@ public class SkillSelectManager: MonoBehaviour
 
     public delegate void OnPassiveSkillSelected(int num, float value); // num: 패시브 스킬 종류, value: 바뀐 수치 값
     public OnPassiveSkillSelected onPassiveSkillSelected;
+
 
     private void Awake()
     {
@@ -271,7 +274,7 @@ public class SkillSelectManager: MonoBehaviour
     {
         Time.timeScale = 0;
 
-        int playerLevel = GameManager.instance.player.level;
+        int playerLevel = playerData.level;
 
         if (playerLevel <= 5)
         {
