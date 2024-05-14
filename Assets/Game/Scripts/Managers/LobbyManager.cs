@@ -61,5 +61,5 @@ public class LobbyManager : MonoBehaviour
 
         SettingPage.SetActive(false);
 
-    }  
+    }
 }

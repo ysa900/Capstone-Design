@@ -62,7 +62,7 @@ public class CharacterPageManager : MonoBehaviour
             // 어차피 뒤로가기 버튼 비활성화 되어있음
         }
         // 캐릭터 선택되어 있고 옵션창은 안떠있는 상황
-        else if(lobbyManager.isCharacterSelect && !lobbyManager.isSettingPageOn)
+        else if (lobbyManager.isCharacterSelect && !lobbyManager.isSettingPageOn)
         {
             lobbyManager.CharacterExplainGroup.SetActive(false);
             // 캐릭터 선택 버튼들 활성화
@@ -99,7 +99,7 @@ public class CharacterPageManager : MonoBehaviour
             lobbyManager.CharacterPageOptionButtonObject.enabled = false;
         }
         // 캐릭터 선택한 상황에서 Option 버튼 누르기
-        else if(lobbyManager.isCharacterSelect && lobbyManager.isCharacterPageOn)
+        else if (lobbyManager.isCharacterSelect && lobbyManager.isCharacterPageOn)
         {
             lobbyManager.CharacterPageOptionButtonObject.enabled = false;
             lobbyManager.isSettingPageOn = true;
