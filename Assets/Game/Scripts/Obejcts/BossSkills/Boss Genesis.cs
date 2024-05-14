@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class Boss_Genesis : BossSkill, IPullingObject
+public class Boss_Genesis : BossSkill, IPoolingObject
 {
     //public float impactPonitX;
     //public float impactPonitY;

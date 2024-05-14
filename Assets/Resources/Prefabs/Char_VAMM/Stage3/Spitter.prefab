@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 9002796513736362784}
   - component: {fileID: 5657231637956615703}
   - component: {fileID: 7985702607334949959}
-  - component: {fileID: 4788991516957631958}
   - component: {fileID: 2406250041084801470}
   - component: {fileID: 3957377648651410911}
+  - component: {fileID: 555903092678305690}
   m_Layer: 0
   m_Name: Spitter
   m_TagString: Spitter
@@ -110,25 +110,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &4788991516957631958
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7816865332231855208}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f766ebcbc4cfff44b152f01b06caa71, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  hp: 0
-  speed: 2
-  isEnemyLookLeft: 0
-  index: 0
-  rigid: {fileID: 0}
-  capsuleCollider: {fileID: 0}
 --- !u!50 &2406250041084801470
 Rigidbody2D:
   serializedVersion: 4
@@ -193,3 +174,22 @@ CapsuleCollider2D:
   m_Offset: {x: 0.1, y: 0.13499999}
   m_Size: {x: 0.13, y: 0.22}
   m_Direction: 0
+--- !u!114 &555903092678305690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7816865332231855208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01158a9771a40af48a12e17ec3008e10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  hp: 0
+  speed: 2
+  isEnemyLookLeft: 0
+  index: 0
+  rigid: {fileID: 0}
+  capsuleCollider: {fileID: 0}

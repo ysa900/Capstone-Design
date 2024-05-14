@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RandomSkill : Skill, IPullingObject
+public class RandomSkill : Skill, IPoolingObject
 {
     public RandomSkill randomSkill;
 

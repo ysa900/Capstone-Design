@@ -159,20 +159,14 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-
         if (SceneManager.GetActiveScene().name == "Stage1")
             skillSelectManager.ChooseStartSkill(); // 시작 스킬 선택
-
-    
 
         // Stage1 배경음 플레이
         GameAudioManager.instance.bgmPlayer.clip = GameAudioManager.instance.bgmClips[(int)Bgm.Stage1];
         GameAudioManager.instance.bgmPlayer.Play();
 
-
         SpawnStartEnemies();
-
-  
     }
 
     // Update is called once per frame
@@ -652,7 +646,6 @@ public class GameManager : MonoBehaviour
 
         playerData.damageReductionValue = 1f;
         playerData.magnetRange = 0.25f;
-
 
     }
 }

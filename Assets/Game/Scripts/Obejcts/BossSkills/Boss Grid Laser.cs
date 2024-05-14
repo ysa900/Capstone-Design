@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class Boss_Grid_Laser : BossSkill, IPullingObject
+public class Boss_Grid_Laser : BossSkill, IPoolingObject
 {
     //public bool isRightTop; // BossSkill에 있음
     private bool isRightBottom;

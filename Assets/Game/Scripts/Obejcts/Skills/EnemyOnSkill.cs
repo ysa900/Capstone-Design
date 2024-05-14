@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class EnemyOnSkill : Skill, IPullingObject
+public class EnemyOnSkill : Skill, IPoolingObject
 {
     public bool isBossAppear;
 

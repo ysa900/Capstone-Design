@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class Boss_Laser : BossSkill, IPullingObject
+public class Boss_Laser : BossSkill, IPoolingObject
 {
     float laserHalf = 29 / 2; // 레이저 prefab의 절반 길이
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Skill : Object, IPullingObject
+public class Skill : Object, IPoolingObject
 {
     // 도트 데미지 관련 변수
     public bool isDotDamageSkill;
