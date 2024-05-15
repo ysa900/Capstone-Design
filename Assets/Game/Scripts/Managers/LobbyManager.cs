@@ -51,12 +51,15 @@ public class LobbyManager : MonoBehaviour
     public bool isCharacterPageOn = false;
     public bool isMainPageOn = true; // MainPage 켜져있는 지 확인하는 bool 변수
     public bool isSettingPageOn = false;
+    public bool isSettingSave = false; // Save 버튼 눌렀는지 확인하는 bool 변수
+    //public bool isGameStartEnabled = false;
 
     private void Start()
     {
         // 시작 시 비활성화
         CharacterPage.SetActive(false);
+
         SettingPage.SetActive(false);
 
-    }  
+    }
 }

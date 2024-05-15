@@ -17,7 +17,7 @@ public class EnemyManager : MonoBehaviour
 
     // Enemy들 이름
     string[] EnemyNames = { "evilTree", "pumpkin","warlock", 
-                            "Skeleton_Sword", "Skeleton_Arrow", "Skeleton_Horse",
+                            "Skeleton_Sword", "Skeleton_Archer", "Skeleton_Horse",
                             "Ghoul", "Spitter", "Summoner", "BloodKing" };
 
     private GameAudioManager gameAudioManager;

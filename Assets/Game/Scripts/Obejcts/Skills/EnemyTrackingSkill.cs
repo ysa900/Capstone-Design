@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class EnemyTrackingSkill : Skill, IPullingObject
+public class EnemyTrackingSkill : Skill, IPoolingObject
 {
     public bool isBossAppear;
 

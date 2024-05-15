@@ -159,20 +159,14 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-
         if (SceneManager.GetActiveScene().name == "Stage1")
             skillSelectManager.ChooseStartSkill(); // 시작 스킬 선택
-
-    
 
         // Stage1 배경음 플레이
         GameAudioManager.instance.bgmPlayer.clip = GameAudioManager.instance.bgmClips[(int)Bgm.Stage1];
         GameAudioManager.instance.bgmPlayer.Play();
 
-
         SpawnStartEnemies();
-
-  
     }
 
     // Update is called once per frame
@@ -467,7 +461,6 @@ public class GameManager : MonoBehaviour
     {
         pauseObject.SetActive(true);
         isPausePageOn = true; 
-        inputManager.PauseButtonObject.interactable = false; // Pause버튼 비활성화
 
         // UI 비활성화
         //HpBarObject.SetActive(false);
@@ -482,7 +475,6 @@ public class GameManager : MonoBehaviour
     {
         pauseObject.SetActive(false);
         isPausePageOn = false;
-        inputManager.PauseButtonObject.interactable = true; // Pause버튼 활성화
 
         // UI 활성화
         //HpBarObject.SetActive(true);
@@ -652,7 +644,6 @@ public class GameManager : MonoBehaviour
 
         playerData.damageReductionValue = 1f;
         playerData.magnetRange = 0.25f;
-
 
     }
 }

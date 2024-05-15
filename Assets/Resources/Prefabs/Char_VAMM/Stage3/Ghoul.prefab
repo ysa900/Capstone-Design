@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 72813465515525759}
   - component: {fileID: 122374210773276493}
   - component: {fileID: 6242615242592359720}
-  - component: {fileID: 4691429641230944019}
   - component: {fileID: 5015239979250332249}
   - component: {fileID: -8880372759947703905}
+  - component: {fileID: -3055699141177095125}
   m_Layer: 0
   m_Name: Ghoul
   m_TagString: Ghoul
@@ -110,25 +110,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &4691429641230944019
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6785428235047254882}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f766ebcbc4cfff44b152f01b06caa71, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  hp: 0
-  speed: 1
-  isEnemyLookLeft: 0
-  index: 0
-  rigid: {fileID: 0}
-  capsuleCollider: {fileID: 0}
 --- !u!70 &5015239979250332249
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -193,3 +174,22 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &-3055699141177095125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6785428235047254882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01158a9771a40af48a12e17ec3008e10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  hp: 0
+  speed: 1
+  isEnemyLookLeft: 0
+  index: 0
+  rigid: {fileID: 0}
+  capsuleCollider: {fileID: 0}
