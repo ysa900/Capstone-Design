@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
     public GameObject pauseObject;
     // GameOption 오브젝트
     public GameObject optionObject;
-    
+
     // HpStatus
     public GameObject HpStatusObject;
     // HpStatusLettering
@@ -103,7 +103,7 @@ public class GameManager : MonoBehaviour
         SettingPageObject.SetActive(false);
 
         // 클래스 객체들 초기화
-        if(sceneNum == 1)
+        if (sceneNum == 1)
         {
             PlayerInit();
         }
@@ -159,20 +159,14 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-
         if (SceneManager.GetActiveScene().name == "Stage1")
             skillSelectManager.ChooseStartSkill(); // 시작 스킬 선택
-
-    
 
         // Stage1 배경음 플레이
         GameAudioManager.instance.bgmPlayer.clip = GameAudioManager.instance.bgmClips[(int)Bgm.Stage1];
         GameAudioManager.instance.bgmPlayer.Play();
 
-
         SpawnStartEnemies();
-
-  
     }
 
     // Update is called once per frame
@@ -227,7 +221,7 @@ public class GameManager : MonoBehaviour
         switch (sceneNum)
         {
             case 1:
-                Vector2 PlayerPos = new Vector2(40,40); 
+                Vector2 PlayerPos = new Vector2(40, 40);
                 player.transform.position = PlayerPos;
 
                 Vector2 AreaSize = new Vector2(120, 120);
@@ -412,7 +406,7 @@ public class GameManager : MonoBehaviour
 
             skillManager.isBossAppear = true;
             skillManager.boss = bossManager.boss;
-            
+
             // 보스 HP바 active
             BossHPObject.SetActive(true);
 
@@ -466,8 +460,7 @@ public class GameManager : MonoBehaviour
     private void OnPauseButtonClicked()
     {
         pauseObject.SetActive(true);
-        isPausePageOn = true; 
-        inputManager.PauseButtonObject.interactable = false; // Pause버튼 비활성화
+        isPausePageOn = true;
 
         // UI 비활성화
         //HpBarObject.SetActive(false);
@@ -482,7 +475,6 @@ public class GameManager : MonoBehaviour
     {
         pauseObject.SetActive(false);
         isPausePageOn = false;
-        inputManager.PauseButtonObject.interactable = true; // Pause버튼 활성화
 
         // UI 활성화
         //HpBarObject.SetActive(true);
@@ -519,7 +511,7 @@ public class GameManager : MonoBehaviour
 
         int ranNum = UnityEngine.Random.Range(0, 11);
 
-        if(ranNum >= 6)
+        if (ranNum >= 6)
         {
             switch (killedEnemy.tag)
             {
@@ -623,7 +615,7 @@ public class GameManager : MonoBehaviour
         followCam.clearWall_RightEndX = xValue;
     }
 
-    
+
 
     void PlayerInit()
     {
@@ -652,7 +644,6 @@ public class GameManager : MonoBehaviour
 
         playerData.damageReductionValue = 1f;
         playerData.magnetRange = 0.25f;
-
 
     }
 }

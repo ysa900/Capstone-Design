@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class PlayerAttachSkill : Skill, IPullingObject
+public class PlayerAttachSkill : Skill, IPoolingObject
 {
     // 플레이어 좌표를 기준으로 위치를 어디로 가야하나를 받는 변수
     public float xPositionNum;

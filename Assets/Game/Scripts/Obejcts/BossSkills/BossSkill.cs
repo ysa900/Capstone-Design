@@ -1,4 +1,4 @@
-﻿public class BossSkill : Object, IPullingObject
+﻿public class BossSkill : Object, IPoolingObject
 {
     public void Init() { } // PoolManager때문에 이거 지우면 안됨
 

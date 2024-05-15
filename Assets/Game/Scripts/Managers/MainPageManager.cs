@@ -13,7 +13,7 @@ public class MainPageManager : MonoBehaviour
     {
         // 시작 시 MainPage 제외 비활성화
         lobbyManager.CharacterPage.SetActive(false);
-  
+
 
         // Exit 버튼 눌렀을 때
         UnityEngine.UI.Button ExitButton = lobbyManager.ExitButtonObject.GetComponent<UnityEngine.UI.Button>();
@@ -31,11 +31,11 @@ public class MainPageManager : MonoBehaviour
     private void ExitButtonClicked()
     {
         // 유니티 에디터에서 게임 플레이할 땐 종료 위한 #if  사용
-        #if UNITY_EDITOR
-                UnityEditor.EditorApplication.isPlaying = false;
-        #else // 실제 빌드 후 게임 플레이 후 종료 할 때 #else 문 사용
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else // 실제 빌드 후 게임 플레이 후 종료 할 때 #else 문 사용
                 Application.Quit(); // 게임 종료
-        #endif
+#endif
     }
 
     // Character 버튼 클릭 시

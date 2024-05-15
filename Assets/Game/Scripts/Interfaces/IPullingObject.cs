@@ -1,6 +1,6 @@
 ﻿//using UnityEngine;
 
-public interface IPullingObject
+public interface IPoolingObject
 {
     void Init();
 }

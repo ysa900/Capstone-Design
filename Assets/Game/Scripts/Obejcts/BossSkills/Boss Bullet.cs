@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class Boss_Bullet : BossSkill, IPullingObject
+public class Boss_Bullet : BossSkill, IPoolingObject
 {
     public Transform target;
 

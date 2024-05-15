@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class EXP : Object, IPullingObject
+public class EXP : Object, IPoolingObject
 {
     public int expAmount;
     public int index;
