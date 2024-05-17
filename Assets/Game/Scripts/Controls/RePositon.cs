@@ -8,7 +8,7 @@ public class RePositon : MonoBehaviour
     public GameObject clearWall;
 
     bool isStage2TimeOver;
-    int playerAreaSize;
+    int playerAreaSize = 120;
     int GroundSize = 160;
 
     private void Start()
@@ -23,13 +23,15 @@ public class RePositon : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
+      
+
         // 플레이어의 Area와 충돌을 감지해 벗어났다면 실행
         // 플레이어 프리팹 하위에 Area라는게 있음 
         if (!collision.CompareTag("Area"))
         {
             return;
         }
-
+        
         Vector3 playerPosition = GameManager.instance.player.transform.position;
         Vector3 myPosition = transform.position;
         float diffX = Mathf.Abs(playerPosition.x - myPosition.x);
@@ -43,15 +45,18 @@ public class RePositon : MonoBehaviour
             case "Ground":
                 if(diffX > playerAreaSize && diffY > playerAreaSize)
                 {
+                    
                     transform.Translate(Vector3.right * dirtionX * GroundSize);
                     transform.Translate(Vector3.up * dirtionY * GroundSize);
                 }
                 else if(diffX > diffY)
                 {
+                  
                     transform.Translate(Vector3.right * dirtionX * GroundSize); // 오른쪽 방향 * (-1 or 1) * 거리
                 }
                 else if (diffX < diffY)
                 {
+                    
                     transform.Translate(Vector3.up * dirtionY * GroundSize);// 윗 방향 * (-1 or 1) * 거리
                 }
                 break;

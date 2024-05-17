@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.AI;
+using static Unity.Barracuda.TextureAsTensorData;
+using static UnityEngine.GraphicsBuffer;
 
 public class Enemy : Object, IDamageable, IPoolingObject
 {
+    // Enemy 규칙: 모든 Enemy 프리팹은 오른쪽을 보는 게 기본
+
     // 플레이어 객체
     public Player player;
 
@@ -18,6 +22,7 @@ public class Enemy : Object, IDamageable, IPoolingObject
     private float colliderOffsetY; // collider의 offset y좌표
 
     public bool isEnemyLookLeft; // 적이 보고 있는 방향을 알려주는 변수
+    bool isFlipWeirdEnemyFlippedOnce; // flip 할 때 이상한 적이 한번이라도 flip 됐는 지
 
     protected bool isDead;
     private bool isTimeOver;
@@ -43,6 +48,7 @@ public class Enemy : Object, IDamageable, IPoolingObject
 
     public CapsuleCollider2D capsuleCollider; // Collider의 offset을 변경하기 위한 변수
 
+    NavMeshAgent agent; // Nav Mesh Agent 사용하기 위한 변수
     public virtual void Init()
     {
         hp = enemy_HP[index];
@@ -67,7 +73,7 @@ public class Enemy : Object, IDamageable, IPoolingObject
 
                 X = tmpX + playerX;
                 Y = tmpY + playerY;
-                
+
 
                 if (degree <= -360)
                 {
@@ -89,7 +95,7 @@ public class Enemy : Object, IDamageable, IPoolingObject
             case 3:
                 radius = UnityEngine.Random.Range(20, 25);
                 degree = UnityEngine.Random.Range(0f, 360f);
-               
+
                 tmpX = (float)Math.Cos(degree) * radius;
                 tmpY = (float)Math.Sin(degree) * radius;
 
@@ -102,7 +108,7 @@ public class Enemy : Object, IDamageable, IPoolingObject
                 }
                 break;
         }
-        
+
         rigid.constraints = RigidbodyConstraints2D.None;
         rigid.constraints = RigidbodyConstraints2D.FreezeRotation;
         GetComponent<CapsuleCollider2D>().enabled = true;
@@ -114,6 +120,9 @@ public class Enemy : Object, IDamageable, IPoolingObject
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
         capsuleCollider = GetComponent<CapsuleCollider2D>();
+        agent = GetComponent<NavMeshAgent>();
+        agent.updateRotation = false;
+        agent.updateUpAxis = false;
 
         colliderOffsetX = capsuleCollider.offset.x; // offset 초기값을 저장
         colliderOffsetY = capsuleCollider.offset.y;
@@ -139,40 +148,52 @@ public class Enemy : Object, IDamageable, IPoolingObject
 
         Vector2 direction = playerPosition - myPosition;
 
+        // 이미 플레이어를 바라보고 있다면 return
+        bool isLookAtCorrectly = direction.x < 0 == spriteRenderer.flipX;
+        if (isLookAtCorrectly) return;
+
         if (Math.Abs(direction.x) >= 0.5f)
         {
             isEnemyLookLeft = direction.x < 0;
         }
 
+        bool isNotFlip = spriteRenderer.flipX == isEnemyLookLeft; // Flip 안 해도 되냐
         spriteRenderer.flipX = isEnemyLookLeft;
 
+        if (isNotFlip) return; // Flip 안 해도 되면 리턴
+
         Vector2 colliderOffset; // CapsuleCollider의 offset에 넣을 Vector2
+
+        bool isFlipWeirdEnemy = tag == "Spitter" || tag == "Summoner";
 
         if (isEnemyLookLeft) // Enemy가 왼쪽을 보면 collider도 x축 대칭을 해준다
         {
             colliderOffset = new Vector2(-colliderOffsetX, colliderOffsetY);
+
+            if (isFlipWeirdEnemy) // flip이 이상해서 보정해 줘야 되는 적이면 보정해 줌
+            {
+                X += 1.82f;
+                isFlipWeirdEnemyFlippedOnce = true;
+            }
         }
         else
         {
             colliderOffset = new Vector2(colliderOffsetX, colliderOffsetY);
 
+            // flip이 이상해서 보정해 줘야 되는 적이면 보정해 줌
+            if (isFlipWeirdEnemyFlippedOnce && isFlipWeirdEnemy)
+            {
+                X -= 1.82f;
+            }
         }
+
         capsuleCollider.offset = colliderOffset; // capsuleCollider에 적용
     }
 
     // 플레이어 방향으로 이동하는 함수
     protected void MoveToPlayer()
     {
-        Vector2 playerPosition = player.transform.position;
-        Vector2 myPosition = transform.position;
-
-        Vector2 direction = playerPosition - myPosition;
-
-        direction = direction.normalized;
-        rigid.MovePosition(rigid.position + direction * speed * Time.fixedDeltaTime); // 플레이어 방향으로 위치 변경
-
-        X = transform.position.x;
-        Y = transform.position.y;
+        agent.SetDestination(player.transform.position);
     }
 
     // 플레이어와의 거리가 너무 멀면 죽는 함수
@@ -213,7 +234,7 @@ public class Enemy : Object, IDamageable, IPoolingObject
 
                     break;
             }
-            
+
         }
 
     }

@@ -95,7 +95,7 @@ public class InputManager : MonoBehaviour
         SceneManager.LoadScene("Lobby");
         Time.timeScale = 1;
     }
-    
+
     // PauseButton이 눌렀을 때
     private void PauseButtonClicked()
     {
@@ -118,7 +118,7 @@ public class InputManager : MonoBehaviour
 
     private void OptionButtonClicked()
     {
-        if(!GameManager.instance.isSettingPageOn) // 설정창 켜지지 않은 상태에서 누르기
+        if (!GameManager.instance.isSettingPageOn) // 설정창 켜지지 않은 상태에서 누르기
         {
             PauseButtonObject.interactable = false;
             // 인게임 중
@@ -143,17 +143,17 @@ public class InputManager : MonoBehaviour
                 GameManager.instance.isSettingPageOn = false;
                 PauseButtonObject.interactable = true;
             }
-            else if(GameManager.instance.isPausePageOn && GameManager.instance.isSettingPageOn) // Pause 화면
+            else if (GameManager.instance.isPausePageOn && GameManager.instance.isSettingPageOn) // Pause 화면
             {
                 GameManager.instance.isSettingPageOn = false;
                 PauseButtonObject.interactable = true;
             }
-            else if(GameManager.instance.isClearPageOn && GameManager.instance.isSettingPageOn) // Clear 화면
+            else if (GameManager.instance.isClearPageOn && GameManager.instance.isSettingPageOn) // Clear 화면
             {
                 GameManager.instance.isSettingPageOn = false;
                 PauseButtonObject.interactable = false;
             }
-            else if(GameManager.instance.isDeadPageOn && GameManager.instance.isSettingPageOn) // 게임 오버
+            else if (GameManager.instance.isDeadPageOn && GameManager.instance.isSettingPageOn) // 게임 오버
             {
                 GameManager.instance.isSettingPageOn = false;
                 PauseButtonObject.interactable = false;
@@ -161,12 +161,12 @@ public class InputManager : MonoBehaviour
 
             GameManager.instance.SettingPageObject.SetActive(false);
         }
-        
+
     }
 
     private void goToNextSceneButtonClicked()
     {
-        switch(SceneManager.GetActiveScene().name)
+        switch (SceneManager.GetActiveScene().name)
         {
             case "Stage1":
                 SceneManager.LoadScene("Splash2");
