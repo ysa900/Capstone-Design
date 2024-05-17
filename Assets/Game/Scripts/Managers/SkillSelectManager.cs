@@ -8,7 +8,7 @@ public class SkillSelectManager: MonoBehaviour
 {
     // 개발용 (스킬 테스트용)
     bool isSkillTest = false;
-    int testSkillIndex = 8;
+    int testSkillIndex = 10;
 
     // 현재 고를 수 있는 스킬 번호 (0 ~ 4 레벨: 5번까지 / 5 ~ 9 레벨: 8번까지 / 10레벨 이상 : 11번까지)
     // 12번은 Blood임

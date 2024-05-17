@@ -21,10 +21,6 @@ public class SkillManager : MonoBehaviour
     public SkillData2 skillData;
     public SkillData2 passiveSkillData;
 
-
-    private bool isShadowAlive; // 그림자가 살아있으면 알파값을 조정하기 위함
-    private float alpha = 0;
-
     private bool isFire3SkillLeftRight; // 불 일반3 스킬은 좌우 / 위아래로 번갈아 나가므로 설정한 변수
 
     // 스킬 클래스 객체들
@@ -32,7 +28,6 @@ public class SkillManager : MonoBehaviour
     private EnemyOnSkill enemyOnSkill;
     private EnemyTrackingSkill enemyTrackingSkill;
     private RandomSkill randomSkill;
-    private RandomSkill skillObject;
 
     // 스킬 관련 배열들 공통 사항
     // 스킬들 index: 불 - 3n, 전기 - 3n + 1, 물 - 3n + 2
@@ -79,15 +74,6 @@ public class SkillManager : MonoBehaviour
                 }
             }
         }
-
-        if (isShadowAlive)
-        {
-            if (alpha < 1f)
-                alpha += 0.008f;
-            skillObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, alpha);
-        }
-        else
-            alpha = 0f;
     }
 
     // skilldata를 초기화
@@ -97,7 +83,7 @@ public class SkillManager : MonoBehaviour
         for (int i = 0; i < skillData.level.Length; i++) { skillData.level[i] = 0; }
 
         skillData.Damage[0] = 23f;
-        skillData.Damage[1] = 20f;
+        skillData.Damage[1] = 10f; // 번개 두 번 침
         skillData.Damage[2] = 5.0f; // dot damage skill
         skillData.Damage[3] = 20f;
         skillData.Damage[4] = 15f;
@@ -320,7 +306,7 @@ public class SkillManager : MonoBehaviour
         {
             case 0:
                 {
-                    enemyTrackingSkill = GameManager.instance.poolManager.GetSkill(0, enemy) as EnemyTrackingSkill;
+                    enemyTrackingSkill = GameManager.instance.poolManager.GetSkill(0, enemy) as Fireball;
                     GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                     Vector2 playerPosition = player.transform.position;
@@ -336,8 +322,8 @@ public class SkillManager : MonoBehaviour
                     
                     enemyTrackingSkill.X = playerPosition.x;
                     enemyTrackingSkill.Y = playerPosition.y;
-
-                    //enemyTrackingSkill.enemy = enemy; 현재 enemy는 PoolManager에서 Init시키기 전에 할당해주는 중
+                    
+                    enemyTrackingSkill.aliveTime = 1f;
 
                     enemyTrackingSkill.speed = 25;
                     enemyTrackingSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[0];
@@ -350,17 +336,8 @@ public class SkillManager : MonoBehaviour
                 }
             case 1:
                 {
-                    enemyOnSkill = GameManager.instance.poolManager.GetSkill(7, enemy) as EnemyOnSkill;
+                    enemyOnSkill = GameManager.instance.poolManager.GetSkill(7, enemy) as Lightning;
                     GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
-
-                    Vector2 enemyPosition = enemy.transform.position;
-
-                    // 스킬 위치를 적 실제 위치로 변경
-                    if (enemy.isEnemyLookLeft)
-                        enemyOnSkill.X = enemyPosition.x - enemy.capsuleCollider.size.x * 6;
-                    else
-                        enemyOnSkill.X = enemyPosition.x + enemy.capsuleCollider.size.x * 6;
-                    enemyOnSkill.Y = enemyPosition.y + enemy.capsuleCollider.size.y * 8;
 
                     enemyOnSkill.enemy = enemy;
                     enemyOnSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[1];
@@ -381,7 +358,7 @@ public class SkillManager : MonoBehaviour
         {
             case 0:
                 {
-                    enemyTrackingSkill = GameManager.instance.poolManager.GetSkill(0, boss) as EnemyTrackingSkill;
+                    enemyTrackingSkill = GameManager.instance.poolManager.GetSkill(0, boss) as Fireball;
                     GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                     Vector2 playerPosition = player.transform.position;
@@ -398,6 +375,8 @@ public class SkillManager : MonoBehaviour
                     enemyTrackingSkill.X = playerPosition.x;
                     enemyTrackingSkill.Y = playerPosition.y;
 
+                    enemyTrackingSkill.aliveTime = 1f;
+
                     // enemyTrackingSkill.boss = boss;
                     enemyTrackingSkill.isBossAppear = true;
 
@@ -412,15 +391,11 @@ public class SkillManager : MonoBehaviour
                 }
             case 1:
                 {
-                    enemyOnSkill = GameManager.instance.poolManager.GetSkill(7, boss) as EnemyOnSkill;
+                    enemyOnSkill = GameManager.instance.poolManager.GetSkill(7, boss) as Lightning;
                     GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
-                    Vector2 bossPosition = boss.transform.position;
+                    enemyOnSkill.aliveTime = 1.5f;
 
-                    // 스킬 위치를 보스 실제 위치로 변경
-                    enemyOnSkill.X = bossPosition.x;
-                    enemyOnSkill.Y = bossPosition.y - boss.capsuleCollider.size.y * 4;
-                    
                     enemyOnSkill.isBossAppear = true;
                     enemyOnSkill.boss = boss;
 
@@ -442,7 +417,7 @@ public class SkillManager : MonoBehaviour
         {
             case 2:
                 {
-                    playerAttachSkill = GameManager.instance.poolManager.GetSkill(11) as PlayerAttachSkill;
+                    playerAttachSkill = GameManager.instance.poolManager.GetSkill(11) as Water_Shot;
                     GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                     //playerAttachSkill.player = player; player는 현재 PoolManager에서 할당중
@@ -483,7 +458,7 @@ public class SkillManager : MonoBehaviour
                 }
             case 3:
                 {
-                    playerAttachSkill = GameManager.instance.poolManager.GetSkill(1) as PlayerAttachSkill;
+                    playerAttachSkill = GameManager.instance.poolManager.GetSkill(1) as Explosion;
                     GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                     playerAttachSkill.player = player;
@@ -516,7 +491,7 @@ public class SkillManager : MonoBehaviour
                 }
             case 5:
                 {
-                    playerAttachSkill = GameManager.instance.poolManager.GetSkill(12) as PlayerAttachSkill;
+                    playerAttachSkill = GameManager.instance.poolManager.GetSkill(12) as Water_Shield;
                     GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                     //playerAttachSkill.player = player;
@@ -524,13 +499,11 @@ public class SkillManager : MonoBehaviour
                     playerAttachSkill.X = player.transform.position.x;
                     playerAttachSkill.Y = player.transform.position.y;
 
-                    playerAttachSkill.isShieldSkill = true;
-
                     playerAttachSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[2];
 
                     playerAttachSkill.aliveTime = 3f;
 
-                    playerAttachSkill.onShieldSkillDestroyed = OnShieldSkillDestroyed;
+                    ((Water_Shield)playerAttachSkill).onShieldSkillDestroyed = OnShieldSkillDestroyed;
 
                     playerAttachSkill.skillIndex = index;
 
@@ -543,44 +516,21 @@ public class SkillManager : MonoBehaviour
                 }
             case 6:
                 {
-                    randomSkill = GameManager.instance.poolManager.GetSkill(3) as RandomSkill;
+                    randomSkill = GameManager.instance.poolManager.GetSkill(3) as Meteor;
                     GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
-                    float tmpX = player.transform.position.x;
-                    float tmpY = player.transform.position.y;
-
-                    float ranNum = UnityEngine.Random.Range(-14f, 10f);
-                    float ranNum2 = UnityEngine.Random.Range(-8f, 3f);
-
-                    tmpX += ranNum;
-                    tmpY += ranNum2;
-
-                    randomSkill.impactPonitX = tmpX;
-                    randomSkill.impactPonitY = tmpY;
-
-                    // 메테오 방향 보정 (충돌 지점 바라보게)
-                    Vector2 direction = new Vector2(-9f, -14f);
-                    float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-
-                    Quaternion angleAxis = Quaternion.AngleAxis(angle + 90f, Vector3.forward);
-                    Quaternion rotation = Quaternion.Slerp(randomSkill.transform.rotation, angleAxis, 5f);
-                    randomSkill.transform.rotation = rotation;
-
-                    randomSkill.X = tmpX + 9f;
-                    randomSkill.Y = tmpY + 14f;
-
                     randomSkill.player = player;
-                    randomSkill.isMeteor = true;
 
                     randomSkill.aliveTime = 0.5f;
+
+                    randomSkill.speed = 25f;
+
                     randomSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[0];
                     randomSkill.scale = skillData.scale[index];
 
                     randomSkill.skillIndex = index;
 
                     SetScale(randomSkill.gameObject, index);
-
-                    StartCoroutine(DisplayShadowNDestroy(tmpX + 2.6f, tmpY + 3.4f)); // 그림자 나타내고 지우기
 
                     randomSkill.onSkillFinished = OnSkillFinished;
                     isSkillsCasted[index] = true;
@@ -589,7 +539,7 @@ public class SkillManager : MonoBehaviour
                 }
             case 7:
                 {
-                    playerAttachSkill = GameManager.instance.poolManager.GetSkill(9) as PlayerAttachSkill;
+                    playerAttachSkill = GameManager.instance.poolManager.GetSkill(9) as Energy_Blast;
                     GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                     //playerAttachSkill.player = player;
@@ -601,7 +551,6 @@ public class SkillManager : MonoBehaviour
                     playerAttachSkill.Y = 999f;
 
                     playerAttachSkill.isAttachSkill = true;
-                    playerAttachSkill.isDelaySkill = true;
                     playerAttachSkill.isDotDamageSkill = true;
 
                     playerAttachSkill.aliveTime = 0.8f;
@@ -623,7 +572,7 @@ public class SkillManager : MonoBehaviour
                 }
             case 8:
                 {
-                    randomSkill = GameManager.instance.poolManager.GetSkill(13) as RandomSkill;
+                    randomSkill = GameManager.instance.poolManager.GetSkill(13) as Ice_Spike;
                     GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                     float tmpX = player.transform.position.x;
@@ -638,10 +587,6 @@ public class SkillManager : MonoBehaviour
                     randomSkill.X = tmpX;
                     randomSkill.Y = tmpY;
 
-                    //randomSkill.player = player;
-
-                    randomSkill.isStaySkill = true;
-                    randomSkill.isIceSpike = true;
                     randomSkill.isDotDamageSkill = true;
 
                     randomSkill.aliveTime = 3f;
@@ -659,7 +604,7 @@ public class SkillManager : MonoBehaviour
                     {
                         for (int i = 0; i < 2; i++)
                         {
-                            playerAttachSkill = GameManager.instance.poolManager.GetSkill(6) as PlayerAttachSkill;
+                            playerAttachSkill = GameManager.instance.poolManager.GetSkill(6) as Twin_Flame;
                             GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                             if (i == 0)
@@ -737,7 +682,7 @@ public class SkillManager : MonoBehaviour
                     {
                         for (int i = 0; i < 2; i++)
                         {
-                            playerAttachSkill = GameManager.instance.poolManager.GetSkill(5) as PlayerAttachSkill;
+                            playerAttachSkill = GameManager.instance.poolManager.GetSkill(5) as Twin_Flame;
                             GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                             if (i == 0)
@@ -824,7 +769,7 @@ public class SkillManager : MonoBehaviour
                 }
             case 11:
                 {
-                    playerAttachSkill = GameManager.instance.poolManager.GetSkill(14) as PlayerAttachSkill;
+                    playerAttachSkill = GameManager.instance.poolManager.GetSkill(14) as Ice_Blast;
                     GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
                     //playerAttachSkill.player = player;
@@ -891,9 +836,9 @@ public class SkillManager : MonoBehaviour
         {
             for(int i = 0; i < 3; i++)
             {
-                playerAttachSkill = GameManager.instance.poolManager.GetSkill(8) as PlayerAttachSkill;
-
-                playerAttachSkill.degree = tmpDegree;
+                playerAttachSkill = GameManager.instance.poolManager.GetSkill(8) as Electric_Ball;
+                
+                ((Electric_Ball)playerAttachSkill).degree = tmpDegree;
                 tmpDegree -= 120f;
 
                 playerAttachSkill.xPositionNum = 4f;
@@ -908,7 +853,6 @@ public class SkillManager : MonoBehaviour
 
                 playerAttachSkill.yPositionNum = 0f;
 
-                playerAttachSkill.isCircleSkill = true;
                 playerAttachSkill.speed = circleSpeed;
 
                 playerAttachSkill.damage = skillData.Damage[4] * passiveSkillData.Damage[1];
@@ -925,9 +869,9 @@ public class SkillManager : MonoBehaviour
         {
             for(int i = 0; i < 2; i++)
             {
-                playerAttachSkill = GameManager.instance.poolManager.GetSkill(8) as PlayerAttachSkill;
+                playerAttachSkill = GameManager.instance.poolManager.GetSkill(8) as Electric_Ball;
 
-                playerAttachSkill.degree = tmpDegree;
+                ((Electric_Ball)playerAttachSkill).degree = tmpDegree;
                 tmpDegree -= 180f;
 
                 playerAttachSkill.xPositionNum = 3.5f;
@@ -942,7 +886,6 @@ public class SkillManager : MonoBehaviour
 
                 playerAttachSkill.yPositionNum = 0f;
 
-                playerAttachSkill.isCircleSkill = true;
                 playerAttachSkill.speed = circleSpeed;
 
                 playerAttachSkill.damage = skillData.Damage[4] * passiveSkillData.Damage[1];
@@ -957,9 +900,9 @@ public class SkillManager : MonoBehaviour
         }
         else
         {
-            playerAttachSkill = GameManager.instance.poolManager.GetSkill(8) as PlayerAttachSkill;
+            playerAttachSkill = GameManager.instance.poolManager.GetSkill(8) as Electric_Ball;
 
-            playerAttachSkill.degree = 0f;
+            ((Electric_Ball)playerAttachSkill).degree = tmpDegree;
 
             playerAttachSkill.xPositionNum = 3f;
             playerAttachSkill.aliveTime = 5f;
@@ -973,7 +916,6 @@ public class SkillManager : MonoBehaviour
 
             playerAttachSkill.yPositionNum = 0f;
 
-            playerAttachSkill.isCircleSkill = true;
             playerAttachSkill.speed = circleSpeed;
 
             playerAttachSkill.damage = skillData.Damage[4] * passiveSkillData.Damage[1];
@@ -987,38 +929,12 @@ public class SkillManager : MonoBehaviour
         }
     }
 
-    // 메테오 떨어질 때 그림자 오브젝트 생성 후 제거
-    IEnumerator DisplayShadowNDestroy(float x, float y)
-    {
-        skillObject = GameManager.instance.poolManager.GetSkill(4) as RandomSkill;
-
-        skillObject.transform.position = new Vector2(x, y);
-
-        // 그림자 sacle 조정
-        Transform parent = skillObject.gameObject.transform.parent;
-
-        skillObject.gameObject.transform.parent = null;
-        // * 6 / 1.5는 메테오와 메테오 그림자 사이의 스케일 조정
-        skillObject.gameObject.transform.localScale = new Vector3(skillData.scale[6] * 6 / (float)1.5, skillData.scale[6] * 6 / (float)1.5, 0);
-        skillObject.gameObject.transform.parent = parent;
-
-        isShadowAlive = true;
-
-        skillObject.aliveTime = 0.6f;
-
-        yield return new WaitForSeconds(0.5f); // 지정한 초 만큼 쉬기
-
-        isShadowAlive = false;
-
-        GameManager.instance.poolManager.ReturnSkill(skillObject, 4);
-    }
-
     // Judgment 스킬 쓸 때 일정 딜레이로 스킬 cast하기 위함
     IEnumerator CastJudgement(int index, int num)
     {
         for (int i = 0; i < num; i++)
         {
-            randomSkill = GameManager.instance.poolManager.GetSkill(10) as RandomSkill;
+            randomSkill = GameManager.instance.poolManager.GetSkill(10) as Judgement;
 
             float tmpX = player.transform.position.x;
             float tmpY = player.transform.position.y;

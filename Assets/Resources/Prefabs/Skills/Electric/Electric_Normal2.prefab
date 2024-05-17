@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3004943371540000463}
   - component: {fileID: 1292242436267445069}
   - component: {fileID: 418608676661791807}
-  - component: {fileID: 5073037063245546934}
+  - component: {fileID: 5876120608259627145}
   m_Layer: 0
   m_Name: Electric_Normal2
   m_TagString: Electric
@@ -183,7 +183,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 5.40625, y: 2.75}
   m_EdgeRadius: 0
---- !u!114 &5073037063245546934
+--- !u!114 &5876120608259627145
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -192,7 +192,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7859932401987513980}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06210489640f166499b171f2a7065272, type: 3}
+  m_Script: {fileID: 11500000, guid: ca85af08ef581774a8f65df04135acd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   isDotDamageSkill: 0
@@ -207,9 +207,5 @@ MonoBehaviour:
   yPositionNum: 0
   isAttachSkill: 0
   isFlipped: 0
-  isCircleSkill: 0
-  isShieldSkill: 0
-  isDelaySkill: 0
   isYFlipped: 0
-  degree: 0
   aliveTime: 0

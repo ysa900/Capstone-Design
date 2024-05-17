@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1801896123635609202}
   - component: {fileID: 3419159339937188515}
   - component: {fileID: 5371081291245308263}
-  - component: {fileID: 2157301204777056331}
+  - component: {fileID: -1235744316394570598}
   m_Layer: 0
   m_Name: Electric_Normal3
   m_TagString: Electric
@@ -174,7 +174,7 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 2.40625, y: 3.90625}
   m_Direction: 0
---- !u!114 &2157301204777056331
+--- !u!114 &-1235744316394570598
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -183,9 +183,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8074771891356104092}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a953555e404b9a46989636228be6680, type: 3}
+  m_Script: {fileID: 11500000, guid: 993e7ea41a5dfae4182a45b0ce421be9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  aliveTime: 0
   isDotDamageSkill: 0
   enemy: {fileID: 0}
   boss: {fileID: 0}
@@ -194,11 +195,4 @@ MonoBehaviour:
   damage: 0
   skillIndex: 0
   returnIndex: 0
-  randomSkill: {fileID: 0}
-  impactPonitX: 0
-  impactPonitY: 0
-  aliveTime: 0
-  isMeteor: 0
-  isIceSpike: 0
-  isStaySkill: 0
   scale: 0

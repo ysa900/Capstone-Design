@@ -4,8 +4,6 @@ public class EnemyTrackingSkill : Skill, IPoolingObject
 {
     public bool isBossAppear;
 
-    private float aliveTime; // 스킬 생존 시간을 체크할 변수
-
     Rigidbody2D rigid; // 물리 입력을 받기위한 변수
 
     Vector2 enemyPosition;
@@ -13,9 +11,9 @@ public class EnemyTrackingSkill : Skill, IPoolingObject
     Vector2 myPosition;
     Vector2 direction;
 
-    public new void Init()
+    public override void Init()
     {
-        aliveTime = 0;
+        base.Init();
 
         X = player.transform.position.x;
         Y = player.transform.position.y;
@@ -44,9 +42,9 @@ public class EnemyTrackingSkill : Skill, IPoolingObject
         }
     }
 
-    private void FixedUpdate()
+    protected override void FixedUpdate()
     {
-        bool destroySkill = aliveTime > 1f;
+        bool destroySkill = aliveTimer > aliveTime;
 
         if (destroySkill)
         {
@@ -65,7 +63,7 @@ public class EnemyTrackingSkill : Skill, IPoolingObject
             MoveToBoss();
         }
 
-        aliveTime += Time.fixedDeltaTime;
+        base.FixedUpdate();
     }
 
     private void SetEnemyPosition()
@@ -75,13 +73,6 @@ public class EnemyTrackingSkill : Skill, IPoolingObject
         myPosition = player.transform.position;
 
         // 적 실제 위치로 보정
-
-
-        /*if (enemy.isEnemyLookLeft)
-            enemyPosition.x -= enemy.capsuleCollider.size.x * 5;
-        else
-            enemyPosition.x += enemy.capsuleCollider.size.x * 5;*/
-
         switch (enemy.tag)
         {
             case "Pumpkin":
@@ -132,30 +123,4 @@ public class EnemyTrackingSkill : Skill, IPoolingObject
         X = transform.position.x;
         Y = transform.position.y;
     }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        IDamageable damageable = collision.GetComponent<IDamageable>();
-
-        if (damageable != null)
-        {
-            damageable.TakeDamage(gameObject, damage);
-
-            //GameManager.instance.poolManager.ReturnSkill(this, index);
-
-            return;
-        }
-
-        IDamageableSkill damageableSkill = collision.GetComponent<IDamageableSkill>();
-
-        if (damageableSkill != null)
-        {
-            damageableSkill.TakeDamage(damage);
-
-            //GameManager.instance.poolManager.ReturnSkill(this, index);
-
-            return;
-        }
-    }
 }
-

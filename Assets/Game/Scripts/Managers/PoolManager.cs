@@ -71,9 +71,9 @@ public class PoolManager : MonoBehaviour
                 if (select.GetComponent<IPoolingObject>() != null)
                 {
                     enemyManager.SetEnemyInfo(select, player, index);
+                    select.gameObject.SetActive(true);
                     select.GetComponent<IPoolingObject>().Init();
                 }
-                select.gameObject.SetActive(true);
                 break;
             }
         }
@@ -196,9 +196,10 @@ public class PoolManager : MonoBehaviour
                     select.player = player;
                     select.returnIndex = index; // return을 위해 index 부여
 
+                    select.gameObject.SetActive(true);
                     select.GetComponent<IPoolingObject>().Init();
                 }
-                select.gameObject.SetActive(true);
+                
                 break;
             }
         }
@@ -249,9 +250,9 @@ public class PoolManager : MonoBehaviour
                     select.player = player;
                     select.returnIndex = index; // return을 위해 index 부여
 
+                    select.gameObject.SetActive(true);
                     select.GetComponent<IPoolingObject>().Init();
                 }
-                select.gameObject.SetActive(true);
                 break;
             }
         }
@@ -313,9 +314,9 @@ public class PoolManager : MonoBehaviour
                 {
                     select.index = index; // return을 위해 index 부여
 
+                    select.gameObject.SetActive(true);
                     select.GetComponent<IPoolingObject>().Init();
                 }
-                select.gameObject.SetActive(true);
                 break;
             }
         }
@@ -357,9 +358,9 @@ public class PoolManager : MonoBehaviour
                     select.index = index; // return을 위해 index 부여
                     select.laserTurnNum = num;
 
+                    select.gameObject.SetActive(true);
                     select.GetComponent<IPoolingObject>().Init();
                 }
-                select.gameObject.SetActive(true);
                 break;
             }
         }
@@ -404,9 +405,9 @@ public class PoolManager : MonoBehaviour
                     select.Y = y;
                     select.isRightTop = b;
 
+                    select.gameObject.SetActive(true);
                     select.GetComponent<IPoolingObject>().Init();
                 }
-                select.gameObject.SetActive(true);
                 break;
             }
         }
@@ -456,9 +457,9 @@ public class PoolManager : MonoBehaviour
                 {
                     select.GetComponent<DamageText>().damage = damage;
                     select.GetComponent<DamageText>().skillTag = skillTag;
+                    select.gameObject.SetActive(true);
                     select.GetComponent<IPoolingObject>().Init();
                 }
-                select.gameObject.SetActive(true);
                 break;
             }
         }
