@@ -36,7 +36,6 @@ public class ObstacleVisble : MonoBehaviour
 
         switch (name)
         {
-
             case "Left Pillar":
             case "Right Pillar":
             case "Tree":
@@ -44,8 +43,6 @@ public class ObstacleVisble : MonoBehaviour
                 isTwowayObstacle=true;
                 break;
         }
-
-
     }
     private void Update()
     {
@@ -53,7 +50,7 @@ public class ObstacleVisble : MonoBehaviour
         {
             playerYpostion = player.transform.position.y + 1.9f;
 
-            if (playerYpostion - this.transform.position.y> 0)
+            if (playerYpostion - this.transform.position.y > 0)
             {
                 transform.Find("Under Clear wall").gameObject.SetActive(true);
                 transform.Find("Upper Clear wall").gameObject.SetActive(false);
@@ -65,20 +62,18 @@ public class ObstacleVisble : MonoBehaviour
                 transform.Find("Upper Clear wall").gameObject.SetActive(true);
                 sr.sortingOrder = 3;
             }
-
-
         }
 
         if (isTriggerMatch) // 장애물 들어갈 때
         {
             if (sr == null) // 자기 자신(오브젝트)이 Tilemap인 경우
             {
-                tileAlphaColor.a = Mathf.Lerp(tileAlphaColor.a, 0.7f, Time.deltaTime * alphaSpeed);
+                tileAlphaColor.a = Mathf.Lerp(tileAlphaColor.a, 0.5f, Time.deltaTime * alphaSpeed);
                 tile.color = tileAlphaColor;
             }
             else // 자기 자신(오브젝트)이 SpriteRenderer인 경우
             {
-                srAlphaColor.a = Mathf.Lerp(srAlphaColor.a, 0.7f, Time.deltaTime * alphaSpeed);
+                srAlphaColor.a = Mathf.Lerp(srAlphaColor.a, 0.5f, Time.deltaTime * alphaSpeed);
                 sr.color = srAlphaColor;
             }
         }
@@ -110,12 +105,6 @@ public class ObstacleVisble : MonoBehaviour
 
 
         isTriggerMatch = true; // Player와 Collider 접촉 시
-
-        switch (name)
-        {
-
-        }
-
     }
 
     public void OnTriggerExit2D(Collider2D collision)
@@ -126,11 +115,5 @@ public class ObstacleVisble : MonoBehaviour
         }
 
         isTriggerMatch = false;
-
-        switch (name)
-        {
-
-
-        }
     }
 }

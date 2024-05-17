@@ -75,11 +75,23 @@ public class EnemyTrackingSkill : Skill, IPoolingObject
         myPosition = player.transform.position;
 
         // 적 실제 위치로 보정
-        if (enemy.isEnemyLookLeft)
+
+
+        /*if (enemy.isEnemyLookLeft)
             enemyPosition.x -= enemy.capsuleCollider.size.x * 5;
         else
-            enemyPosition.x += enemy.capsuleCollider.size.x * 5;
-        enemyPosition.y += enemy.capsuleCollider.size.y * 5;
+            enemyPosition.x += enemy.capsuleCollider.size.x * 5;*/
+
+        switch (enemy.tag)
+        {
+            case "Pumpkin":
+            case "WarLock":
+            case "Ghoul":
+            case "Spitter":
+            case "Summoner":
+                enemyPosition.y += enemy.capsuleCollider.size.y * 5;
+                break;
+        }
 
         direction = enemyPosition - myPosition;
 
