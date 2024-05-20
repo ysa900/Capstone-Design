@@ -201,7 +201,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1241539688459082294}
   - component: {fileID: 7066819932642189422}
-  - component: {fileID: 469101282282165499}
   m_Layer: 0
   m_Name: Under Clear wall
   m_TagString: ClearWall
@@ -291,33 +290,6 @@ PolygonCollider2D:
       - {x: 0.6707939, y: -0.5324881}
       - {x: 0.45933008, y: -0.40453506}
   m_UseDelaunayMesh: 0
---- !u!50 &469101282282165499
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5886017955602988547}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 7
 --- !u!1 &6074932195017823033
 GameObject:
   m_ObjectHideFlags: 0
@@ -328,9 +300,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6412514973204595887}
   - component: {fileID: 83102787080548429}
-  - component: {fileID: 70801762521263514}
-  - component: {fileID: 687505032764845181}
-  - component: {fileID: 3389224739247059343}
+  - component: {fileID: 5245416358293851832}
+  - component: {fileID: 867199259545389782}
   m_Layer: 0
   m_Name: Upper Clear wall
   m_TagString: ClearWall
@@ -410,34 +381,7 @@ PolygonCollider2D:
       - {x: 0.43800417, y: -0.13400608}
       - {x: 0.43045667, y: 0.0495531}
   m_UseDelaunayMesh: 0
---- !u!50 &70801762521263514
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6074932195017823033}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 7
---- !u!212 &687505032764845181
+--- !u!212 &5245416358293851832
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -478,7 +422,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -9095717837082945937, guid: 207ee8102dd4143d288186ef0be518ee, type: 3}
+  m_Sprite: {fileID: -9095717837082945937, guid: 48a26e54709963144a8dd04a9b546e28, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_FlipX: 0
   m_FlipY: 0
@@ -489,7 +433,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &3389224739247059343
+--- !u!114 &867199259545389782
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

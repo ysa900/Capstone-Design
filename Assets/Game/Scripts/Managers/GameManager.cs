@@ -83,11 +83,14 @@ public class GameManager : MonoBehaviour
 
     public PlayerData playerData; // 플레이어 데이터 객체
 
+    public NavMeshControl navMeshControl; //Nav mesh AI 객체
+
     public bool isSettingPageOn = false;
     public bool isPausePageOn = false;
     public bool isClearPageOn = false;
     public bool isDeadPageOn = false;
     public bool isSkillSelectPageOn = false;
+
 
     private void Awake()
     {
@@ -117,6 +120,7 @@ public class GameManager : MonoBehaviour
         bossManager = FindAnyObjectByType<BossManager>();
         poolManager = FindAnyObjectByType<PoolManager>();
         tilemapManager = FindAnyObjectByType<TilemapManager>();
+        navMeshControl = FindAnyObjectByType<NavMeshControl>();
 
         // inputManger Delegate 할당
         inputManager.onPauseButtonClicked = OnPauseButtonClicked;
@@ -149,6 +153,7 @@ public class GameManager : MonoBehaviour
         // BossManager delegate 할당
         bossManager.onBossHasKilled = OnBossHasKilled;
 
+
         //gameTime = maxGameTime - 2f;
         //player.isPlayerShielded = true;
         //player.level = 20;
@@ -159,6 +164,9 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+
+        navMeshControl.BakeNavMeshArea();
+        Debug.Log("nav mesh 설치");
         if (SceneManager.GetActiveScene().name == "Stage1")
             skillSelectManager.ChooseStartSkill(); // 시작 스킬 선택
 
@@ -166,6 +174,8 @@ public class GameManager : MonoBehaviour
         GameAudioManager.instance.bgmPlayer.clip = GameAudioManager.instance.bgmClips[(int)Bgm.Stage1];
         GameAudioManager.instance.bgmPlayer.Play();
 
+   
+        
         SpawnStartEnemies();
     }
 
@@ -176,6 +186,7 @@ public class GameManager : MonoBehaviour
         {
             gameTime += Time.deltaTime; // 게임 시간 증가
             CoolTimer += Time.deltaTime;
+            
 
             if (!isBossSpawned)
             {
@@ -221,7 +232,7 @@ public class GameManager : MonoBehaviour
         switch (sceneNum)
         {
             case 1:
-                Vector2 PlayerPos = new Vector2(40, 40);
+                Vector2 PlayerPos = new Vector2(0, 0);
                 player.transform.position = PlayerPos;
 
                 Vector2 AreaSize = new Vector2(120, 120);
@@ -615,6 +626,13 @@ public class GameManager : MonoBehaviour
         followCam.clearWall_RightEndX = xValue;
     }
 
+    // Reposition에서 Stage1 맵 타일 하나가 변경되면 NavMeshControl에게 전해주는 데이터들
+    public void SendDirectionNavMesh(float DirectionX, float DirectionY)
+    {
+        navMeshControl.DirectionX = DirectionX;
+        navMeshControl.DirectionY = DirectionY;
+   
+    }
 
 
     void PlayerInit()

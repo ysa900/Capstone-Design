@@ -15,13 +15,13 @@ GameObject:
   - component: {fileID: 1390031446686185054}
   - component: {fileID: 7204233095306447647}
   - component: {fileID: -7857294534372207960}
-  - component: {fileID: 9205551581048428049}
+  - component: {fileID: 5738444910830256226}
   m_Layer: 0
   m_Name: evilTree
   m_TagString: EvilTree
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &4323312108606116
 Transform:
@@ -257,7 +257,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.1
+  m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
@@ -291,7 +291,8 @@ MonoBehaviour:
   index: 0
   rigid: {fileID: 0}
   capsuleCollider: {fileID: 0}
---- !u!195 &9205551581048428049
+  agent: {fileID: 0}
+--- !u!195 &5738444910830256226
 NavMeshAgent:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

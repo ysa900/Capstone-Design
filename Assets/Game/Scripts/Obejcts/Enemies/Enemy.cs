@@ -3,7 +3,6 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using static Unity.Barracuda.TextureAsTensorData;
-using static UnityEngine.GraphicsBuffer;
 
 public class Enemy : Object, IDamageable, IPoolingObject
 {
@@ -48,7 +47,8 @@ public class Enemy : Object, IDamageable, IPoolingObject
 
     public CapsuleCollider2D capsuleCollider; // Collider의 offset을 변경하기 위한 변수
 
-    NavMeshAgent agent; // Nav Mesh Agent 사용하기 위한 변수
+    public NavMeshAgent agent;
+
     public virtual void Init()
     {
         hp = enemy_HP[index];
@@ -120,7 +120,9 @@ public class Enemy : Object, IDamageable, IPoolingObject
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
         capsuleCollider = GetComponent<CapsuleCollider2D>();
-        agent = GetComponent<NavMeshAgent>();
+        agent = GetComponent<NavMeshAgent> ();
+
+
         agent.updateRotation = false;
         agent.updateUpAxis = false;
 
@@ -131,6 +133,8 @@ public class Enemy : Object, IDamageable, IPoolingObject
     protected virtual void FixedUpdate()
     {
         isTimeOver = GameManager.instance.gameTime >= GameManager.instance.maxGameTime;
+    
+
         if (isTimeOver && !isDead)
         {
             StartCoroutine(Dead());
@@ -193,6 +197,17 @@ public class Enemy : Object, IDamageable, IPoolingObject
     // 플레이어 방향으로 이동하는 함수
     protected void MoveToPlayer()
     {
+       /* Vector2 playerPosition = player.transform.position;
+        Vector2 myPosition = transform.position;
+
+        Vector2 direction = playerPosition - myPosition;
+
+        direction = direction.normalized;
+        rigid.MovePosition(rigid.position + direction * speed * Time.fixedDeltaTime); // 플레이어 방향으로 위치 변경
+
+        X = transform.position.x;
+        Y = transform.position.y;*/
+
         agent.SetDestination(player.transform.position);
     }
 

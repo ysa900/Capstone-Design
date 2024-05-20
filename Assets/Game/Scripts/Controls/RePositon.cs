@@ -45,18 +45,19 @@ public class RePositon : MonoBehaviour
             case "Ground":
                 if(diffX > playerAreaSize && diffY > playerAreaSize)
                 {
-                    
-                    transform.Translate(Vector3.right * dirtionX * GroundSize);
+                    SendDirectionNavMesh(dirtionX,dirtionY); // GameManager 에게 값 전달
+                    transform.Translate(Vector3.right * dirtionX * GroundSize); //대각선 방향으로 오른쪽, 왼쪽 위 아래 방향으로 이동.
                     transform.Translate(Vector3.up * dirtionY * GroundSize);
                 }
                 else if(diffX > diffY)
                 {
-                  
+                    SendDirectionNavMesh(dirtionX, 0);  // GameManager 에게 값 전달
+
                     transform.Translate(Vector3.right * dirtionX * GroundSize); // 오른쪽 방향 * (-1 or 1) * 거리
                 }
                 else if (diffX < diffY)
                 {
-                    
+                    SendDirectionNavMesh(0, dirtionY); // GameManager 에게 값 전달
                     transform.Translate(Vector3.up * dirtionY * GroundSize);// 윗 방향 * (-1 or 1) * 거리
                 }
                 break;
@@ -85,6 +86,14 @@ public class RePositon : MonoBehaviour
         float clearWall_RightX = clearWall.transform.position.x + clearWall.transform.localScale.x / 2;
         GameManager.instance.SendClearWall_RightX(clearWall_RightX);
     }
+
+    // Reposition에서 Stage1 맵 타일 하나가 변경되면 NavMeshControl에게 전해주는 데이터들
+    public void SendDirectionNavMesh(float DirectionX, float DirectionY)
+    {
+        GameManager.instance.SendDirectionNavMesh(DirectionX, DirectionY);
+
+    }
+
 
     IEnumerator WaitForNSec(float time)
     {

@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: 70f55d94a9702d64981444c791f92317
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - surface2d: {fileID: 1627823823656753280, guid: 94febe7bc3ee15a41b032bd62a01bdf2, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
