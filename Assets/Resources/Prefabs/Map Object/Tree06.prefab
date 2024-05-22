@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8192077163363812672}
   - component: {fileID: 1800615920179991349}
   - component: {fileID: 6604745113643591840}
-  - component: {fileID: 4633907008711792992}
+  - component: {fileID: 7896911268850480048}
   m_Layer: 0
   m_Name: Under Clear wall
   m_TagString: ClearWall
@@ -151,7 +151,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &4633907008711792992
+--- !u!114 &7896911268850480048
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -178,7 +178,7 @@ GameObject:
   - component: {fileID: 8132006468469067665}
   - component: {fileID: 9222761660752614797}
   - component: {fileID: 4962262869182373307}
-  - component: {fileID: 5081841312803027615}
+  - component: {fileID: 4138956621040168586}
   m_Layer: 0
   m_Name: Upper Clear wall
   m_TagString: ClearWall
@@ -314,7 +314,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &5081841312803027615
+--- !u!114 &4138956621040168586
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

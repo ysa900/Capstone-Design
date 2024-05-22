@@ -125,6 +125,8 @@ public class Enemy : Object, IDamageable, IPoolingObject
 
         agent.updateRotation = false;
         agent.updateUpAxis = false;
+        agent.velocity = Vector3.zero;
+        rigid.velocity = Vector3.zero;
 
         colliderOffsetX = capsuleCollider.offset.x; // offset 초기값을 저장
         colliderOffsetY = capsuleCollider.offset.y;
@@ -197,16 +199,18 @@ public class Enemy : Object, IDamageable, IPoolingObject
     // 플레이어 방향으로 이동하는 함수
     protected void MoveToPlayer()
     {
-       /* Vector2 playerPosition = player.transform.position;
-        Vector2 myPosition = transform.position;
 
-        Vector2 direction = playerPosition - myPosition;
+      
+        /* Vector2 playerPosition = player.transform.position;
+         Vector2 myPosition = transform.position;
 
-        direction = direction.normalized;
-        rigid.MovePosition(rigid.position + direction * speed * Time.fixedDeltaTime); // 플레이어 방향으로 위치 변경
+         Vector2 direction = playerPosition - myPosition;
 
-        X = transform.position.x;
-        Y = transform.position.y;*/
+         direction = direction.normalized;
+         rigid.MovePosition(rigid.position + direction * speed * Time.fixedDeltaTime); // 플레이어 방향으로 위치 변경
+
+         X = transform.position.x;
+         Y = transform.position.y;*/
 
         agent.SetDestination(player.transform.position);
     }
@@ -259,6 +263,8 @@ public class Enemy : Object, IDamageable, IPoolingObject
     {
         hp = hp - (int)damage;
 
+     
+
         ShowDamageText(damage, causer.tag); // damageText 출력
 
         if (hp <= 0 && !isDead)
@@ -273,7 +279,32 @@ public class Enemy : Object, IDamageable, IPoolingObject
                 damageDelayTimer = 0;
             }
         }
+
+
+
     }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if(collision.gameObject.tag == "Player")
+        {
+            agent.isStopped = true;
+            agent.velocity = Vector3.zero;
+            rigid.velocity = Vector3.zero;
+           
+        }  
+     
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if(collision.gameObject.tag == "Player")
+             agent.isStopped = false;
+
+     
+    }
+
+
 
     IEnumerator Dead()
     {

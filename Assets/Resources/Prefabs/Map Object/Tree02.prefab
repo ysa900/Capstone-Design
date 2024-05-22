@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7827500529111790390}
   - component: {fileID: 860390724355261188}
-  - component: {fileID: 7369945032622920360}
-  - component: {fileID: 4991540910778668817}
+  - component: {fileID: 3481306585541204871}
+  - component: {fileID: 1943734921790707174}
   m_Layer: 0
   m_Name: Upper Clear wall
   m_TagString: ClearWall
@@ -97,7 +97,7 @@ PolygonCollider2D:
       - {x: 1.5060619, y: 0.45982844}
       - {x: 0.49846077, y: 0.24293107}
   m_UseDelaunayMesh: 0
---- !u!212 &7369945032622920360
+--- !u!212 &3481306585541204871
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -149,7 +149,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &4991540910778668817
+--- !u!114 &1943734921790707174
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -175,8 +175,8 @@ GameObject:
   m_Component:
   - component: {fileID: 430171200701802023}
   - component: {fileID: 7890760823287632195}
-  - component: {fileID: 2385405986345650176}
-  - component: {fileID: 553282938596445018}
+  - component: {fileID: 3670984162365504981}
+  - component: {fileID: 5872347470617826409}
   m_Layer: 0
   m_Name: Under Clear wall
   m_TagString: ClearWall
@@ -255,23 +255,7 @@ PolygonCollider2D:
       - {x: 1.9871069, y: -0.7572053}
       - {x: 0.55637604, y: 0.19244072}
   m_UseDelaunayMesh: 0
---- !u!114 &2385405986345650176
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3010975711663077178}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_OverrideArea: 1
-  m_Area: 1
-  m_IgnoreFromBuild: 0
-  m_AffectedAgents: ffffffff
---- !u!212 &553282938596445018
+--- !u!212 &3670984162365504981
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -323,6 +307,22 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &5872347470617826409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3010975711663077178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &7803269755028439347
 GameObject:
   m_ObjectHideFlags: 0

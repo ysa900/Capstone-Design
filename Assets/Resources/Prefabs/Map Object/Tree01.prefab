@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5258002154596835534}
   - component: {fileID: 732641542806076332}
-  - component: {fileID: 1997136721625006499}
-  - component: {fileID: 1551080212536279065}
+  - component: {fileID: 1513090710850868284}
+  - component: {fileID: 4241619189035262249}
   m_Layer: 0
   m_Name: Upper Clear wall
   m_TagString: ClearWall
@@ -98,7 +98,23 @@ PolygonCollider2D:
       - {x: 1.523376, y: 0.31570232}
       - {x: 0.49846077, y: 0.24293107}
   m_UseDelaunayMesh: 0
---- !u!212 &1997136721625006499
+--- !u!114 &1513090710850868284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3407867630883799979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
+--- !u!212 &4241619189035262249
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -150,22 +166,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1551080212536279065
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3407867630883799979}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_OverrideArea: 1
-  m_Area: 1
-  m_IgnoreFromBuild: 0
-  m_AffectedAgents: ffffffff
 --- !u!1 &6326612154663810098
 GameObject:
   m_ObjectHideFlags: 0
@@ -367,8 +367,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1043123918179375829}
   - component: {fileID: 5509894768987744032}
-  - component: {fileID: 765831793257293321}
-  - component: {fileID: 2465658888826642487}
+  - component: {fileID: 868321504437277496}
+  - component: {fileID: 2481424158719144911}
   m_Layer: 0
   m_Name: Under Clear wall
   m_TagString: ClearWall
@@ -447,7 +447,23 @@ PolygonCollider2D:
       - {x: 1.9871069, y: -0.7572053}
       - {x: 0.8114546, y: 0.17305437}
   m_UseDelaunayMesh: 0
---- !u!212 &765831793257293321
+--- !u!114 &868321504437277496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8304374950310126205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
+--- !u!212 &2481424158719144911
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -499,19 +515,3 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &2465658888826642487
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8304374950310126205}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_OverrideArea: 1
-  m_Area: 1
-  m_IgnoreFromBuild: 0
-  m_AffectedAgents: ffffffff

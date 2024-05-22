@@ -105,14 +105,6 @@ public class GameManager : MonoBehaviour
         BossHPObject.SetActive(false);
         SettingPageObject.SetActive(false);
 
-        // 클래스 객체들 초기화
-        if (sceneNum == 1)
-        {
-            PlayerInit();
-        }
-        player = Instantiate(playerPrefab);
-        SetPlayerInfo();
-
         inputManager = FindAnyObjectByType<InputManager>();
         followCam = FindAnyObjectByType<FollowCam>();
         skillManager = FindAnyObjectByType<SkillManager>();
@@ -121,6 +113,17 @@ public class GameManager : MonoBehaviour
         poolManager = FindAnyObjectByType<PoolManager>();
         tilemapManager = FindAnyObjectByType<TilemapManager>();
         navMeshControl = FindAnyObjectByType<NavMeshControl>();
+
+
+        // 클래스 객체들 초기화
+        if (sceneNum == 1)
+        {
+            PlayerInit();
+        }
+        player = Instantiate(playerPrefab);
+        SetPlayerInfo();
+
+
 
         // inputManger Delegate 할당
         inputManager.onPauseButtonClicked = OnPauseButtonClicked;
@@ -166,7 +169,7 @@ public class GameManager : MonoBehaviour
     {
 
         navMeshControl.BakeNavMeshArea();
-        Debug.Log("nav mesh 설치");
+
         if (SceneManager.GetActiveScene().name == "Stage1")
             skillSelectManager.ChooseStartSkill(); // 시작 스킬 선택
 
@@ -174,8 +177,8 @@ public class GameManager : MonoBehaviour
         GameAudioManager.instance.bgmPlayer.clip = GameAudioManager.instance.bgmClips[(int)Bgm.Stage1];
         GameAudioManager.instance.bgmPlayer.Play();
 
-   
-        
+
+
         SpawnStartEnemies();
     }
 
