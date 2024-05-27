@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class DamageText : MonoBehaviour, IPullingObject
+public class DamageText : MonoBehaviour, IPoolingObject
 {
     public float moveSpeed;
     public float alphaSpeed;

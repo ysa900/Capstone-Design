@@ -119,8 +119,8 @@ GameObject:
   - component: {fileID: 7972012226627406321}
   - component: {fileID: 8537299119572706926}
   - component: {fileID: 3773880679329778290}
-  - component: {fileID: 2782590012111047386}
   - component: {fileID: 798621046198259757}
+  - component: {fileID: 8367565453512072717}
   m_Layer: 0
   m_Name: Water_Normal2
   m_TagString: Water
@@ -269,34 +269,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 2, y: 2.2}
   m_EdgeRadius: 0
---- !u!114 &2782590012111047386
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4588440597301789961}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a953555e404b9a46989636228be6680, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isDotDamageSkill: 0
-  enemy: {fileID: 0}
-  boss: {fileID: 0}
-  player: {fileID: 0}
-  speed: 0
-  damage: 0
-  skillIndex: 0
-  returnIndex: 0
-  randomSkill: {fileID: 0}
-  impactPonitX: 0
-  impactPonitY: 0
-  aliveTime: 0
-  isMeteor: 0
-  isIceSpike: 0
-  isStaySkill: 0
-  scale: 0
 --- !u!95 &798621046198259757
 Animator:
   serializedVersion: 7
@@ -319,3 +291,25 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &8367565453512072717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4588440597301789961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d9ef59bbe3c58d4bbea0d381a80b76e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  aliveTime: 0
+  isDotDamageSkill: 0
+  enemy: {fileID: 0}
+  boss: {fileID: 0}
+  player: {fileID: 0}
+  speed: 0
+  damage: 0
+  skillIndex: 0
+  returnIndex: 0
+  scale: 0

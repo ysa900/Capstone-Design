@@ -1,0 +1,136 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aaad7937e2e378141bcc07f261ede7b6, type: 3}
+  m_Name: Skills2
+  m_EditorClassIdentifier: 
+  skillName:
+  - Fire Ball
+  - Lightning
+  - Water Shot
+  - Explosion
+  - Electric Ball
+  - Water Shield
+  - Meteor
+  - Energy Blast
+  - Ice Spike
+  - Twin Flame
+  - Judgement
+  - Ice Blast
+  - Heavens Eclipse
+  - Beam Laser
+  - Hydro Flame
+  - Shield Flame
+  - Blood
+  - Blood
+  - Blood
+  skillDescription:
+  - Cast FireBall to Nearest Enemy
+  - Cast Lightning on Random Enemy
+  - Cast Water Shot In front of Player
+  - Fire Explode Around Player
+  - Electric Ball Move Around Player
+  - Water Shield Protects Player from Enemy
+  - Meteor Falls on Random Point
+  - K a m e h a m e h a!!
+  - Ice Spike Rise at Random Point
+  - Two Flame Changes Alternatively
+  - Lightning Rains Stormy
+  - Case Ice Blast In front of Player
+  - Heaven Eclipce
+  - Laser Beam
+  - Hydro Flame
+  - Shield And Flame
+  - Heal ten Points
+  - Heal ten Points
+  - Heal ten Points
+  level: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  Damage:
+  - 23
+  - 10
+  - 5
+  - 20
+  - 15
+  - 0
+  - 35
+  - 20
+  - 10
+  - 200
+  - 40
+  - 10
+  - 5
+  - 150
+  - 100
+  - 50
+  - 2
+  - 2
+  - 2
+  Delay:
+  - 1
+  - 0.75
+  - 1.5
+  - 3
+  - 14
+  - 10
+  - 1
+  - 4
+  - 2
+  - 3
+  - 7.5
+  - 8
+  - 3
+  - 3.5
+  - 3
+  - 3
+  - 8
+  - 8
+  - 8
+  scale:
+  - 1.5
+  - 1
+  - 2
+  - 1.5
+  - 1.5
+  - 1
+  - 1.5
+  - 1.5
+  - 1.8
+  - 1.75
+  - 1.5
+  - 1.5
+  - 20
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  skillSelected: 00000000000000000000000000000000000000
+  skillicon:
+  - {fileID: 21300000, guid: 90f5c378a37421e4c900728afc36b321, type: 2}
+  - {fileID: 21300000, guid: 83ce16839d132e842a2b72cbf6a4410f, type: 2}
+  - {fileID: 21300000, guid: 2b5e0b4341ab9a54999add375c2e8a87, type: 2}
+  - {fileID: 21300000, guid: bb170114dfb0b02429d4c6e2d7fd387e, type: 2}
+  - {fileID: 21300000, guid: acd12b9e52d962c43b344e34e47a3a02, type: 2}
+  - {fileID: 21300000, guid: 516efd04627540f42838259ea470f42b, type: 2}
+  - {fileID: 21300000, guid: f2b882308d3041b489b3542416ebfe5c, type: 2}
+  - {fileID: 21300000, guid: 5fbd9a6d8953713438785abb2ed42e1a, type: 2}
+  - {fileID: 21300000, guid: e541fe5d9f1fffa42902c86789fc11a7, type: 2}
+  - {fileID: 21300000, guid: c4322abfbefec6d46a4283e434dc46cb, type: 2}
+  - {fileID: 21300000, guid: f75bd353d209d174aaa28850a3695f2f, type: 2}
+  - {fileID: 21300000, guid: bef00553c8586ce4f97ab31fad65e9ea, type: 2}
+  - {fileID: 21300000, guid: 581ce6a34b86cfc40b2ea857034c99db, type: 2}
+  - {fileID: 21300000, guid: 29eb7c4e7c46d32449132ac622b106df, type: 2}
+  - {fileID: 21300000, guid: a686a39615a764d43b4532dd07768666, type: 2}
+  - {fileID: 21300000, guid: 3d776b03e5f9f9c4e9d3c78c57162806, type: 2}
+  - {fileID: 21300000, guid: 7f6251c7985e30447bf8dc271d8dae64, type: 2}
+  - {fileID: 21300000, guid: 7f6251c7985e30447bf8dc271d8dae64, type: 2}
+  - {fileID: 21300000, guid: 7f6251c7985e30447bf8dc271d8dae64, type: 2}

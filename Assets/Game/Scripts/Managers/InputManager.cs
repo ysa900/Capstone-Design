@@ -3,10 +3,10 @@ using UnityEngine.SceneManagement;
 
 public class InputManager : MonoBehaviour
 {
-    // GameoVer_GoTOLobby 버튼
+    // GameOver_GoTOLobby 버튼
     public UnityEngine.UI.Button GVGoToLobbyButtonObject;
 
-    // GameoVer_Restart 버튼
+    // GameOver_Restart 버튼
     public UnityEngine.UI.Button GVRestartButtonObject;
 
     // GameClear_GoTOLobby 버튼
@@ -24,9 +24,11 @@ public class InputManager : MonoBehaviour
     // Play 버튼
     public UnityEngine.UI.Button PlayButtonObject;
 
+    // GotoNextScene 버튼
+    public UnityEngine.UI.Button GoToNextSceneButtonObject;
+
     // Option 관련 버튼
     public UnityEngine.UI.Button OptionButtonObject; // 프레이 화면의 Option 버튼
-    public UnityEngine.UI.Button SettingPageBackButtonObject; // Setting Page(옵션 창)의 Back 버튼
 
 
     // GameManager에게 정보 전달을 하기 위한 Delegate들
@@ -36,7 +38,6 @@ public class InputManager : MonoBehaviour
     public delegate void OnPlayButtonClicked();
     public OnPlayButtonClicked onPlayButtonClicked;
 
-    // Start is called before the first frame update
     void Start()
     {
         // GameOver_Restart 버튼 눌렀을 때
@@ -63,6 +64,10 @@ public class InputManager : MonoBehaviour
         UnityEngine.UI.Button PGoToLobbyButton = PGoToLobbyButtonObject.GetComponent<UnityEngine.UI.Button>();
         PGoToLobbyButton.onClick.AddListener(goToLobbyButtonClicked);
 
+        // GoToNextScene 버튼 눌렀을 때
+        UnityEngine.UI.Button GoToNextSceneButton = GoToNextSceneButtonObject.GetComponent<UnityEngine.UI.Button>();
+        GoToNextSceneButton.onClick.AddListener(goToNextSceneButtonClicked);
+
         // Play 버튼 눌렀을 때
         UnityEngine.UI.Button PlayButton = PlayButtonObject.GetComponent<UnityEngine.UI.Button>();
         PlayButton.onClick.AddListener(PlayButtonClicked);
@@ -71,9 +76,6 @@ public class InputManager : MonoBehaviour
         UnityEngine.UI.Button OptionButton = OptionButtonObject.GetComponent<UnityEngine.UI.Button>();
         OptionButton.onClick.AddListener(OptionButtonClicked);
 
-        // SettingPage의 BackButton 눌렀을 때
-        UnityEngine.UI.Button SettingPageBackButton = SettingPageBackButtonObject.GetComponent<UnityEngine.UI.Button>();
-        SettingPageBackButton.onClick.AddListener(SettingPageBackButtonClicked);
     }
 
     // RestartButton이 눌렀을 때
@@ -81,7 +83,7 @@ public class InputManager : MonoBehaviour
     {
         GameAudioManager.instance.bgmPlayer.Stop(); // 현재 BGM 종료
 
-        SceneManager.LoadScene("Game"); // Stage1 으로 돌아가기(해당 씬 Load), 현재는 "Game" 씬 
+        SceneManager.LoadScene("Stage1"); // Stage1 으로 돌아가기 
         Time.timeScale = 1;
     }
 
@@ -93,7 +95,7 @@ public class InputManager : MonoBehaviour
         SceneManager.LoadScene("Lobby");
         Time.timeScale = 1;
     }
-    
+
     // PauseButton이 눌렀을 때
     private void PauseButtonClicked()
     {
@@ -116,17 +118,62 @@ public class InputManager : MonoBehaviour
 
     private void OptionButtonClicked()
     {
-        Time.timeScale = 0;
-        //GameManager.instance.HpBarObject.SetActive(false);
-        GameManager.instance.SettingPageObject.SetActive(true);
-        OptionButtonObject.interactable = false;
+        if (!GameManager.instance.isSettingPageOn) // 설정창 켜지지 않은 상태에서 누르기
+        {
+            PauseButtonObject.interactable = false;
+            // 인게임 중
+            if (!GameManager.instance.isPausePageOn && !GameManager.instance.isClearPageOn && !GameManager.instance.isSkillSelectPageOn && !GameManager.instance.isDeadPageOn)
+            {
+                GameManager.instance.isSettingPageOn = true;
+                Time.timeScale = 0; // 화면 멈추기
+                GameManager.instance.SettingPageObject.SetActive(true);
+            }
+            else // 나머지 상황: Pause, 레벨업, 클리어, 게임 오버
+            {
+                GameManager.instance.isSettingPageOn = true;
+                GameManager.instance.SettingPageObject.SetActive(true);
+            }
+        }
+        else // 설정창 켜진 상태에서 한번 더 누르기
+        {
+            // 인게임 중
+            if (!GameManager.instance.isPausePageOn && !GameManager.instance.isClearPageOn && !GameManager.instance.isSkillSelectPageOn && !GameManager.instance.isDeadPageOn)
+            {
+                Time.timeScale = 1; // 화면 풀기
+                GameManager.instance.isSettingPageOn = false;
+                PauseButtonObject.interactable = true;
+            }
+            else if (GameManager.instance.isPausePageOn && GameManager.instance.isSettingPageOn) // Pause 화면
+            {
+                GameManager.instance.isSettingPageOn = false;
+                PauseButtonObject.interactable = true;
+            }
+            else if (GameManager.instance.isClearPageOn && GameManager.instance.isSettingPageOn) // Clear 화면
+            {
+                GameManager.instance.isSettingPageOn = false;
+                PauseButtonObject.interactable = false;
+            }
+            else if (GameManager.instance.isDeadPageOn && GameManager.instance.isSettingPageOn) // 게임 오버
+            {
+                GameManager.instance.isSettingPageOn = false;
+                PauseButtonObject.interactable = false;
+            }
+
+            GameManager.instance.SettingPageObject.SetActive(false);
+        }
+
     }
 
-    private void SettingPageBackButtonClicked()
+    private void goToNextSceneButtonClicked()
     {
-        Time.timeScale = 1;
-        //GameManager.instance.HpBarObject.SetActive(true);
-        GameManager.instance.SettingPageObject.SetActive(false);
-        OptionButtonObject.interactable = true;
+        switch (SceneManager.GetActiveScene().name)
+        {
+            case "Stage1":
+                SceneManager.LoadScene("Splash2");
+                break;
+            case "Stage2":
+                SceneManager.LoadScene("Splash3");
+                break;
+        }
     }
 }

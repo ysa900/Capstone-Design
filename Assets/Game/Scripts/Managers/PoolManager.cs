@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class PoolManager : MonoBehaviour
 {
-    const int ENEMY_NUM = 7;
+    const int ENEMY_NUM = 10;
     const int EXP_NUM = 3;
-    const int SKILL_NUM = 15; // 불: 0 ~ 6, 전기: 7 ~ 10, 물: 11 ~ 14
+    const int SKILL_NUM = 21; // 불: 0 ~ 6, 전기: 7 ~ 10, 물: 11 ~ 14, 공명 스킬: 15 ~ 20
     const int BOSS_SKILL_NUM = 4;
 
     // 사용할 클래스 객체들
@@ -19,6 +19,7 @@ public class PoolManager : MonoBehaviour
     public Skill[] Skill_prefabs = new Skill[SKILL_NUM]; // SKILL_NUM = 15
     public BossSkill[] Boss_Skill_prefabs = new BossSkill[BOSS_SKILL_NUM]; // BOSS_SKILL_NUM = 4
     public GameObject damageText;
+    public Arrow arrow;
 
     // 풀 담당을 하는 리스트들
     List<Enemy>[] Enemy_pools;
@@ -26,12 +27,10 @@ public class PoolManager : MonoBehaviour
     List<Skill>[] Skill_pools;
     List<BossSkill>[] Boss_Skill_pools;
     List<GameObject> Damage_Text_pools = new List<GameObject>();
+    List<Arrow> arrow_pools = new List<Arrow>();
 
     private void Awake()
     {
-        // 클래스 객체들 초기화
-        enemyManager = FindAnyObjectByType<EnemyManager>();
-
         Enemy_pools = new List<Enemy>[Enemy_prefabs.Length];
         for (int index = 0; index < Enemy_pools.Length; index++)
         {
@@ -69,12 +68,12 @@ public class PoolManager : MonoBehaviour
             {
                 // 발견하면 select 변수에 할당
                 select = item;
-                if (select.GetComponent<IPullingObject>() != null)
+                if (select.GetComponent<IPoolingObject>() != null)
                 {
                     enemyManager.SetEnemyInfo(select, player, index);
-                    select.GetComponent<IPullingObject>().Init();
+                    select.gameObject.SetActive(true);
+                    select.GetComponent<IPoolingObject>().Init();
                 }
-                select.gameObject.SetActive(true);
                 break;
             }
         }
@@ -129,8 +128,8 @@ public class PoolManager : MonoBehaviour
                 // 발견하면 select 변수에 할당
                 select = item;
 
-                if (select.GetComponent<IPullingObject>() != null)
-                    select.GetComponent<IPullingObject>().Init();
+                if (select.GetComponent<IPoolingObject>() != null)
+                    select.GetComponent<IPoolingObject>().Init();
 
                 select.gameObject.SetActive(true);
                 break;
@@ -185,7 +184,7 @@ public class PoolManager : MonoBehaviour
                 // 발견하면 select 변수에 할당
                 select = item;
 
-                if (select.GetComponent<IPullingObject>() != null)
+                if (select.GetComponent<IPoolingObject>() != null)
                 {
                     if (target is Enemy)// 상속 형변환 활용
                     {
@@ -197,9 +196,10 @@ public class PoolManager : MonoBehaviour
                     select.player = player;
                     select.returnIndex = index; // return을 위해 index 부여
 
-                    select.GetComponent<IPullingObject>().Init();
+                    select.gameObject.SetActive(true);
+                    select.GetComponent<IPoolingObject>().Init();
                 }
-                select.gameObject.SetActive(true);
+                
                 break;
             }
         }
@@ -210,7 +210,7 @@ public class PoolManager : MonoBehaviour
             // 새롭게 생성하고 select 변수에 할당
             select = Instantiate(Skill_prefabs[index]);
 
-            if (select.GetComponent<IPullingObject>() != null)
+            if (select.GetComponent<IPoolingObject>() != null)
             {
                 if (target is Enemy) // 상속 형변환 활용
                 {
@@ -224,7 +224,7 @@ public class PoolManager : MonoBehaviour
                 select.player = player;
                 select.returnIndex = index; // return을 위해 index 부여
 
-                //select.GetComponent<IPullingObject>().Init();
+                //select.GetComponent<IPoolingObject>().Init();
             }
 
             select.transform.SetParent(this.gameObject.transform.GetChild(2));
@@ -245,14 +245,14 @@ public class PoolManager : MonoBehaviour
                 // 발견하면 select 변수에 할당
                 select = item;
 
-                if (select.GetComponent<IPullingObject>() != null)
+                if (select.GetComponent<IPoolingObject>() != null)
                 {
                     select.player = player;
                     select.returnIndex = index; // return을 위해 index 부여
 
-                    select.GetComponent<IPullingObject>().Init();
+                    select.gameObject.SetActive(true);
+                    select.GetComponent<IPoolingObject>().Init();
                 }
-                select.gameObject.SetActive(true);
                 break;
             }
         }
@@ -263,12 +263,12 @@ public class PoolManager : MonoBehaviour
             // 새롭게 생성하고 select 변수에 할당
             select = Instantiate(Skill_prefabs[index]);
 
-            if (select.GetComponent<IPullingObject>() != null)
+            if (select.GetComponent<IPoolingObject>() != null)
             {
                 select.player = player;
                 select.returnIndex = index; // return을 위해 index 부여
 
-                //select.GetComponent<IPullingObject>().Init();
+                //select.GetComponent<IPoolingObject>().Init();
             }
 
             select.transform.SetParent(this.gameObject.transform.GetChild(2));
@@ -310,13 +310,13 @@ public class PoolManager : MonoBehaviour
                 // 발견하면 select 변수에 할당
                 select = item;
 
-                if (select.GetComponent<IPullingObject>() != null)
+                if (select.GetComponent<IPoolingObject>() != null)
                 {
                     select.index = index; // return을 위해 index 부여
 
-                    select.GetComponent<IPullingObject>().Init();
+                    select.gameObject.SetActive(true);
+                    select.GetComponent<IPoolingObject>().Init();
                 }
-                select.gameObject.SetActive(true);
                 break;
             }
         }
@@ -327,12 +327,12 @@ public class PoolManager : MonoBehaviour
             // 새롭게 생성하고 select 변수에 할당
             select = Instantiate(Boss_Skill_prefabs[index]);
 
-            if (select.GetComponent<IPullingObject>() != null)
+            if (select.GetComponent<IPoolingObject>() != null)
             {
                 select.player = player;
                 select.index = index; // return을 위해 index 부여
 
-                //select.GetComponent<IPullingObject>().Init();
+                //select.GetComponent<IPoolingObject>().Init();
             }
 
             select.transform.SetParent(this.gameObject.transform.GetChild(3));
@@ -353,14 +353,14 @@ public class PoolManager : MonoBehaviour
                 // 발견하면 select 변수에 할당
                 select = item;
 
-                if (select.GetComponent<IPullingObject>() != null)
+                if (select.GetComponent<IPoolingObject>() != null)
                 {
                     select.index = index; // return을 위해 index 부여
                     select.laserTurnNum = num;
 
-                    select.GetComponent<IPullingObject>().Init();
+                    select.gameObject.SetActive(true);
+                    select.GetComponent<IPoolingObject>().Init();
                 }
-                select.gameObject.SetActive(true);
                 break;
             }
         }
@@ -371,13 +371,13 @@ public class PoolManager : MonoBehaviour
             // 새롭게 생성하고 select 변수에 할당
             select = Instantiate(Boss_Skill_prefabs[index]);
 
-            if (select.GetComponent<IPullingObject>() != null)
+            if (select.GetComponent<IPoolingObject>() != null)
             {
                 select.player = player;
                 select.index = index; // return을 위해 index 부여
                 select.laserTurnNum = num;
 
-                //select.GetComponent<IPullingObject>().Init();
+                //select.GetComponent<IPoolingObject>().Init();
             }
 
             select.transform.SetParent(this.gameObject.transform.GetChild(3));
@@ -398,16 +398,16 @@ public class PoolManager : MonoBehaviour
                 // 발견하면 select 변수에 할당
                 select = item;
 
-                if (select.GetComponent<IPullingObject>() != null)
+                if (select.GetComponent<IPoolingObject>() != null)
                 {
                     select.index = index; // return을 위해 index 부여
                     select.X = x;
                     select.Y = y;
                     select.isRightTop = b;
 
-                    select.GetComponent<IPullingObject>().Init();
+                    select.gameObject.SetActive(true);
+                    select.GetComponent<IPoolingObject>().Init();
                 }
-                select.gameObject.SetActive(true);
                 break;
             }
         }
@@ -418,7 +418,7 @@ public class PoolManager : MonoBehaviour
             // 새롭게 생성하고 select 변수에 할당
             select = Instantiate(Boss_Skill_prefabs[index]);
 
-            if (select.GetComponent<IPullingObject>() != null)
+            if (select.GetComponent<IPoolingObject>() != null)
             {
                 select.player = player;
                 select.index = index; // return을 위해 index 부여
@@ -426,7 +426,7 @@ public class PoolManager : MonoBehaviour
                 select.Y = y;
                 select.isRightTop = b;
 
-                //select.GetComponent<IPullingObject>().Init();
+                //select.GetComponent<IPoolingObject>().Init();
             }
 
             select.transform.SetParent(this.gameObject.transform.GetChild(3));
@@ -453,13 +453,13 @@ public class PoolManager : MonoBehaviour
             {
                 // 발견하면 select 변수에 할당
                 select = item;
-                if (select.GetComponent<IPullingObject>() != null)
+                if (select.GetComponent<IPoolingObject>() != null)
                 {
                     select.GetComponent<DamageText>().damage = damage;
                     select.GetComponent<DamageText>().skillTag = skillTag;
-                    select.GetComponent<IPullingObject>().Init();
+                    select.gameObject.SetActive(true);
+                    select.GetComponent<IPoolingObject>().Init();
                 }
-                select.gameObject.SetActive(true);
                 break;
             }
         }
@@ -494,6 +494,65 @@ public class PoolManager : MonoBehaviour
 
             tmpObject.transform.SetParent(this.gameObject.transform.GetChild(4)); // 자기 자신(transform) 추가 이유: hierarchy창 지저분해지는 거 방지
             Damage_Text_pools.Add(tmpObject);
+
+            tmpObject.gameObject.SetActive(false);
+        }
+    }
+
+    public Arrow GetArrow(float x, float y, Enemy enemy)
+    {
+        Arrow select = null;
+
+        // 선택한 풀의 놀고있는(비활성화된) 게임 오브젝트 접근    
+        foreach (Arrow item in arrow_pools)
+        {
+            if (!item.gameObject.activeSelf)
+            {
+                // 발견하면 select 변수에 할당
+                select = item;
+
+                select.X = enemy.X + x;
+                select.Y = enemy.Y + y;
+
+                if (select.GetComponent<IPoolingObject>() != null)
+                    select.GetComponent<IPoolingObject>().Init();
+
+                select.gameObject.SetActive(true);
+                break;
+            }
+        }
+
+        // 못 찾았으면?      
+        if (!select)
+        {
+            // 새롭게 생성하고 select 변수에 할당
+            // 자기 자신(transform) 추가 이유: hierarchy창 지저분해지는 거 방지
+            select = Instantiate(arrow);
+
+            select.X = enemy.X + x;
+            select.Y = enemy.Y + y;
+
+            select.transform.SetParent(this.gameObject.transform.GetChild(5));
+            arrow_pools.Add(select);
+        }
+
+        return select;
+    }
+    public void ReturnArrow(Arrow obj)
+    {
+        obj.gameObject.SetActive(false);
+        obj.transform.SetParent(this.gameObject.transform.GetChild(5));
+        arrow_pools.Add(obj);
+    }
+
+    void CreateArrows(int num)
+    {
+        for (int i = 0; i < num; i++)
+        {
+            Arrow tmpObject = Instantiate(arrow);
+
+            tmpObject.transform.SetParent(this.gameObject.transform.GetChild(5)); // 자기 자신(transform) 추가 이유: hierarchy창 지저분해지는 거 방지
+            arrow_pools.Add(tmpObject);
 
             tmpObject.gameObject.SetActive(false);
         }

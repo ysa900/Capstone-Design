@@ -7,11 +7,10 @@ using UnityEngine.UI;
 public class SkillSelectManager: MonoBehaviour
 {
     // 개발용 (스킬 테스트용)
-    bool isSkillTest = false;
-    int testSkillIndex = 8;
+    bool isSkillTest = true;
+    int testSkillIndex = 15;
 
     // 현재 고를 수 있는 스킬 번호 (0 ~ 4 레벨: 5번까지 / 5 ~ 9 레벨: 8번까지 / 10레벨 이상 : 11번까지)
-    // 12번은 Blood임
     private int skillCount = 6; // 이건 개수라서 5번까지 나오게 할려면 6개임
 
     // 패시브 스킬을 3개까지 가지고 있을 수 있음
@@ -62,6 +61,8 @@ public class SkillSelectManager: MonoBehaviour
 
     public SkillData2 skillData; // 스킬 데이터
     public SkillData2 passiveSkillData; // 패시브 스킬 데이터
+    public PlayerData playerData; // 플레이어 데이터
+
 
     // skillSelectObject의 아이콘, 스킬이름, 스킬 설명
     Image icon;
@@ -122,6 +123,7 @@ public class SkillSelectManager: MonoBehaviour
 
     public delegate void OnPassiveSkillSelected(int num, float value); // num: 패시브 스킬 종류, value: 바뀐 수치 값
     public OnPassiveSkillSelected onPassiveSkillSelected;
+
 
     private void Awake()
     {
@@ -271,7 +273,7 @@ public class SkillSelectManager: MonoBehaviour
     {
         Time.timeScale = 0;
 
-        int playerLevel = GameManager.instance.player.level;
+        int playerLevel = playerData.level;
 
         if (playerLevel <= 5)
         {
@@ -362,8 +364,13 @@ public class SkillSelectManager: MonoBehaviour
             SetSkillPanel(1);
         }else if(list.Count == 0) // 스킬 전부 만렙 찍으면 체력 회복하게 함
         {
-            isSkillAllMax = true;
-            SetSkillPanel(1);
+            //isSkillAllMax = true;
+            //SetSkillPanel(1);
+            skillSelectObject.SetActive(false);
+
+            onSkillSelectObjectHided();
+
+            Time.timeScale = 1;
         }
         else
         {
@@ -387,7 +394,7 @@ public class SkillSelectManager: MonoBehaviour
     {
         if (isSkillAllMax) // 스킬, 패시브 전부 다 MAX면
         {
-            icon = skill_Icon[i].GetComponent<Image>();
+            /*icon = skill_Icon[i].GetComponent<Image>();
             icon.sprite = skillData.skillicon[12];
 
             string color = "#FF0000";
@@ -398,7 +405,7 @@ public class SkillSelectManager: MonoBehaviour
             textDescription = skill_TextDescription[i].GetComponent<TextMeshProUGUI>();
             textDescription.text = "<color=" + color + ">" + skillData.skillDescription[12] + "</color>";
 
-            levelObject[i].SetActive(false);
+            levelObject[i].SetActive(false);*/
 
             return;
         }
@@ -758,7 +765,7 @@ public class SkillSelectManager: MonoBehaviour
         }
         else
         {
-            onPlayerHealed();
+            //onPlayerHealed();
         }
         skillSelectObject.SetActive(false);
 

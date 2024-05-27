@@ -1,15 +1,19 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RePositon : MonoBehaviour
 {
     public GameObject clearWall;
 
-    int sceneNum;
     bool isStage2TimeOver;
+    int playerAreaSize = 120;
+    int GroundSize = 160;
 
     private void Start()
     {
+        
         // clearWall의 오른쪽 끝 좌표를 GameManger를 통해 FollowCam에게 전달 
         if (clearWall != null) SendClearWall_RightX();
 
@@ -19,13 +23,15 @@ public class RePositon : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
+      
+
         // 플레이어의 Area와 충돌을 감지해 벗어났다면 실행
         // 플레이어 프리팹 하위에 Area라는게 있음 
         if (!collision.CompareTag("Area"))
         {
             return;
         }
-
+        
         Vector3 playerPosition = GameManager.instance.player.transform.position;
         Vector3 myPosition = transform.position;
         float diffX = Mathf.Abs(playerPosition.x - myPosition.x);
@@ -37,19 +43,27 @@ public class RePositon : MonoBehaviour
         switch (transform.tag)
         {
             case "Ground":
-                if (diffX > diffY)
+                if(diffX > playerAreaSize && diffY > playerAreaSize)
                 {
-                    transform.Translate(Vector3.right * dirtionX * 80); // 오른쪽 방향 * (-1 or 1) * 거리
+                    
+                    transform.Translate(Vector3.right * dirtionX * GroundSize);
+                    transform.Translate(Vector3.up * dirtionY * GroundSize);
+                }
+                else if(diffX > diffY)
+                {
+                  
+                    transform.Translate(Vector3.right * dirtionX * GroundSize); // 오른쪽 방향 * (-1 or 1) * 거리
                 }
                 else if (diffX < diffY)
                 {
-                    transform.Translate(Vector3.up * dirtionY * 80);// 윗 방향 * (-1 or 1) * 거리
+                    
+                    transform.Translate(Vector3.up * dirtionY * GroundSize);// 윗 방향 * (-1 or 1) * 거리
                 }
                 break;
 
             case "Corridor":
                 // Stage2에서 5분이 지나면 Reposition이 멈추고, 보스 방으로 가는 길이 열려야 함
-                isStage2TimeOver = sceneNum == 3 && GameManager.instance.gameTime >= 5 * 60;
+                isStage2TimeOver = SceneManager.GetActiveScene().name == "Stage2" && GameManager.instance.gameTime >= 5 * 60;
                 
                 if (isStage2TimeOver) break;
 
@@ -76,6 +90,6 @@ public class RePositon : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
 
-        sceneNum = GameManager.instance.sceneNum;
+        playerAreaSize = (int)GameManager.instance.player.gameObject.GetComponentInChildren<BoxCollider2D>().size.x;
     }
 }

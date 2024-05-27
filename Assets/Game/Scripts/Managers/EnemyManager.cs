@@ -16,8 +16,9 @@ public class EnemyManager : MonoBehaviour
     int enemyNameIndex = 0;
 
     // Enemy들 이름
-    string[] EnemyNames = { "Ghoul", "Spitter", "Summoner", "BloodKing",
-                            "Skeleton_Sword", "Skeleton_Arrow", "Skeleton_Horse"};
+    string[] EnemyNames = { "evilTree", "pumpkin","warlock", 
+                            "Skeleton_Sword", "Skeleton_Archer", "Skeleton_Horse",
+                            "Ghoul", "Spitter", "Summoner", "BloodKing" };
 
     private GameAudioManager gameAudioManager;
 
@@ -29,9 +30,17 @@ public class EnemyManager : MonoBehaviour
     public delegate void OnEnemyKilled(Enemy killedEnemy);
     public OnEnemyKilled onEnemyKilled;
 
+    float hitDelayTime = 0.1f;
+    float hitDelatTimer = 0f;
+
     private void Awake()
     {
         gameAudioManager = FindAnyObjectByType<GameAudioManager>();
+    }
+
+    private void FixedUpdate()
+    {
+        hitDelatTimer += Time.fixedDeltaTime;
     }
 
     // 적 정보를 입력하고 적을 생성하는 함수
@@ -45,7 +54,10 @@ public class EnemyManager : MonoBehaviour
         enemyNameIndex++;
 
         enemy.player = player;
+
+        // delegate 할당
         enemy.onEnemyWasKilled = OnEnemyWasKilled;
+        enemy.onEnemyHit = OnEnemyHit;
 
         enemies.Add(enemy);
 
@@ -68,5 +80,16 @@ public class EnemyManager : MonoBehaviour
         enemies.Remove(killedEnemy);
 
         onEnemiesChanged(enemies); // enmy 배열 업데이트하도록 GameManager에게 알려주기
+    }
+
+    void OnEnemyHit()
+    {
+
+        bool isDelayOver = hitDelatTimer >= hitDelayTime;
+        if (isDelayOver)
+        {
+            GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // Enemy 피격 효과음
+            hitDelatTimer = 0;
+        }
     }
 }

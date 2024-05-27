@@ -9,14 +9,8 @@ public class LobbyManager : MonoBehaviour
     // Character 버튼
     public UnityEngine.UI.Button CharacterButtonObject;
 
-    // Item 버튼
-    public UnityEngine.UI.Button ItemButtonObject;
-
     // Character Page Back 버튼
     public UnityEngine.UI.Button CharacterPageBackButtonObject;
-
-    // Item Page Back 버튼
-    public UnityEngine.UI.Button ItemPageBackButtonObject;
 
     // Setting Page(옵션 창)의 Back 버튼
     public UnityEngine.UI.Button SettingPageBackButtonObject;
@@ -49,9 +43,6 @@ public class LobbyManager : MonoBehaviour
     // Character Page 오브젝트
     public GameObject CharacterPage;
 
-    // Item Page 오브젝트
-    public GameObject ItemPage;
-
     // Setting Page 오브젝트
     public GameObject SettingPage;
 
@@ -67,22 +58,8 @@ public class LobbyManager : MonoBehaviour
     {
         // 시작 시 비활성화
         CharacterPage.SetActive(false);
-        ItemPage.SetActive(false);
 
-        // 미구현:
-        UnityEngine.UI.Button SelectAssassinButton = SelectAssassinButtonObject.GetComponent<UnityEngine.UI.Button>();
-        UnityEngine.UI.Button SelectWarriorButton = SelectWarriorButtonObject.GetComponent<UnityEngine.UI.Button>();
+        SettingPage.SetActive(false);
 
-        // 미구현: Item Page 뒤로가기 버튼 눌렀을 때
-        UnityEngine.UI.Button ItemPageBackButton = ItemPageBackButtonObject.GetComponent<UnityEngine.UI.Button>();
-        ItemPageBackButton.onClick.AddListener(ItemPageBackButtonClicked);
-    }
-
-    // Item Page 미구현이라 해당 버튼 함수는 여기에 둠
-    // Item Page 뒤로가기 버튼 클릭 시
-    private void ItemPageBackButtonClicked()
-    {
-        ItemPage.SetActive(false);
-        MainPage.SetActive(true);
     }
 }
