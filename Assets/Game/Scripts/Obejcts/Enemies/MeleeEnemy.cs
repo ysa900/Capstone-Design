@@ -15,6 +15,10 @@ public class MeleeEnemy : Enemy
         if (!isDead)
         {
             LookAtPlayer();
+
+            if (isAgentDelay)
+                return;
+
             MoveToPlayer();
         }
 

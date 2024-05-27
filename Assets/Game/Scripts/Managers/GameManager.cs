@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 using static GameAudioManager;
 
 // Pause 걸면 이전에는 인게임 속 UI들(피통, 스킬 패널, 프로필)이 안사라져서
@@ -37,7 +38,7 @@ public class GameManager : MonoBehaviour
     // Enemy들을 담을 리스트
     [SerializeField]
     [ReadOnly]
-    private List<Enemy> enemies = new List<Enemy>();
+    public List<Enemy> enemies = new List<Enemy>();
 
     // 사용할 클래스 객체들
     public Player player;
@@ -90,6 +91,7 @@ public class GameManager : MonoBehaviour
     public bool isClearPageOn = false;
     public bool isDeadPageOn = false;
     public bool isSkillSelectPageOn = false;
+  
 
 
     private void Awake()
@@ -170,7 +172,7 @@ public class GameManager : MonoBehaviour
 
         navMeshControl.BakeNavMeshArea();
 
-        if (SceneManager.GetActiveScene().name == "Stage1")
+        if (SceneManager.GetActiveScene().name == "Stage3")
             skillSelectManager.ChooseStartSkill(); // 시작 스킬 선택
 
         // Stage1 배경음 플레이
@@ -321,7 +323,7 @@ public class GameManager : MonoBehaviour
     {
         if (gameTime <= 60 * 1 && CoolTimer >= CoolTime)
         {
-            SpawnEnemies(3, 10); // Skeleton_Sword 몬스터 소환
+            SpawnEnemies(3, 1); // Skeleton_Sword 몬스터 소환
             CoolTimer = 0f;
         }
         else if (gameTime <= 60 * 2 && CoolTimer >= CoolTime)
@@ -572,8 +574,8 @@ public class GameManager : MonoBehaviour
         exp.index = index;
         exp.player = player;
 
-        exp.X = killedEnemy.X;
-        exp.Y = killedEnemy.Y + 1f;
+        exp.X = killedEnemy.transform.position.x;
+        exp.Y = killedEnemy.transform.position.y+ 0.5f;
     }
 
     // 플레이어가 레벨 업 했을 시 실행
@@ -634,6 +636,7 @@ public class GameManager : MonoBehaviour
     {
         navMeshControl.DirectionX = DirectionX;
         navMeshControl.DirectionY = DirectionY;
+        
    
     }
 
