@@ -164,7 +164,7 @@ public class Enemy : Object, IDamageable, IPoolingObject
         
         DestryIfToFar(); // 플레이어와의 거리가 너무 멀면 죽음
         damageDelayTimer += Time.fixedDeltaTime;
-        
+        agent.enabled = true;
     }
 
     // 플레이어 방향으로 이동하는 함수
@@ -226,7 +226,8 @@ public class Enemy : Object, IDamageable, IPoolingObject
 
         if (isinvoked)
         {
-            if (agentToplayerDistance > 30f)
+
+            if (agentToplayerDistance > 30f && sceneNum == 3)
             {
                 if(player.transform.position.x >0 && player.transform.position.y >0){
 

@@ -172,7 +172,7 @@ public class GameManager : MonoBehaviour
 
         navMeshControl.BakeNavMeshArea();
 
-        if (SceneManager.GetActiveScene().name == "Stage3")
+        if (SceneManager.GetActiveScene().name == "Stage2")
             skillSelectManager.ChooseStartSkill(); // 시작 스킬 선택
 
         // Stage1 배경음 플레이
@@ -323,7 +323,7 @@ public class GameManager : MonoBehaviour
     {
         if (gameTime <= 60 * 1 && CoolTimer >= CoolTime)
         {
-            SpawnEnemies(3, 1); // Skeleton_Sword 몬스터 소환
+            SpawnEnemies(3, 10); // Skeleton_Sword 몬스터 소환
             CoolTimer = 0f;
         }
         else if (gameTime <= 60 * 2 && CoolTimer >= CoolTime)
