@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5585784915097225099}
   - component: {fileID: -2373174194302336799}
   - component: {fileID: 4175485433745905301}
-  - component: {fileID: -4913061032893352038}
+  - component: {fileID: -7424071372996459232}
   m_Layer: 0
   m_Name: Fire_basic
   m_TagString: Fire
@@ -174,7 +174,7 @@ CapsuleCollider2D:
   m_Offset: {x: -0.05, y: 0.05}
   m_Size: {x: 0.53, y: 1}
   m_Direction: 0
---- !u!114 &-4913061032893352038
+--- !u!114 &-7424071372996459232
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -183,7 +183,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1876097049369689279}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e131ebce646e5c64abe159924d3779de, type: 3}
+  m_Script: {fileID: 11500000, guid: d188f4d574f01a245ba5bc814dcc32a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   isDotDamageSkill: 0

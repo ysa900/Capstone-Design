@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7742417754174193469}
   - component: {fileID: 4962036524032665678}
   - component: {fileID: 5100622841451757952}
-  - component: {fileID: -1467645379966069019}
+  - component: {fileID: 1444332819241385628}
   m_Layer: 0
   m_Name: Water_Normal3
   m_TagString: Water
@@ -183,7 +183,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 4.46875, y: 5.71875}
   m_EdgeRadius: 0
---- !u!114 &-1467645379966069019
+--- !u!114 &1444332819241385628
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -192,7 +192,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3500552672976249189}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af1fdf874ad18934a888143e9f124998, type: 3}
+  m_Script: {fileID: 11500000, guid: 06210489640f166499b171f2a7065272, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   isDotDamageSkill: 0
@@ -207,5 +207,9 @@ MonoBehaviour:
   yPositionNum: 0
   isAttachSkill: 0
   isFlipped: 0
+  isCircleSkill: 0
+  isShieldSkill: 0
+  isDelaySkill: 0
   isYFlipped: 0
+  degree: 0
   aliveTime: 0

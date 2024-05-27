@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 using static GameAudioManager;
 
 // Pause 걸면 이전에는 인게임 속 UI들(피통, 스킬 패널, 프로필)이 안사라져서
@@ -37,7 +38,7 @@ public class GameManager : MonoBehaviour
     // Enemy들을 담을 리스트
     [SerializeField]
     [ReadOnly]
-    private List<Enemy> enemies = new List<Enemy>();
+    public List<Enemy> enemies = new List<Enemy>();
 
     // 사용할 클래스 객체들
     public Player player;
@@ -83,11 +84,15 @@ public class GameManager : MonoBehaviour
 
     public PlayerData playerData; // 플레이어 데이터 객체
 
+    public NavMeshControl navMeshControl; //Nav mesh AI 객체
+
     public bool isSettingPageOn = false;
     public bool isPausePageOn = false;
     public bool isClearPageOn = false;
     public bool isDeadPageOn = false;
     public bool isSkillSelectPageOn = false;
+  
+
 
     private void Awake()
     {
@@ -102,6 +107,16 @@ public class GameManager : MonoBehaviour
         BossHPObject.SetActive(false);
         SettingPageObject.SetActive(false);
 
+        inputManager = FindAnyObjectByType<InputManager>();
+        followCam = FindAnyObjectByType<FollowCam>();
+        skillManager = FindAnyObjectByType<SkillManager>();
+        skillSelectManager = FindAnyObjectByType<SkillSelectManager>();
+        bossManager = FindAnyObjectByType<BossManager>();
+        poolManager = FindAnyObjectByType<PoolManager>();
+        tilemapManager = FindAnyObjectByType<TilemapManager>();
+        navMeshControl = FindAnyObjectByType<NavMeshControl>();
+
+
         // 클래스 객체들 초기화
         if (sceneNum == 1)
         {
@@ -110,13 +125,7 @@ public class GameManager : MonoBehaviour
         player = Instantiate(playerPrefab);
         SetPlayerInfo();
 
-        inputManager = FindAnyObjectByType<InputManager>();
-        followCam = FindAnyObjectByType<FollowCam>();
-        skillManager = FindAnyObjectByType<SkillManager>();
-        skillSelectManager = FindAnyObjectByType<SkillSelectManager>();
-        bossManager = FindAnyObjectByType<BossManager>();
-        poolManager = FindAnyObjectByType<PoolManager>();
-        tilemapManager = FindAnyObjectByType<TilemapManager>();
+
 
         // inputManger Delegate 할당
         inputManager.onPauseButtonClicked = OnPauseButtonClicked;
@@ -149,6 +158,7 @@ public class GameManager : MonoBehaviour
         // BossManager delegate 할당
         bossManager.onBossHasKilled = OnBossHasKilled;
 
+
         //gameTime = maxGameTime - 2f;
         //player.isPlayerShielded = true;
         //player.level = 20;
@@ -159,12 +169,17 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        if (SceneManager.GetActiveScene().name == "Stage1")
+
+        navMeshControl.BakeNavMeshArea();
+
+        if (SceneManager.GetActiveScene().name == "Stage3")
             skillSelectManager.ChooseStartSkill(); // 시작 스킬 선택
 
         // Stage1 배경음 플레이
         GameAudioManager.instance.bgmPlayer.clip = GameAudioManager.instance.bgmClips[(int)Bgm.Stage1];
         GameAudioManager.instance.bgmPlayer.Play();
+
+
 
         SpawnStartEnemies();
     }
@@ -176,6 +191,7 @@ public class GameManager : MonoBehaviour
         {
             gameTime += Time.deltaTime; // 게임 시간 증가
             CoolTimer += Time.deltaTime;
+            
 
             if (!isBossSpawned)
             {
@@ -221,7 +237,7 @@ public class GameManager : MonoBehaviour
         switch (sceneNum)
         {
             case 1:
-                Vector2 PlayerPos = new Vector2(40, 40);
+                Vector2 PlayerPos = new Vector2(0, 0);
                 player.transform.position = PlayerPos;
 
                 Vector2 AreaSize = new Vector2(120, 120);
@@ -307,7 +323,7 @@ public class GameManager : MonoBehaviour
     {
         if (gameTime <= 60 * 1 && CoolTimer >= CoolTime)
         {
-            SpawnEnemies(3, 10); // Skeleton_Sword 몬스터 소환
+            SpawnEnemies(3, 1); // Skeleton_Sword 몬스터 소환
             CoolTimer = 0f;
         }
         else if (gameTime <= 60 * 2 && CoolTimer >= CoolTime)
@@ -558,8 +574,8 @@ public class GameManager : MonoBehaviour
         exp.index = index;
         exp.player = player;
 
-        exp.X = killedEnemy.X;
-        exp.Y = killedEnemy.Y + 1f;
+        exp.X = killedEnemy.transform.position.x;
+        exp.Y = killedEnemy.transform.position.y+ 0.5f;
     }
 
     // 플레이어가 레벨 업 했을 시 실행
@@ -615,6 +631,14 @@ public class GameManager : MonoBehaviour
         followCam.clearWall_RightEndX = xValue;
     }
 
+    // Reposition에서 Stage1 맵 타일 하나가 변경되면 NavMeshControl에게 전해주는 데이터들
+    public void SendDirectionNavMesh(float DirectionX, float DirectionY)
+    {
+        navMeshControl.DirectionX = DirectionX;
+        navMeshControl.DirectionY = DirectionY;
+        
+   
+    }
 
 
     void PlayerInit()

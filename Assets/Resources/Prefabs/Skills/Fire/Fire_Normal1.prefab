@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 718911471557462316}
   - component: {fileID: 6510520190359188534}
+  - component: {fileID: 2903703863847993547}
   - component: {fileID: 1394539822934466381}
   - component: {fileID: 6564916000610080609}
   - component: {fileID: 3750057749521518364}
-  - component: {fileID: -4400064218046672018}
   m_Layer: 0
   m_Name: Fire_Normal1
   m_TagString: Fire
@@ -88,6 +88,36 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &2903703863847993547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1449370788958344176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06210489640f166499b171f2a7065272, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isDotDamageSkill: 0
+  enemy: {fileID: 0}
+  boss: {fileID: 0}
+  player: {fileID: 0}
+  speed: 0
+  damage: 0
+  skillIndex: 0
+  returnIndex: 0
+  xPositionNum: 0
+  yPositionNum: 0
+  isAttachSkill: 0
+  isFlipped: 0
+  isCircleSkill: 0
+  isShieldSkill: 0
+  isDelaySkill: 0
+  isYFlipped: 0
+  degree: 0
+  aliveTime: 0
 --- !u!58 &1394539822934466381
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -173,29 +203,3 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &-4400064218046672018
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1449370788958344176}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 08531798654b6064cab84a687a4fa118, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isDotDamageSkill: 0
-  enemy: {fileID: 0}
-  boss: {fileID: 0}
-  player: {fileID: 0}
-  speed: 0
-  damage: 0
-  skillIndex: 0
-  returnIndex: 0
-  xPositionNum: 0
-  yPositionNum: 0
-  isAttachSkill: 0
-  isFlipped: 0
-  isYFlipped: 0
-  aliveTime: 0

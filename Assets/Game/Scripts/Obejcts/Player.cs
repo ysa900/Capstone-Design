@@ -1,5 +1,6 @@
 using Unity.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Player : MonoBehaviour, IPlayer
 {
@@ -49,6 +50,7 @@ public class Player : MonoBehaviour, IPlayer
 
     public PlayerData playerData; // 플레이어 데이터
 
+
     private void Awake()
     {
         gameAudioManager = FindAnyObjectByType<GameAudioManager>();
@@ -62,7 +64,10 @@ public class Player : MonoBehaviour, IPlayer
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
         absorberCollider = gameObject.GetComponentInChildren<CircleCollider2D>();
+   
     }
+
+
 
     // Update is called once per frame
     void Update()
@@ -112,8 +117,9 @@ public class Player : MonoBehaviour, IPlayer
         // fixedDeltaTime은 물리 프레임 시간
         Vector2 nextVec = inputVec.normalized * playerData.speed * Time.fixedDeltaTime;
 
-        // 입력받은 방향으로 플레이어 위치 설정
         rigid.MovePosition(rigid.position + nextVec);
+        // 입력받은 방향으로 플레이어 위치 설정
+
     }
 
     //player 경험치 획득 함수

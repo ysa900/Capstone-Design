@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5572848396861307380}
   - component: {fileID: 3816789274483198280}
   - component: {fileID: -7192459276839609349}
-  - component: {fileID: -3112494141064117918}
+  - component: {fileID: -3618531333995826868}
   m_Layer: 0
   m_Name: Electric_basic
   m_TagString: Electric
@@ -174,7 +174,7 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 2.3125, y: 5.28125}
   m_Direction: 0
---- !u!114 &-3112494141064117918
+--- !u!114 &-3618531333995826868
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -183,7 +183,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3719459856391972471}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a425cd068b8a2f4ebe2c24ebb593e08, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b48512a07722b645809a211e145e830, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   isDotDamageSkill: 0
@@ -195,4 +195,3 @@ MonoBehaviour:
   skillIndex: 0
   returnIndex: 0
   isBossAppear: 0
-  aliveTime: 0

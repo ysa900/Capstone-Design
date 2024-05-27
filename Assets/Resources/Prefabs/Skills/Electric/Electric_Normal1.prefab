@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 2902973571867742876}
   - component: {fileID: 353769856378019508}
   - component: {fileID: 4500753896685704306}
+  - component: {fileID: 8321802461996845402}
   - component: {fileID: 518198947388021794}
-  - component: {fileID: 7176606802967417820}
   m_Layer: 0
   m_Name: Electric_Normal1
   m_TagString: Electric
@@ -151,6 +151,36 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.6875
+--- !u!114 &8321802461996845402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3708506530452975792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06210489640f166499b171f2a7065272, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isDotDamageSkill: 0
+  enemy: {fileID: 0}
+  boss: {fileID: 0}
+  player: {fileID: 0}
+  speed: 0
+  damage: 0
+  skillIndex: 0
+  returnIndex: 0
+  xPositionNum: 0
+  yPositionNum: 0
+  isAttachSkill: 0
+  isFlipped: 0
+  isCircleSkill: 0
+  isShieldSkill: 0
+  isDelaySkill: 0
+  isYFlipped: 0
+  degree: 0
+  aliveTime: 0
 --- !u!95 &518198947388021794
 Animator:
   serializedVersion: 7
@@ -173,30 +203,3 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &7176606802967417820
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3708506530452975792}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 16e3035a51c6ec04490276048aaddb01, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isDotDamageSkill: 0
-  enemy: {fileID: 0}
-  boss: {fileID: 0}
-  player: {fileID: 0}
-  speed: 0
-  damage: 0
-  skillIndex: 0
-  returnIndex: 0
-  xPositionNum: 0
-  yPositionNum: 0
-  isAttachSkill: 0
-  isFlipped: 0
-  isYFlipped: 0
-  aliveTime: 0
-  degree: 0
