@@ -13,12 +13,24 @@ public class EnemyTrackingSkill : Skill, IPoolingObject
     Vector2 myPosition;
     Vector2 direction;
 
+    private string sceneName;
+
     public new void Init()
     {
         aliveTime = 0;
 
-        X = player.transform.position.x;
-        Y = player.transform.position.y;
+        switch(sceneName)
+        {
+            case "Stage1_ML":
+                X = player_ML.transform.position.x;
+                Y = player_ML.transform.position.y;          
+                break;
+            default:
+                X = player.transform.position.x;
+                Y = player.transform.position.y;
+                break;
+        }
+
 
         if (!isBossAppear)
         {
@@ -33,6 +45,7 @@ public class EnemyTrackingSkill : Skill, IPoolingObject
     private void Start()
     {
         rigid = GetComponent<Rigidbody2D>();
+        sceneName = GameManager.instance.sceneName;
         
         if(!isBossAppear)
         {
@@ -53,7 +66,15 @@ public class EnemyTrackingSkill : Skill, IPoolingObject
             if (onSkillFinished != null)
                 onSkillFinished(skillIndex); // skillManager에게 delegate로 알려줌
 
-            GameManager.instance.poolManager.ReturnSkill(this, returnIndex);
+            switch(sceneName)
+            {
+                case "Stage1_ML":
+                    GameManager.instance.poolManager_ML.ReturnSkill(this, returnIndex);
+                    break;
+                default:
+                    GameManager.instance.poolManager.ReturnSkill(this, returnIndex);
+                    break;
+            }
             return;
         }
         else if(!isBossAppear)
@@ -70,32 +91,51 @@ public class EnemyTrackingSkill : Skill, IPoolingObject
 
     private void SetEnemyPosition()
     {
-        enemyPosition = enemy.transform.position;
-
-        myPosition = player.transform.position;
-
-        // 적 실제 위치로 보정
-
-
-        /*if (enemy.isEnemyLookLeft)
-            enemyPosition.x -= enemy.capsuleCollider.size.x * 5;
-        else
-            enemyPosition.x += enemy.capsuleCollider.size.x * 5;*/
-
-        switch (enemy.tag)
+        switch(sceneName)
         {
-            case "Pumpkin":
-            case "WarLock":
-            case "Ghoul":
-            case "Spitter":
-            case "Summoner":
-                enemyPosition.y += enemy.capsuleCollider.size.y * 5;
+            case "Stage1_ML":
+                enemyPosition = enemy_ML.transform.position; // ML
+                myPosition = player.transform.position;
+
+                // 적 실제 위치로 보정
+
+                switch (enemy_ML.tag)
+                {
+                    case "Pumpkin":
+                    case "WarLock":
+                    case "Ghoul":
+                    case "Spitter":
+                    case "Summoner":
+                        enemyPosition.y += enemy_ML.capsuleCollider.size.y * 5;
+                        break;
+                }
+
+                direction = enemyPosition - myPosition;
+                direction = direction.normalized;
+
                 break;
+            default:
+                enemyPosition = enemy.transform.position;
+
+                myPosition = player.transform.position;
+
+                // 적 실제 위치로 보정
+
+                switch (enemy.tag)
+                {
+                    case "Pumpkin":
+                    case "WarLock":
+                    case "Ghoul":
+                    case "Spitter":
+                    case "Summoner":
+                        enemyPosition.y += enemy.capsuleCollider.size.y * 5;
+                        break;
+                }
+
+                direction = enemyPosition - myPosition;
+                direction = direction.normalized;
+            break;
         }
-
-        direction = enemyPosition - myPosition;
-
-        direction = direction.normalized;
     }
 
     private void SetBossPosition()

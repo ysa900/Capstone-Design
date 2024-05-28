@@ -7,6 +7,7 @@ using UnityEngine;
 public class SkillManager : MonoBehaviour
 {
     public Player player;
+    public Player_ML player_ML; // ML
 
     private float attackRange = 17.5f; // 플레이어 공격 사거리
     private float nearAttackRange = 7.5f; // 플레이어 근접 우선 공격 사거리
@@ -16,6 +17,8 @@ public class SkillManager : MonoBehaviour
     [SerializeField]
     [ReadOnly]
     public List<Enemy> enemies; // Enemy들을 담을 리스트
+    public List<Enemy_ML> enemies_ML; // ML용 Enemy_ML들을 담을 리스트
+
     public Boss boss;
 
     public SkillData2 skillData;
@@ -26,6 +29,8 @@ public class SkillManager : MonoBehaviour
     private float alpha = 0;
 
     private bool isFire3SkillLeftRight; // 불 일반3 스킬은 좌우 / 위아래로 번갈아 나가므로 설정한 변수
+
+    private string sceneName;
 
     // 스킬 클래스 객체들
     private PlayerAttachSkill playerAttachSkill;
@@ -55,6 +60,11 @@ public class SkillManager : MonoBehaviour
     private void Awake()
     {
         Init(); // skillData 초기화
+    }
+
+    private void Start()
+    {
+        sceneName = GameManager.instance.sceneName;
     }
 
     private void Update()
@@ -168,85 +178,178 @@ public class SkillManager : MonoBehaviour
             {
                 case 0:
                     {
-                        // 불 공격은 가장 가까운 적이 사거리 내에 있어야지만 나간다
-                        Enemy enemy = FindNearestEnemy(); // 가장 가까운 적을 찾는다
-                        if (enemy == null) return; // 적이 없으면 공격 X
-                        Vector2 enemyPos = enemy.transform.position;
-                        Vector2 playerPos = player.transform.position;
-                        float distance = Vector2.Distance(enemyPos, playerPos);
-                        
-                        bool isInAttackRange = distance <= attackRange; // 적이 사거리 내에 있을때만 공격이 나간다
+                        float distance;
 
-                        if (isInAttackRange)
+                        switch(sceneName)
                         {
-                            CastSkill(enemy, index); // 스킬을 시전
+                            case "Stage1_ML":
+                                // 불 공격은 가장 가까운 적이 사거리 내에 있어야지만 나간다
+                                Enemy_ML enemy_ML = FindNearestEnemy_ML(); // 가장 가까운 적을 찾는다
+                                if (enemy_ML == null) return; // 적이 없으면 공격 X
+                                Vector2 enemyPos = enemy_ML.transform.position;
+                                Vector2 playerPos = player_ML.transform.position;
+                                distance = Vector2.Distance(enemyPos, playerPos);
+                                bool isInAttackRange = distance <= attackRange; // 적이 사거리 내에 있을때만 공격이 나간다
+
+                                if (isInAttackRange)
+                                {
+                                    CastSkill(enemy_ML, index); // 스킬을 시전
+                                }
+
+                                break;
+                            default:
+                                // 불 공격은 가장 가까운 적이 사거리 내에 있어야지만 나간다
+                                Enemy enemy = FindNearestEnemy(); // 가장 가까운 적을 찾는다
+                                if (enemy == null) return; // 적이 없으면 공격 X
+                                enemyPos = enemy.transform.position;
+                                playerPos = player.transform.position;
+                                distance = Vector2.Distance(enemyPos, playerPos);
+
+                                isInAttackRange = distance <= attackRange; // 적이 사거리 내에 있을때만 공격이 나간다
+
+                                if (isInAttackRange)
+                                {
+                                    CastSkill(enemy, index); // 스킬을 시전
+                                }
+                                break;
                         }
 
                         break;
                     }
                 case 1:
                     {
-                        // 전기 공격은 사거리 내 랜덤한 적에게 시전된다
-                        Enemy enemy;
-
-                        int breakNum = 0; // while문 탈출을 위한 num
-                        bool isInAttackRange = false;
-
-                        while (true)
+                        switch(sceneName)
                         {
-                            int ranNum = UnityEngine.Random.Range(0, enemies.Count);
-                            
-                            enemy = enemies[ranNum];
-                            
-                            if (!(enemy == null))
-                            {
-                                float distance = Vector2.Distance(enemy.transform.position, player.transform.position);
-                                
-                                isInAttackRange = distance <= nearAttackRange; // 적이 사거리 내에 있을때만 공격이 나간다
+                            case "Stage1_ML":
+                                // ML용
+                                Enemy_ML enemy_ML;
 
-                                if (isInAttackRange)
-                                    break;
-                            }
+                                int breakNum = 0; // while문 탈출을 위한 num
+                                bool isInAttackRange = false;
 
-                            breakNum++;
-                            if (breakNum >= 1000) // 1000회 반복 내에 마땅한 적을 찾지 못했다면 그냥 break;
-                                break;
-                        }
-                        if (enemy == null) return; // 적이 없으면 공격 X
-
-                        if (isInAttackRange) { 
-                            CastSkill(enemy, index);
-                        } else { // 근접 우선 사거리 내에 적이 없으면 원거리 범위 적을 찾는다
-
-                            breakNum = 0; // while문 탈출을 위한 num
-                            isInAttackRange = false;
-
-                            while (true)
-                            {
-                                int ranNum = UnityEngine.Random.Range(0, enemies.Count);
-
-                                enemy = enemies[ranNum];
-
-                                if (!(enemy == null))
+                                while (true)
                                 {
-                                    float distance = Vector2.Distance(enemy.transform.position, player.transform.position);
+                                    int ranNum = UnityEngine.Random.Range(0, enemies_ML.Count);
 
-                                    isInAttackRange = distance <= attackRange; // 적이 사거리 내에 있을때만 공격이 나간다
+                                    enemy_ML = enemies_ML[ranNum];
 
-                                    if (isInAttackRange)
+                                    if (!(enemy_ML == null))
+                                    {
+                                        float distance = Vector2.Distance(enemy_ML.transform.position, player_ML.transform.position);
+
+                                        isInAttackRange = distance <= nearAttackRange; // 적이 사거리 내에 있을때만 공격이 나간다
+
+                                        if (isInAttackRange)
+                                            break;
+                                    }
+
+                                    breakNum++;
+                                    if (breakNum >= 1000) // 1000회 반복 내에 마땅한 적을 찾지 못했다면 그냥 break;
                                         break;
                                 }
+                                if (enemy_ML == null) return; // 적이 없으면 공격 X
 
-                                breakNum++;
-                                if (breakNum >= 1000) // 1000회 반복 내에 마땅한 적을 찾지 못했다면 그냥 break;
-                                    break;
-                            }
+                                if (isInAttackRange) { 
+                                    CastSkill(enemy_ML, index);
+                                } else { // 근접 우선 사거리 내에 적이 없으면 원거리 범위 적을 찾는다
+
+                                    breakNum = 0; // while문 탈출을 위한 num
+                                    isInAttackRange = false;
+
+                                    while (true)
+                                    {
+                                        int ranNum = UnityEngine.Random.Range(0, enemies.Count);
+
+                                        enemy_ML = enemies_ML[ranNum];
+
+                                        if (!(enemy_ML == null))
+                                        {
+                                            float distance = Vector2.Distance(enemy_ML.transform.position, player.transform.position);
+
+                                            isInAttackRange = distance <= attackRange; // 적이 사거리 내에 있을때만 공격이 나간다
+
+                                            if (isInAttackRange)
+                                                break;
+                                        }
+
+                                        breakNum++;
+                                        if (breakNum >= 1000) // 1000회 반복 내에 마땅한 적을 찾지 못했다면 그냥 break;
+                                            break;
+                                    }
+                                }
+
+                                if (enemy_ML == null) return; // 적이 없으면 공격 X
+
+                                if (isInAttackRange)
+                                    CastSkill(enemy_ML, index);
+
+                                break;
+
+                            default:
+                                // 전기 공격은 사거리 내 랜덤한 적에게 시전된다
+                                Enemy enemy;
+
+                                breakNum = 0; // while문 탈출을 위한 num
+                                isInAttackRange = false;
+
+                                while (true)
+                                {
+                                    int ranNum = UnityEngine.Random.Range(0, enemies.Count);
+
+                                    enemy = enemies[ranNum];
+
+                                    if (!(enemy == null))
+                                    {
+                                        float distance = Vector2.Distance(enemy.transform.position, player.transform.position);
+
+                                        isInAttackRange = distance <= nearAttackRange; // 적이 사거리 내에 있을때만 공격이 나간다
+
+                                        if (isInAttackRange)
+                                            break;
+                                    }
+
+                                    breakNum++;
+                                    if (breakNum >= 1000) // 1000회 반복 내에 마땅한 적을 찾지 못했다면 그냥 break;
+                                        break;
+                                }
+                                if (enemy == null) return; // 적이 없으면 공격 X
+
+                                if (isInAttackRange) { 
+                                    CastSkill(enemy, index);
+                                } else { // 근접 우선 사거리 내에 적이 없으면 원거리 범위 적을 찾는다
+
+                                    breakNum = 0; // while문 탈출을 위한 num
+                                    isInAttackRange = false;
+
+                                    while (true)
+                                    {
+                                        int ranNum = UnityEngine.Random.Range(0, enemies.Count);
+
+                                        enemy = enemies[ranNum];
+
+                                        if (!(enemy == null))
+                                        {
+                                            float distance = Vector2.Distance(enemy.transform.position, player.transform.position);
+
+                                            isInAttackRange = distance <= attackRange; // 적이 사거리 내에 있을때만 공격이 나간다
+
+                                            if (isInAttackRange)
+                                                break;
+                                        }
+
+                                        breakNum++;
+                                        if (breakNum >= 1000) // 1000회 반복 내에 마땅한 적을 찾지 못했다면 그냥 break;
+                                            break;
+                                    }
+                                }
+
+                                if (enemy == null) return; // 적이 없으면 공격 X
+
+                                if (isInAttackRange)
+                                    CastSkill(enemy, index);
+
+                                break;
                         }
-
-                        if (enemy == null) return; // 적이 없으면 공격 X
-
-                        if (isInAttackRange)
-                            CastSkill(enemy, index);
 
                         break; // switch 문의 break
                     }
@@ -287,7 +390,6 @@ public class SkillManager : MonoBehaviour
                     }
             }
         }
-        
     }
 
     // 가장 가까운 Enemy를 찾는 함수
@@ -304,6 +406,26 @@ public class SkillManager : MonoBehaviour
             {
                 minDistance = distance;
                 nearEnemy = enemies[i];
+            }
+        }
+
+        return nearEnemy;
+    }
+
+        // 가장 가까운 Enemy를 찾는 함수
+    public Enemy_ML FindNearestEnemy_ML()
+    {
+        Enemy_ML nearEnemy = null;
+
+        float minDistance = float.MaxValue;
+
+        for (int i = 0, ii = enemies.Count; i < ii; i++)
+        {
+            float distance = Vector2.Distance(enemies_ML[i].transform.position, player_ML.transform.position);
+            if (distance <= minDistance)
+            {
+                minDistance = distance;
+                nearEnemy = enemies_ML[i];
             }
         }
 
@@ -363,6 +485,66 @@ public class SkillManager : MonoBehaviour
                     enemyOnSkill.Y = enemyPosition.y + enemy.capsuleCollider.size.y * 8;
 
                     enemyOnSkill.enemy = enemy;
+                    enemyOnSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[1];
+
+                    enemyOnSkill.skillIndex = index;
+
+                    SetScale(enemyOnSkill.gameObject, index);
+
+                    break;
+                }
+        }
+    }
+
+    // ML용 CastSkill()
+     private void CastSkill(Enemy_ML enemy_ML, int index)
+    {
+        switch (index)
+        {
+            case 0:
+                {
+                    enemyTrackingSkill = GameManager.instance.poolManager_ML.GetSkill(0, enemy_ML) as EnemyTrackingSkill;
+
+                    // ML용 Player, Enemy
+                    Vector2 playerPosition = player_ML.transform.position;
+                    Vector2 enemyPosition = enemy_ML.transform.position;
+                    
+                    // 파이퍼볼 방향 보정 (적 바라보게)
+                    Vector2 direction = new Vector2(playerPosition.x - enemyPosition.x, playerPosition.y - enemyPosition.y);
+                    float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+                    Quaternion angleAxis = Quaternion.AngleAxis(angle + 90f, Vector3.forward);
+                    Quaternion rotation = Quaternion.Slerp(enemyTrackingSkill.transform.rotation, angleAxis, 5f);
+                    enemyTrackingSkill.transform.rotation = rotation;
+                    
+                    enemyTrackingSkill.X = playerPosition.x;
+                    enemyTrackingSkill.Y = playerPosition.y;
+
+                    //enemyTrackingSkill.enemy = enemy; 현재 enemy는 PoolManager에서 Init시키기 전에 할당해주는 중
+
+                    enemyTrackingSkill.speed = 25;
+                    enemyTrackingSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[0];
+
+                    enemyTrackingSkill.skillIndex = index;
+
+                    SetScale(enemyTrackingSkill.gameObject, index);
+
+                    break;
+                }
+            case 1:
+                {
+                    enemyOnSkill = GameManager.instance.poolManager_ML.GetSkill(7, enemy_ML) as EnemyOnSkill;
+
+                    Vector2 enemyPosition = enemy_ML.transform.position;
+
+                    // 스킬 위치를 적 실제 위치로 변경
+                    if (enemy_ML.isEnemyLookLeft)
+                        enemyOnSkill.X = enemyPosition.x - enemy_ML.capsuleCollider.size.x * 6;
+                    else
+                        enemyOnSkill.X = enemyPosition.x + enemy_ML.capsuleCollider.size.x * 6;
+                    enemyOnSkill.Y = enemyPosition.y + enemy_ML.capsuleCollider.size.y * 8;
+
+                    enemyOnSkill.enemy_ML = enemy_ML;
                     enemyOnSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[1];
 
                     enemyOnSkill.skillIndex = index;
@@ -442,10 +624,16 @@ public class SkillManager : MonoBehaviour
         {
             case 2:
                 {
-                    playerAttachSkill = GameManager.instance.poolManager.GetSkill(11) as PlayerAttachSkill;
-                    GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
-
-                    //playerAttachSkill.player = player; player는 현재 PoolManager에서 할당중
+                    switch(sceneName)
+                    {
+                        case "Stage1_ML":
+                            playerAttachSkill = GameManager.instance.poolManager_ML.GetSkill(11) as PlayerAttachSkill;                   
+                            break;
+                        default:
+                            playerAttachSkill = GameManager.instance.poolManager.GetSkill(11) as PlayerAttachSkill;
+                            GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+                            break;
+                    }
 
                     if (skillData.level[index] == 5)
                     {
@@ -483,18 +671,30 @@ public class SkillManager : MonoBehaviour
                 }
             case 3:
                 {
-                    playerAttachSkill = GameManager.instance.poolManager.GetSkill(1) as PlayerAttachSkill;
-                    GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
-
-                    playerAttachSkill.player = player;
+                    switch(sceneName)
+                    {
+                        case "Stage1_ML":
+                            playerAttachSkill = GameManager.instance.poolManager_ML.GetSkill(1) as PlayerAttachSkill;
+                            playerAttachSkill.player_ML = player_ML;
+                            
+                            playerAttachSkill.X = player_ML.transform.position.x;
+                            playerAttachSkill.Y = player_ML.transform.position.y;
+                            break;
+                        default:
+                            playerAttachSkill = GameManager.instance.poolManager.GetSkill(1) as PlayerAttachSkill;
+                            GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+                            playerAttachSkill.player = player;
+                            
+                            playerAttachSkill.X = player.transform.position.x;
+                            playerAttachSkill.Y = player.transform.position.y;
+                    
+                            break;
+                    }
 
                     playerAttachSkill.xPositionNum = 0;
                     playerAttachSkill.yPositionNum = 0.2f;
 
                     playerAttachSkill.isAttachSkill = true;
-
-                    playerAttachSkill.X = player.transform.position.x;
-                    playerAttachSkill.Y = player.transform.position.y;
 
                     playerAttachSkill.aliveTime = 0.5f;
 
@@ -516,13 +716,22 @@ public class SkillManager : MonoBehaviour
                 }
             case 5:
                 {
-                    playerAttachSkill = GameManager.instance.poolManager.GetSkill(12) as PlayerAttachSkill;
-                    GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+                    switch(sceneName)
+                    {
+                        case "Stage1_ML":
+                            playerAttachSkill = GameManager.instance.poolManager_ML.GetSkill(12) as PlayerAttachSkill;                   
 
-                    //playerAttachSkill.player = player;
+                            playerAttachSkill.X = player_ML.transform.position.x;
+                            playerAttachSkill.Y = player_ML.transform.position.y;
+                            break;
+                        default:
+                            playerAttachSkill = GameManager.instance.poolManager.GetSkill(12) as PlayerAttachSkill;
+                            GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
-                    playerAttachSkill.X = player.transform.position.x;
-                    playerAttachSkill.Y = player.transform.position.y;
+                            playerAttachSkill.X = player.transform.position.x;
+                            playerAttachSkill.Y = player.transform.position.y;
+                            break;
+                    }
 
                     playerAttachSkill.isShieldSkill = true;
 
@@ -543,11 +752,30 @@ public class SkillManager : MonoBehaviour
                 }
             case 6:
                 {
-                    randomSkill = GameManager.instance.poolManager.GetSkill(3) as RandomSkill;
-                    GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+                    float tmpX, tmpY;
+                    switch(sceneName)
+                    {
+                        case "Stage1_ML":
+                            randomSkill = GameManager.instance.poolManager_ML.GetSkill(3) as RandomSkill;                   
 
-                    float tmpX = player.transform.position.x;
-                    float tmpY = player.transform.position.y;
+                            playerAttachSkill.X = player_ML.transform.position.x;
+                            playerAttachSkill.Y = player_ML.transform.position.y;
+
+                            tmpX = player_ML.transform.position.x;
+                            tmpY = player_ML.transform.position.y;
+
+                            // randomSkill.player_ML = player_ML;
+                            break;
+                        default:
+                            randomSkill = GameManager.instance.poolManager.GetSkill(3) as RandomSkill;
+                            GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+
+                            tmpX = player.transform.position.x;
+                            tmpY = player.transform.position.y;
+
+                            // randomSkill.player = player;
+                            break;
+                    }
 
                     float ranNum = UnityEngine.Random.Range(-14f, 10f);
                     float ranNum2 = UnityEngine.Random.Range(-8f, 3f);
@@ -555,8 +783,8 @@ public class SkillManager : MonoBehaviour
                     tmpX += ranNum;
                     tmpY += ranNum2;
 
-                    randomSkill.impactPonitX = tmpX;
-                    randomSkill.impactPonitY = tmpY;
+                    randomSkill.impactPointX = tmpX;
+                    randomSkill.impactPointY = tmpY;
 
                     // 메테오 방향 보정 (충돌 지점 바라보게)
                     Vector2 direction = new Vector2(-9f, -14f);
@@ -569,7 +797,7 @@ public class SkillManager : MonoBehaviour
                     randomSkill.X = tmpX + 9f;
                     randomSkill.Y = tmpY + 14f;
 
-                    randomSkill.player = player;
+
                     randomSkill.isMeteor = true;
 
                     randomSkill.aliveTime = 0.5f;
@@ -589,6 +817,16 @@ public class SkillManager : MonoBehaviour
                 }
             case 7:
                 {
+                    switch(sceneName)
+                    {
+                        case "Stage1_ML":
+                            playerAttachSkill = GameManager.instance.poolManager_ML.GetSkill(9) as PlayerAttachSkill;                   
+                            break;
+                        default:
+                            playerAttachSkill = GameManager.instance.poolManager.GetSkill(9) as PlayerAttachSkill;
+                            GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+                            break;
+                    }
                     playerAttachSkill = GameManager.instance.poolManager.GetSkill(9) as PlayerAttachSkill;
                     GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
 
@@ -623,11 +861,26 @@ public class SkillManager : MonoBehaviour
                 }
             case 8:
                 {
-                    randomSkill = GameManager.instance.poolManager.GetSkill(13) as RandomSkill;
-                    GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+                    float tmpX, tmpY;
+                    switch(sceneName)
+                    {
+                        case "Stage1_ML":
+                            randomSkill = GameManager.instance.poolManager_ML.GetSkill(13) as RandomSkill;                   
 
-                    float tmpX = player.transform.position.x;
-                    float tmpY = player.transform.position.y;
+                            playerAttachSkill.X = player_ML.transform.position.x;
+                            playerAttachSkill.Y = player_ML.transform.position.y;
+
+                            tmpX = player_ML.transform.position.x;
+                            tmpY = player_ML.transform.position.y;
+                            break;
+                        default:
+                            randomSkill = GameManager.instance.poolManager.GetSkill(13) as RandomSkill;
+                            GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+
+                            tmpX = player.transform.position.x;
+                            tmpY = player.transform.position.y;
+                            break;
+                    }
 
                     float ranNum = UnityEngine.Random.Range(-14f, 14f);
                     float ranNum2 = UnityEngine.Random.Range(-6f, 6f);
@@ -637,8 +890,6 @@ public class SkillManager : MonoBehaviour
 
                     randomSkill.X = tmpX;
                     randomSkill.Y = tmpY;
-
-                    //randomSkill.player = player;
 
                     randomSkill.isStaySkill = true;
                     randomSkill.isIceSpike = true;
@@ -659,8 +910,17 @@ public class SkillManager : MonoBehaviour
                     {
                         for (int i = 0; i < 2; i++)
                         {
-                            playerAttachSkill = GameManager.instance.poolManager.GetSkill(6) as PlayerAttachSkill;
-                            GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+                            switch(sceneName)
+                            {
+                                case "Stage1_ML":
+                                    playerAttachSkill = GameManager.instance.poolManager_ML.GetSkill(6) as PlayerAttachSkill;
+                                    break;
+                                default:
+                                    playerAttachSkill = GameManager.instance.poolManager.GetSkill(6) as PlayerAttachSkill;
+                                    GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+
+                                    break;
+                            }
 
                             if (i == 0)
                             {
@@ -680,8 +940,6 @@ public class SkillManager : MonoBehaviour
                                     playerAttachSkill.xPositionNum = -4f;
                                 }
                                 playerAttachSkill.yPositionNum = 0f;
-
-                                //playerAttachSkill.player = player;
 
                                 playerAttachSkill.isAttachSkill = true;
                                 playerAttachSkill.isFlipped = false;
@@ -715,8 +973,6 @@ public class SkillManager : MonoBehaviour
                                 }
                                 playerAttachSkill.yPositionNum = 0f;
 
-                                //playerAttachSkill.player = player;
-
                                 playerAttachSkill.isAttachSkill = true;
                                 playerAttachSkill.isFlipped = true;
 
@@ -737,8 +993,17 @@ public class SkillManager : MonoBehaviour
                     {
                         for (int i = 0; i < 2; i++)
                         {
-                            playerAttachSkill = GameManager.instance.poolManager.GetSkill(5) as PlayerAttachSkill;
-                            GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+                            switch(sceneName)
+                            {
+                                case "Stage1_ML":
+                                    playerAttachSkill = GameManager.instance.poolManager_ML.GetSkill(5) as PlayerAttachSkill;
+                                    break;
+                                default:
+                                    playerAttachSkill = GameManager.instance.poolManager.GetSkill(5) as PlayerAttachSkill;
+                                    GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+
+                                    break;
+                            }
 
                             if (i == 0)
                             {
@@ -760,8 +1025,6 @@ public class SkillManager : MonoBehaviour
                                 }
 
                                 playerAttachSkill.GetComponent<SpriteRenderer>().flipY = true;
-
-                                //playerAttachSkill.player = player;
 
                                 playerAttachSkill.isAttachSkill = true;
 
@@ -794,8 +1057,6 @@ public class SkillManager : MonoBehaviour
                                     playerAttachSkill.yPositionNum = -2.5f;
                                 }
 
-                                //playerAttachSkill.player = player;
-
                                 playerAttachSkill.isAttachSkill = true;
 
                                 playerAttachSkill.aliveTime = 1f;
@@ -818,16 +1079,21 @@ public class SkillManager : MonoBehaviour
             case 10:
                 {
                     StartCoroutine(CastJudgement(index, 10));
-
                     GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
                     break;
                 }
             case 11:
                 {
-                    playerAttachSkill = GameManager.instance.poolManager.GetSkill(14) as PlayerAttachSkill;
-                    GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
-
-                    //playerAttachSkill.player = player;
+                    switch(sceneName)
+                    {
+                        case "Stage1_ML":
+                            playerAttachSkill = GameManager.instance.poolManager_ML.GetSkill(14) as PlayerAttachSkill;
+                            break;
+                        default:
+                            playerAttachSkill = GameManager.instance.poolManager.GetSkill(14) as PlayerAttachSkill;
+                            GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과
+                            break;
+                    }                    
 
                     if (skillData.level[index] == 5)
                     {
@@ -891,22 +1157,29 @@ public class SkillManager : MonoBehaviour
         {
             for(int i = 0; i < 3; i++)
             {
-                playerAttachSkill = GameManager.instance.poolManager.GetSkill(8) as PlayerAttachSkill;
+                switch(sceneName)
+                {
+                    case "Stage1_ML":
+                        playerAttachSkill = GameManager.instance.poolManager_ML.GetSkill(8) as PlayerAttachSkill;
+
+                        playerAttachSkill.X = player_ML.transform.position.x + 3f;
+                        playerAttachSkill.Y = player_ML.transform.position.y;
+                        break;
+                    default:
+                        playerAttachSkill = GameManager.instance.poolManager.GetSkill(8) as PlayerAttachSkill;
+                        GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+
+                        playerAttachSkill.X = player.transform.position.x + 3f;
+                        playerAttachSkill.Y = player.transform.position.y;
+                        break;
+                }
 
                 playerAttachSkill.degree = tmpDegree;
                 tmpDegree -= 120f;
 
                 playerAttachSkill.xPositionNum = 4f;
-                playerAttachSkill.aliveTime = 5f * 1.5f;
-
-                GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
-
-                //playerAttachSkill.player = player;
-
-                playerAttachSkill.X = player.transform.position.x + 3f;
-                playerAttachSkill.Y = player.transform.position.y;
-
                 playerAttachSkill.yPositionNum = 0f;
+                playerAttachSkill.aliveTime = 5f * 1.5f;
 
                 playerAttachSkill.isCircleSkill = true;
                 playerAttachSkill.speed = circleSpeed;
@@ -925,22 +1198,30 @@ public class SkillManager : MonoBehaviour
         {
             for(int i = 0; i < 2; i++)
             {
-                playerAttachSkill = GameManager.instance.poolManager.GetSkill(8) as PlayerAttachSkill;
+                switch(sceneName)
+                {
+                    case "Stage1_ML":
+                        playerAttachSkill = GameManager.instance.poolManager_ML.GetSkill(8) as PlayerAttachSkill;
+
+                        playerAttachSkill.X = player_ML.transform.position.x + 3f;
+                        playerAttachSkill.Y = player_ML.transform.position.y;
+                        break;
+                    default:
+                        playerAttachSkill = GameManager.instance.poolManager.GetSkill(8) as PlayerAttachSkill;
+                        GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+
+                        playerAttachSkill.X = player.transform.position.x + 3f;
+                        playerAttachSkill.Y = player.transform.position.y;
+                        break;
+                }
 
                 playerAttachSkill.degree = tmpDegree;
                 tmpDegree -= 180f;
 
                 playerAttachSkill.xPositionNum = 3.5f;
-                playerAttachSkill.aliveTime = 5f * 1.25f;
-
-                GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
-
-                //playerAttachSkill.player = player;
-
-                playerAttachSkill.X = player.transform.position.x + 3f;
-                playerAttachSkill.Y = player.transform.position.y;
-
                 playerAttachSkill.yPositionNum = 0f;
+                
+                playerAttachSkill.aliveTime = 5f * 1.25f;
 
                 playerAttachSkill.isCircleSkill = true;
                 playerAttachSkill.speed = circleSpeed;
@@ -957,21 +1238,27 @@ public class SkillManager : MonoBehaviour
         }
         else
         {
-            playerAttachSkill = GameManager.instance.poolManager.GetSkill(8) as PlayerAttachSkill;
-
+            switch(sceneName)
+            {
+                case "Stage1_ML":
+                    playerAttachSkill = GameManager.instance.poolManager_ML.GetSkill(8) as PlayerAttachSkill;
+                    playerAttachSkill.X = player_ML.transform.position.x + 3f;
+                    playerAttachSkill.Y = player_ML.transform.position.y;
+                    break;
+                default:
+                    playerAttachSkill = GameManager.instance.poolManager.GetSkill(8) as PlayerAttachSkill;
+                    GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
+                    playerAttachSkill.X = player.transform.position.x + 3f;
+                    playerAttachSkill.Y = player.transform.position.y;
+                    break;
+            }
+            
             playerAttachSkill.degree = 0f;
 
             playerAttachSkill.xPositionNum = 3f;
+            playerAttachSkill.yPositionNum = 0f;
             playerAttachSkill.aliveTime = 5f;
 
-            GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Range); // 스킬 사용 효과음
-
-            //playerAttachSkill.player = player;
-
-            playerAttachSkill.X = player.transform.position.x + 3f;
-            playerAttachSkill.Y = player.transform.position.y;
-
-            playerAttachSkill.yPositionNum = 0f;
 
             playerAttachSkill.isCircleSkill = true;
             playerAttachSkill.speed = circleSpeed;
@@ -990,7 +1277,15 @@ public class SkillManager : MonoBehaviour
     // 메테오 떨어질 때 그림자 오브젝트 생성 후 제거
     IEnumerator DisplayShadowNDestroy(float x, float y)
     {
-        skillObject = GameManager.instance.poolManager.GetSkill(4) as RandomSkill;
+        switch(sceneName)
+        {
+            case "Stage1_ML":
+                skillObject = GameManager.instance.poolManager_ML.GetSkill(4) as RandomSkill;
+                break;
+            default:
+                skillObject = GameManager.instance.poolManager.GetSkill(4) as RandomSkill;
+                break;
+        }
 
         skillObject.transform.position = new Vector2(x, y);
 
@@ -1010,7 +1305,16 @@ public class SkillManager : MonoBehaviour
 
         isShadowAlive = false;
 
-        GameManager.instance.poolManager.ReturnSkill(skillObject, 4);
+        switch(sceneName)
+        {
+            case "Stage1_ML":
+                GameManager.instance.poolManager_ML.ReturnSkill(skillObject, 4);
+                break;
+            default:
+                GameManager.instance.poolManager.ReturnSkill(skillObject, 4);
+                break;
+        }
+
     }
 
     // Judgment 스킬 쓸 때 일정 딜레이로 스킬 cast하기 위함
@@ -1018,10 +1322,22 @@ public class SkillManager : MonoBehaviour
     {
         for (int i = 0; i < num; i++)
         {
-            randomSkill = GameManager.instance.poolManager.GetSkill(10) as RandomSkill;
-
-            float tmpX = player.transform.position.x;
-            float tmpY = player.transform.position.y;
+            float tmpX, tmpY;
+            switch(sceneName)
+            {
+                case "Stage1_ML":
+                    randomSkill = GameManager.instance.poolManager_ML.GetSkill(10) as RandomSkill;
+                    
+                    tmpX = player_ML.transform.position.x;
+                    tmpY = player_ML.transform.position.y;
+                    break;
+                default:
+                    randomSkill = GameManager.instance.poolManager.GetSkill(10) as RandomSkill;
+                    
+                    tmpX = player.transform.position.x;
+                    tmpY = player.transform.position.y;
+                    break;
+            }
 
             float ranNum = UnityEngine.Random.Range(-10f, 10f);
             float ranNum2 = UnityEngine.Random.Range(-5f, 5f);
@@ -1032,7 +1348,6 @@ public class SkillManager : MonoBehaviour
             randomSkill.X = tmpX;
             randomSkill.Y = tmpY;
 
-            //randomSkill.player = player;
 
             randomSkill.aliveTime = 0.8f;
             randomSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[1];
@@ -1060,4 +1375,3 @@ public class SkillManager : MonoBehaviour
         isSkillsCasted[index] = false;
     }
 }
-

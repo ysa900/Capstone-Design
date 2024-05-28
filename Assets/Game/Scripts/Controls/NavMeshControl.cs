@@ -3,11 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using Unity.AI.Navigation;
-using Unity.MLAgents;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class NavMeshControl : MonoBehaviour
@@ -19,19 +16,8 @@ public class NavMeshControl : MonoBehaviour
     public float DirectionX = 0;
     public float DirectionY = 0;
 
-    
-    private int Stage;
-
-    private void Start()
-    {
-        Stage = SceneManager.GetActiveScene().buildIndex;
-
-    }
-
     private void FixedUpdate()
     {
-
-       
         ChangeSurface();
 
     }
@@ -39,53 +25,33 @@ public class NavMeshControl : MonoBehaviour
     //GameObject 표면의 위치를 이동시키고 NavMesh를 삭제후 굽는 함수
     public void ChangeSurface()
     {
-
-        switch (Stage)
+        if (DirectionX == 0 && DirectionY == 0) { return; }
+        else if (DirectionX != 0 && DirectionY != 0)
         {
-            case 1:
-                if (DirectionX == 0 && DirectionY == 0) { return; }
-                else if (DirectionX != 0 && DirectionY != 0)
-                {
-                    surface.transform.Translate(Vector3.right * DirectionX * 40);
-                    surface.transform.Translate(Vector3.up * DirectionY * 40);
-                    DirectionX = 0;
-                    DirectionY = 0;
-                 
-                }
-                else if (DirectionX != 0 && DirectionY == 0)
-                {
-                    surface.transform.Translate(Vector3.right * DirectionX * 40);
-                    DirectionX = 0;
-                    DirectionY = 0;
-                
-                }
-                else if (DirectionX == 0 && DirectionY != 0)
-                {
-                    surface.transform.Translate(Vector3.up * DirectionY * 40);
-                    DirectionX = 0;
-                    DirectionY = 0;
-                  
-
-                }
-                break;
-
-            case 2:
-                if (DirectionX != 0)
-                {
-                    surface.transform.Translate(Vector3.right * 85); // 오른쪽 방향 * 거리
-                 
-                    DirectionX = 0;
-                }
-                break;
-            case 3:
-
-                break;
-
-
+            surface.transform.Translate(Vector3.right * DirectionX * 40);
+            surface.transform.Translate(Vector3.up * DirectionY * 40);
+            DirectionX = 0;
+            DirectionY = 0;  
+            RemoveNavMeshArea();
+            BakeNavMeshArea();
+        }
+        else if (DirectionX != 0 && DirectionY == 0)
+        {
+            surface.transform.Translate(Vector3.right * DirectionX * 40);
+            DirectionX = 0;
+            DirectionY = 0;      
+            RemoveNavMeshArea();
+            BakeNavMeshArea();
+        }
+        else if (DirectionX == 0 && DirectionY != 0)
+        {
+            surface.transform.Translate(Vector3.up * DirectionY * 40);
+            DirectionX = 0;
+            DirectionY = 0;
+            RemoveNavMeshArea();
+            BakeNavMeshArea();
 
         }
-
-       
             
     }
 
@@ -93,13 +59,12 @@ public class NavMeshControl : MonoBehaviour
     public void BakeNavMeshArea()
     {
         surface2d.BuildNavMesh();
-       
     }
 
     // NavMesh 영역 삭제 함수
     public void RemoveNavMeshArea()
     {
-        surface2d.RemoveData();  ;
-      
+        surface2d.RemoveData();
+
     }
 }

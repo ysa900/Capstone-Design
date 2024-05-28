@@ -4,14 +4,14 @@ public class Arrow : Object, IPoolingObject
 {
     public Player player;
 
-    // Arrow Á¤º¸
+    // Arrow ì •ë³´
     [SerializeField] float speed;
     [SerializeField] float damage;
 
-    private float aliveTime; // ½ºÅ³ »ıÁ¸ ½Ã°£À» Ã¼Å©ÇÒ º¯¼ö
-    int returnIndex; // Ç®¸µ ½Ã ¸®ÅÏ ÀÎµ¦½º
+    private float aliveTime; // ìŠ¤í‚¬ ìƒì¡´ ì‹œê°„ì„ ì²´í¬í•  ë³€ìˆ˜
+    int returnIndex; // í’€ë§ ì‹œ ë¦¬í„´ ì¸ë±ìŠ¤
 
-    Rigidbody2D rigid; // ¹°¸® ÀÔ·ÂÀ» ¹Ş±âÀ§ÇÑ º¯¼ö
+    Rigidbody2D rigid; // ë¬¼ë¦¬ ì…ë ¥ì„ ë°›ê¸°ìœ„í•œ ë³€ìˆ˜
 
     Vector2 playerPosition;
     Vector2 myPosition;
@@ -50,7 +50,7 @@ public class Arrow : Object, IPoolingObject
         aliveTime += Time.fixedDeltaTime;
     }
 
-    // È­»ìÀÌ ³¯¾Æ°¥ ÇÃ·¹ÀÌ¾î ¹æÇâ(Direction) ¼³Á¤
+    // í™”ì‚´ì´ ë‚ ì•„ê°ˆ í”Œë ˆì´ì–´ ë°©í–¥(Direction) ì„¤ì •
     private void SetPlayerPosition()
     {
         playerPosition = player.transform.position;
@@ -59,7 +59,7 @@ public class Arrow : Object, IPoolingObject
         direction = direction.normalized;
     }
 
-    // È­»ì ¹æÇâ(rotation) º¸Á¤ (ÇÃ·¹ÀÌ¾î ¹Ù¶óº¸°Ô)
+    // í™”ì‚´ ë°©í–¥(rotation) ë³´ì • (í”Œë ˆì´ì–´ ë°”ë¼ë³´ê²Œ)
     private void SetArrowDirection()
     {
         Vector2 direction = new Vector2(myPosition.x - playerPosition.x, myPosition.y - playerPosition.y);
@@ -70,10 +70,10 @@ public class Arrow : Object, IPoolingObject
         transform.rotation = rotation;
     }
 
-    // ÇÃ·¹ÀÌ¾î¸¦ µû¶ó°¡´Â ½ºÅ³
+    // í”Œë ˆì´ì–´ë¥¼ ë”°ë¼ê°€ëŠ” ìŠ¤í‚¬
     private void MoveToPlayer()
     {
-        rigid.MovePosition(rigid.position + direction * speed * Time.fixedDeltaTime); // Player ¹æÇâÀ¸·Î À§Ä¡ º¯°æ
+        rigid.MovePosition(rigid.position + direction * speed * Time.fixedDeltaTime); // Player ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
 
         X = transform.position.x;
         Y = transform.position.y;

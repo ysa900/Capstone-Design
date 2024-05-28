@@ -6,8 +6,8 @@ public class RandomSkill : Skill, IPoolingObject
 {
     public RandomSkill randomSkill;
 
-    public float impactPonitX;
-    public float impactPonitY;
+    public float impactPointX;
+    public float impactPointY;
 
     private float aliveTimer; // 스킬 생존 시간을 체크할 변수
     public float aliveTime; // 스킬 생존 시간
@@ -18,6 +18,7 @@ public class RandomSkill : Skill, IPoolingObject
     public bool isStaySkill; // 몇초동안 지속되다가 사라지는 스킬이냐
 
     public float scale;
+    private string sceneName;
 
     Rigidbody2D rigid; // 물리 입력을 받기위한 변수
     Vector2 direction; // 날아갈 방향
@@ -42,6 +43,8 @@ public class RandomSkill : Skill, IPoolingObject
     {
         rigid = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        sceneName = GameManager.instance.sceneName;
+
         if (isIceSpike)
         {
             animator_ground = transform.Find("ground").GetComponent<Animator>();
@@ -57,7 +60,16 @@ public class RandomSkill : Skill, IPoolingObject
             if (isMeteor)
             {
                 RandomSkill explode;
-                explode = GameManager.instance.poolManager.GetSkill(2) as RandomSkill;
+
+                switch(sceneName)
+                {
+                    case "Stage1_ML":
+                        explode = GameManager.instance.poolManager_ML.GetSkill(2) as RandomSkill;
+                        break;
+                    default:
+                        explode = GameManager.instance.poolManager.GetSkill(2) as RandomSkill;
+                        break;   
+                }
 
                 explode.X = X;
                 explode.Y = Y;
@@ -80,15 +92,23 @@ public class RandomSkill : Skill, IPoolingObject
             {
                 if (onSkillFinished != null)
                     onSkillFinished(skillIndex); // skillManager에게 delegate로 알려줌
-
-                GameManager.instance.poolManager.ReturnSkill(this, returnIndex);
+                
+                switch(sceneName)
+                {
+                    case "Stage1_ML":
+                        GameManager.instance.poolManager_ML.ReturnSkill(this, returnIndex);
+                        break;
+                    default:
+                        GameManager.instance.poolManager.ReturnSkill(this, returnIndex);
+                        break;   
+                }
             }
             
             return;
         }
         else
         {
-            if(isMeteor) { MoveToimpactPonit(); }
+            if(isMeteor) { MoveToimpactPoint(); }
         }
 
         aliveTimer += Time.fixedDeltaTime;
@@ -105,7 +125,7 @@ public class RandomSkill : Skill, IPoolingObject
     // 날아갈 방향을 정하는 함수
     public void setDirection()
     {
-        Vector2 impactVector = new Vector2 (impactPonitX, impactPonitY);
+        Vector2 impactVector = new Vector2 (impactPointX, impactPointY);
         Vector2 nowVector = transform.position;
 
         direction = impactVector - nowVector;
@@ -114,7 +134,7 @@ public class RandomSkill : Skill, IPoolingObject
     }
 
     // 폭발 지점으로 이동하는 함수
-    private void MoveToimpactPonit()
+    private void MoveToimpactPoint()
     {
         setDirection();
 
@@ -215,7 +235,15 @@ public class RandomSkill : Skill, IPoolingObject
         if (onSkillFinished != null)
             onSkillFinished(skillIndex); // skillManager에게 delegate로 알려줌
 
-        GameManager.instance.poolManager.ReturnSkill(this, returnIndex);
+            switch(sceneName)
+            {
+                case "Stage1_ML":
+                    GameManager.instance.poolManager_ML.ReturnSkill(this, returnIndex);
+                    break;
+                default:
+                    GameManager.instance.poolManager.ReturnSkill(this, returnIndex);
+                    break;   
+            }
 
         isCoroutineNow = false;
     }

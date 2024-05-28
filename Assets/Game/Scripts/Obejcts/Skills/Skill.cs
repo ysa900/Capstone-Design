@@ -18,8 +18,10 @@ public class Skill : Object, IPoolingObject
     public void Init() { } // PoolManager때문에 이거 지우면 안됨
 
     public Enemy enemy;
+    public Enemy_ML enemy_ML; // ML
     public Boss boss;
     public Player player;
+    public Player_ML player_ML; // ML
 
     public float speed;
     public float damage;

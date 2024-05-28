@@ -68,15 +68,12 @@ public class PoolManager : MonoBehaviour
             {
                 // 발견하면 select 변수에 할당
                 select = item;
-                select.agent.enabled = false;
                 if (select.GetComponent<IPoolingObject>() != null)
                 {
                     enemyManager.SetEnemyInfo(select, player, index);
                     select.GetComponent<IPoolingObject>().Init();
                 }
-                
                 select.gameObject.SetActive(true);
-               
                 break;
             }
         }
@@ -89,7 +86,7 @@ public class PoolManager : MonoBehaviour
             select = Instantiate(Enemy_prefabs[index]);
 
             enemyManager.SetEnemyInfo(select, player, index);
-            select.agent.enabled = false;
+
             select.Init(); // 얘는 Init 해줘야됨
 
             select.transform.SetParent(this.gameObject.transform.GetChild(0));

@@ -7,6 +7,7 @@ public class EnemyOnSkill : Skill, IPoolingObject
 
     private float aliveTime = 0f; // 스킬 생존 시간을 체크할 변수
 
+    private string sceneName;
     public new void Init()
     {
         aliveTime = 0f;
@@ -14,6 +15,7 @@ public class EnemyOnSkill : Skill, IPoolingObject
 
     private void Start()
     {
+        sceneName = GameManager.instance.sceneName;
     }
 
     private void FixedUpdate()
@@ -28,7 +30,16 @@ public class EnemyOnSkill : Skill, IPoolingObject
             if (onSkillFinished != null)
                 onSkillFinished(skillIndex); // skillManager에게 delegate로 알려줌
 
-            GameManager.instance.poolManager.ReturnSkill(this, returnIndex);
+            switch(sceneName)
+            {
+                case "Stage1_ML":
+                    GameManager.instance.poolManager_ML.ReturnSkill(this, returnIndex);
+                    break;
+                default:
+                    GameManager.instance.poolManager.ReturnSkill(this, returnIndex);
+                    break;
+            }
+
             return;
         }
 
@@ -67,7 +78,15 @@ public class EnemyOnSkill : Skill, IPoolingObject
         if (onSkillFinished != null)
             onSkillFinished(skillIndex); // skillManager에게 delegate로 알려줌
 
-        GameManager.instance.poolManager.ReturnSkill(this, returnIndex);
+             switch(sceneName)
+            {
+                case "Stage1_ML":
+                    GameManager.instance.poolManager_ML.ReturnSkill(this, returnIndex);
+                    break;
+                default:
+                    GameManager.instance.poolManager.ReturnSkill(this, returnIndex);
+                    break;
+            }
     }
 }
 

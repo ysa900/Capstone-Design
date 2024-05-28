@@ -37,16 +37,15 @@ public class ArrangeEnemy : Enemy
 
         rigid.constraints = RigidbodyConstraints2D.FreezeRotation;
 
-        Vector3 enemyPos = transform.position;
-        Vector3 playerPos = player.transform.position;
-        float distance = Vector3.Distance(enemyPos, playerPos);
+        Vector2 enemyPos = transform.position;
+        Vector2 playerPos = player.transform.position;
+        float distance = Vector2.Distance(enemyPos, playerPos);
 
         bool isInAttackRange = distance <= attackRange; // 플레이어가 사거리 내에 있을때만 공격이 나간다
         bool isAttackOK = attackCoolTime <= attackCoolTimer; // 플레이어가 사거리 내에 있을때만 공격이 나간다
         
         if (!isInAttackRange)
         {
-            agent.enabled = true;
             LookAtPlayer();
             MoveToPlayer();
         }
@@ -54,13 +53,11 @@ public class ArrangeEnemy : Enemy
         {
             Arrange_Attack();
             attackCoolTimer = 0;
-            agent.enabled = false;
         }
         else
         {
             rigid.constraints = RigidbodyConstraints2D.FreezeAll;
             LookAtPlayer();
-            agent.enabled = false;
         }
 
         attackCoolTimer += Time.fixedDeltaTime;
