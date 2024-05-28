@@ -120,7 +120,7 @@ GameObject:
   - component: {fileID: 1593764723844764137}
   - component: {fileID: 7072882875419859554}
   - component: {fileID: 4045687923528465103}
-  - component: {fileID: 2240211933938734696}
+  - component: {fileID: 1586864423047789129}
   m_Layer: 0
   m_Name: Fire_Normal2_Meteor
   m_TagString: Fire
@@ -281,7 +281,7 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.0001
---- !u!114 &2240211933938734696
+--- !u!114 &1586864423047789129
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -290,22 +290,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 7845469873061453590}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a953555e404b9a46989636228be6680, type: 3}
+  m_Script: {fileID: 11500000, guid: 8b1c7f989823c494f95980cc49b8f4ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  aliveTime: 0
   isDotDamageSkill: 0
   enemy: {fileID: 0}
   boss: {fileID: 0}
   player: {fileID: 0}
-  speed: 30
+  speed: 0
   damage: 0
   skillIndex: 0
   returnIndex: 0
-  randomSkill: {fileID: 0}
-  impactPonitX: 0
-  impactPonitY: 0
-  aliveTime: 0
-  isMeteor: 0
-  isIceSpike: 0
-  isStaySkill: 0
   scale: 0

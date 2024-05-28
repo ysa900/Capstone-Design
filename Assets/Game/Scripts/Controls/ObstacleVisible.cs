@@ -40,7 +40,6 @@ public class ObstacleVisble : MonoBehaviour
             case "Right Pillar":
             case "Tree":
             case "Pillar":
-            case "Statue":
                 isTwowayObstacle=true;
                 break;
         }

@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class MeleeEnemy : Enemy
 {
-    
-
     protected override void Awake()
     {
         base.Awake();
@@ -15,10 +13,6 @@ public class MeleeEnemy : Enemy
         if (!isDead)
         {
             LookAtPlayer();
-
-            if (isAgentDelay)
-                return;
-
             MoveToPlayer();
         }
 

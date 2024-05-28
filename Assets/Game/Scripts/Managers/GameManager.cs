@@ -1,9 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UIElements;
 using static GameAudioManager;
 
 // Pause 걸면 이전에는 인게임 속 UI들(피통, 스킬 패널, 프로필)이 안사라져서
@@ -20,7 +18,7 @@ public class GameManager : MonoBehaviour
 
     // 씬 번호
     // 0: splash, 1: Lobby, 2: Game, 3: Stage2
-    public int sceneNum;
+    public string sceneName;
 
     // 적 스폰 쿨타임
     private float CoolTime = 2f;
@@ -37,13 +35,12 @@ public class GameManager : MonoBehaviour
 
     // Enemy들을 담을 리스트
     [SerializeField]
-    [ReadOnly]
     public List<Enemy> enemies = new List<Enemy>();
 
     // 사용할 클래스 객체들
     public Player player;
     public Boss boss;
-    private FollowCam followCam;
+    public FollowCam followCam;
     private InputManager inputManager;
     private SkillManager skillManager;
     private SkillSelectManager skillSelectManager;
@@ -91,14 +88,13 @@ public class GameManager : MonoBehaviour
     public bool isClearPageOn = false;
     public bool isDeadPageOn = false;
     public bool isSkillSelectPageOn = false;
-  
+
 
 
     private void Awake()
     {
         instance = this; // GameManager를 인스턴스화
-        sceneNum = SceneManager.GetActiveScene().buildIndex;
-
+        sceneName = SceneManager.GetActiveScene().name;
         // 시작 시 비활성화
         gameOverObject.SetActive(false);
         gameClearObject.SetActive(false);
@@ -118,14 +114,12 @@ public class GameManager : MonoBehaviour
 
 
         // 클래스 객체들 초기화
-        if (sceneNum == 1)
+        if (sceneName == "Stage1")
         {
             PlayerInit();
         }
         player = Instantiate(playerPrefab);
         SetPlayerInfo();
-
-
 
         // inputManger Delegate 할당
         inputManager.onPauseButtonClicked = OnPauseButtonClicked;
@@ -158,7 +152,6 @@ public class GameManager : MonoBehaviour
         // BossManager delegate 할당
         bossManager.onBossHasKilled = OnBossHasKilled;
 
-
         //gameTime = maxGameTime - 2f;
         //player.isPlayerShielded = true;
         //player.level = 20;
@@ -169,17 +162,14 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-
         navMeshControl.BakeNavMeshArea();
 
-        if (SceneManager.GetActiveScene().name == "Stage2")
+        if (SceneManager.GetActiveScene().name == "Stage1")
             skillSelectManager.ChooseStartSkill(); // 시작 스킬 선택
 
         // Stage1 배경음 플레이
         GameAudioManager.instance.bgmPlayer.clip = GameAudioManager.instance.bgmClips[(int)Bgm.Stage1];
         GameAudioManager.instance.bgmPlayer.Play();
-
-
 
         SpawnStartEnemies();
     }
@@ -191,7 +181,7 @@ public class GameManager : MonoBehaviour
         {
             gameTime += Time.deltaTime; // 게임 시간 증가
             CoolTimer += Time.deltaTime;
-            
+
 
             if (!isBossSpawned)
             {
@@ -207,15 +197,15 @@ public class GameManager : MonoBehaviour
 
     private void SpawnStartEnemies()
     {
-        switch (sceneNum)
+        switch (sceneName)
         {
-            case 1:
+            case "Stage1":
                 SpawnEnemies(0, 50); // 시작 적 소환
                 break;
-            case 2:
+            case "Stage2":
                 SpawnEnemies(3, 50); // 시작 적 소환
                 break;
-            case 3:
+            case "Stage3":
                 SpawnEnemies(6, 50); // 시작 적 소환
                 break;
 
@@ -234,24 +224,24 @@ public class GameManager : MonoBehaviour
     // Player 생성 함수
     private void SetPlayerInfo()
     {
-        switch (sceneNum)
+        switch (sceneName)
         {
-            case 1:
-                Vector2 PlayerPos = new Vector2(0, 0);
+            case "Stage1":
+                Vector2 PlayerPos = new Vector2(40, 40);
                 player.transform.position = PlayerPos;
 
                 Vector2 AreaSize = new Vector2(120, 120);
                 player.gameObject.GetComponentInChildren<BoxCollider2D>().size = AreaSize;
 
                 break;
-            case 2:
+            case "Stage2":
                 PlayerPos = new Vector2(0, 0);
                 player.transform.position = PlayerPos;
 
                 AreaSize = new Vector2(40, 40);
                 player.gameObject.GetComponentInChildren<BoxCollider2D>().size = AreaSize;
                 break;
-            case 3:
+            case "Stage3":
                 PlayerPos = new Vector2(0, 0);
                 player.transform.position = PlayerPos;
                 break;
@@ -265,15 +255,15 @@ public class GameManager : MonoBehaviour
     // Enemy 스폰 시간을 계산해 소환할 적을 지정하는 함수
     private void CalculateEnemySpawnTimeNSpawn()
     {
-        switch (sceneNum)
+        switch (sceneName)
         {
-            case 1:
+            case "Stage1":
                 Stage1Spawn();
                 break;
-            case 2:
+            case "Stage2":
                 Stage2Spawn();
                 break;
-            case 3:
+            case "Stage3":
                 Stage3Spawn();
                 break;
         }
@@ -412,7 +402,7 @@ public class GameManager : MonoBehaviour
     // Boss 소환 함수
     void SpawnBoss()
     {
-        bool isBossStage = sceneNum == 3;
+        bool isBossStage = sceneName == "Stage3";
 
         if (gameTime >= maxGameTime && isBossStage)
         {
@@ -575,7 +565,7 @@ public class GameManager : MonoBehaviour
         exp.player = player;
 
         exp.X = killedEnemy.transform.position.x;
-        exp.Y = killedEnemy.transform.position.y+ 0.5f;
+        exp.Y = killedEnemy.transform.position.y + 0.5f;
     }
 
     // 플레이어가 레벨 업 했을 시 실행
@@ -636,8 +626,8 @@ public class GameManager : MonoBehaviour
     {
         navMeshControl.DirectionX = DirectionX;
         navMeshControl.DirectionY = DirectionY;
-        
-   
+
+
     }
 
 

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3622427026198650882}
   - component: {fileID: 3870345909828825760}
   - component: {fileID: 3550662537358455200}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bat_Debuff
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -192,3 +192,5 @@ MonoBehaviour:
   index: 0
   rigid: {fileID: 0}
   capsuleCollider: {fileID: 0}
+  agent: {fileID: 0}
+  isAgentDelay: 0

@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 7204233095306447647}
   - component: {fileID: -7857294534372207960}
   - component: {fileID: 5738444910830256226}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: evilTree
   m_TagString: EvilTree
   m_Icon: {fileID: 0}
@@ -292,6 +292,7 @@ MonoBehaviour:
   rigid: {fileID: 0}
   capsuleCollider: {fileID: 0}
   agent: {fileID: 5738444910830256226}
+  isAgentDelay: 0
 --- !u!195 &5738444910830256226
 NavMeshAgent:
   m_ObjectHideFlags: 0

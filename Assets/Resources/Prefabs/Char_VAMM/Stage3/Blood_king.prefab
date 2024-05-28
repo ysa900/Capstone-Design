@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3883549422948085429}
   - component: {fileID: 2900380924192150031}
   - component: {fileID: -285216330053893295}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Blood_king
   m_TagString: BloodKing
   m_Icon: {fileID: 0}
@@ -196,7 +196,6 @@ MonoBehaviour:
   capsuleCollider: {fileID: 0}
   agent: {fileID: 0}
   isAgentDelay: 0
-  isinvoked: 0
 --- !u!195 &-285216330053893295
 NavMeshAgent:
   m_ObjectHideFlags: 0

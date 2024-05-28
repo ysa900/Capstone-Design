@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3957377648651410911}
   - component: {fileID: 555903092678305690}
   - component: {fileID: -8077438694934264946}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Spitter
   m_TagString: Spitter
   m_Icon: {fileID: 0}
@@ -196,7 +196,6 @@ MonoBehaviour:
   capsuleCollider: {fileID: 0}
   agent: {fileID: 0}
   isAgentDelay: 0
-  isinvoked: 0
 --- !u!195 &-8077438694934264946
 NavMeshAgent:
   m_ObjectHideFlags: 0

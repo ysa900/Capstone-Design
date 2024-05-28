@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3266123827925496666}
   - component: {fileID: 4629948510650405677}
   - component: {fileID: 1929611714848516213}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Skeleton_Horse
   m_TagString: Skeleton_Horse
   m_Icon: {fileID: 0}
@@ -195,6 +195,7 @@ MonoBehaviour:
   rigid: {fileID: 0}
   capsuleCollider: {fileID: 0}
   agent: {fileID: 0}
+  isAgentDelay: 0
 --- !u!195 &1929611714848516213
 NavMeshAgent:
   m_ObjectHideFlags: 0

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4744589942722089093}
   - component: {fileID: -3761602471601446238}
   - component: {fileID: 5633158934850353765}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Skeleton_Sword
   m_TagString: Skeleton_Sword
   m_Icon: {fileID: 0}
@@ -196,7 +196,6 @@ MonoBehaviour:
   capsuleCollider: {fileID: 0}
   agent: {fileID: 5633158934850353765}
   isAgentDelay: 0
-  isinvoked: 0
 --- !u!195 &5633158934850353765
 NavMeshAgent:
   m_ObjectHideFlags: 0

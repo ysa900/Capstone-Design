@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -8234795060675869048}
   - component: {fileID: -5872528668468562918}
   - component: {fileID: 690172433918093239}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: warlock
   m_TagString: WarLock
   m_Icon: {fileID: 0}
@@ -292,6 +292,7 @@ MonoBehaviour:
   rigid: {fileID: 0}
   capsuleCollider: {fileID: 0}
   agent: {fileID: 690172433918093239}
+  isAgentDelay: 0
 --- !u!195 &690172433918093239
 NavMeshAgent:
   m_ObjectHideFlags: 0

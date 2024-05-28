@@ -1,12 +1,5 @@
 fileFormatVersion: 2
 guid: f42684c4e14ece4499ab04ebfc5aefc5
-AssetOrigin:
-  serializedVersion: 1
-  productId: 266966
-  packageName: Unique Fantasy Statues
-  packageVersion: 1.0
-  assetPath: Assets/Fantasy Statues/Statues/silver8.png
-  uploadId: 617898
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -27,12 +20,11 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
-    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMipmapLimit: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -71,7 +63,6 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
-  swizzle: 50462976
   cookieLightType: 0
   platformSettings:
   - serializedVersion: 3
@@ -136,8 +127,16 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable: {}
-  mipmapLimitGroupName: 
+  spritePackingTag: 
   pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 266966
+  packageName: Unique Fantasy Statues
+  packageVersion: 1.0
+  assetPath: Assets/Fantasy Statues/Statues/silver8.png
+  uploadId: 617898

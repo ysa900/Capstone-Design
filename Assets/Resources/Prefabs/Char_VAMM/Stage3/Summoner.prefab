@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2878646979041324979}
   - component: {fileID: -3337024891017436492}
   - component: {fileID: -3204275273619302721}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Summoner
   m_TagString: Summoner
   m_Icon: {fileID: 0}
@@ -196,7 +196,6 @@ MonoBehaviour:
   capsuleCollider: {fileID: 0}
   agent: {fileID: 0}
   isAgentDelay: 0
-  isinvoked: 0
 --- !u!195 &-3204275273619302721
 NavMeshAgent:
   m_ObjectHideFlags: 0

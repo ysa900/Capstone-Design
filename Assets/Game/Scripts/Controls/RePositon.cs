@@ -10,11 +10,11 @@ public class RePositon : MonoBehaviour
     bool isStage2TimeOver;
     int playerAreaSize = 120;
     int GroundSize = 160;
-    
+
 
     private void Start()
     {
-        
+
         // clearWall의 오른쪽 끝 좌표를 GameManger를 통해 FollowCam에게 전달 
         if (clearWall != null) SendClearWall_RightX();
 
@@ -24,7 +24,7 @@ public class RePositon : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-      
+
 
         // 플레이어의 Area와 충돌을 감지해 벗어났다면 실행
         // 플레이어 프리팹 하위에 Area라는게 있음 
@@ -32,7 +32,7 @@ public class RePositon : MonoBehaviour
         {
             return;
         }
-        
+
         Vector3 playerPosition = GameManager.instance.player.transform.position;
         Vector3 myPosition = transform.position;
         float diffX = Mathf.Abs(playerPosition.x - myPosition.x);
@@ -44,13 +44,13 @@ public class RePositon : MonoBehaviour
         switch (transform.tag)
         {
             case "Ground":
-                if(diffX > playerAreaSize && diffY > playerAreaSize)
+                if (diffX > playerAreaSize && diffY > playerAreaSize)
                 {
-                    SendDirectionNavMesh(dirtionX,dirtionY); // GameManager를 통해 NavMeshControl에게 전달
+                    SendDirectionNavMesh(dirtionX, dirtionY); // GameManager를 통해 NavMeshControl에게 전달
                     transform.Translate(Vector3.right * dirtionX * GroundSize); //대각선 방향으로 오른쪽, 왼쪽 위 아래 방향으로 이동.
                     transform.Translate(Vector3.up * dirtionY * GroundSize);
                 }
-                else if(diffX > diffY)
+                else if (diffX > diffY)
                 {
                     SendDirectionNavMesh(dirtionX, 0);  // GameManager를 통해 NavMeshControl에게 전달
 
@@ -66,12 +66,12 @@ public class RePositon : MonoBehaviour
             case "Corridor":
                 // Stage2에서 5분이 지나면 Reposition이 멈추고, 보스 방으로 가는 길이 열려야 함
                 isStage2TimeOver = SceneManager.GetActiveScene().name == "Stage2" && GameManager.instance.gameTime >= 5 * 60;
-                
+
                 if (isStage2TimeOver) break;
 
                 if (playerPosition.x >= myPosition.x)
                 {
-                    
+
                     transform.Translate(Vector3.right * 85 * 2); // 오른쪽 방향 * 거리
                     clearWall.transform.Translate(Vector3.right * 85);
                     dirtionX = 1;

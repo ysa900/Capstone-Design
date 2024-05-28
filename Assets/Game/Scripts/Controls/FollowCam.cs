@@ -7,7 +7,7 @@ public class FollowCam : MonoBehaviour
 {
     public Player player;
 
-    int sceneNum;
+    string sceneName;
     float cameraHalfWidth, cameraHalfHeight;
     bool isClearWallDetected;
     public float clearWall_RightEndX = 0;
@@ -24,8 +24,7 @@ public class FollowCam : MonoBehaviour
         // 카메라가 투명벽의 오른쪽 끝보다 오른쪽에 있는 상태에서,
         // 카메라가 투명벽의 오른쪽 끝에 닿으면 카메라 x축 안따라감
 
-
-        if (sceneNum == 2)
+        if (sceneName == "Stage2")
         {
             isClearWallDetected = (transform.position.x - cameraHalfWidth >= clearWall_RightEndX) &&
                 (clearWall_RightEndX > player.transform.position.x - cameraHalfWidth);
@@ -47,7 +46,7 @@ public class FollowCam : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
 
-        sceneNum = GameManager.instance.sceneNum;
+        sceneName = GameManager.instance.sceneName;
         
     }
 }
