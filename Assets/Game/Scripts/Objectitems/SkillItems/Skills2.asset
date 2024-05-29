@@ -29,9 +29,8 @@ MonoBehaviour:
   - Beam Laser
   - Hydro Flame
   - Shield Flame
-  - Blood
-  - Blood
-  - Blood
+  - Sky Fall
+  - Frozen Spike
   skillDescription:
   - Cast FireBall to Nearest Enemy
   - Cast Lightning on Random Enemy
@@ -49,10 +48,9 @@ MonoBehaviour:
   - Laser Beam
   - Hydro Flame
   - Shield And Flame
-  - Heal ten Points
-  - Heal ten Points
-  - Heal ten Points
-  level: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  - Sky Fall
+  - Frozen Spike
+  level: 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000
   Damage:
   - 23
   - 10
@@ -69,9 +67,8 @@ MonoBehaviour:
   - 5
   - 150
   - 100
-  - 50
-  - 2
-  - 2
+  - 75
+  - 100
   - 2
   Delay:
   - 1
@@ -89,9 +86,8 @@ MonoBehaviour:
   - 3
   - 3.5
   - 3
-  - 3
-  - 8
-  - 8
+  - 6
+  - 1
   - 8
   scale:
   - 1.5
@@ -112,8 +108,7 @@ MonoBehaviour:
   - 1
   - 1
   - 1
-  - 1
-  skillSelected: 00000000000000000000000000000000000000
+  skillSelected: 000000000000000000000000000000000100
   skillicon:
   - {fileID: 21300000, guid: 90f5c378a37421e4c900728afc36b321, type: 2}
   - {fileID: 21300000, guid: 83ce16839d132e842a2b72cbf6a4410f, type: 2}
@@ -131,6 +126,5 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 29eb7c4e7c46d32449132ac622b106df, type: 2}
   - {fileID: 21300000, guid: a686a39615a764d43b4532dd07768666, type: 2}
   - {fileID: 21300000, guid: 3d776b03e5f9f9c4e9d3c78c57162806, type: 2}
-  - {fileID: 21300000, guid: 7f6251c7985e30447bf8dc271d8dae64, type: 2}
-  - {fileID: 21300000, guid: 7f6251c7985e30447bf8dc271d8dae64, type: 2}
-  - {fileID: 21300000, guid: 7f6251c7985e30447bf8dc271d8dae64, type: 2}
+  - {fileID: 21300000, guid: 4a723842084b07c468e2cf5833ca2dc2, type: 2}
+  - {fileID: 21300000, guid: 445331c10e2e38a419b2b369a14cec27, type: 3}

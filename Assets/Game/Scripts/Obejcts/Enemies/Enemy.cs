@@ -15,7 +15,7 @@ public class Enemy : Object, IDamageable, IPoolingObject
     public Player player;
 
     // Enemy들 체력
-    int[] enemy_HP = { 15, 50, 80, 15, 50, 70, 15, 50, 80, 150 };
+    int[] enemy_HP = { 1500, 50, 80, 15, 50, 70, 15, 50, 80, 150 };
 
     // enemy 정보
     public int hp;
@@ -377,9 +377,7 @@ public class Enemy : Object, IDamageable, IPoolingObject
             isAgentDelay = false;
         }
     }
-
-
-
+    
     IEnumerator Dead()
     {
         isDead = true;

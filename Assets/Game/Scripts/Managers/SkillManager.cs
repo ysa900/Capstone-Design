@@ -23,7 +23,8 @@ public class SkillManager : MonoBehaviour
     public SkillData2 skillData;
     public SkillData2 passiveSkillData;
 
-    private bool isFire3SkillLeftRight; // 불 일반3 스킬은 좌우 / 위아래로 번갈아 나가므로 설정한 변수
+    bool isFire3SkillLeftRight; // 불 일반3 스킬은 좌우 / 위아래로 번갈아 나가므로 설정한 변수
+    int skyFallQuadrantNum = -1; // Skyfall스킬 랜덤 사분면 번호
 
     // 스킬 클래스 객체들
     private Skill skill;
@@ -38,8 +39,8 @@ public class SkillManager : MonoBehaviour
     float[] attackDelayTimer = new float[19];
 
     /* 
-     * 0번 스킬(fire ball), 1번 스킬(lightning), 8번 스킬(ice spike)
-     * 들은 스킬 시전 중에 시전 가능, 따라서 스킬 스전 할 때 isSkillsCasted[index] = true로 안함
+     * 0번 스킬(fire ball), 1번 스킬(lightning), 8번 스킬(ice spike), 16번 스킬(Sky Fall)
+     * 들은 스킬 시전 중에 시전 가능, 따라서 스킬 시전 할 때 isSkillsCasted[index] = true로 안함
     */
     bool[] isSkillsCasted = new bool[19];
 
@@ -102,6 +103,8 @@ public class SkillManager : MonoBehaviour
         skillData.Damage[13] = 150f;
         skillData.Damage[14] = 100f;
         skillData.Damage[15] = 75f;
+        skillData.Damage[16] = 100f;
+        skillData.Damage[17] = 750f;
 
         skillData.Delay[0] = 1f;
         skillData.Delay[1] = 0.75f;
@@ -120,6 +123,8 @@ public class SkillManager : MonoBehaviour
         skillData.Delay[13] = 3.5f;
         skillData.Delay[14] = 3f;
         skillData.Delay[15] = 6f;
+        skillData.Delay[16] = 1f;
+        skillData.Delay[17] = 0.25f;
 
         skillData.scale[0] = 1.5f;
         skillData.scale[1] = 1f;
@@ -898,7 +903,7 @@ public class SkillManager : MonoBehaviour
 
                     playerAttachSkill.xPositionNum = 0.08f * 8;
 
-                    playerAttachSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[2];
+                    playerAttachSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[0] * passiveSkillData.Damage[2];
 
                     playerAttachSkill.aliveTime = 4f;
                     playerAttachSkill.isDotDamageSkill = true;
@@ -911,6 +916,123 @@ public class SkillManager : MonoBehaviour
 
                     playerAttachSkill.onSkillFinished = OnSkillFinished;
                     isSkillsCasted[index] = true;
+
+                    break;
+                }
+            case 16:
+                {
+                    randomSkill = GameManager.instance.poolManager.GetSkill(19) as Sky_Fall;
+
+                    float tmpX = player.transform.position.x;
+                    float tmpY = player.transform.position.y;
+
+                    // 스킬이 플레이어 기준 1 ~ 4분면 중 어디에 시전될 까
+                    // 이전에 떨어졌던 사분면에는 떨어지지 않음
+                    int quadrantNum;
+                    do
+                    {
+                        quadrantNum = UnityEngine.Random.Range(1, 5);
+                    }
+                    while (skyFallQuadrantNum == quadrantNum);
+
+                    skyFallQuadrantNum = quadrantNum;
+
+                    float ranNumX = 0;
+                    float ranNumY = 0;
+                    switch (quadrantNum)
+                    {
+                        case 1:
+                            ranNumX = UnityEngine.Random.Range(2f, 10f);
+                            ranNumY = UnityEngine.Random.Range(1f, 5f);
+                            break;
+
+                        case 2:
+                            ranNumX = UnityEngine.Random.Range(-10f, -2f);
+                            ranNumY = UnityEngine.Random.Range(1f, 5f);
+                            break;
+
+                        case 3:
+                            ranNumX = UnityEngine.Random.Range(-10f, -2f);
+                            ranNumY = UnityEngine.Random.Range(-5f, -1f);
+                            break;
+
+                        case 4:
+                            ranNumX = UnityEngine.Random.Range(2f, 10f);
+                            ranNumY = UnityEngine.Random.Range(-5f, -1f);
+                            break;
+                    }
+                    
+                    tmpX += ranNumX;
+                    tmpY += ranNumY;
+                    
+                    randomSkill.X = tmpX;
+                    randomSkill.Y = tmpY;
+
+                    randomSkill.aliveTime = 2.55f;
+                    randomSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[0] * passiveSkillData.Damage[1];
+
+                    ((Sky_Fall)randomSkill).delay = 0.65f;
+                    randomSkill.isDotDamageSkill = true;
+
+                    randomSkill.skillIndex = index;
+
+                    break;
+                }
+            case 17:
+                {
+                    randomSkill = GameManager.instance.poolManager.GetSkill(20) as Frozen_Spike;
+
+                    float tmpX = player.transform.position.x;
+                    float tmpY = player.transform.position.y;
+
+                    // 스킬이 플레이어 기준 1 ~ 4분면 중 어디에 시전될 까
+                    // 이전에 떨어졌던 사분면에는 떨어지지 않음
+                    int quadrantNum;
+                    do
+                    {
+                        quadrantNum = UnityEngine.Random.Range(1, 5);
+                    }
+                    while (skyFallQuadrantNum == quadrantNum);
+
+                    skyFallQuadrantNum = quadrantNum;
+
+                    float ranNumX = 0;
+                    float ranNumY = 0;
+                    switch (quadrantNum)
+                    {
+                        case 1:
+                            ranNumX = UnityEngine.Random.Range(0, 16f);
+                            ranNumY = UnityEngine.Random.Range(0, 7.5f);
+                            break;
+
+                        case 2:
+                            ranNumX = UnityEngine.Random.Range(-16f, 0);
+                            ranNumY = UnityEngine.Random.Range(0, 7.5f);
+                            break;
+
+                        case 3:
+                            ranNumX = UnityEngine.Random.Range(-16f, 0);
+                            ranNumY = UnityEngine.Random.Range(0, -7.5f);
+                            break;
+
+                        case 4:
+                            ranNumX = UnityEngine.Random.Range(0, 16f);
+                            ranNumY = UnityEngine.Random.Range(-7.5f, 0);
+                            break;
+                    }
+
+                    tmpX += ranNumX;
+                    tmpY += ranNumY;
+
+                    randomSkill.X = tmpX;
+                    randomSkill.Y = tmpY;
+
+                    randomSkill.aliveTime = 2f;
+                    randomSkill.damage = skillData.Damage[index] * passiveSkillData.Damage[1] * passiveSkillData.Damage[2];
+
+                    ((Frozen_Spike)randomSkill).delay = 0.55f;
+
+                    randomSkill.skillIndex = index;
 
                     break;
                 }
@@ -1060,7 +1182,8 @@ public class SkillManager : MonoBehaviour
         }
     }
 
-    // Judgment 스킬 쓸 때 일정 딜레이로 스킬 cast하기 위함
+    // Laser 스킬 앞으로 다다다다 나가게 하기 위함
+    // 현재 안쓰고 있음
     IEnumerator CastLaser(int index, int num)
     {
         int plusMinus;

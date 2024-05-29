@@ -12,7 +12,7 @@ public class Shield_Flame : PlayerAttachSkill
     bool oldisPlayerLookLeft = false;
     bool isAbsorberOn;
 
-    float absorbTime = 1.45f;
+    float absorbTime = 1.47f;
     float absorbTimer = 0f;
 
     public override void Init()
