@@ -186,7 +186,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5354398621021156387}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.32
   m_Speed: 3.5
@@ -214,8 +214,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 3
-    NumStackedVectorObservations: 2
+    VectorObservationSize: 6
+    NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 2
       BranchSizes: 0300000003000000
@@ -225,7 +225,7 @@ MonoBehaviour:
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
   m_InferenceDevice: 2
-  m_BehaviorType: 1
+  m_BehaviorType: 0
   m_BehaviorName: Player
   TeamId: 0
   m_UseChildSensors: 1
@@ -252,9 +252,9 @@ MonoBehaviour:
   isPlayerDead: 0
   isPlayerLookLeft: 0
   isPlayerShielded: 0
+  speed: 0
   playerData: {fileID: 11400000, guid: 47e058fb0d3ee424a84b9ee6737e6685, type: 2}
   enemy: {fileID: 0}
-  speed: 0
   nextMove: {x: 0, y: 0}
 --- !u!114 &1649702020077544231
 MonoBehaviour:

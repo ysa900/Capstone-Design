@@ -5,6 +5,9 @@ using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using UnityEngine.AI;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEditor.SearchService;
+using UnityEngine.SceneManagement;
 
 public class Player : Agent, IPlayer
 {
@@ -15,6 +18,7 @@ public class Player : Agent, IPlayer
     public bool isPlayerLookLeft; // 플레이어가 보고 있는 방향을 알려주는 변수
     public bool isPlayerShielded; // 플레이어가 보호막의 보호를 받고있냐
 
+    [SerializeField] float speed;
     // 플레이어 피격음 딜레이
     float hitDelayTime = 0.1f;
     float hitDelayTimer = 0.1f;
@@ -34,7 +38,8 @@ public class Player : Agent, IPlayer
     private GameAudioManager gameAudioManager;
 
     public PlayerData playerData; // 플레이어 데이터
-    public MeleeEnemy enemy; 
+    public Enemy enemy;
+    public int count = 0;
 
     private void Awake()
     {
@@ -51,11 +56,13 @@ public class Player : Agent, IPlayer
         navAgent = GetComponent<NavMeshAgent>();
         enemy = FindAnyObjectByType<MeleeEnemy>();
         rigid = GetComponent<Rigidbody2D>();
-        
+        speed = 5f;
     }
 
     void Update()
     {
+        
+
     }
 
     // 물리 연산 프레임마다 호출되는 생명주기 함수
@@ -63,8 +70,13 @@ public class Player : Agent, IPlayer
     {
         
         hitDelayTimer += Time.fixedDeltaTime;
+
+
     }
     
+
+
+
     // 프레임이 끝나기 직전에 실행되는 함수
     private void LateUpdate()
     {
@@ -83,8 +95,18 @@ public class Player : Agent, IPlayer
     }
     public override void OnEpisodeBegin()
     {
-        transform.position = Vector2.zero;
+        if (count != 0)
+        {
+        /*    transform.position = Vector2.zero;
+            GameManager.instance.gameTime = 0f;*/
+            SceneManager.LoadScene("Stage1");
+       
+            
+        }
+        count++;
     }
+    
+
 
     public override void CollectObservations(VectorSensor sensor)
     {
@@ -93,29 +115,48 @@ public class Player : Agent, IPlayer
         
     }
 
-    [SerializeField] float speed = 1;
+   
     public Vector2 nextMove;
     public override void OnActionReceived(ActionBuffers actions)
     {
+    /*    if (enemy.isDead)
+        {
+            GameManager.instance.EtoPdistance = 100f;
+        }*/
+
         nextMove.x = actions.ContinuousActions[0];
         nextMove.y = actions.ContinuousActions[1];
 
-        nextMove.x -= enemy.transform.position.x;
-        nextMove.y -= enemy.transform.position.y;
-
-        navAgent.SetDestination(nextMove * Time.deltaTime * speed);
+        transform.Translate(nextMove * Time.deltaTime * speed);
     }
-    private void OnTriggerEnter(Collider other) 
+    private void OnTriggerEnter2D(Collider2D other) 
     {
-        if  ( other.transform == enemy )    
-        {
-            SetReward(-1);
-            EndEpisode();
-        }
-        else if ( GameManager.instance.gameTime == 10f)
+        
+        if ( GameManager.instance.gameTime >= 20f)
         {
             SetReward(+1);
             EndEpisode();
+        }
+    }
+    
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        switch (collision.gameObject.tag)
+        {
+      
+            case "EvilTree":
+            case "Pumpkin":
+            case "WarLock":
+            case "Skeleton_Sword":
+            case "Skeleton_Horse":
+            case "Skeleton_Archer":
+            case "Splitter":
+            case "Ghoul":
+            case "Summoner":
+            case "BloodKing":
+                SetReward(-1);      
+                EndEpisode();
+                break;
         }
     }
 
@@ -206,4 +247,9 @@ public class Player : Agent, IPlayer
     {
 
     }
+
+
+
+
+
 }

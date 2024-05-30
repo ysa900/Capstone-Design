@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +16,7 @@ public class GameManager : MonoBehaviour
     // 게임 시간
     public float gameTime;
     public float maxGameTime = 5 * 60f; // 보스 스폰 시간
+    public float EtoPdistance;
 
     // 씬 번호
     // 0: splash, 1: Lobby, 2: Game, 3: Stage2
@@ -170,6 +172,8 @@ public class GameManager : MonoBehaviour
         // Stage1 배경음 플레이
         GameAudioManager.instance.bgmPlayer.clip = GameAudioManager.instance.bgmClips[(int)Bgm.Stage1];
         GameAudioManager.instance.bgmPlayer.Play();
+        EtoPdistance = 100f;
+
 
         SpawnStartEnemies();
     }
@@ -269,7 +273,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void Stage1Spawn()
+ 
+    public void Stage1Spawn()
     {
         if (gameTime <= 60 * 1 && CoolTimer >= CoolTime)
         {
@@ -389,9 +394,9 @@ public class GameManager : MonoBehaviour
         }
 
     }
-
+    
     // Enemy 소환 함수
-    void SpawnEnemies(int index, int num)
+    public void SpawnEnemies(int index, int num)
     {
         for (int i = 0; i < num; i++)
         {
@@ -629,6 +634,7 @@ public class GameManager : MonoBehaviour
 
 
     }
+
 
 
     void PlayerInit()

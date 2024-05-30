@@ -15,7 +15,7 @@ public class Enemy : Object, IDamageable, IPoolingObject
     public Player player;
 
     // Enemy들 체력
-    int[] enemy_HP = { 1500, 50, 80, 15, 50, 70, 15, 50, 80, 150 };
+    int[] enemy_HP = { 10, 50, 80, 15, 50, 70, 15, 50, 80, 150 };
 
     // enemy 정보
     public int hp;
@@ -26,7 +26,7 @@ public class Enemy : Object, IDamageable, IPoolingObject
     public bool isEnemyLookLeft; // 적이 보고 있는 방향을 알려주는 변수
     bool isFlipWeirdEnemyFlippedOnce; // flip 할 때 이상한 적이 한번이라도 flip 됐는 지
 
-    protected bool isDead;
+    public bool isDead;
     private bool isTimeOver;
 
     private float damageDelay = 2f;
@@ -229,6 +229,7 @@ public class Enemy : Object, IDamageable, IPoolingObject
     protected void MoveToPlayer()
     {
         agentToplayerDistance = Vector3.Distance(player.transform.position, transform.position);
+        
 
         if (agentToplayerDistance > 20f && sceneName == "Stage3")
         {
@@ -393,6 +394,23 @@ public class Enemy : Object, IDamageable, IPoolingObject
         GetComponent<CapsuleCollider2D>().enabled = false;
 
         yield return new WaitForSeconds(0.5f); // 지정한 초 만큼 쉬기
+
+        GameManager.instance.poolManager.ReturnEnemy(this, index);
+    }
+
+    public void Dead_ML()
+    {
+        isDead = true;
+
+        animator.SetTrigger("Dead");
+
+        if (!isTimeOver)
+        {
+            onEnemyWasKilled(this, true); // 대리자 호출
+        }
+
+        rigid.constraints = RigidbodyConstraints2D.FreezeAll;
+        GetComponent<CapsuleCollider2D>().enabled = false;
 
         GameManager.instance.poolManager.ReturnEnemy(this, index);
     }
