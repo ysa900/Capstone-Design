@@ -25,7 +25,12 @@ MonoBehaviour:
   - Twin Flame
   - Judgement
   - Ice Blast
-  - Blood
+  - Heavens Eclipse
+  - Beam Laser
+  - Hydro Flame
+  - Shield Flame
+  - Sky Fall
+  - Frozen Spike
   skillDescription:
   - Cast FireBall to Nearest Enemy
   - Cast Lightning on Random Enemy
@@ -39,48 +44,71 @@ MonoBehaviour:
   - Two Flame Changes Alternatively
   - Lightning Rains Stormy
   - Case Ice Blast In front of Player
-  - Heal ten Points
-  level: 050000000500000000000000050000000000000000000000000000000500000005000000000000000500000000000000
+  - Heaven Eclipce
+  - Laser Beam
+  - Hydro Flame
+  - Shield And Flame
+  - Sky Fall
+  - Frozen Spike
+  level: 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000
   Damage:
-  - 77.76001
-  - 51.840004
-  - 2
-  - 51.840004
+  - 23
+  - 10
+  - 5
+  - 20
   - 15
   - 0
-  - 60
-  - 7.776001
-  - 5.1840005
+  - 35
+  - 20
+  - 10
+  - 200
   - 40
-  - 103.68001
+  - 10
+  - 5
+  - 150
+  - 100
+  - 75
+  - 100
   - 2
   Delay:
-  - 0.34991997
-  - 0.43739995
+  - 1
+  - 0.75
   - 1.5
-  - 1.3122
+  - 3
   - 14
   - 10
+  - 1
+  - 4
+  - 2
   - 3
-  - 1.7495998
-  - 0.8747999
+  - 7.5
+  - 8
   - 3
-  - 3.2805
+  - 3.5
+  - 3
+  - 6
+  - 1
   - 8
   scale:
-  - 2
-  - 2
+  - 1.5
   - 1
   - 2
+  - 1.5
+  - 1.5
+  - 1
+  - 1.5
+  - 1.5
+  - 1.8
+  - 1.75
+  - 1.5
+  - 1.5
+  - 20
   - 1
   - 1
   - 1
-  - 2
-  - 2
   - 1
-  - 2
   - 1
-  skillSelected: 010100010000000101000100
+  skillSelected: 000000000000000000000000000000000100
   skillicon:
   - {fileID: 21300000, guid: 90f5c378a37421e4c900728afc36b321, type: 2}
   - {fileID: 21300000, guid: 83ce16839d132e842a2b72cbf6a4410f, type: 2}
@@ -94,17 +122,9 @@ MonoBehaviour:
   - {fileID: 21300000, guid: c4322abfbefec6d46a4283e434dc46cb, type: 2}
   - {fileID: 21300000, guid: f75bd353d209d174aaa28850a3695f2f, type: 2}
   - {fileID: 21300000, guid: bef00553c8586ce4f97ab31fad65e9ea, type: 2}
-  - {fileID: 21300000, guid: 7f6251c7985e30447bf8dc271d8dae64, type: 2}
-  projectile:
-  - {fileID: 1876097049369689279, guid: 4f5aab16534b5d543b90b75837de3cc4, type: 3}
-  - {fileID: 3719459856391972471, guid: a30f3ee6b2db5c540af102e95890215c, type: 3}
-  - {fileID: 7156574298850864081, guid: 3772c381276b3ab4aa6590f755c6521d, type: 3}
-  - {fileID: 1449370788958344176, guid: 9aef766674f0e6148bc3d4baa343e2fb, type: 3}
-  - {fileID: 3708506530452975792, guid: ce1225d4b4af3da418cea198e24f7b90, type: 3}
-  - {fileID: 3178857544331025768, guid: 607156135ff587f4e89da21cbc00b368, type: 3}
-  - {fileID: 3178857544331025768, guid: 607156135ff587f4e89da21cbc00b368, type: 3}
-  - {fileID: 3178857544331025768, guid: 607156135ff587f4e89da21cbc00b368, type: 3}
-  - {fileID: 3178857544331025768, guid: 607156135ff587f4e89da21cbc00b368, type: 3}
-  - {fileID: 3178857544331025768, guid: 607156135ff587f4e89da21cbc00b368, type: 3}
-  - {fileID: 3178857544331025768, guid: 607156135ff587f4e89da21cbc00b368, type: 3}
-  - {fileID: 3178857544331025768, guid: 607156135ff587f4e89da21cbc00b368, type: 3}
+  - {fileID: 21300000, guid: 581ce6a34b86cfc40b2ea857034c99db, type: 2}
+  - {fileID: 21300000, guid: 29eb7c4e7c46d32449132ac622b106df, type: 2}
+  - {fileID: 21300000, guid: a686a39615a764d43b4532dd07768666, type: 2}
+  - {fileID: 21300000, guid: 3d776b03e5f9f9c4e9d3c78c57162806, type: 2}
+  - {fileID: 21300000, guid: 4a723842084b07c468e2cf5833ca2dc2, type: 2}
+  - {fileID: 21300000, guid: 445331c10e2e38a419b2b369a14cec27, type: 3}

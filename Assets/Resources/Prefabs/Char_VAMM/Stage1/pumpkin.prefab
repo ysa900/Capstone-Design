@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 2092667235809357167}
   - component: {fileID: 7468508348664377}
   - component: {fileID: 3264262453915024326}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: pumpkin
   m_TagString: Pumpkin
   m_Icon: {fileID: 0}
@@ -292,6 +292,7 @@ MonoBehaviour:
   rigid: {fileID: 0}
   capsuleCollider: {fileID: 0}
   agent: {fileID: 3264262453915024326}
+  isAgentDelay: 0
 --- !u!195 &3264262453915024326
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -302,7 +303,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.1
-  m_Speed: 3.5
+  m_Speed: 1.2
   m_Acceleration: 20
   avoidancePriority: 51
   m_AngularSpeed: 20

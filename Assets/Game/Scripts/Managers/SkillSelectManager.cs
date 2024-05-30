@@ -7,11 +7,10 @@ using UnityEngine.UI;
 public class SkillSelectManager: MonoBehaviour
 {
     // 개발용 (스킬 테스트용)
-    bool isSkillTest = false;
-    int testSkillIndex = 8;
+    bool isSkillTest = true;
+    int testSkillIndex = 12;
 
     // 현재 고를 수 있는 스킬 번호 (0 ~ 4 레벨: 5번까지 / 5 ~ 9 레벨: 8번까지 / 10레벨 이상 : 11번까지)
-    // 12번은 Blood임
     private int skillCount = 6; // 이건 개수라서 5번까지 나오게 할려면 6개임
 
     // 패시브 스킬을 3개까지 가지고 있을 수 있음
@@ -365,8 +364,13 @@ public class SkillSelectManager: MonoBehaviour
             SetSkillPanel(1);
         }else if(list.Count == 0) // 스킬 전부 만렙 찍으면 체력 회복하게 함
         {
-            isSkillAllMax = true;
-            SetSkillPanel(1);
+            //isSkillAllMax = true;
+            //SetSkillPanel(1);
+            skillSelectObject.SetActive(false);
+
+            onSkillSelectObjectHided();
+
+            Time.timeScale = 1;
         }
         else
         {
@@ -390,7 +394,7 @@ public class SkillSelectManager: MonoBehaviour
     {
         if (isSkillAllMax) // 스킬, 패시브 전부 다 MAX면
         {
-            icon = skill_Icon[i].GetComponent<Image>();
+            /*icon = skill_Icon[i].GetComponent<Image>();
             icon.sprite = skillData.skillicon[12];
 
             string color = "#FF0000";
@@ -401,7 +405,7 @@ public class SkillSelectManager: MonoBehaviour
             textDescription = skill_TextDescription[i].GetComponent<TextMeshProUGUI>();
             textDescription.text = "<color=" + color + ">" + skillData.skillDescription[12] + "</color>";
 
-            levelObject[i].SetActive(false);
+            levelObject[i].SetActive(false);*/
 
             return;
         }
@@ -761,7 +765,7 @@ public class SkillSelectManager: MonoBehaviour
         }
         else
         {
-            onPlayerHealed();
+            //onPlayerHealed();
         }
         skillSelectObject.SetActive(false);
 

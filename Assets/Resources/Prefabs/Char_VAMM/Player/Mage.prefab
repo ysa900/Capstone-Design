@@ -263,7 +263,6 @@ GameObject:
   - component: {fileID: 1253346671858574077}
   - component: {fileID: 7818977613494987131}
   - component: {fileID: 5645827978221573267}
-  - component: {fileID: 3621306853304922202}
   - component: {fileID: 8557957087405267583}
   m_Layer: 0
   m_Name: Mage
@@ -406,31 +405,6 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: -0.06}
   m_Size: {x: 0.15, y: 0.25}
   m_Direction: 0
---- !u!114 &3621306853304922202
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7289612309239362924}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ef3b78ebc65906459c4945c22d60b0c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inputVec: {x: 0, y: 0}
-  speed: 6
-  hp: 100
-  maxHp: 100
-  Exp: 0
-  level: 0
-  nextExp: 
-  damageReductionValue: 1
-  magnetRange: 0.25
-  kill: 0
-  isPlayerDead: 0
-  isPlayerLookLeft: 0
-  isPlayerShielded: 0
 --- !u!95 &8557957087405267583
 Animator:
   serializedVersion: 7

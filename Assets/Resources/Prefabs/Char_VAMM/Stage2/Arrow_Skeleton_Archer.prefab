@@ -163,6 +163,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bab90403ff170434bb9090d14c611898, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 8857619680574137846, guid: daf2389240168c24ea3446fee54b4f80, type: 3}
+  player: {fileID: 0}
   speed: 10
   damage: 3

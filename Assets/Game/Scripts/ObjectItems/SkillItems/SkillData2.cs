@@ -19,6 +19,5 @@ public class SkillData2 : ScriptableObject
     [Header("# Skill")]
     public bool[] skillSelected;
     public Sprite[] skillicon;
-    public GameObject[] projectile;
 
 }

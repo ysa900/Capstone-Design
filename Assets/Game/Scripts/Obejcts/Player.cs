@@ -1,39 +1,24 @@
 using Unity.Collections;
 using UnityEngine;
+using Unity.MLAgents;
+using Unity.MLAgents.Actuators;
+using Unity.MLAgents.Sensors;
 using UnityEngine.AI;
+using System.Collections.Generic;
 
-public class Player : MonoBehaviour, IPlayer
+public class Player : Agent, IPlayer
 {
-    // 키보드 방향키 입력을 위한 벡터
-    public Vector2 inputVec;
+    public NavMeshAgent navAgent; // Navmesh
 
-    //[SerializeField]
-    //// 플레이어 정보
-    //public float speed;
-    //public float hp;
-    //public float maxHp;
-    //public float Exp;
-    //public int level;
-    //public int[] nextExp;
-
-    // 플레이어 패시브 효과 관련 변수
-    //public float damageReductionValue = 1f; // 뎀감x
-    //public float magnetRange; // 자석 범위
-
-    //킬 수
-    //public int kill;
-
+    public Rigidbody2D rigid;
     public bool isPlayerDead; // 플레이어가 죽었는지 판별하는 변수
-
     public bool isPlayerLookLeft; // 플레이어가 보고 있는 방향을 알려주는 변수
-
     public bool isPlayerShielded; // 플레이어가 보호막의 보호를 받고있냐
 
     // 플레이어 피격음 딜레이
     float hitDelayTime = 0.1f;
     float hitDelayTimer = 0.1f;
 
-    Rigidbody2D rigid; // 물리 입력을 받기위한 변수
     SpriteRenderer spriteRenderer; // 플레이어 방향을 바꾸기 위해 flipX를 가져오기 위한 변수
     Animator animator; // 애니메이션 관리를 위한 변수
     CircleCollider2D absorberCollider; // Absorber의 Collider - 자석 효과 범위를 바꾸기 위한 변수
@@ -49,7 +34,7 @@ public class Player : MonoBehaviour, IPlayer
     private GameAudioManager gameAudioManager;
 
     public PlayerData playerData; // 플레이어 데이터
-
+    public MeleeEnemy enemy; 
 
     private void Awake()
     {
@@ -60,37 +45,34 @@ public class Player : MonoBehaviour, IPlayer
     void Start()
     {
         // 변수 초기화
-        rigid = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
         absorberCollider = gameObject.GetComponentInChildren<CircleCollider2D>();
-   
+        navAgent = GetComponent<NavMeshAgent>();
+        enemy = FindAnyObjectByType<MeleeEnemy>();
+        rigid = GetComponent<Rigidbody2D>();
+        
     }
 
-
-
-    // Update is called once per frame
     void Update()
     {
-        ReceiveDirectionInput(); // 키보드 방향키 입력을 가져오는 함수
     }
 
     // 물리 연산 프레임마다 호출되는 생명주기 함수
     private void FixedUpdate()
     {
-        MovePlayer();
-
+        
         hitDelayTimer += Time.fixedDeltaTime;
     }
-
+    
     // 프레임이 끝나기 직전에 실행되는 함수
     private void LateUpdate()
     {
-        animator.SetFloat("Speed", inputVec.magnitude); // animator의 float타입인 변수 Speed를 inpuVec의 크기만큼으로 설정한다
+        animator.SetFloat("Speed", speed); // animator의 float타입인 변수 Speed를 inpuVec의 크기만큼으로 설정한다
 
-        isPlayerLookLeft = inputVec.x < 0; // 플레이어가 왼쪽을 보고 있으면
+        isPlayerLookLeft = nextMove.x < 0; // 플레이어가 왼쪽을 보고 있으면
 
-        if (inputVec.x != 0) // 키를 안눌렀을 때는 실행 안되도록 하기 위해 inputVec.x가 0이 아닌 경우만 실행하게 한다
+        if (nextMove.x != 0) // 키를 안눌렀을 때는 실행 안되도록 하기 위해 inputVec.x가 0이 아닌 경우만 실행하게 한다
         {
             spriteRenderer.flipX = isPlayerLookLeft; // 플레이어를 x축으로 뒤집는다
         }
@@ -99,27 +81,48 @@ public class Player : MonoBehaviour, IPlayer
             isPlayerLookLeft = spriteRenderer.flipX;
         }
     }
-
-    // 키보드 방향키 입력을 가져오는 함수
-    private void ReceiveDirectionInput()
+    public override void OnEpisodeBegin()
     {
-        // 수평, 수직 방향 입력을 받는다
-        // inputmanager에 기본 설정돼있다
-        // GetAxisRaw를 해야 더욱 명확한 컨트롤 가능
-        inputVec.x = Input.GetAxisRaw("Horizontal");
-        inputVec.y = Input.GetAxisRaw("Vertical");
+        transform.position = Vector2.zero;
     }
 
-    // 플레이어를 움직이는 함수
-    private void MovePlayer()
+    public override void CollectObservations(VectorSensor sensor)
     {
-        // 플레이어의 방향벡터를 가져와서 속도를 설정
-        // fixedDeltaTime은 물리 프레임 시간
-        Vector2 nextVec = inputVec.normalized * playerData.speed * Time.fixedDeltaTime;
+        sensor.AddObservation(transform.position);
+        sensor.AddObservation(enemy.transform.position);
+        
+    }
 
-        rigid.MovePosition(rigid.position + nextVec);
-        // 입력받은 방향으로 플레이어 위치 설정
+    [SerializeField] float speed = 1;
+    public Vector2 nextMove;
+    public override void OnActionReceived(ActionBuffers actions)
+    {
+        nextMove.x = actions.ContinuousActions[0];
+        nextMove.y = actions.ContinuousActions[1];
 
+        nextMove.x -= enemy.transform.position.x;
+        nextMove.y -= enemy.transform.position.y;
+
+        navAgent.SetDestination(nextMove * Time.deltaTime * speed);
+    }
+    private void OnTriggerEnter(Collider other) 
+    {
+        if  ( other.transform == enemy )    
+        {
+            SetReward(-1);
+            EndEpisode();
+        }
+        else if ( GameManager.instance.gameTime == 10f)
+        {
+            SetReward(+1);
+            EndEpisode();
+        }
+    }
+
+    // 자석 범위를 변경하는 함수
+    public void ChangeMagnetRange()
+    {
+        absorberCollider.radius = playerData.magnetRange;
     }
 
     //player 경험치 획득 함수
@@ -134,13 +137,6 @@ public class Player : MonoBehaviour, IPlayer
             playerData.level++;
             playerData.Exp = 0;
         }
-
-    }
-
-    // 자석 범위를 변경하는 함수
-    public void ChangeMagnetRange()
-    {
-        absorberCollider.radius = playerData.magnetRange;
     }
 
     // 플레이어가 몬스터와 충돌하면 데미지를 입는다

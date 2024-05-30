@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 185251017419095182}
   - component: {fileID: 2878646979041324979}
   - component: {fileID: -3337024891017436492}
-  - component: {fileID: -9053146040695909623}
-  m_Layer: 0
+  - component: {fileID: -3204275273619302721}
+  m_Layer: 6
   m_Name: Summoner
   m_TagString: Summoner
   m_Icon: {fileID: 0}
@@ -194,8 +194,9 @@ MonoBehaviour:
   index: 0
   rigid: {fileID: 0}
   capsuleCollider: {fileID: 0}
-  agent: {fileID: -9053146040695909623}
---- !u!195 &-9053146040695909623
+  agent: {fileID: 0}
+  isAgentDelay: 0
+--- !u!195 &-3204275273619302721
 NavMeshAgent:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -205,7 +206,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.18
-  m_Speed: 3.5
+  m_Speed: 1.3
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120

@@ -12,18 +12,14 @@ public class ObstacleVisble : MonoBehaviour
     Tilemap tile;
     Color srAlphaColor, tileAlphaColor;
     Player player;
-    Player player_ML; // ML
     float playerYpostion;
 
     bool isTriggerMatch = false;
     bool isTwowayObstacle = false;
 
-    private string sceneName;
-
     private void Start()
     {
         player = GameManager.instance.player;
-        sceneName = GameManager.instance.sceneName;
 
         switch (name)
         {
@@ -52,16 +48,7 @@ public class ObstacleVisble : MonoBehaviour
     {
         if (isTwowayObstacle)
         {
-            switch(sceneName)
-            {
-                case "Stage1_ML":
-                    playerYpostion = player_ML.transform.position.y + 1.9f;
-                    break;
-                default:
-                    playerYpostion = player.transform.position.y + 1.9f;
-                    break;
-            }
-
+            playerYpostion = player.transform.position.y + 1.9f;
 
             if (playerYpostion - this.transform.position.y > 0)
             {
@@ -77,32 +64,33 @@ public class ObstacleVisble : MonoBehaviour
             }
         }
 
-        if (isTriggerMatch) // ì¥ì• ë¬¼ ë“¤ì–´ê°ˆ ë•Œ
+        if (isTriggerMatch) // Àå¾Ö¹° µé¾î°¥ ¶§
         {
-            if (sr == null) // ìê¸° ìì‹ (ì˜¤ë¸Œì íŠ¸)ì´ Tilemapì¸ ê²½ìš°
+            if (sr == null) // ÀÚ±â ÀÚ½Å(¿ÀºêÁ§Æ®)ÀÌ TilemapÀÎ °æ¿ì
             {
                 tileAlphaColor.a = Mathf.Lerp(tileAlphaColor.a, 0.5f, Time.deltaTime * alphaSpeed);
                 tile.color = tileAlphaColor;
             }
-            else // ìê¸° ìì‹ (ì˜¤ë¸Œì íŠ¸)ì´ SpriteRendererì¸ ê²½ìš°
+            else // ÀÚ±â ÀÚ½Å(¿ÀºêÁ§Æ®)ÀÌ SpriteRendererÀÎ °æ¿ì
             {
                 srAlphaColor.a = Mathf.Lerp(srAlphaColor.a, 0.5f, Time.deltaTime * alphaSpeed);
                 sr.color = srAlphaColor;
             }
         }
-        else // ì¥ì• ë¬¼ì—ì„œ ë‚˜ì˜¬ ë•Œ
+        else // Àå¾Ö¹°¿¡¼­ ³ª¿Ã ¶§
         {
-            if (sr == null) // ìê¸° ìì‹ (ì˜¤ë¸Œì íŠ¸)ì´ Tilemapì¸ ê²½ìš°
+            if (sr == null) // ÀÚ±â ÀÚ½Å(¿ÀºêÁ§Æ®)ÀÌ TilemapÀÎ °æ¿ì
             {
                 tileAlphaColor.a = Mathf.Lerp(tileAlphaColor.a, 1f, Time.deltaTime * alphaSpeed);
                 tile.color = tileAlphaColor;
 
             }
-            else // ìê¸° ìì‹ (ì˜¤ë¸Œì íŠ¸)ì´ SpriteRendererì¸ ê²½ìš°
+            else // ÀÚ±â ÀÚ½Å(¿ÀºêÁ§Æ®)ÀÌ SpriteRendererÀÎ °æ¿ì
             {
                 srAlphaColor.a = Mathf.Lerp(srAlphaColor.a, 1f, Time.deltaTime * alphaSpeed);
                 sr.color = srAlphaColor;
             }
+
 
         }
     }
@@ -112,10 +100,11 @@ public class ObstacleVisble : MonoBehaviour
 
         if (!collision.CompareTag("Player"))
         {
-            return; // Player íƒœê·¸ ì•„ë‹ˆë©´ í•¨ìˆ˜ íƒˆì¶œ
+            return; // Player ÅÂ±× ¾Æ´Ï¸é ÇÔ¼ö Å»Ãâ
         }
 
-        isTriggerMatch = true; // Playerì™€ Collider ì ‘ì´‰ ì‹œ
+
+        isTriggerMatch = true; // Player¿Í Collider Á¢ÃË ½Ã
     }
 
     public void OnTriggerExit2D(Collider2D collision)

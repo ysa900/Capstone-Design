@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5312263826241417555}
   - component: {fileID: 7440133503203717277}
   - component: {fileID: 7338616373390584116}
-  - component: {fileID: 6682502125918302997}
+  - component: {fileID: 402253632833680148}
   m_Layer: 0
   m_Name: Water_Normal1
   m_TagString: Water
@@ -173,7 +173,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &6682502125918302997
+--- !u!114 &402253632833680148
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -182,7 +182,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3178857544331025768}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06210489640f166499b171f2a7065272, type: 3}
+  m_Script: {fileID: 11500000, guid: 164e5d809644c084faeeae27aa9bea1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   isDotDamageSkill: 0
@@ -197,9 +197,5 @@ MonoBehaviour:
   yPositionNum: 0
   isAttachSkill: 0
   isFlipped: 0
-  isCircleSkill: 0
-  isShieldSkill: 0
-  isDelaySkill: 0
   isYFlipped: 0
-  degree: 0
   aliveTime: 0

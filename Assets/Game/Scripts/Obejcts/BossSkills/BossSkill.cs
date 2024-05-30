@@ -10,6 +10,7 @@
 
     public int index;
 
+
     // 풀링땜에 어쩔수 없지 만든 변수들
     public float laserTurnNum; // boss_laser꺼
     public bool isRightTop; // boss_grid꺼

@@ -12,8 +12,11 @@ GameObject:
   - component: {fileID: 8972967962853224141}
   - component: {fileID: 2484715673646967731}
   - component: {fileID: 6362983058256405347}
-  - component: {fileID: 8857619680574137846}
   - component: {fileID: -6388075190265237586}
+  - component: {fileID: -8720644868683111200}
+  - component: {fileID: 58920036473435842}
+  - component: {fileID: -8867439172521574641}
+  - component: {fileID: 1649702020077544231}
   m_Layer: 0
   m_Name: Mage2
   m_TagString: Player
@@ -152,25 +155,8 @@ CapsuleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: -0.08}
-  m_Size: {x: 0.3, y: 0.47}
+  m_Size: {x: 0.22, y: 0.47}
   m_Direction: 0
---- !u!114 &8857619680574137846
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5354398621021156387}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ef3b78ebc65906459c4945c22d60b0c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inputVec: {x: 0, y: 0}
-  isPlayerDead: 0
-  isPlayerLookLeft: 0
-  isPlayerShielded: 0
-  playerData: {fileID: 11400000, guid: 47e058fb0d3ee424a84b9ee6737e6685, type: 2}
 --- !u!95 &-6388075190265237586
 Animator:
   serializedVersion: 7
@@ -193,6 +179,97 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!195 &-8720644868683111200
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5354398621021156387}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.32
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 0.64
+  m_BaseOffset: 0.32
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 0
+--- !u!114 &58920036473435842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5354398621021156387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d1c4e0b1822b495aa52bc52839ecb30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_BrainParameters:
+    VectorObservationSize: 3
+    NumStackedVectorObservations: 2
+    m_ActionSpec:
+      m_NumContinuousActions: 2
+      BranchSizes: 0300000003000000
+    VectorActionSize: 
+    VectorActionDescriptions: []
+    VectorActionSpaceType: 1
+    hasUpgradedBrainParametersWithActionSpec: 1
+  m_Model: {fileID: 0}
+  m_InferenceDevice: 2
+  m_BehaviorType: 1
+  m_BehaviorName: Player
+  TeamId: 0
+  m_UseChildSensors: 1
+  m_UseChildActuators: 1
+  m_ObservableAttributeHandling: 0
+--- !u!114 &-8867439172521574641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5354398621021156387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ef3b78ebc65906459c4945c22d60b0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 5000
+  navAgent: {fileID: -8720644868683111200}
+  rigid: {fileID: 2484715673646967731}
+  isPlayerDead: 0
+  isPlayerLookLeft: 0
+  isPlayerShielded: 0
+  playerData: {fileID: 11400000, guid: 47e058fb0d3ee424a84b9ee6737e6685, type: 2}
+  enemy: {fileID: 0}
+  speed: 0
+  nextMove: {x: 0, y: 0}
+--- !u!114 &1649702020077544231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5354398621021156387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DecisionPeriod: 5
+  TakeActionsBetweenDecisions: 1
 --- !u!1 &5620825763213714776
 GameObject:
   m_ObjectHideFlags: 0

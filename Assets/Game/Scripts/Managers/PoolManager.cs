@@ -6,7 +6,7 @@ public class PoolManager : MonoBehaviour
 {
     const int ENEMY_NUM = 10;
     const int EXP_NUM = 3;
-    const int SKILL_NUM = 15; // 불: 0 ~ 6, 전기: 7 ~ 10, 물: 11 ~ 14
+    const int SKILL_NUM = 21; // 불: 0 ~ 6, 전기: 7 ~ 10, 물: 11 ~ 14, 공명 스킬: 15 ~ 20
     const int BOSS_SKILL_NUM = 4;
 
     // 사용할 클래스 객체들
@@ -68,12 +68,13 @@ public class PoolManager : MonoBehaviour
             {
                 // 발견하면 select 변수에 할당
                 select = item;
+                select.agent.enabled = false;
                 if (select.GetComponent<IPoolingObject>() != null)
                 {
                     enemyManager.SetEnemyInfo(select, player, index);
+                    select.gameObject.SetActive(true);
                     select.GetComponent<IPoolingObject>().Init();
                 }
-                select.gameObject.SetActive(true);
                 break;
             }
         }
@@ -87,6 +88,7 @@ public class PoolManager : MonoBehaviour
 
             enemyManager.SetEnemyInfo(select, player, index);
 
+            select.agent.enabled = false;
             select.Init(); // 얘는 Init 해줘야됨
 
             select.transform.SetParent(this.gameObject.transform.GetChild(0));
@@ -196,9 +198,10 @@ public class PoolManager : MonoBehaviour
                     select.player = player;
                     select.returnIndex = index; // return을 위해 index 부여
 
+                    select.gameObject.SetActive(true);
                     select.GetComponent<IPoolingObject>().Init();
                 }
-                select.gameObject.SetActive(true);
+                
                 break;
             }
         }
@@ -249,9 +252,9 @@ public class PoolManager : MonoBehaviour
                     select.player = player;
                     select.returnIndex = index; // return을 위해 index 부여
 
+                    select.gameObject.SetActive(true);
                     select.GetComponent<IPoolingObject>().Init();
                 }
-                select.gameObject.SetActive(true);
                 break;
             }
         }
@@ -313,9 +316,9 @@ public class PoolManager : MonoBehaviour
                 {
                     select.index = index; // return을 위해 index 부여
 
+                    select.gameObject.SetActive(true);
                     select.GetComponent<IPoolingObject>().Init();
                 }
-                select.gameObject.SetActive(true);
                 break;
             }
         }
@@ -357,9 +360,9 @@ public class PoolManager : MonoBehaviour
                     select.index = index; // return을 위해 index 부여
                     select.laserTurnNum = num;
 
+                    select.gameObject.SetActive(true);
                     select.GetComponent<IPoolingObject>().Init();
                 }
-                select.gameObject.SetActive(true);
                 break;
             }
         }
@@ -404,9 +407,9 @@ public class PoolManager : MonoBehaviour
                     select.Y = y;
                     select.isRightTop = b;
 
+                    select.gameObject.SetActive(true);
                     select.GetComponent<IPoolingObject>().Init();
                 }
-                select.gameObject.SetActive(true);
                 break;
             }
         }
@@ -456,9 +459,9 @@ public class PoolManager : MonoBehaviour
                 {
                     select.GetComponent<DamageText>().damage = damage;
                     select.GetComponent<DamageText>().skillTag = skillTag;
+                    select.gameObject.SetActive(true);
                     select.GetComponent<IPoolingObject>().Init();
                 }
-                select.gameObject.SetActive(true);
                 break;
             }
         }
