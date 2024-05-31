@@ -40,6 +40,8 @@ public class Player : Agent, IPlayer
     public PlayerData playerData; // 플레이어 데이터
     public Enemy enemy;
     public int count = 0;
+    private bool isExpGet = false;
+    private int expCount = 0;
 
     private void Awake()
     {
@@ -97,10 +99,10 @@ public class Player : Agent, IPlayer
     {
         if (count != 0)
         {
-        /*    transform.position = Vector2.zero;
-            GameManager.instance.gameTime = 0f;*/
+            /*    transform.position = Vector2.zero;
+                GameManager.instance.gameTime = 0f;*/
+            GameManager.instance.playerData.kill = 0;
             SceneManager.LoadScene("Stage1");
-       
             
         }
         count++;
@@ -132,9 +134,31 @@ public class Player : Agent, IPlayer
     private void OnTriggerEnter2D(Collider2D other) 
     {
         
-        if ( GameManager.instance.gameTime >= 20f)
+        if ( GameManager.instance.gameTime >= 120f)
+        {
+            SetReward(+5);
+            EndEpisode();
+        }
+
+        if (GameManager.instance.playerData.kill > 60 )
+        {
+            SetReward(+2);
+        }
+
+        if ( isExpGet )
         {
             SetReward(+1);
+        }
+
+        if ( expCount >= 20)
+        {
+            SetReward(+2);
+            EndEpisode() ;
+        }
+
+        if (GameManager.instance.playerData.hp < 5f )
+        {
+            SetReward(-3);
             EndEpisode();
         }
     }
@@ -155,7 +179,6 @@ public class Player : Agent, IPlayer
             case "Summoner":
             case "BloodKing":
                 SetReward(-1);      
-                EndEpisode();
                 break;
         }
     }
@@ -170,6 +193,8 @@ public class Player : Agent, IPlayer
     public void GetExp(int expAmount)
     {
         playerData.Exp += expAmount;
+        isExpGet = true;
+        expCount++;
 
         if (playerData.Exp >= playerData.nextExp[playerData.level])
         {
@@ -247,9 +272,4 @@ public class Player : Agent, IPlayer
     {
 
     }
-
-
-
-
-
 }
