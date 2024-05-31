@@ -113,7 +113,7 @@ public class Player : Agent, IPlayer
     public override void CollectObservations(VectorSensor sensor)
     {
         sensor.AddObservation(transform.position);
-        sensor.AddObservation(enemy.transform.position);
+        // sensor.AddObservation(enemy.transform.position);
         
     }
 
@@ -134,40 +134,40 @@ public class Player : Agent, IPlayer
     private void OnTriggerEnter2D(Collider2D other) 
     {
         
-        if ( GameManager.instance.gameTime >= 120f)
+        if ( GameManager.instance.gameTime >= 250f)
         {
-            SetReward(+5);
+            SetReward(+4);
             EndEpisode();
         }
 
-        if (GameManager.instance.playerData.kill > 60 )
-        {
-            SetReward(+2);
-        }
-
-        if ( isExpGet )
+        if (GameManager.instance.playerData.kill != 0 && GameManager.instance.playerData.kill % 100 == 0)
         {
             SetReward(+1);
         }
 
-        if ( expCount >= 20)
+        if ( isExpGet )
         {
-            SetReward(+2);
-            EndEpisode() ;
+            SetReward(+0.5f);
+            isExpGet = false;
         }
 
-        if (GameManager.instance.playerData.hp < 5f )
+        if ( expCount != 0 && expCount % 20 == 0)
         {
-            SetReward(-3);
+            SetReward(+0.1f);
             EndEpisode();
         }
+
+        // if (GameManager.instance.playerData.hp < 70f )
+        // {
+        //     SetReward(-3);
+        //     EndEpisode();
+        // }
     }
     
     private void OnCollisionEnter2D(Collision2D collision)
     {
         switch (collision.gameObject.tag)
         {
-      
             case "EvilTree":
             case "Pumpkin":
             case "WarLock":
@@ -178,7 +178,8 @@ public class Player : Agent, IPlayer
             case "Ghoul":
             case "Summoner":
             case "BloodKing":
-                SetReward(-1);      
+                SetReward(-0.9f);
+                EndEpisode();      
                 break;
         }
     }

@@ -166,8 +166,9 @@ public class GameManager : MonoBehaviour
     {
         navMeshControl.BakeNavMeshArea();
 
-        if (SceneManager.GetActiveScene().name == "Stage1")
-            skillSelectManager.ChooseStartSkill(); // 시작 스킬 선택
+        // ML용 스킬 선택 안하게 하기
+        // if (SceneManager.GetActiveScene().name == "Stage1")
+        //     skillSelectManager.ChooseStartSkill(); // 시작 스킬 선택
 
         // Stage1 배경음 플레이
         GameAudioManager.instance.bgmPlayer.clip = GameAudioManager.instance.bgmClips[(int)Bgm.Stage1];

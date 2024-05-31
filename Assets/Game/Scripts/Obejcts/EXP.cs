@@ -44,7 +44,7 @@ public class EXP : Object, IPoolingObject
             return;
         }
 
-        iPlayer.GetExp(expAmount);
+        // iPlayer.GetExp(expAmount);
 
         GameManager.instance.poolManager.ReturnExp(this, index);
     }
