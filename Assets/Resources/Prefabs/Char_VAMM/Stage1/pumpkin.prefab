@@ -284,10 +284,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01158a9771a40af48a12e17ec3008e10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 8857619680574137846, guid: daf2389240168c24ea3446fee54b4f80, type: 3}
+  player: {fileID: 0}
   hp: 0
   speed: 2
   isEnemyLookLeft: 0
+  isDead: 0
   index: 0
   rigid: {fileID: 0}
   capsuleCollider: {fileID: 0}

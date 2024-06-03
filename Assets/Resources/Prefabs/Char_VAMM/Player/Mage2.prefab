@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 2484715673646967731}
   - component: {fileID: 6362983058256405347}
   - component: {fileID: -6388075190265237586}
-  - component: {fileID: -8720644868683111200}
   - component: {fileID: 58920036473435842}
   - component: {fileID: -8867439172521574641}
   - component: {fileID: 1649702020077544231}
@@ -180,28 +179,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!195 &-8720644868683111200
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5354398621021156387}
-  m_Enabled: 0
-  m_AgentTypeID: 0
-  m_Radius: 0.32
-  m_Speed: 3.5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 0.64
-  m_BaseOffset: 0.32
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 0
 --- !u!114 &58920036473435842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -215,17 +192,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 3
-    NumStackedVectorObservations: 1
+    VectorObservationSize: 6
+    NumStackedVectorObservations: 2
     m_ActionSpec:
       m_NumContinuousActions: 2
       BranchSizes: 0300000003000000
     VectorActionSize: 
     VectorActionDescriptions: []
-    VectorActionSpaceType: 1
+    VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
-  m_InferenceDevice: 2
+  m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: Player
   TeamId: 0
@@ -247,8 +224,8 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 5000
-  navAgent: {fileID: -8720644868683111200}
+  MaxStep: 10000000
+  navAgent: {fileID: 0}
   rigid: {fileID: 2484715673646967731}
   isPlayerDead: 0
   isPlayerLookLeft: 0

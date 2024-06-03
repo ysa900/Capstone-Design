@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor.SearchService;
 using UnityEngine.SceneManagement;
+using System;
 
 public class Player : Agent, IPlayer
 {
@@ -46,7 +47,7 @@ public class Player : Agent, IPlayer
     private void Awake()
     {
         gameAudioManager = FindAnyObjectByType<GameAudioManager>();
-        
+
     }
 
     void Start()
@@ -58,24 +59,24 @@ public class Player : Agent, IPlayer
         navAgent = GetComponent<NavMeshAgent>();
         enemy = FindAnyObjectByType<MeleeEnemy>();
         rigid = GetComponent<Rigidbody2D>();
-        speed = 5f;
+        speed = 3.5f;
     }
 
     void Update()
     {
-        
+
 
     }
 
     // 물리 연산 프레임마다 호출되는 생명주기 함수
     private void FixedUpdate()
     {
-        
+
         hitDelayTimer += Time.fixedDeltaTime;
 
 
     }
-    
+
 
 
 
@@ -103,67 +104,96 @@ public class Player : Agent, IPlayer
                 GameManager.instance.gameTime = 0f;*/
             GameManager.instance.playerData.kill = 0;
             SceneManager.LoadScene("Stage1");
-            
+
         }
         count++;
     }
-    
+
 
 
     public override void CollectObservations(VectorSensor sensor)
     {
         sensor.AddObservation(transform.position);
         // sensor.AddObservation(enemy.transform.position);
-        
+
     }
 
-   
+
     public Vector2 nextMove;
     public override void OnActionReceived(ActionBuffers actions)
     {
-    /*    if (enemy.isDead)
-        {
-            GameManager.instance.EtoPdistance = 100f;
-        }*/
+        /*    if (enemy.isDead)
+            {
+                GameManager.instance.EtoPdistance = 100f;
+            }*/
 
         nextMove.x = actions.ContinuousActions[0];
         nextMove.y = actions.ContinuousActions[1];
 
         transform.Translate(nextMove * Time.deltaTime * speed);
     }
-    private void OnTriggerEnter2D(Collider2D other) 
+
+    public override void Heuristic(in ActionBuffers actionsOut)
     {
-        
-        if ( GameManager.instance.gameTime >= 250f)
+        var continuousActionsOut = actionsOut.ContinuousActions;
+        continuousActionsOut[0] = Input.GetAxis("Horizontal");
+        continuousActionsOut[1] = Input.GetAxis("Vertical");
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+
+        if (GameManager.instance.gameTime >= 250f)
         {
-            SetReward(+4);
+            SetReward(+3);
             EndEpisode();
         }
 
         if (GameManager.instance.playerData.kill != 0 && GameManager.instance.playerData.kill % 100 == 0)
         {
-            SetReward(+1);
+            SetReward(+1.2f);
         }
 
-        if ( isExpGet )
+        if (isExpGet)
         {
             SetReward(+0.5f);
             isExpGet = false;
         }
 
-        if ( expCount != 0 && expCount % 20 == 0)
+        if (expCount != 0 && expCount % 20 == 0)
         {
-            SetReward(+0.1f);
+            SetReward(+0.7f);
             EndEpisode();
         }
 
-        // if (GameManager.instance.playerData.hp < 70f )
-        // {
-        //     SetReward(-3);
-        //     EndEpisode();
-        // }
+        // 40초 구간마다 대각선 이동 제한
+        if (GameManager.instance.gameTime != 0f && Math.Truncate(GameManager.instance.gameTime % 15) == 0) 
+        {
+            if (nextMove.x == 1f && nextMove.y == 1f)
+            {
+                SetReward(-0.5f);
+            }
+            else if (nextMove.x == 1f && nextMove.y == -1f)
+            {
+                SetReward(-0.5f);
+            }
+            else if (nextMove.x == -1f && nextMove.y == 1f)
+            {
+                SetReward(-0.5f);
+            }
+            else if (nextMove.x == -1f && nextMove.y == -1f)
+            {
+                SetReward(-0.5f);
+            }
+        }
+
+        if (GameManager.instance.playerData.hp < 95f )
+        {
+            SetReward(-2);
+            EndEpisode();
+        }
     }
-    
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         switch (collision.gameObject.tag)
@@ -178,8 +208,7 @@ public class Player : Agent, IPlayer
             case "Ghoul":
             case "Summoner":
             case "BloodKing":
-                SetReward(-0.9f);
-                EndEpisode();      
+                SetReward(-0.5f);
                 break;
         }
     }
