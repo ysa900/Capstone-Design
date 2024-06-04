@@ -7,14 +7,20 @@ using UnityEngine.UI;
 public class SkillSelectManager: MonoBehaviour
 {
     // 개발용 (스킬 테스트용)
-    bool isSkillTest = true;
+    bool isSkillTest = false;
     int testSkillIndex = 12;
 
     // 현재 고를 수 있는 스킬 번호 (0 ~ 4 레벨: 5번까지 / 5 ~ 9 레벨: 8번까지 / 10레벨 이상 : 11번까지)
     private int skillCount = 6; // 이건 개수라서 5번까지 나오게 할려면 6개임
 
     // 패시브 스킬을 3개까지 가지고 있을 수 있음
-    private int passiveSkillCount = 19; // 패시브 스킬은 13 ~ 18까지 6개
+    private int passiveSkillNum = 100;
+    private int passiveSkillCount = 106; // 패시브 스킬은 100 ~ 106까지 6개
+
+    // 공명 스킬은 12 ~ 17까지 6개
+
+    const int MAXSKILLNUM = 18; // 스킬 개수
+    const int MAXPASSIVESKILLNUM = 6; // 패시브 스킬 개수
 
     // 스킬 선택 버튼들
     public UnityEngine.UI.Button SkillSelectButton1;
@@ -48,16 +54,18 @@ public class SkillSelectManager: MonoBehaviour
     public GameObject[] levelObject = new GameObject[3];
 
     // panel_skill_Icon 오브젝트
-    public GameObject[] panel_skill_Icon = new GameObject[6];
+    public List<GameObject> panel_skill_Icon = new List<GameObject>(6);
 
     // panel_skill_LevelText 오브젝트
-    public GameObject[] panel_skill_LevelText = new GameObject[6];
+    public List<GameObject> panel_skill_LevelText = new List<GameObject>(6);
 
     // panel_passive_skill_Icon 오브젝트
     public GameObject[] panel_passive_skill_Icon = new GameObject[3];
 
     // panel_passive_skill_LevelText 오브젝트
     public GameObject[] panel_passive_skill_LevelText = new GameObject[3];
+
+    public GameObject skillPanelObject;
 
     public SkillData2 skillData; // 스킬 데이터
     public SkillData2 passiveSkillData; // 패시브 스킬 데이터
@@ -72,15 +80,23 @@ public class SkillSelectManager: MonoBehaviour
     int[] ranNum = new int[3]; // 스킬들 중에서 랜덤으로 고를 숫자
 
     bool ischoosingStartSkill; // 시작 스킬을 고르는 상황이냐
+    bool isResonateNow; // 스킬 공명하는 상황이냐
+
+    int resonanceSkill_Index = -1; // 공명 스킬 인덱스
+    int resIndex1 = -1; // 공명할 두 스킬 인덱스
+    int resIndex2 = -1; // 공명할 두 스킬 인덱스
+    bool isResonanceAlreadyDone; // 공명 스킬을 이미 얻었냐 (두 번은 못 얻게 하기 위함)
 
     bool[] isSkillMaxLevel; // 만렙인 스킬은 true, 아니면 false로 저장하는 배열
     bool[] isPassiveSkillMaxLevel; // 만렙인 패시브 스킬은 true, 아니면 false로 저장하는 배열
 
-    int[] selected_Skills = new int[] { -1, -1, -1, -1, -1, -1 }; // 선택된 스킬 번호가 들어갈 배열
+    List<int> selected_Skills = new List<int>() { -1, -1, -1, -1, -1, -1 }; // 선택된 스킬 번호가 들어갈 리스트
     int selected_Skills_Pointer = 0;
 
     int[] selected_Passive_Skills = new int[] { -1, -1, -1}; // 선택된 패시브 스킬 번호가 들어갈 배열
     int selected_Passive_Skills_Pointer = 0;
+
+    List<int> banned_Skills = new List<int>(); // 선택하면 안 되는 스킬 번호가 들어갈 리스트
 
     bool isSkillAllSelected; // 스킬이 전부 선택됐는지 판단하는 변수
     bool isPassiveSkillAllSelected; // 패시브 스킬이 전부 선택됐는지 판단하는 변수
@@ -131,7 +147,7 @@ public class SkillSelectManager: MonoBehaviour
         closedSkillObject1.SetActive(false);
         closedSkillObject2.SetActive(false);
 
-        for (int i = 0; i < panel_skill_Icon.Length; i++) { panel_skill_Icon[i].SetActive(false); }
+        for (int i = 0; i < panel_skill_Icon.Count; i++) { panel_skill_Icon[i].SetActive(false); }
         for (int i = 0; i < panel_passive_skill_Icon.Length; i++) { panel_passive_skill_Icon[i].SetActive(false); }
     }
 
@@ -149,8 +165,8 @@ public class SkillSelectManager: MonoBehaviour
         UnityEngine.UI.Button skillSelectButton3 = SkillSelectButton3.GetComponent<UnityEngine.UI.Button>();
         skillSelectButton3.onClick.AddListener(SkillSelectButton3Clicked);
 
-        isSkillMaxLevel = new bool[12];
-        isPassiveSkillMaxLevel = new bool[6];
+        isSkillMaxLevel = new bool[MAXSKILLNUM];
+        isPassiveSkillMaxLevel = new bool[MAXPASSIVESKILLNUM];
     }
 
     // 시작 스킬 고르기
@@ -273,13 +289,121 @@ public class SkillSelectManager: MonoBehaviour
     {
         Time.timeScale = 0;
 
+        // 공명 조건 검사
+        if (selected_Skills[1] >= 0 && !isResonanceAlreadyDone) // 스킬을 2개 이상 갖고 있을 때, 공명 스킬 이미 안 얻었는지
+        {
+            bool isFound = false;
+            for (int i = 0; i < selected_Skills.Count; i++)
+            {
+                if (selected_Skills[i] == -1)
+                    break;
+
+                if(!isSkillMaxLevel[selected_Skills[i]]) // maxlevel 아님 넘기기
+                    continue;
+
+                for (int j = i + 1; j < selected_Skills.Count; j++)
+                {
+                    if (selected_Skills[j] == -1)
+                        break;
+
+                    if (!isSkillMaxLevel[selected_Skills[j]]) // maxlevel 아님 넘기기
+                        continue;
+
+                    if (IsResonate(selected_Skills[i], selected_Skills[j]))
+                    {
+                        resIndex1 = selected_Skills[i];
+                        resIndex2 = selected_Skills[j];
+
+                        isFound = true;
+                        break;
+                    }
+                }
+                if (isFound) break;
+            }
+        }
+
+        // 공명 조건에 만족하는 두 스킬이 있으면
+        if (resIndex1 > 0 && resIndex2 > 0 && !isResonanceAlreadyDone) 
+        {
+            isResonateNow = true;
+            DisplayResonance(resIndex1, resIndex2);
+        }
+        else
+        {
+            // 보통 상황 때 레벨 업 패널 띄우는 함수
+            DisplayNormalWay();
+        }
+    }
+
+    // 스킬을 공명하는(조합하는) 함수
+    private bool IsResonate(int skill_Index1, int skill_Index2)
+    {
+        // Heavens Eclipse = Meteor + Ice Spike
+        bool isHeavensEclipse = skill_Index1 == 6 && skill_Index2 == 8 || skill_Index1 == 8 && skill_Index2 == 6;
+        if (isHeavensEclipse)
+        {
+            resonanceSkill_Index = 12;
+        }
+
+        // Beam Laser = Laser Blast + Twin Flame
+        bool isBeamLaser = skill_Index1 == 7 && skill_Index2 == 9 || skill_Index1 == 9 && skill_Index2 == 7;
+        if (isBeamLaser)
+        {
+            resonanceSkill_Index = 13;
+        }
+
+        // Hydro Flame = Ice Blast + Laser Blast
+        bool isHydroFlame = skill_Index1 == 11 && skill_Index2 == 7 || skill_Index1 == 7 && skill_Index2 == 11;
+        if (isHydroFlame)
+        {
+            resonanceSkill_Index = 14;
+        }
+
+        // Shiled Flame = Explosion + Water Shield
+        bool isShieldFlame = skill_Index1 == 3 && skill_Index2 == 5 || skill_Index1 == 5 && skill_Index2 == 3;
+        if (isShieldFlame)
+        {
+            resonanceSkill_Index = 15;
+        }
+
+        // Sky Fall = Judgement + Meteor
+        bool isSkyFall = skill_Index1 == 10 && skill_Index2 == 6 || skill_Index1 == 6 && skill_Index2 == 10;
+        if (isSkyFall)
+        {
+            resonanceSkill_Index = 16;
+        }
+
+        // Frozen Spike = Ice Spike + Judgement
+        bool isFrozenSpike = skill_Index1 == 8 && skill_Index2 == 10 || skill_Index1 == 10 && skill_Index2 == 8;
+        if (isFrozenSpike)
+        {
+            resonanceSkill_Index = 17;
+        }
+
+        // 공명 스킬이 맞냐 검사
+        bool isResonaceSkill = isHeavensEclipse || isBeamLaser || isHydroFlame || isShieldFlame || isSkyFall || isFrozenSpike;
+
+        if (isResonaceSkill)
+        {
+            return true;
+        }
+        else
+        {
+            resonanceSkill_Index = 0;
+            return false;
+        }
+    }
+
+    // 보통 상황 때 레벨 업 패널 띄우는 함수
+    private void DisplayNormalWay()
+    {
         int playerLevel = playerData.level;
 
         if (playerLevel <= 5)
         {
             skillCount = 6;
         }
-        else if(playerLevel <= 10)
+        else if (playerLevel <= 10)
         {
             skillCount = 9;
         }
@@ -296,24 +420,33 @@ public class SkillSelectManager: MonoBehaviour
 
         List<int> list = new List<int>(); // 이 리스트의 숫자들 중에서 랜덤으로 뽑는 것
 
-        if(selected_Skills_Pointer >= 6)
+        if (selected_Skills_Pointer >= 6)
             isSkillAllSelected = true;
 
-        if(selected_Passive_Skills_Pointer >= 3)
+        if (selected_Passive_Skills_Pointer >= 3)
             isPassiveSkillAllSelected = true;
 
         if (!isSkillAllSelected)
         {
             for (int i = 0; i < skillCount; i++) // list에 스킬 추가
             {
+                if (banned_Skills.IndexOf(i) >= 0) // 금지 스킬에 있으면 continue
+                    continue;
+
+                if (i >= 12) // 공명 스킬은 등장 X
+                    continue;
+
                 if (!isSkillMaxLevel[i]) // 만렙인 스킬은 등장 X
                     list.Add(i);
             }
         }
         else
         {
-            for (int i = 0; i < selected_Skills.Length; i++)
+            for (int i = 0; i < selected_Skills.Count; i++)
             {
+                if (selected_Skills[i] >= 12) // 공명 스킬은 등장 X
+                    continue;
+
                 if (!isSkillMaxLevel[selected_Skills[i]]) // 만렙인 스킬은 등장 X
                     list.Add(selected_Skills[i]);
             }
@@ -321,9 +454,9 @@ public class SkillSelectManager: MonoBehaviour
 
         if (!isPassiveSkillAllSelected)
         {
-            for (int i = 13; i < passiveSkillCount; i++) // list에 패시브 스킬 추가
+            for (int i = passiveSkillNum; i < passiveSkillCount; i++) // list에 패시브 스킬 추가
             {
-                if (!isPassiveSkillMaxLevel[i - 13])
+                if (!isPassiveSkillMaxLevel[i - passiveSkillNum])
                     list.Add(i);
             }
         }
@@ -332,11 +465,11 @@ public class SkillSelectManager: MonoBehaviour
             for (int i = 0; i < selected_Passive_Skills.Length; i++)
             {
                 if (!isPassiveSkillMaxLevel[selected_Passive_Skills[i]]) // 만렙인 스킬은 등장 X
-                    list.Add(selected_Passive_Skills[i] + 13);
+                    list.Add(selected_Passive_Skills[i] + passiveSkillNum);
             }
         }
 
-        if(list.Count == 2) // 만렙 안찍은 스킬이 2개면 실행
+        if (list.Count == 2) // 만렙 안찍은 스킬이 2개면 실행
         {
             openSkillObject2.SetActive(false);
             closedSkillObject2.SetActive(true);
@@ -350,11 +483,12 @@ public class SkillSelectManager: MonoBehaviour
                 list.RemoveAt(ran);
             }
 
-            for(int i = 0; i < 2; i++)
+            for (int i = 0; i < 2; i++)
             {
                 SetSkillPanel(i);
             }
-        }else if(list.Count == 1) // 만렙 안찍은 스킬이 1개면 실행
+        }
+        else if (list.Count == 1) // 만렙 안찍은 스킬이 1개면 실행
         {
             openSkillObject1.SetActive(false);
             closedSkillObject1.SetActive(true);
@@ -362,7 +496,8 @@ public class SkillSelectManager: MonoBehaviour
             ranNum[1] = list[0];
 
             SetSkillPanel(1);
-        }else if(list.Count == 0) // 스킬 전부 만렙 찍으면 체력 회복하게 함
+        }
+        else if (list.Count == 0) // 스킬 전부 만렙 찍으면 체력 회복하게 함
         {
             //isSkillAllMax = true;
             //SetSkillPanel(1);
@@ -390,9 +525,23 @@ public class SkillSelectManager: MonoBehaviour
         }
     }
 
+    private void DisplayResonance(int skill_Index1, int skill_Index2)
+    {
+        onSkillSelectObjectDisplayed();
+
+        skillSelectObject.SetActive(true);
+
+        levelUpTextObject.GetComponent<TextMeshProUGUI>().text = "Two Skills are Resonating!";
+
+        openSkillObject1.SetActive(false);
+        openSkillObject2.SetActive(false);
+
+        SetResonanceSkillPanel(skill_Index1, skill_Index2);
+    }
+
     private void SetSkillPanel(int i)
     {
-        if (isSkillAllMax) // 스킬, 패시브 전부 다 MAX면
+        if (isSkillAllMax) // 스킬, 패시브 전부 다 MAX면, 여기 나중에 수정해야 됨
         {
             /*icon = skill_Icon[i].GetComponent<Image>();
             icon.sprite = skillData.skillicon[12];
@@ -410,11 +559,12 @@ public class SkillSelectManager: MonoBehaviour
             return;
         }
 
-        bool isPassiveSkill = ranNum[i] > 12; // 현재 패널에 표시할게 패시브 스킬이냐
+        bool isPassiveSkill = ranNum[i] >= passiveSkillNum; // 현재 패널에 표시할게 패시브 스킬이냐
 
         if (!isPassiveSkill) // 패시브 스킬이 아니면 (일반 스킬이면)
         {
             icon = skill_Icon[i].GetComponent<Image>();
+
             icon.sprite = skillData.skillicon[ranNum[i]];
 
             // 텍스트 색 설정
@@ -449,21 +599,21 @@ public class SkillSelectManager: MonoBehaviour
         else // 패시브 스킬 이면
         {
             icon = skill_Icon[i].GetComponent<Image>();
-            icon.sprite = passiveSkillData.skillicon[ranNum[i] - 13];
+            icon.sprite = passiveSkillData.skillicon[ranNum[i] - passiveSkillNum];
 
             // 텍스트 색 설정
             string color;
             
-            if (ranNum[i] - 13 == 0) { color = "#F7570B"; }
-            else if (ranNum[i] - 13 == 1) { color = "#0EB4FC"; }
-            else if (ranNum[i] - 13 == 2) { color = "#79EDFF"; }
+            if (ranNum[i] - passiveSkillNum == 0) { color = "#F7570B"; }
+            else if (ranNum[i] - passiveSkillNum == 1) { color = "#0EB4FC"; }
+            else if (ranNum[i] - passiveSkillNum == 2) { color = "#79EDFF"; }
             else { color = "#FFFFFF"; }
 
             textName = skill_TextName[i].GetComponent<TextMeshProUGUI>();
-            textName.text = "<color=" + color + ">" + passiveSkillData.skillName[ranNum[i] - 13] + "</color>";
+            textName.text = "<color=" + color + ">" + passiveSkillData.skillName[ranNum[i] - passiveSkillNum] + "</color>";
 
             textDescription = skill_TextDescription[i].GetComponent<TextMeshProUGUI>();
-            textDescription.text = "<color=" + color + ">" + passiveSkillData.skillDescription[ranNum[i] - 13] + "</color>";
+            textDescription.text = "<color=" + color + ">" + passiveSkillData.skillDescription[ranNum[i] - passiveSkillNum] + "</color>";
 
             Image[] img = levelObject[i].GetComponentsInChildren<Image>();
 
@@ -476,18 +626,47 @@ public class SkillSelectManager: MonoBehaviour
             col.a = 0f;
             img[4].color = col;
 
-            for (int num = 3; num > passiveSkillData.level[ranNum[i] - 13]; num--)
+            for (int num = 3; num > passiveSkillData.level[ranNum[i] - passiveSkillNum]; num--)
             {
                 col = img[num].color;
                 col.a = 0.3f;
                 img[num].color = col;
             }
-            for (int num = 1; num <= passiveSkillData.level[ranNum[i] - 13]; num++)
+            for (int num = 1; num <= passiveSkillData.level[ranNum[i] - passiveSkillNum]; num++)
             {
                 col = img[num].color;
                 col.a = 1f;
                 img[num].color = col;
             }
+        }
+    }
+    
+    private void SetResonanceSkillPanel(int skill_Index1, int skill_Index2)
+    {
+        icon = skill_Icon[1].GetComponent<Image>();
+        icon.sprite = skillData.skillicon[resonanceSkill_Index];
+
+        // 텍스트 색 설정
+        string color;
+
+        if (resonanceSkill_Index % 3 == 0) { color = "#FF0000"; }
+        else if (resonanceSkill_Index % 3 == 1) { color = "#D2F7FF"; }
+        else { color = "#0000FF"; }
+
+        textName = skill_TextName[1].GetComponent<TextMeshProUGUI>();
+        textName.text = "<color=" + color + ">" + skillData.skillName[resonanceSkill_Index] + "</color>";
+
+        textDescription = skill_TextDescription[1].GetComponent<TextMeshProUGUI>();
+        textDescription.text = "<color=" + color + ">" + skillData.skillDescription[resonanceSkill_Index] + "</color>";
+
+        Image[] img = levelObject[1].GetComponentsInChildren<Image>();
+
+        // 마법진 알파값 설정 (다 투명)
+        for (int num = 0; num < 5; num++)
+        {
+            UnityEngine.Color col = img[num].color;
+            col.a = 0f;
+            img[num].color = col;
         }
     }
 
@@ -512,7 +691,7 @@ public class SkillSelectManager: MonoBehaviour
         }
         else
         {
-            bool isPassiveSkill = ranNum[0] > 12; // 현재 패널에 표시할게 패시브 스킬이냐
+            bool isPassiveSkill = ranNum[0] >= passiveSkillNum; // 현재 패널에 표시할게 패시브 스킬이냐
 
             if (!isPassiveSkill) // 패시브 스킬이 아니면 (일반 스킬이면)
             {
@@ -531,8 +710,7 @@ public class SkillSelectManager: MonoBehaviour
 
                     selected_Skills[selected_Skills_Pointer++] = ranNum[0];
 
-                    if (ranNum[0] != 12) // blood는 빼고
-                        onSkillSelected(ranNum[0]); // delegate 호출
+                    onSkillSelected(ranNum[0]); // delegate 호출
                 }
                 else
                 {
@@ -540,7 +718,7 @@ public class SkillSelectManager: MonoBehaviour
 
                     isSkillMaxLevel[ranNum[0]] = skillData.level[ranNum[0]] == 5;
 
-                    int index = Array.IndexOf(selected_Skills, ranNum[0]);
+                    int index = selected_Skills.FindIndex(i => i == ranNum[0]);
 
                     textName = panel_skill_LevelText[index].GetComponent<TextMeshProUGUI>();
                     textName.text = "Lv " + skillData.level[ranNum[0]];
@@ -566,59 +744,58 @@ public class SkillSelectManager: MonoBehaviour
                         skillData.Delay[ranNum[0]] *= normalDelayCoefficient;
                     }
 
-                    if (ranNum[0] != 12) // blood는 빼고
-                        onSkillSelected(ranNum[0]); // delegate 호출
+                    onSkillSelected(ranNum[0]); // delegate 호출
                 }
             }
             else // 패시브 스킬이면
             {
-                if (!passiveSkillData.skillSelected[ranNum[0] - 13])
+                if (!passiveSkillData.skillSelected[ranNum[0] - passiveSkillNum])
                 {
-                    passiveSkillData.skillSelected[ranNum[0] - 13] = true;
-                    passiveSkillData.level[ranNum[0] - 13] = 1;
+                    passiveSkillData.skillSelected[ranNum[0] - passiveSkillNum] = true;
+                    passiveSkillData.level[ranNum[0] - passiveSkillNum] = 1;
 
                     icon = panel_passive_skill_Icon[selected_Passive_Skills_Pointer].GetComponent<Image>();
-                    icon.sprite = passiveSkillData.skillicon[ranNum[0] - 13];
+                    icon.sprite = passiveSkillData.skillicon[ranNum[0] - passiveSkillNum];
 
                     textName = panel_passive_skill_LevelText[selected_Passive_Skills_Pointer].GetComponent<TextMeshProUGUI>();
-                    textName.text = "Lv " + passiveSkillData.level[ranNum[0] - 13];
+                    textName.text = "Lv " + passiveSkillData.level[ranNum[0] - passiveSkillNum];
 
-                    switch (ranNum[0] - 13)
+                    switch (ranNum[0] - passiveSkillNum)
                     {
-                        case 3: { passiveSkillData.Damage[ranNum[0] - 13] = damageReductionSkill_StartValue; break; }
-                        case 4: { passiveSkillData.Damage[ranNum[0] - 13] = speedUpSkill_StartValue; break; }
-                        case 5: { passiveSkillData.Damage[ranNum[0] - 13] = magnetSkill_StartValue; break; }
-                        default: { passiveSkillData.Damage[ranNum[0] - 13] = masterySkill_StartValue; break; }
+                        case 3: { passiveSkillData.Damage[ranNum[0] - passiveSkillNum] = damageReductionSkill_StartValue; break; }
+                        case 4: { passiveSkillData.Damage[ranNum[0] - passiveSkillNum] = speedUpSkill_StartValue; break; }
+                        case 5: { passiveSkillData.Damage[ranNum[0] - passiveSkillNum] = magnetSkill_StartValue; break; }
+                        default: { passiveSkillData.Damage[ranNum[0] - passiveSkillNum] = masterySkill_StartValue; break; }
                     }
 
                     panel_passive_skill_Icon[selected_Passive_Skills_Pointer].SetActive(true);
 
-                    selected_Passive_Skills[selected_Passive_Skills_Pointer++] = ranNum[0] - 13;
+                    selected_Passive_Skills[selected_Passive_Skills_Pointer++] = ranNum[0] - passiveSkillNum;
 
-                    onPassiveSkillSelected(ranNum[0] - 13, passiveSkillData.Damage[ranNum[0] - 13]); // delegate 호출
+                    onPassiveSkillSelected(ranNum[0] - passiveSkillNum, passiveSkillData.Damage[ranNum[0] - passiveSkillNum]); // delegate 호출
                 }
                 else
                 {
-                    passiveSkillData.level[ranNum[0] - 13]++;
+                    passiveSkillData.level[ranNum[0] - passiveSkillNum]++;
 
-                    isPassiveSkillMaxLevel[ranNum[0] - 13] = passiveSkillData.level[ranNum[0] - 13] == 3;
+                    isPassiveSkillMaxLevel[ranNum[0] - passiveSkillNum] = passiveSkillData.level[ranNum[0] - passiveSkillNum] == 3;
 
-                    int index = Array.IndexOf(selected_Passive_Skills, ranNum[0] - 13);
+                    int index = Array.IndexOf(selected_Passive_Skills, ranNum[0] - passiveSkillNum);
 
                     textName = panel_passive_skill_LevelText[index].GetComponent<TextMeshProUGUI>();
-                    textName.text = "Lv " + passiveSkillData.level[ranNum[0] - 13];
+                    textName.text = "Lv " + passiveSkillData.level[ranNum[0] - passiveSkillNum];
 
-                    switch(ranNum[0] - 13)
+                    switch(ranNum[0] - passiveSkillNum)
                     {
-                        case 3: { passiveSkillData.Damage[ranNum[0] - 13] -= damageReductionSkill_IncrementValue; break; }
-                        case 4: { passiveSkillData.Damage[ranNum[0] - 13] += speedUpSkill_IncrementValue; break; }
-                        case 5: { passiveSkillData.Damage[ranNum[0] - 13] += magnetSkill_IncrementValue; break; }
-                        default: { passiveSkillData.Damage[ranNum[0] - 13] += masterySkill_IncrementValue; break; }
+                        case 3: { passiveSkillData.Damage[ranNum[0] - passiveSkillNum] -= damageReductionSkill_IncrementValue; break; }
+                        case 4: { passiveSkillData.Damage[ranNum[0] - passiveSkillNum] += speedUpSkill_IncrementValue; break; }
+                        case 5: { passiveSkillData.Damage[ranNum[0] - passiveSkillNum] += magnetSkill_IncrementValue; break; }
+                        default: { passiveSkillData.Damage[ranNum[0] - passiveSkillNum] += masterySkill_IncrementValue; break; }
                     }
 
-                    if (isPassiveSkillMaxLevel[ranNum[0] - 13]) { textName.text = "Lv Max"; }
+                    if (isPassiveSkillMaxLevel[ranNum[0] - passiveSkillNum]) { textName.text = "Lv Max"; }
 
-                    onPassiveSkillSelected(ranNum[0] - 13, passiveSkillData.Damage[ranNum[0] - 13]); // delegate 호출
+                    onPassiveSkillSelected(ranNum[0] - passiveSkillNum, passiveSkillData.Damage[ranNum[0] - passiveSkillNum]); // delegate 호출
                 }
             }
         }
@@ -631,6 +808,86 @@ public class SkillSelectManager: MonoBehaviour
 
     private void SkillSelectButton2Clicked()
     {
+        if (isResonateNow && !isResonanceAlreadyDone)
+        {
+            // 여기에 공명하는 두 스킬 하단 선택된 스킬 창에서 없앰
+            skillData.skillSelected[resIndex1] = false;
+            skillData.skillSelected[resIndex2] = false;
+
+            // 패널에서도 지워주기 위해 공명 될 스킬의 list에서의 index를 저장
+            int listResIndex1 = selected_Skills.IndexOf(resIndex1);
+            int listResIndex2 = selected_Skills.IndexOf(resIndex2);
+
+            selected_Skills.Remove(resIndex1);
+            selected_Skills.Remove(resIndex2);
+
+            // 공명 된 두 스킬은 다시 획득할 수 없게 함
+            banned_Skills.Add(resIndex1);
+            banned_Skills.Add(resIndex2);
+
+            // 공명 스킬 선택함
+            skillData.skillSelected[resonanceSkill_Index] = true;
+            skillData.level[resonanceSkill_Index] = 5;
+
+            selected_Skills.Add(resonanceSkill_Index);
+            selected_Skills_Pointer -= 1; // 포인터 위치도 조정해 줌
+
+            // 패널에서도 공명 될 두 스킬 제거
+            panel_skill_Icon[listResIndex1].SetActive(false); // 비활성화
+            panel_skill_Icon[listResIndex2].SetActive(false);
+
+            GameObject tmpIcon1 = panel_skill_Icon[listResIndex1]; // 옮기고
+            GameObject tmpIcon2 = panel_skill_Icon[listResIndex2];
+
+            panel_skill_Icon.RemoveAt(listResIndex1); // 제거
+            panel_skill_Icon.RemoveAt(listResIndex2 - 1); // 앞에서 하나가 지워져서 index가 하나 줄어드니까 -1 하는 것
+
+            panel_skill_Icon.Add(tmpIcon1); // 리스트 맨 뒤에 다시 Add
+            panel_skill_Icon.Add(tmpIcon2);
+
+            // 패널 텍스트 에서도 공명 될 두 스킬 제거
+            panel_skill_LevelText[listResIndex1].SetActive(false); // 비활성화
+            panel_skill_LevelText[listResIndex2].SetActive(false);
+
+            GameObject tmpText1 = panel_skill_LevelText[listResIndex1]; // 옮기고
+            GameObject tmpText2 = panel_skill_LevelText[listResIndex2];
+
+            panel_skill_LevelText.RemoveAt(listResIndex1); // 제거
+            panel_skill_LevelText.RemoveAt(listResIndex2 - 1); // 앞에서 하나가 지워져서 index가 하나 줄어드니까 -1 하는 것
+
+            panel_skill_LevelText.Add(tmpText1); // 리스트 맨 뒤에 다시 Add
+            panel_skill_LevelText.Add(tmpText2);
+
+            // 패널에 공명 스킬 설정
+            icon = panel_skill_Icon[selected_Skills_Pointer].GetComponent<Image>();
+            icon.sprite = skillData.skillicon[resonanceSkill_Index];
+
+            textName = panel_skill_LevelText[selected_Skills_Pointer].GetComponent<TextMeshProUGUI>();
+            textName.text = "Lv Max";
+
+            panel_skill_Icon[selected_Skills_Pointer].SetActive(true);
+            panel_skill_LevelText[selected_Skills_Pointer].SetActive(true);
+
+            // 스킬 패널 크기 조정
+            RectTransform skillPanelRect = skillPanelObject.GetComponent<RectTransform>();
+            skillPanelRect.sizeDelta = new Vector2(skillPanelRect.sizeDelta.x / 6 * 5, skillPanelRect.sizeDelta.y);
+
+            onSkillSelected(resonanceSkill_Index); // delegate 호출
+
+            isResonateNow = false;
+            openSkillObject1.SetActive(true);
+            openSkillObject2.SetActive(true);
+            isResonanceAlreadyDone = true;
+
+            skillSelectObject.SetActive(false);
+
+            onSkillSelectObjectHided();
+
+            Time.timeScale = 1;
+
+            return;
+        }
+
         if (!isSkillAllMax)
         {
             if (ischoosingStartSkill)
@@ -652,7 +909,7 @@ public class SkillSelectManager: MonoBehaviour
             }
             else
             {
-                bool isPassiveSkill = ranNum[1] > 12; // 현재 패널에 표시할게 패시브 스킬이냐
+                bool isPassiveSkill = ranNum[1] >= passiveSkillNum; // 현재 패널에 표시할게 패시브 스킬이냐
 
                 if (!isPassiveSkill) // 패시브 스킬이 아니면 (일반 스킬이면)
                 {
@@ -671,8 +928,7 @@ public class SkillSelectManager: MonoBehaviour
 
                         selected_Skills[selected_Skills_Pointer++] = ranNum[1];
 
-                        if (ranNum[0] != 12) // blood는 빼고
-                            onSkillSelected(ranNum[1]); // delegate 호출
+                        onSkillSelected(ranNum[1]); // delegate 호출
                     }
                     else
                     {
@@ -680,7 +936,7 @@ public class SkillSelectManager: MonoBehaviour
 
                         isSkillMaxLevel[ranNum[1]] = skillData.level[ranNum[1]] == 5;
 
-                        int index = Array.IndexOf(selected_Skills, ranNum[1]);
+                        int index = selected_Skills.FindIndex(i => i == ranNum[1]);
                         
                         textName = panel_skill_LevelText[index].GetComponent<TextMeshProUGUI>();
                         textName.text = "Lv " + skillData.level[ranNum[1]];
@@ -706,59 +962,58 @@ public class SkillSelectManager: MonoBehaviour
                             skillData.Delay[ranNum[1]] *= normalDelayCoefficient;
                         }
 
-                        if (ranNum[0] != 12) // blood는 빼고
-                            onSkillSelected(ranNum[1]); // delegate 호출
+                        onSkillSelected(ranNum[1]); // delegate 호출
                     }
                 }
                 else // 패시브 스킬이면
                 {
-                    if (!passiveSkillData.skillSelected[ranNum[1] - 13])
+                    if (!passiveSkillData.skillSelected[ranNum[1] - passiveSkillNum])
                     {
-                        passiveSkillData.skillSelected[ranNum[1] - 13] = true;
-                        passiveSkillData.level[ranNum[1] - 13] = 1;
+                        passiveSkillData.skillSelected[ranNum[1] - passiveSkillNum] = true;
+                        passiveSkillData.level[ranNum[1] - passiveSkillNum] = 1;
 
                         icon = panel_passive_skill_Icon[selected_Passive_Skills_Pointer].GetComponent<Image>();
-                        icon.sprite = passiveSkillData.skillicon[ranNum[1] - 13];
+                        icon.sprite = passiveSkillData.skillicon[ranNum[1] - passiveSkillNum];
 
                         textName = panel_passive_skill_LevelText[selected_Passive_Skills_Pointer].GetComponent<TextMeshProUGUI>();
-                        textName.text = "Lv " + passiveSkillData.level[ranNum[1] - 13];
+                        textName.text = "Lv " + passiveSkillData.level[ranNum[1] - passiveSkillNum];
 
-                        switch (ranNum[1] - 13)
+                        switch (ranNum[1] - passiveSkillNum)
                         {
-                            case 3: { passiveSkillData.Damage[ranNum[1] - 13] = damageReductionSkill_StartValue; break; }
-                            case 4: { passiveSkillData.Damage[ranNum[1] - 13] = speedUpSkill_StartValue; break; }
-                            case 5: { passiveSkillData.Damage[ranNum[1] - 13] = magnetSkill_StartValue; break; }
-                            default: { passiveSkillData.Damage[ranNum[1] - 13] = masterySkill_StartValue; break; }
+                            case 3: { passiveSkillData.Damage[ranNum[1] - passiveSkillNum] = damageReductionSkill_StartValue; break; }
+                            case 4: { passiveSkillData.Damage[ranNum[1] - passiveSkillNum] = speedUpSkill_StartValue; break; }
+                            case 5: { passiveSkillData.Damage[ranNum[1] - passiveSkillNum] = magnetSkill_StartValue; break; }
+                            default: { passiveSkillData.Damage[ranNum[1] - passiveSkillNum] = masterySkill_StartValue; break; }
                         }
 
                         panel_passive_skill_Icon[selected_Passive_Skills_Pointer].SetActive(true);
 
-                        selected_Passive_Skills[selected_Passive_Skills_Pointer++] = ranNum[1] - 13;
+                        selected_Passive_Skills[selected_Passive_Skills_Pointer++] = ranNum[1] - passiveSkillNum;
 
-                        onPassiveSkillSelected(ranNum[1] - 13, passiveSkillData.Damage[ranNum[1] - 13]); // delegate 호출
+                        onPassiveSkillSelected(ranNum[1] - passiveSkillNum, passiveSkillData.Damage[ranNum[1] - passiveSkillNum]); // delegate 호출
                     }
                     else
                     {
-                        passiveSkillData.level[ranNum[1] - 13]++;
+                        passiveSkillData.level[ranNum[1] - passiveSkillNum]++;
 
-                        isPassiveSkillMaxLevel[ranNum[1] - 13] = passiveSkillData.level[ranNum[1] - 13] == 3;
+                        isPassiveSkillMaxLevel[ranNum[1] - passiveSkillNum] = passiveSkillData.level[ranNum[1] - passiveSkillNum] == 3;
 
-                        int index = Array.IndexOf(selected_Passive_Skills, ranNum[1] - 13);
+                        int index = Array.IndexOf(selected_Passive_Skills, ranNum[1] - passiveSkillNum);
 
                         textName = panel_passive_skill_LevelText[index].GetComponent<TextMeshProUGUI>();
-                        textName.text = "Lv " + passiveSkillData.level[ranNum[1] - 13];
+                        textName.text = "Lv " + passiveSkillData.level[ranNum[1] - passiveSkillNum];
 
-                        switch (ranNum[1] - 13)
+                        switch (ranNum[1] - passiveSkillNum)
                         {
-                            case 3: { passiveSkillData.Damage[ranNum[1] - 13] -= damageReductionSkill_IncrementValue; break; }
-                            case 4: { passiveSkillData.Damage[ranNum[1] - 13] += speedUpSkill_IncrementValue; break; }
-                            case 5: { passiveSkillData.Damage[ranNum[1] - 13] += magnetSkill_IncrementValue; break; }
-                            default: { passiveSkillData.Damage[ranNum[1] - 13] += masterySkill_IncrementValue; break; }
+                            case 3: { passiveSkillData.Damage[ranNum[1] - passiveSkillNum] -= damageReductionSkill_IncrementValue; break; }
+                            case 4: { passiveSkillData.Damage[ranNum[1] - passiveSkillNum] += speedUpSkill_IncrementValue; break; }
+                            case 5: { passiveSkillData.Damage[ranNum[1] - passiveSkillNum] += magnetSkill_IncrementValue; break; }
+                            default: { passiveSkillData.Damage[ranNum[1] - passiveSkillNum] += masterySkill_IncrementValue; break; }
                         }
 
-                        if (isPassiveSkillMaxLevel[ranNum[1] - 13]) { textName.text = "Lv Max"; }
+                        if (isPassiveSkillMaxLevel[ranNum[1] - passiveSkillNum]) { textName.text = "Lv Max"; }
 
-                        onPassiveSkillSelected(ranNum[1] - 13, passiveSkillData.Damage[ranNum[1] - 13]); // delegate 호출
+                        onPassiveSkillSelected(ranNum[1] - passiveSkillNum, passiveSkillData.Damage[ranNum[1] - passiveSkillNum]); // delegate 호출
                     }
                 }
             }
@@ -815,7 +1070,7 @@ public class SkillSelectManager: MonoBehaviour
         }
         else
         {
-            bool isPassiveSkill = ranNum[2] > 12; // 현재 패널에 표시할게 패시브 스킬이냐
+            bool isPassiveSkill = ranNum[2] >= passiveSkillNum; // 현재 패널에 표시할게 패시브 스킬이냐
 
             if (!isPassiveSkill) // 패시브 스킬이 아니면 (일반 스킬이면)
             {
@@ -834,8 +1089,7 @@ public class SkillSelectManager: MonoBehaviour
 
                     selected_Skills[selected_Skills_Pointer++] = ranNum[2];
 
-                    if (ranNum[0] != 12) // blood는 빼고
-                        onSkillSelected(ranNum[2]); // delegate 호출
+                    onSkillSelected(ranNum[2]); // delegate 호출
                 }
                 else
                 {
@@ -843,7 +1097,7 @@ public class SkillSelectManager: MonoBehaviour
 
                     isSkillMaxLevel[ranNum[2]] = skillData.level[ranNum[2]] == 5;
 
-                    int index = Array.IndexOf(selected_Skills, ranNum[2]);
+                    int index = selected_Skills.FindIndex(i => i == ranNum[2]);
 
                     textName = panel_skill_LevelText[index].GetComponent<TextMeshProUGUI>();
                     textName.text = "Lv " + skillData.level[ranNum[2]];
@@ -869,59 +1123,58 @@ public class SkillSelectManager: MonoBehaviour
                         skillData.Delay[ranNum[2]] *= normalDelayCoefficient;
                     }
 
-                    if (ranNum[0] != 12) // blood는 빼고
-                        onSkillSelected(ranNum[2]); // delegate 호출
+                    onSkillSelected(ranNum[2]); // delegate 호출
                 }
             }
             else // 패시브 스킬이면
             {
-                if (!passiveSkillData.skillSelected[ranNum[2] - 13])
+                if (!passiveSkillData.skillSelected[ranNum[2] - passiveSkillNum])
                 {
-                    passiveSkillData.skillSelected[ranNum[2] - 13] = true;
-                    passiveSkillData.level[ranNum[2] - 13] = 1;
+                    passiveSkillData.skillSelected[ranNum[2] - passiveSkillNum] = true;
+                    passiveSkillData.level[ranNum[2] - passiveSkillNum] = 1;
 
                     icon = panel_passive_skill_Icon[selected_Passive_Skills_Pointer].GetComponent<Image>();
-                    icon.sprite = passiveSkillData.skillicon[ranNum[2] - 13];
+                    icon.sprite = passiveSkillData.skillicon[ranNum[2] - passiveSkillNum];
 
                     textName = panel_passive_skill_LevelText[selected_Passive_Skills_Pointer].GetComponent<TextMeshProUGUI>();
-                    textName.text = "Lv " + passiveSkillData.level[ranNum[2] - 13];
+                    textName.text = "Lv " + passiveSkillData.level[ranNum[2] - passiveSkillNum];
 
-                    switch (ranNum[2] - 13)
+                    switch (ranNum[2] - passiveSkillNum)
                     {
-                        case 3: { passiveSkillData.Damage[ranNum[2] - 13] = damageReductionSkill_StartValue; break; }
-                        case 4: { passiveSkillData.Damage[ranNum[2] - 13] = speedUpSkill_StartValue; break; }
-                        case 5: { passiveSkillData.Damage[ranNum[2] - 13] = magnetSkill_StartValue; break; }
-                        default: { passiveSkillData.Damage[ranNum[2] - 13] = masterySkill_StartValue; break; }
+                        case 3: { passiveSkillData.Damage[ranNum[2] - passiveSkillNum] = damageReductionSkill_StartValue; break; }
+                        case 4: { passiveSkillData.Damage[ranNum[2] - passiveSkillNum] = speedUpSkill_StartValue; break; }
+                        case 5: { passiveSkillData.Damage[ranNum[2] - passiveSkillNum] = magnetSkill_StartValue; break; }
+                        default: { passiveSkillData.Damage[ranNum[2] - passiveSkillNum] = masterySkill_StartValue; break; }
                     }
 
                     panel_passive_skill_Icon[selected_Passive_Skills_Pointer].SetActive(true);
 
-                    selected_Passive_Skills[selected_Passive_Skills_Pointer++] = ranNum[2] - 13;
+                    selected_Passive_Skills[selected_Passive_Skills_Pointer++] = ranNum[2] - passiveSkillNum;
 
-                    onPassiveSkillSelected(ranNum[2] - 13, passiveSkillData.Damage[ranNum[2] - 13]); // delegate 호출
+                    onPassiveSkillSelected(ranNum[2] - passiveSkillNum, passiveSkillData.Damage[ranNum[2] - passiveSkillNum]); // delegate 호출
                 }
                 else
                 {
-                    passiveSkillData.level[ranNum[2] - 13]++;
+                    passiveSkillData.level[ranNum[2] - passiveSkillNum]++;
 
-                    isPassiveSkillMaxLevel[ranNum[2] - 13] = passiveSkillData.level[ranNum[2] - 13] == 3;
+                    isPassiveSkillMaxLevel[ranNum[2] - passiveSkillNum] = passiveSkillData.level[ranNum[2] - passiveSkillNum] == 3;
 
-                    int index = Array.IndexOf(selected_Passive_Skills, ranNum[2] - 13);
+                    int index = Array.IndexOf(selected_Passive_Skills, ranNum[2] - passiveSkillNum);
 
                     textName = panel_passive_skill_LevelText[index].GetComponent<TextMeshProUGUI>();
-                    textName.text = "Lv " + passiveSkillData.level[ranNum[2] - 13];
+                    textName.text = "Lv " + passiveSkillData.level[ranNum[2] - passiveSkillNum];
 
-                    switch (ranNum[2] - 13)
+                    switch (ranNum[2] - passiveSkillNum)
                     {
-                        case 3: { passiveSkillData.Damage[ranNum[2] - 13] -= damageReductionSkill_IncrementValue; break; }
-                        case 4: { passiveSkillData.Damage[ranNum[2] - 13] += speedUpSkill_IncrementValue; break; }
-                        case 5: { passiveSkillData.Damage[ranNum[2] - 13] += magnetSkill_IncrementValue; break; }
-                        default: { passiveSkillData.Damage[ranNum[2] - 13] += masterySkill_IncrementValue; break; }
+                        case 3: { passiveSkillData.Damage[ranNum[2] - passiveSkillNum] -= damageReductionSkill_IncrementValue; break; }
+                        case 4: { passiveSkillData.Damage[ranNum[2] - passiveSkillNum] += speedUpSkill_IncrementValue; break; }
+                        case 5: { passiveSkillData.Damage[ranNum[2] - passiveSkillNum] += magnetSkill_IncrementValue; break; }
+                        default: { passiveSkillData.Damage[ranNum[2] - passiveSkillNum] += masterySkill_IncrementValue; break; }
                     }
 
-                    if (isPassiveSkillMaxLevel[ranNum[2] - 13]) { textName.text = "Lv Max"; }
+                    if (isPassiveSkillMaxLevel[ranNum[2] - passiveSkillNum]) { textName.text = "Lv Max"; }
 
-                    onPassiveSkillSelected(ranNum[2] - 13, passiveSkillData.Damage[ranNum[2] - 13]); // delegate 호출
+                    onPassiveSkillSelected(ranNum[2] - passiveSkillNum, passiveSkillData.Damage[ranNum[2] - passiveSkillNum]); // delegate 호출
                 }
             }
         }

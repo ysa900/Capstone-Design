@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.Collections;
 using UnityEngine;
 
@@ -31,6 +32,9 @@ public class Player : MonoBehaviour, IPlayer
     // 플레이어 피격음 딜레이
     float hitDelayTime = 0.1f;
     float hitDelayTimer = 0.1f;
+
+    // 플레이어 레벨업 함수 실행을 기다리게 하기 위한 변수
+    public bool isSkillSelectComplete = true;
 
     Rigidbody2D rigid; // 물리 입력을 받기위한 변수
     SpriteRenderer spriteRenderer; // 플레이어 방향을 바꾸기 위해 flipX를 가져오기 위한 변수
@@ -121,14 +125,7 @@ public class Player : MonoBehaviour, IPlayer
     {
         playerData.Exp += expAmount;
 
-        if (playerData.Exp >= playerData.nextExp[playerData.level])
-        {
-            onPlayerLevelUP(); // delegate 호출
-
-            playerData.level++;
-            playerData.Exp = 0;
-        }
-
+        StartCoroutine(LevelUP()); // 레벨 업 함수 실행
     }
 
     // 자석 범위를 변경하는 함수
@@ -198,6 +195,22 @@ public class Player : MonoBehaviour, IPlayer
                 transform.localScale = new Vector3(1.0f, 1.0f, 1.0f); // 죽었을 때 나오는 묘비 크기 때문에 크기 조정 해준 것
             }
         }
+    }
+
+    IEnumerator LevelUP()
+    {
+        yield return new WaitUntil(() => isSkillSelectComplete);
+        
+        onPlayerLevelUP(); // delegate 호출
+
+        isSkillSelectComplete = false;
+
+        playerData.Exp -= playerData.nextExp[playerData.level];
+        playerData.level++;
+
+        // 경험치를 경험치 통보다 많이 갖고있으면 재귀적으로 반복
+        bool isAgain = playerData.Exp >= playerData.nextExp[playerData.level];
+        if (isAgain) StartCoroutine(LevelUP());
     }
 
     public void OnPlayerBlinded()

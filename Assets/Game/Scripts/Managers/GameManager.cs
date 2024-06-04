@@ -89,8 +89,6 @@ public class GameManager : MonoBehaviour
     public bool isDeadPageOn = false;
     public bool isSkillSelectPageOn = false;
 
-
-
     private void Awake()
     {
         instance = this; // GameManager를 인스턴스화
@@ -585,6 +583,8 @@ public class GameManager : MonoBehaviour
     {
         isSkillSelectPageOn = false;
         inputManager.PauseButtonObject.interactable = true;
+
+        player.isSkillSelectComplete = true;
     }
 
     private void OnPlayerHealed()
