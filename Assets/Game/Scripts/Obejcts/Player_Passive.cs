@@ -7,34 +7,21 @@ using UnityEngine.SceneManagement;
 
 public class Player_Passive : Player
 {
-    float delayTime;
-    float delayTimer;
-
     float minDistanceToEnemy; // 제일 가까운 적과 플레이어 사이의 거리
 
     protected override void Start()
     {
+        base.Start();
 
-        // 적한테 맞을 때 쿨타임 계산용
-        coolTime = 0.1f;
-        coolTimer = 0f;
-        // 시간 체크 쿨타임 계산용
-        delayTime = 20f;
-        delayTimer = 0f;
-
-        increaseWeight = 0.5f;
         minDistanceToEnemy = 0f;
 
-        base.Start();
     }
 
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
-        distanceToEnemy = new List<float>();
 
-        coolTimer += Time.fixedDeltaTime;
-        delayTimer += Time.fixedDeltaTime;
+        distanceToEnemy = new List<float>();
 
         for (int i = 0; i < GameManager.instance.enemies.Count; i++)
         {
@@ -106,8 +93,8 @@ public class Player_Passive : Player
 
         if (delayTimer >= delayTime)
         {
-            SetReward(increaseWeight);
-            increaseWeight += 0.5f; // increaseWeight = 0.1f 초기값
+            SetReward(increaseWeight); // 살아남을수록 리워드 부여
+            increaseWeight += 0.5f; // 리워드 가중치 증가
             delayTimer = 0f;
         }
 

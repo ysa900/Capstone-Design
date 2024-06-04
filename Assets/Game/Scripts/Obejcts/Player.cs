@@ -47,10 +47,14 @@ public class Player : Agent, IPlayer
     protected int count = 0;
     protected bool isExpGet = false;
     public int expCount;
+    // 피격 쿨타임용
     protected float coolTime;
     protected float coolTimer;
+    // 리워드 가중치 쿨타임용
+    protected float delayTime;
+    protected float delayTimer;
     protected float increaseWeight; // 변하는 리워드 가중치
-    public bool isEpisodeEnd;
+    public bool isEpisodeEnd; // 에피소드 종료됐는지 확인
 
 
     private void Awake()
@@ -67,7 +71,15 @@ public class Player : Agent, IPlayer
         enemy = FindAnyObjectByType<MeleeEnemy>();
         rigid = GetComponent<Rigidbody2D>();
 
+        // 적한테 맞을 때 쿨타임 계산용
+        coolTime = 0.1f;
+        coolTimer = 0f;
+        // 시간 체크 쿨타임 계산용
+        delayTime = 20f;
+        delayTimer = 0f;
+
         speed = 6f; // ML 플레이어 이동 속도
+        increaseWeight = 0.5f;
         expCount = 0;
         isEpisodeEnd = false;
     }
@@ -76,7 +88,8 @@ public class Player : Agent, IPlayer
     protected virtual void FixedUpdate()
     {
         hitDelayTimer += Time.fixedDeltaTime;
-
+        coolTimer += Time.fixedDeltaTime;
+        delayTimer += Time.fixedDeltaTime;
     }
 
     // 프레임이 끝나기 직전에 실행되는 함수

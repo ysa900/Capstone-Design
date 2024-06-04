@@ -11,15 +11,9 @@ public class Player_Exp : Player
 
     protected override void Start()
     {
-
-        // 적한테 맞을 때 쿨타임 계산용
-        coolTime = 0.1f;
-        coolTimer = 0f;
-
-        increaseWeight = 2f;
-        minDistanceToExp = 0f;
-
         base.Start();
+
+        minDistanceToExp = 0f;
     }
 
     protected override void FixedUpdate()

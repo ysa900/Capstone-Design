@@ -9,19 +9,14 @@ public class Player_Active : Player
 {
     protected override void Start()
     {
-
-        // 적한테 맞을 때 쿨타임 계산용
-        coolTime = 0.1f;
-        coolTimer = 0f;
-
         base.Start();
     }
 
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
-        distanceToExp = new List<float>();
 
+        distanceToExp = new List<float>();
         coolTimer += Time.fixedDeltaTime;
 
    }
@@ -108,6 +103,12 @@ public class Player_Active : Player
             SetReward(-3);
             isEpisodeEnd = true;
             EndEpisode();
+        }
+
+        if (delayTimer >= delayTime)
+        {
+            increaseWeight += 0.5f;
+            delayTimer = 0f;
         }
     }
 
