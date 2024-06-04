@@ -57,8 +57,8 @@ public class SkillManager : MonoBehaviour
         
         // ML용 기본 스킬 1 레벨씩 조정, 내가 원하는 스킬 인덱스번호 추가해서 true로..
         skillData.skillSelected[0] = true;
-        skillData.skillSelected[1] = true;
-        skillData.skillSelected[2] = true;
+        // skillData.skillSelected[1] = true;
+        // skillData.skillSelected[2] = true;
     }
 
     private void Update()

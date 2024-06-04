@@ -24,6 +24,7 @@ public class PoolManager : MonoBehaviour
     // 풀 담당을 하는 리스트들
     List<Enemy>[] Enemy_pools;
     List<EXP>[] Exp_pools;
+    public List<EXP>[] Exp_Active_pools;
     List<Skill>[] Skill_pools;
     List<BossSkill>[] Boss_Skill_pools;
     List<GameObject> Damage_Text_pools = new List<GameObject>();
@@ -41,6 +42,12 @@ public class PoolManager : MonoBehaviour
         for (int index = 0; index < Exp_pools.Length; index++)
         {
             Exp_pools[index] = new List<EXP>();
+        }
+
+        Exp_Active_pools = new List<EXP>[Exp_prefabs.Length];
+        for (int index = 0; index < Exp_Active_pools.Length; index++)
+        {
+            Exp_Active_pools[index] = new List<EXP>();
         }
 
         Skill_pools = new List<Skill>[Skill_prefabs.Length];
@@ -129,6 +136,7 @@ public class PoolManager : MonoBehaviour
             {
                 // 발견하면 select 변수에 할당
                 select = item;
+                Exp_Active_pools[index].Add(select);
 
                 if (select.GetComponent<IPoolingObject>() != null)
                     select.GetComponent<IPoolingObject>().Init();
@@ -144,6 +152,7 @@ public class PoolManager : MonoBehaviour
             // 새롭게 생성하고 select 변수에 할당
             // 자기 자신(transform) 추가 이유: hierarchy창 지저분해지는 거 방지
             select = Instantiate(Exp_prefabs[index]);
+            Exp_Active_pools[index].Add(select);
 
             //select.Init();
 
@@ -158,6 +167,7 @@ public class PoolManager : MonoBehaviour
         obj.gameObject.SetActive(false);
         obj.transform.SetParent(this.gameObject.transform.GetChild(1));
         Exp_pools[index].Add(obj);
+        Exp_Active_pools[index].Remove(obj);
     }
 
     // Exp를 새롭게 생성

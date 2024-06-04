@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
     public Boss boss;
     public FollowCam followCam;
     private InputManager inputManager;
-    private SkillManager skillManager;
+    public SkillManager skillManager;
     private SkillSelectManager skillSelectManager;
     private EXP exp;
     private BossManager bossManager;
@@ -90,8 +90,7 @@ public class GameManager : MonoBehaviour
     public bool isClearPageOn = false;
     public bool isDeadPageOn = false;
     public bool isSkillSelectPageOn = false;
-
-
+    public bool isEnemyKilled = false;
 
     private void Awake()
     {
@@ -519,6 +518,7 @@ public class GameManager : MonoBehaviour
         if (!player.isPlayerDead)
         {
             player.playerData.kill++;
+            isEnemyKilled = true;
         }
 
         int ranNum = UnityEngine.Random.Range(0, 11);

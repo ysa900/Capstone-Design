@@ -4,18 +4,17 @@ using UnityEngine.UI;
 public class HUD : MonoBehaviour
 {
     // 다루게 될 데이터 enum으로 선언
-    public enum InfoType { Exp, Level, Kill, Time, Hp, HpStatus, BossHP }
+    public enum InfoType { Exp, Level, Kill, Time, Hp, HpStatus, BossHP, ExpCheckPoint }
     public InfoType type;
 
-    Text hpText, timeText;
+    Text InfomationText;
     Slider myHpSlider;
     Slider myExpSlider;
     Slider bossHPSlider;
 
     void Awake()
     {
-        hpText = GetComponent<Text>();
-        timeText = GetComponent<Text>();
+        InfomationText = GetComponent<Text>();
         myHpSlider = GetComponent<Slider>();
         myExpSlider = GetComponent<Slider>();
         bossHPSlider = GetComponent<Slider>();
@@ -32,12 +31,16 @@ public class HUD : MonoBehaviour
                 myExpSlider.value = curExp / maxExp;
                 break;
 
+            case InfoType.ExpCheckPoint:
+                InfomationText.text = string.Format("{0:F0}", GameManager.instance.player.expCount);
+                break;
+
             case InfoType.Level:
-                timeText.text = string.Format("Lv.{0:F0}", GameManager.instance.playerData.level);
+                InfomationText.text = string.Format("Lv.{0:F0}", GameManager.instance.playerData.level);
                 break;
 
             case InfoType.Kill:
-                timeText.text = string.Format("{0:F0}", GameManager.instance.playerData.kill);
+                InfomationText.text = string.Format("{0:F0}", GameManager.instance.playerData.kill);
                 break;
 
             case InfoType.Hp:
@@ -50,7 +53,7 @@ public class HUD : MonoBehaviour
                 float currentHp2 = GameManager.instance.playerData.hp;
                 float maxHp2 = GameManager.instance.playerData.maxHp;
 
-                hpText.text = string.Format("{0} / {1}", (int)currentHp2, (int)maxHp2);
+                InfomationText.text = string.Format("{0} / {1}", (int)currentHp2, (int)maxHp2);
                 break;
 
             case InfoType.BossHP:
@@ -64,7 +67,7 @@ public class HUD : MonoBehaviour
                 float playTime = GameManager.instance.gameTime;
                 int min = Mathf.FloorToInt(playTime / 60);
                 int sec = Mathf.FloorToInt(playTime % 60);
-                timeText.text = string.Format("{0:D2}:{1:D2}", min, sec);
+                InfomationText.text = string.Format("{0:D2}:{1:D2}", min, sec);
                 break;
 
         }

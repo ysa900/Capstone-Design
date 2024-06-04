@@ -22,7 +22,7 @@ public class CsvTest : MonoBehaviour {
         PrePlayerY = GameManager.instance.player.transform.position.y;
         writer = new CsvFileWriter("Assets/Resources/playerInfo.csv");
 
-         columns = new List<string>() { "Index","Vector X", "Vector Y" };// making Index Row
+         columns = new List<string>() { "Index","Vector X", "Vector Y", "Exp Count", "Kill" };// making Index Row
          writer.WriteRow(columns);
          columns.Clear();
       
@@ -41,6 +41,18 @@ public class CsvTest : MonoBehaviour {
                 columns.Add(index.ToString()); 
                 columns.Add(PrePlayerX.ToString());
                 columns.Add(PrePlayerY.ToString());
+                if (GameManager.instance.player.isEpisodeEnd)
+                {
+                    columns.Add(GameManager.instance.player.expCount.ToString()); // 먹은 Exp
+                    columns.Add(GameManager.instance.playerData.kill.ToString()); // 처치 몹 kill 수
+                    GameManager.instance.player.isEpisodeEnd = false;
+                }
+                else
+                {
+                    columns.Add(" "); // 먹은 Exp
+                    columns.Add(" "); // 처치 몹 kill 수
+                }
+
                 writer.WriteRow(columns);
                 columns.Clear();
                 Count();
@@ -50,8 +62,6 @@ public class CsvTest : MonoBehaviour {
         }
 
 	}
-
-
 
 	public void Count()
 	{

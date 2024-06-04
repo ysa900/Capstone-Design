@@ -9,17 +9,17 @@ using Unity.VisualScripting;
 using UnityEditor.SearchService;
 using UnityEngine.SceneManagement;
 using System;
+using Unity.MLAgents.Policies;
 
 public class Player : Agent, IPlayer
 {
-    public NavMeshAgent navAgent; // Navmesh
 
     public Rigidbody2D rigid;
     public bool isPlayerDead; // 플레이어가 죽었는지 판별하는 변수
     public bool isPlayerLookLeft; // 플레이어가 보고 있는 방향을 알려주는 변수
     public bool isPlayerShielded; // 플레이어가 보호막의 보호를 받고있냐
 
-    [SerializeField] float speed;
+    [SerializeField] protected float speed;
     // 플레이어 피격음 딜레이
     float hitDelayTime = 0.1f;
     float hitDelayTimer = 0.1f;
@@ -40,48 +40,47 @@ public class Player : Agent, IPlayer
 
     public PlayerData playerData; // 플레이어 데이터
     public Enemy enemy;
-    public int count = 0;
-    private bool isExpGet = false;
-    private int expCount = 0;
+
+    protected List<float> distanceToEnemy;
+    protected List<float> distanceToExp;
+    
+    protected int count = 0;
+    protected bool isExpGet = false;
+    public int expCount;
+    protected float coolTime;
+    protected float coolTimer;
+    protected float increaseWeight; // 변하는 리워드 가중치
+    public bool isEpisodeEnd;
+
 
     private void Awake()
     {
         gameAudioManager = FindAnyObjectByType<GameAudioManager>();
-
     }
 
-    void Start()
+    protected virtual void Start()
     {
         // 변수 초기화
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
         absorberCollider = gameObject.GetComponentInChildren<CircleCollider2D>();
-        navAgent = GetComponent<NavMeshAgent>();
         enemy = FindAnyObjectByType<MeleeEnemy>();
         rigid = GetComponent<Rigidbody2D>();
-        speed = 3.5f;
-    }
 
-    void Update()
-    {
-
-
+        speed = 6f; // ML 플레이어 이동 속도
+        expCount = 0;
+        isEpisodeEnd = false;
     }
 
     // 물리 연산 프레임마다 호출되는 생명주기 함수
-    private void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
-
         hitDelayTimer += Time.fixedDeltaTime;
-
 
     }
 
-
-
-
     // 프레임이 끝나기 직전에 실행되는 함수
-    private void LateUpdate()
+    protected virtual void LateUpdate()
     {
         animator.SetFloat("Speed", speed); // animator의 float타입인 변수 Speed를 inpuVec의 크기만큼으로 설정한다
 
@@ -96,25 +95,24 @@ public class Player : Agent, IPlayer
             isPlayerLookLeft = spriteRenderer.flipX;
         }
     }
-    public override void OnEpisodeBegin()
-    {
-        if (count != 0)
-        {
-            /*    transform.position = Vector2.zero;
-                GameManager.instance.gameTime = 0f;*/
-            GameManager.instance.playerData.kill = 0;
-            SceneManager.LoadScene("Stage1");
-
-        }
-        count++;
-    }
-
-
-
     public override void CollectObservations(VectorSensor sensor)
     {
-        sensor.AddObservation(transform.position);
-        // sensor.AddObservation(enemy.transform.position);
+        sensor.AddObservation(transform.position); // 플레이어 오브젝트만 관측
+
+        // 적 전부
+        for(int i = 0; i < GameManager.instance.enemies.Count; i++)
+        {
+            sensor.AddObservation(GameManager.instance.enemies[i].transform.position);
+        }
+
+        // 생성된 Exp 전부
+        for(int i = 0; i < GameManager.instance.poolManager.Exp_Active_pools.Length; i++)
+        {
+            for(int j = 0; j < GameManager.instance.poolManager.Exp_Active_pools[i].Count; j++)
+            {
+                sensor.AddObservation(GameManager.instance.poolManager.Exp_Active_pools[i][j].transform.position);
+            }
+        }
 
     }
 
@@ -122,11 +120,6 @@ public class Player : Agent, IPlayer
     public Vector2 nextMove;
     public override void OnActionReceived(ActionBuffers actions)
     {
-        /*    if (enemy.isDead)
-            {
-                GameManager.instance.EtoPdistance = 100f;
-            }*/
-
         nextMove.x = actions.ContinuousActions[0];
         nextMove.y = actions.ContinuousActions[1];
 
@@ -138,79 +131,6 @@ public class Player : Agent, IPlayer
         var continuousActionsOut = actionsOut.ContinuousActions;
         continuousActionsOut[0] = Input.GetAxis("Horizontal");
         continuousActionsOut[1] = Input.GetAxis("Vertical");
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-
-        if (GameManager.instance.gameTime >= 250f)
-        {
-            SetReward(+3);
-            EndEpisode();
-        }
-
-        if (GameManager.instance.playerData.kill != 0 && GameManager.instance.playerData.kill % 100 == 0)
-        {
-            SetReward(+1.2f);
-        }
-
-        if (isExpGet)
-        {
-            SetReward(+0.5f);
-            isExpGet = false;
-        }
-
-        if (expCount != 0 && expCount % 20 == 0)
-        {
-            SetReward(+0.7f);
-            EndEpisode();
-        }
-
-        // 40초 구간마다 대각선 이동 제한
-        if (GameManager.instance.gameTime != 0f && Math.Truncate(GameManager.instance.gameTime % 15) == 0) 
-        {
-            if (nextMove.x == 1f && nextMove.y == 1f)
-            {
-                SetReward(-0.5f);
-            }
-            else if (nextMove.x == 1f && nextMove.y == -1f)
-            {
-                SetReward(-0.5f);
-            }
-            else if (nextMove.x == -1f && nextMove.y == 1f)
-            {
-                SetReward(-0.5f);
-            }
-            else if (nextMove.x == -1f && nextMove.y == -1f)
-            {
-                SetReward(-0.5f);
-            }
-        }
-
-        if (GameManager.instance.playerData.hp < 95f )
-        {
-            SetReward(-2);
-            EndEpisode();
-        }
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        switch (collision.gameObject.tag)
-        {
-            case "EvilTree":
-            case "Pumpkin":
-            case "WarLock":
-            case "Skeleton_Sword":
-            case "Skeleton_Horse":
-            case "Skeleton_Archer":
-            case "Splitter":
-            case "Ghoul":
-            case "Summoner":
-            case "BloodKing":
-                SetReward(-0.5f);
-                break;
-        }
     }
 
     // 자석 범위를 변경하는 함수
@@ -229,7 +149,6 @@ public class Player : Agent, IPlayer
         if (playerData.Exp >= playerData.nextExp[playerData.level])
         {
             onPlayerLevelUP(); // delegate 호출
-
             playerData.level++;
             playerData.Exp = 0;
         }

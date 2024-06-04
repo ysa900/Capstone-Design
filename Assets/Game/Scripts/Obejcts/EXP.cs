@@ -45,6 +45,7 @@ public class EXP : Object, IPoolingObject
         }
 
         // iPlayer.GetExp(expAmount);
+        collision.GetComponent<Player>().expCount++; // 경험치 먹은 횟수 체크용
 
         GameManager.instance.poolManager.ReturnExp(this, index);
     }
