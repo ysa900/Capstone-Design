@@ -119,7 +119,7 @@ public class SkillManager : MonoBehaviour
         skillData.Delay[10] = 7.5f;
         skillData.Delay[11] = 8f;
         // 여기부터 공명 스킬
-        skillData.Delay[12] = 3f;
+        skillData.Delay[12] = 6f;
         skillData.Delay[13] = 3.5f;
         skillData.Delay[14] = 3f;
         skillData.Delay[15] = 6f;

@@ -125,7 +125,8 @@ public class Player : MonoBehaviour, IPlayer
     {
         playerData.Exp += expAmount;
 
-        StartCoroutine(LevelUP()); // 레벨 업 함수 실행
+        if(playerData.Exp >= playerData.nextExp[playerData.level])
+            StartCoroutine(LevelUP()); // 레벨 업 함수 실행
     }
 
     // 자석 범위를 변경하는 함수
