@@ -25,7 +25,6 @@ public class RePositon : MonoBehaviour
     private void OnTriggerExit2D(Collider2D collision)
     {
 
-
         // 플레이어의 Area와 충돌을 감지해 벗어났다면 실행
         // 플레이어 프리팹 하위에 Area라는게 있음 
         if (!collision.CompareTag("Area"))

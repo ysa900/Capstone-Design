@@ -20,18 +20,16 @@ public class NavMeshControl : MonoBehaviour
     public float DirectionY = 0;
 
     
-    private int Stage;
+    private string stage;
 
     private void Start()
     {
-        Stage = SceneManager.GetActiveScene().buildIndex;
+        stage = SceneManager.GetActiveScene().name;
 
     }
 
     private void FixedUpdate()
     {
-
-       
         ChangeSurface();
 
     }
@@ -40,9 +38,9 @@ public class NavMeshControl : MonoBehaviour
     public void ChangeSurface()
     {
 
-        switch (Stage)
+        switch (stage)
         {
-            case 1:
+            case "Stage1":
                 if (DirectionX == 0 && DirectionY == 0) { return; }
                 else if (DirectionX != 0 && DirectionY != 0)
                 {
@@ -69,7 +67,7 @@ public class NavMeshControl : MonoBehaviour
                 }
                 break;
 
-            case 2:
+            case "Stage2":
                 if (DirectionX != 0)
                 {
                     surface.transform.Translate(Vector3.right * 85); // 오른쪽 방향 * 거리
@@ -77,15 +75,11 @@ public class NavMeshControl : MonoBehaviour
                     DirectionX = 0;
                 }
                 break;
-            case 3:
+            default:
 
                 break;
 
-
-
-        }
-
-       
+        }       
             
     }
 

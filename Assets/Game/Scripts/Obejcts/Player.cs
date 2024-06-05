@@ -45,8 +45,8 @@ public class Player : Agent, IPlayer
     protected List<float> distanceToExp;
     
     protected int count = 0;
-    protected bool isExpGet = false;
     public int expCount;
+    protected int preExp;
     // 피격 쿨타임용
     protected float coolTime;
     protected float coolTimer;
@@ -54,7 +54,7 @@ public class Player : Agent, IPlayer
     protected float delayTime;
     protected float delayTimer;
     protected float increaseWeight; // 변하는 리워드 가중치
-    public bool isEpisodeEnd; // 에피소드 종료됐는지 확인
+    public int endCheckPoint; // 에피소드 종료됐는지 확인
 
 
     private void Awake()
@@ -81,7 +81,8 @@ public class Player : Agent, IPlayer
         speed = 6f; // ML 플레이어 이동 속도
         increaseWeight = 0.5f;
         expCount = 0;
-        isEpisodeEnd = false;
+        preExp = 0;
+        endCheckPoint = 1;
     }
 
     // 물리 연산 프레임마다 호출되는 생명주기 함수
@@ -113,22 +114,20 @@ public class Player : Agent, IPlayer
         sensor.AddObservation(transform.position); // 플레이어 오브젝트만 관측
 
         // 적 전부
-        for(int i = 0; i < GameManager.instance.enemies.Count; i++)
+        for (int i = 0; i < GameManager.instance.enemies.Count; i++)
         {
             sensor.AddObservation(GameManager.instance.enemies[i].transform.position);
         }
 
         // 생성된 Exp 전부
-        for(int i = 0; i < GameManager.instance.poolManager.Exp_Active_pools.Length; i++)
+        for (int i = 0; i < GameManager.instance.poolManager.Exp_Active_pools.Length; i++)
         {
-            for(int j = 0; j < GameManager.instance.poolManager.Exp_Active_pools[i].Count; j++)
+            for (int j = 0; j < GameManager.instance.poolManager.Exp_Active_pools[i].Count; j++)
             {
                 sensor.AddObservation(GameManager.instance.poolManager.Exp_Active_pools[i][j].transform.position);
             }
         }
-
     }
-
 
     public Vector2 nextMove;
     public override void OnActionReceived(ActionBuffers actions)
@@ -156,7 +155,6 @@ public class Player : Agent, IPlayer
     public void GetExp(int expAmount)
     {
         playerData.Exp += expAmount;
-        isExpGet = true;
         expCount++;
 
         if (playerData.Exp >= playerData.nextExp[playerData.level])

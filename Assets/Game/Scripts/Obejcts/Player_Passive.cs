@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.MLAgents.Actuators;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -23,42 +24,7 @@ public class Player_Passive : Player
 
         distanceToEnemy = new List<float>();
 
-        for (int i = 0; i < GameManager.instance.enemies.Count; i++)
-        {
-            // Debug.Log("Transform Position: " + transform.position);
-            // Debug.Log("Enemies Positions: " + GameManager.instance.enemies[i].transform.position);
-            distanceToEnemy.Add(Vector3.Distance(transform.position, GameManager.instance.enemies[i].transform.position));
-        }
-
-        for (int i = 0; i < distanceToEnemy.Count; i++)
-        {
-            minDistanceToEnemy = distanceToEnemy[0];
-            if (minDistanceToEnemy > distanceToEnemy[i])
-            {
-                minDistanceToEnemy = distanceToEnemy[i];
-            }
-        }
-    }
-
-    protected override void LateUpdate()
-    {
-        base.LateUpdate();
-    }
-
-    public override void OnEpisodeBegin()
-    {
-        if(count != 0)
-        {
-            Debug.Log("에피소드 시작");
-            GameManager.instance.playerData.kill = 0;
-            increaseWeight = 0.5f;
-            SceneManager.LoadScene("Stage1");
-        }
-        count++;
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
+        // 학습 위한 플레이어의 스킬 세팅
         if (GameManager.instance.gameTime >= 90f)
         {
             GameManager.instance.skillManager.skillData.skillSelected[3] = true;
@@ -80,28 +46,74 @@ public class Player_Passive : Player
         else if (GameManager.instance.gameTime == 300f)
         {
             SetReward(+4);
-            isEpisodeEnd = true;
+            endCheckPoint--;
             EndEpisode();
         }
 
         if (GameManager.instance.playerData.hp < 90f) // Hp 90%
         {
             SetReward(-3);
-            isEpisodeEnd = true;
+            Debug.Log("Hp 깎여서 마이너스");
+            endCheckPoint--;
             EndEpisode();
         }
 
         if (delayTimer >= delayTime)
         {
             SetReward(increaseWeight); // 살아남을수록 리워드 부여
+            Debug.Log("오래 살아남아서 20초마다 보상 획득");
             increaseWeight += 0.5f; // 리워드 가중치 증가
             delayTimer = 0f;
         }
 
-        if (minDistanceToEnemy > 5f)
+        if (minDistanceToEnemy > 12f)
         {
             SetReward(+0.0001f);
-            Debug.Log("멀어져서 Reward +0.001f");
+            Debug.Log("멀어져서 Reward +0.001 보상 획득");
+            minDistanceToEnemy = 0f;
+        }
+    }
+
+    protected override void LateUpdate()
+    {
+        base.LateUpdate();
+    }
+
+    public override void OnEpisodeBegin()
+    {
+        if(count != 0)
+        {
+            Debug.Log("에피소드 시작");
+            GameManager.instance.playerData.kill = 0;
+            endCheckPoint = 1;
+            increaseWeight = 0.5f;
+            minDistanceToEnemy = 0f;
+            SceneManager.LoadScene("Stage1");
+        }
+        count++;
+    }
+
+    public override void OnActionReceived(ActionBuffers actions)
+    {
+        nextMove.x = actions.ContinuousActions[0];
+        nextMove.y = actions.ContinuousActions[1];
+
+        transform.Translate(nextMove * Time.deltaTime * speed);
+
+        for (int i = 0; i < GameManager.instance.enemies.Count; i++)
+        {
+            // Debug.Log("Transform Position: " + transform.position);
+            // Debug.Log("Enemies Positions: " + GameManager.instance.enemies[i].transform.position);
+            distanceToEnemy.Add(Vector3.Distance(transform.position, GameManager.instance.enemies[i].transform.position));
+        }
+
+        for (int i = 0; i < distanceToEnemy.Count; i++)
+        {
+            minDistanceToEnemy = distanceToEnemy[0];
+            if (minDistanceToEnemy > distanceToEnemy[i])
+            {
+                minDistanceToEnemy = distanceToEnemy[i];
+            }
         }
     }
 

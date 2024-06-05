@@ -41,11 +41,10 @@ public class CsvTest : MonoBehaviour {
                 columns.Add(index.ToString()); 
                 columns.Add(PrePlayerX.ToString());
                 columns.Add(PrePlayerY.ToString());
-                if (GameManager.instance.player.isEpisodeEnd)
+                if (GameManager.instance.player.endCheckPoint == 0)
                 {
                     columns.Add(GameManager.instance.player.expCount.ToString()); // 먹은 Exp
                     columns.Add(GameManager.instance.playerData.kill.ToString()); // 처치 몹 kill 수
-                    GameManager.instance.player.isEpisodeEnd = false;
                 }
                 else
                 {

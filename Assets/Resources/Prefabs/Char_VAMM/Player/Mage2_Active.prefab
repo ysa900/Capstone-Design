@@ -15,9 +15,8 @@ GameObject:
   - component: {fileID: -6388075190265237586}
   - component: {fileID: -8720644868683111200}
   - component: {fileID: 58920036473435842}
-  - component: {fileID: -8867439172521574641}
   - component: {fileID: 1649702020077544231}
-  - component: {fileID: 1652627066820542677}
+  - component: {fileID: -3063774443864021601}
   m_Layer: 0
   m_Name: Mage2_Active
   m_TagString: Player
@@ -215,8 +214,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 3
-    NumStackedVectorObservations: 1
+    VectorObservationSize: 6003
+    NumStackedVectorObservations: 2
     m_ActionSpec:
       m_NumContinuousActions: 2
       BranchSizes: 0300000003000000
@@ -227,37 +226,11 @@ MonoBehaviour:
   m_Model: {fileID: 0}
   m_InferenceDevice: 2
   m_BehaviorType: 0
-  m_BehaviorName: Player
+  m_BehaviorName: Player_Active
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
   m_ObservableAttributeHandling: 0
---- !u!114 &-8867439172521574641
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5354398621021156387}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ef3b78ebc65906459c4945c22d60b0c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agentParameters:
-    maxStep: 0
-  hasUpgradedFromAgentParameters: 1
-  MaxStep: 5000
-  navAgent: {fileID: -8720644868683111200}
-  rigid: {fileID: 2484715673646967731}
-  isPlayerDead: 0
-  isPlayerLookLeft: 0
-  isPlayerShielded: 0
-  speed: 0
-  playerData: {fileID: 11400000, guid: 47e058fb0d3ee424a84b9ee6737e6685, type: 2}
-  enemy: {fileID: 0}
-  count: 0
-  nextMove: {x: 0, y: 0}
 --- !u!114 &1649702020077544231
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -272,7 +245,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DecisionPeriod: 5
   TakeActionsBetweenDecisions: 1
---- !u!114 &1652627066820542677
+--- !u!114 &-3063774443864021601
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -281,9 +254,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 5354398621021156387}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76e6536690e96b745a922e27f3d96a2f, type: 3}
+  m_Script: {fileID: 11500000, guid: d0d3f26266e994f07b5f9ace625c1721, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 20000000
+  rigid: {fileID: 2484715673646967731}
+  isPlayerDead: 0
+  isPlayerLookLeft: 0
+  isPlayerShielded: 0
+  speed: 0
+  playerData: {fileID: 11400000, guid: 47e058fb0d3ee424a84b9ee6737e6685, type: 2}
+  enemy: {fileID: 0}
+  expCount: 0
+  endCheckPoint: 0
+  nextMove: {x: 0, y: 0}
 --- !u!1 &5620825763213714776
 GameObject:
   m_ObjectHideFlags: 0
