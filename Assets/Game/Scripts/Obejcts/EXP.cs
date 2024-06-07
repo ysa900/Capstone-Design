@@ -5,6 +5,7 @@ public class EXP : Object, IPoolingObject
     public int expAmount;
     public int index;
     public Player player;
+    public int poolIndex; // 자신의 풀 인덱스를 저장하는 변수
 
     bool isInMagnetRange; // Exp가 자석 범위 안에 있나
     bool isAbsorberActivated; // trigger에 Player의 Absorber가 감지됐다면
@@ -48,6 +49,16 @@ public class EXP : Object, IPoolingObject
         collision.GetComponent<Player>().expCount++; // 경험치 먹은 횟수 체크용
 
         GameManager.instance.poolManager.ReturnExp(this, index);
+    }
+
+    private void OnEnable()
+    {
+        GameManager.instance.poolManager.AddExp(this);
+    }
+
+    private void OnDisable()
+    {
+        GameManager.instance.poolManager.ReturnExp(this, poolIndex);
     }
 }
 

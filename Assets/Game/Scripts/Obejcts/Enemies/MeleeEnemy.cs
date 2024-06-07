@@ -18,6 +18,4 @@ public class MeleeEnemy : Enemy
 
         base.FixedUpdate();
     }
-
-    
 }

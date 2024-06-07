@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Unity.MLAgents.Actuators;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,107 +11,120 @@ public class Player_Exp : Player
     protected override void Start()
     {
         base.Start();
-
-        minDistanceToExp = 10f;
-    }
-
-    private void Update()
-    {
-
+        csvTest = FindAnyObjectByType<CsvTest>(); // 로그 기록용
+        GameManager.instance.playerData.kill = 0;
+        minDistanceToExp = float.MaxValue;
     }
 
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
-        distanceToExp = new List<float>();
 
-        coolTimer += Time.fixedDeltaTime;
+        UpdateMinDistanceToExp();
 
-        if (GameManager.instance.gameTime >= 240f)
+        // 학습 위한 플레이어의 스킬 세팅
+        if (GameManager.instance.gameTime >= 140f)
         {
-            SetReward(+3f);
+            GameManager.instance.skillManager.skillData.skillSelected[4] = true;
+            GameManager.instance.skillManager.skillData.Damage[2] = 7.5f;
         }
-        else if (GameManager.instance.gameTime == 300f)
+        else if (GameManager.instance.gameTime > 80f)
+        {
+            GameManager.instance.skillManager.skillData.skillSelected[3] = true;
+            GameManager.instance.skillManager.skillData.Damage[0] = 40f;
+        }
+        else if (GameManager.instance.gameTime >= 40f)
+        {
+            GameManager.instance.skillManager.skillData.skillSelected[2] = true;
+        }
+        else if (GameManager.instance.gameTime > 20f)
+        {
+            GameManager.instance.skillManager.skillData.skillSelected[1] = true;
+        }
+
+        if (GameManager.instance.gameTime >= 300f)
         {
             SetReward(+4);
-            endCheckPoint--;
             EndEpisode();
         }
+        else if (GameManager.instance.gameTime >= 240f)
+        {
+            SetReward(+3);
+        }
 
-        if (GameManager.instance.playerData.hp < 90f)
+        if (GameManager.instance.playerData.hp < 85f)
         {
             SetReward(-3);
             Debug.Log("Hp 깎여서 마이너스");
-            endCheckPoint--;
             EndEpisode();
         }
 
-        if (expCount != 0 && expCount % 10 == 0)
+        if (expCount != 0 && expCount % 2 == 0)
         {
             SetReward(increaseWeight);
-            increaseWeight += 0.5f;
         }
 
+        if (expCount != 0 && expCount % 5 == 0)
+        {
+            SetReward(+2f);
+        }
 
         if (preExp < expCount)
         {
-            SetReward(+1);
-            Debug.Log("Exp와 먹어서 리워드 +1 획득");
+            SetReward(+2);
+            Debug.Log("Exp와 먹어서 리워드 +2 획득");
             preExp = expCount;
         }
 
-        if (minDistanceToExp < 5f)
+        if (minDistanceToExp < 2f)
         {
-            SetReward(+0.01f);
-            Debug.Log("Exp와 가까워져서 리워드 +0.01 획득");
-            minDistanceToExp = 10f;
+            SetReward(+0.4f);
+            Debug.Log("Exp와 가까워져서 리워드 +0.4 획득");
+            minDistanceToExp = float.MaxValue;
+        }
+
+        if (delayTimer >= delayTime)
+        {
+            SetReward(+0.2f);
+            increaseWeight += 0.5f;
+            delayTimer = 0f;
+        }
+
+        if (GameManager.instance.gameTime >= 20f)
+        {
+            for (int i = 0; i < GameManager.instance.enemies.Count; i++)
+            {
+                GameManager.instance.enemies[i].transform.GetChild(0).gameObject.SetActive(true);
+            }
         }
     }
 
     protected override void LateUpdate()
     {
         base.LateUpdate();
-
     }
 
     public override void OnEpisodeBegin()
     {
-        if(count != 0)
+        if (count != 0)
         {
             Debug.Log("에피소드 시작");
             GameManager.instance.playerData.kill = 0;
             increaseWeight = 2f;
             expCount = 0;
             preExp = 0;
-            endCheckPoint = 1;
-            minDistanceToExp = 10f;
+            minDistanceToExp = float.MaxValue;
             SceneManager.LoadScene("Stage1");
         }
         count++;
     }
+
     public override void OnActionReceived(ActionBuffers actions)
     {
         nextMove.x = actions.ContinuousActions[0];
         nextMove.y = actions.ContinuousActions[1];
 
         transform.Translate(nextMove * Time.deltaTime * speed);
-
-        for (int i = 0; i < GameManager.instance.poolManager.Exp_Active_pools.Length; i++)
-        {
-            for (int j = 0; j < GameManager.instance.poolManager.Exp_Active_pools[i].Count; j++)
-            {
-                distanceToExp.Add(Vector3.Distance(transform.position, GameManager.instance.poolManager.Exp_Active_pools[i][j].transform.position));
-            }
-        }
-
-        for (int i = 0; i < distanceToExp.Count; i++)
-        {
-            minDistanceToExp = distanceToExp[0];
-            if (minDistanceToExp > distanceToExp[i])
-            {
-                minDistanceToExp = distanceToExp[i];
-            }
-        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -132,10 +143,56 @@ public class Player_Exp : Player
                 case "Ghoul":
                 case "Summoner":
                 case "BloodKing":
-                        SetReward(-0.5f / increaseWeight);
+                    SetReward(-1f / increaseWeight);
                     break;
             }
             coolTimer = 0f;
         }
+    }
+
+    private void UpdateMinDistanceToExp()
+    {
+        float currentMinDistance = float.MaxValue;
+
+        foreach (var exp in GameManager.instance.poolManager.Exp_Active_pools)
+        {
+            float distance = Vector3.Distance(transform.position, exp.transform.position);
+            if (distance < currentMinDistance)
+            {
+                currentMinDistance = distance;
+            }
+        }
+
+        minDistanceToExp = currentMinDistance;
+    }
+
+    void EndEpisode()
+    {
+        isEndEpisode = true;
+
+        GameManager.instance.player.expCount = CalculateExp(); // Placeholder
+        GameManager.instance.playerData.kill = CalculateKills(); // Placeholder
+
+        // Log the episode data
+        Debug.Log("에피소드 종료됐는 지 확인용 : " + GameManager.instance.player.isEndEpisode);
+        Debug.Log("Kill 수: " + GameManager.instance.playerData.kill);
+        Debug.Log("Exp 획득량: " + GameManager.instance.player.expCount);
+
+        csvTest.WriteData();
+        base.EndEpisode();
+
+        isEndEpisode = false;
+    }
+
+    int CalculateExp()
+    {
+        // Placeholder for actual EXP calculation logic
+        return GameManager.instance.player.expCount;
+    }
+
+    int CalculateKills()
+    {
+        // Placeholder for actual Kill calculation logic
+        return GameManager.instance.playerData.kill;
     }
 }

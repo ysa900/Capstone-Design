@@ -15,10 +15,10 @@ public class Enemy : Object, IDamageable, IPoolingObject
     public Player player;
 
     // Enemy들 체력
-    int[] enemy_HP = { 10, 50, 80, 15, 50, 70, 15, 50, 80, 150 };
+    public float[] enemy_HP = { 10, 50, 80, 15, 50, 70, 15, 50, 80, 150 };
 
     // enemy 정보
-    public int hp;
+    public float hp;
     public float speed;
     private float colliderOffsetX; // collider의 offset x좌표
     private float colliderOffsetY; // collider의 offset y좌표

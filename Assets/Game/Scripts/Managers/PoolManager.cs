@@ -24,7 +24,7 @@ public class PoolManager : MonoBehaviour
     // 풀 담당을 하는 리스트들
     List<Enemy>[] Enemy_pools;
     List<EXP>[] Exp_pools;
-    public List<EXP>[] Exp_Active_pools;
+    public List<EXP> Exp_Active_pools; // 필드에 떨어진 Exp Pool
     List<Skill>[] Skill_pools;
     List<BossSkill>[] Boss_Skill_pools;
     List<GameObject> Damage_Text_pools = new List<GameObject>();
@@ -38,18 +38,6 @@ public class PoolManager : MonoBehaviour
             Enemy_pools[index] = new List<Enemy>();
         }
 
-        Exp_pools = new List<EXP>[Exp_prefabs.Length];
-        for (int index = 0; index < Exp_pools.Length; index++)
-        {
-            Exp_pools[index] = new List<EXP>();
-        }
-
-        Exp_Active_pools = new List<EXP>[Exp_prefabs.Length];
-        for (int index = 0; index < Exp_Active_pools.Length; index++)
-        {
-            Exp_Active_pools[index] = new List<EXP>();
-        }
-
         Skill_pools = new List<Skill>[Skill_prefabs.Length];
         for (int index = 0; index < Skill_pools.Length; index++)
         {
@@ -61,6 +49,17 @@ public class PoolManager : MonoBehaviour
         {
             Boss_Skill_pools[index] = new List<BossSkill>();
         }
+    }
+
+    private void Start()
+    {
+        Exp_pools = new List<EXP>[Exp_prefabs.Length];
+        for (int index = 0; index < Exp_pools.Length; index++)
+        {
+            Exp_pools[index] = new List<EXP>();
+        }
+
+        Exp_Active_pools = new List<EXP>();
     }
 
     public Enemy GetEnemy(int index)
@@ -125,36 +124,32 @@ public class PoolManager : MonoBehaviour
         }
     }
 
-    public EXP GetExp(int index)
+     public EXP GetExp(int index)
     {
         EXP select = null;
 
-        // 선택한 풀의 놀고있는(비활성화된) 게임 오브젝트 접근    
         foreach (EXP item in Exp_pools[index])
         {
             if (!item.gameObject.activeSelf)
             {
-                // 발견하면 select 변수에 할당
                 select = item;
-                Exp_Active_pools[index].Add(select);
+                Exp_Active_pools.Add(select);
 
                 if (select.GetComponent<IPoolingObject>() != null)
                     select.GetComponent<IPoolingObject>().Init();
 
+                select.poolIndex = index; // 풀 인덱스 설정
                 select.gameObject.SetActive(true);
                 break;
             }
         }
 
-        // 못 찾았으면?      
         if (!select)
         {
-            // 새롭게 생성하고 select 변수에 할당
-            // 자기 자신(transform) 추가 이유: hierarchy창 지저분해지는 거 방지
-            select = Instantiate(Exp_prefabs[index]);
-            Exp_Active_pools[index].Add(select);
+            select = Instantiate(Exp_prefabs[index]).GetComponent<EXP>();
+            Exp_Active_pools.Add(select);
 
-            //select.Init();
+            select.poolIndex = index; // 풀 인덱스 설정
 
             select.transform.SetParent(this.gameObject.transform.GetChild(1));
             Exp_pools[index].Add(select);
@@ -162,12 +157,21 @@ public class PoolManager : MonoBehaviour
 
         return select;
     }
+
     public void ReturnExp(EXP obj, int index)
     {
         obj.gameObject.SetActive(false);
         obj.transform.SetParent(this.gameObject.transform.GetChild(1));
         Exp_pools[index].Add(obj);
-        Exp_Active_pools[index].Remove(obj);
+        Exp_Active_pools.Remove(obj);
+    }
+
+    public void AddExp(EXP exp)
+    {
+        if (!Exp_Active_pools.Contains(exp))
+        {
+            Exp_Active_pools.Add(exp);
+        }
     }
 
     // Exp를 새롭게 생성

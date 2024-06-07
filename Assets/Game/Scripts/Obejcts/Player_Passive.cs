@@ -1,31 +1,35 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using Unity.MLAgents.Actuators;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Player_Passive : Player
 {
-    float minDistanceToEnemy; // 제일 가까운 적과 플레이어 사이의 거리
+    float minDistanceToEnemy;
+    List<float> distanceToEnemy;
 
     protected override void Start()
     {
         base.Start();
-
-        minDistanceToEnemy = 0f;
-
+        csvTest = FindAnyObjectByType<CsvTest>(); // 로그 기록용
+        GameManager.instance.playerData.kill = 0;
+        minDistanceToEnemy = float.MaxValue;
+        distanceToEnemy = new List<float>();
     }
 
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
 
-        distanceToEnemy = new List<float>();
+        UpdateMinDistanceToEnemy();
 
         // 학습 위한 플레이어의 스킬 세팅
-        if (GameManager.instance.gameTime >= 90f)
+        if (GameManager.instance.gameTime >= 140f)
+        {
+            GameManager.instance.skillManager.skillData.skillSelected[4] = true;
+            GameManager.instance.skillManager.skillData.Damage[2] = 7.5f;
+        }
+        else if (GameManager.instance.gameTime > 80f)
         {
             GameManager.instance.skillManager.skillData.skillSelected[3] = true;
             GameManager.instance.skillManager.skillData.Damage[0] = 40f;
@@ -34,27 +38,29 @@ public class Player_Passive : Player
         {
             GameManager.instance.skillManager.skillData.skillSelected[2] = true;
         }
-        else if (GameManager.instance.gameTime >= 20f)
+        else if (GameManager.instance.gameTime > 20f)
         {
             GameManager.instance.skillManager.skillData.skillSelected[1] = true;
         }
 
-        if (GameManager.instance.gameTime >= 240f)
-        {
-            SetReward(+3f);
-        }
-        else if (GameManager.instance.gameTime == 300f)
+        if (GameManager.instance.gameTime >= 300f)
         {
             SetReward(+4);
-            endCheckPoint--;
             EndEpisode();
         }
+        else if (GameManager.instance.gameTime >= 240f)
+        {
+            SetReward(+3);
+        }
+        else if (GameManager.instance.gameTime >= 180f)
+        {
+            SetReward(+2);
+        }
 
-        if (GameManager.instance.playerData.hp < 90f) // Hp 90%
+        if (GameManager.instance.playerData.hp < 93f) // Hp 90%
         {
             SetReward(-3);
             Debug.Log("Hp 깎여서 마이너스");
-            endCheckPoint--;
             EndEpisode();
         }
 
@@ -66,11 +72,11 @@ public class Player_Passive : Player
             delayTimer = 0f;
         }
 
-        if (minDistanceToEnemy > 12f)
+        // 매 프레임마다 적과의 거리를 계산하고 보상을 부여합니다.
+        if (minDistanceToEnemy > 7f)
         {
-            SetReward(+0.0001f);
-            Debug.Log("멀어져서 Reward +0.001 보상 획득");
-            minDistanceToEnemy = 0f;
+            SetReward(+0.01f); // 보상 크기 조정
+            Debug.Log("멀어져서 Reward +0.01 보상 획득");
         }
     }
 
@@ -81,13 +87,12 @@ public class Player_Passive : Player
 
     public override void OnEpisodeBegin()
     {
-        if(count != 0)
+        if (count != 0)
         {
             Debug.Log("에피소드 시작");
             GameManager.instance.playerData.kill = 0;
-            endCheckPoint = 1;
             increaseWeight = 0.5f;
-            minDistanceToEnemy = 0f;
+            minDistanceToEnemy = float.MaxValue;
             SceneManager.LoadScene("Stage1");
         }
         count++;
@@ -99,22 +104,6 @@ public class Player_Passive : Player
         nextMove.y = actions.ContinuousActions[1];
 
         transform.Translate(nextMove * Time.deltaTime * speed);
-
-        for (int i = 0; i < GameManager.instance.enemies.Count; i++)
-        {
-            // Debug.Log("Transform Position: " + transform.position);
-            // Debug.Log("Enemies Positions: " + GameManager.instance.enemies[i].transform.position);
-            distanceToEnemy.Add(Vector3.Distance(transform.position, GameManager.instance.enemies[i].transform.position));
-        }
-
-        for (int i = 0; i < distanceToEnemy.Count; i++)
-        {
-            minDistanceToEnemy = distanceToEnemy[0];
-            if (minDistanceToEnemy > distanceToEnemy[i])
-            {
-                minDistanceToEnemy = distanceToEnemy[i];
-            }
-        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -133,10 +122,58 @@ public class Player_Passive : Player
                 case "Ghoul":
                 case "Summoner":
                 case "BloodKing":
-                        SetReward(-1f / increaseWeight);
+                    SetReward(-1f / increaseWeight);
                     break;
             }
             coolTimer = 0f;
         }
+    }
+
+    private void UpdateMinDistanceToEnemy()
+    {
+        float currentMinDistance = float.MaxValue;
+
+        if (GameManager.instance.enemies == null || GameManager.instance.enemies.Count == 0)
+        {
+            return;
+        }
+
+        foreach (var enemy in GameManager.instance.enemies)
+        {
+            float distance = Vector3.Distance(transform.position, enemy.transform.position);
+            if (distance < currentMinDistance)
+            {
+                currentMinDistance = distance;
+            }
+        }
+
+        minDistanceToEnemy = currentMinDistance;
+    }
+
+    void EndEpisode()
+    {
+        isEndEpisode = true;
+
+        GameManager.instance.player.expCount = CalculateExp();
+        GameManager.instance.playerData.kill = CalculateKills();
+
+        Debug.Log("에피소드 종료됐는 지 확인용 : " + GameManager.instance.player.isEndEpisode);
+        Debug.Log("Kill 수: " + GameManager.instance.playerData.kill);
+        Debug.Log("Exp 획득량: " + GameManager.instance.player.expCount);
+
+        csvTest.WriteData();
+        base.EndEpisode();
+
+        isEndEpisode = false;
+    }
+
+    int CalculateExp()
+    {
+        return GameManager.instance.player.expCount;
+    }
+
+    int CalculateKills()
+    {
+        return GameManager.instance.playerData.kill;
     }
 }

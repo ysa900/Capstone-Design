@@ -9,12 +9,18 @@ using UnityEngine.SceneManagement;
 public class Player_Active : Player
 {
     int preKill;
- 
+
+    // 딴딴이 기믹용
+    private bool gimmickExecuted = false;
+    private bool hardModeActivated = false;
+
     protected override void Start()
     {
         base.Start();
-        
+        csvTest = FindAnyObjectByType<CsvTest>(); // 로그 기록용
+        GameManager.instance.playerData.kill = 0;
         preKill = 0;
+        isEndEpisode = false;
     }
 
     protected override void FixedUpdate()
@@ -44,15 +50,15 @@ public class Player_Active : Player
             GameManager.instance.skillManager.skillData.skillSelected[1] = true;
         }
 
-        if (GameManager.instance.gameTime >= 240f)
-        {
-            SetReward(+3f);
-        }
-        else if (GameManager.instance.gameTime == 300f)
+        if (GameManager.instance.gameTime >= 300f)
         {
             SetReward(+4);
-            endCheckPoint--;
             EndEpisode();
+            
+        }
+        else if (GameManager.instance.gameTime >= 240f)
+        {
+            SetReward(+3);
         }
 
         if (GameManager.instance.playerData.kill >= 1000)
@@ -113,8 +119,8 @@ public class Player_Active : Player
         if (GameManager.instance.playerData.hp < 85f) // HP 85%
         {
             SetReward(-3);
+            isEndEpisode = true;
             Debug.Log("Hp 깎여서 마이너스");
-            endCheckPoint--;
             EndEpisode();
         }
 
@@ -123,7 +129,91 @@ public class Player_Active : Player
             increaseWeight += 0.5f;
             delayTimer = 0f;
         }
+
+        // 게임 시간이 10초에 도달했는지 확인
+        if (GameManager.instance.gameTime >= 10f && !hardModeActivated)
+        {
+            //makeEnemyHard();
+            hardModeActivated = true;
+        }
+
+        // 지정된 시간에 기믹이 실행되었는지 확인
+        if (gimmickExecuted)
+        {
+            patternTimer += Time.deltaTime;
+            if (patternTimer >= patternTime)
+            {
+                //makeEnemyNormal();
+                patternTimer = 0f;
+                gimmickExecuted = false; // 원상복구 후 다시 실행되지 않도록 설정
+            }
+        }
+
     }
+    /*
+    private void makeEnemyHard()
+    {
+        string[] tags = { "EvilTree", "Pumpkin", "Warlock" };
+
+        foreach (string tag in tags)
+        {
+            GameObject[] enemies = GameObject.FindGameObjectsWithTag(tag);
+            foreach (GameObject enemyObj in enemies)
+            {
+                Enemy enemy = enemyObj.GetComponent<Enemy>();
+                if (enemy != null)
+                {
+                    int index = hpIndices[tag];
+
+                    // 자식 오브젝트 활성화
+                    Transform child = enemy.transform.GetChild(0);
+                    if (child != null)
+                    {
+                        child.gameObject.SetActive(true);
+                    }
+
+                    // HP 증가
+                    originalHP[enemy] = new float[enemy.enemy_HP.Length];
+                    enemy.enemy_HP.CopyTo(originalHP[enemy], 0); // 기존 HP 저장
+                    enemy.enemy_HP[index] *= 1.5f; // HP 1.5배 증가
+                    Debug.Log($"{enemy.name} HP 증가: {enemy.enemy_HP[index]}"); // 디버그 로그 추가
+                    modifiedEnemies.Add(enemy); // 수정된 적 목록에 추가
+                }
+            }
+        }
+        // 기믹이 실행되었음을 표시하고 타이머 초기화
+        gimmickExecuted = true;
+        patternTimer = 0f;
+    }
+
+    private void makeEnemyNormal()
+    {
+        foreach (Enemy enemy in modifiedEnemies)
+        {
+            if (enemy != null)
+            {
+                int index = hpIndices[enemy.tag];
+
+                // 자식 오브젝트 비활성화
+                Transform child = enemy.transform.GetChild(0);
+                if (child != null)
+                {
+                    child.gameObject.SetActive(false);
+                }
+
+                // HP 원상복구
+                if (originalHP.ContainsKey(enemy))
+                {
+                    originalHP[enemy].CopyTo(enemy.enemy_HP, 0); // 기존 HP로 복원
+                    Debug.Log($"{enemy.name} HP 원상복구: {enemy.enemy_HP[index]}"); // 디버그 로그 추가
+                }
+            }
+        }
+        // 수정된 적 목록과 원래 HP 목록 초기화
+        modifiedEnemies.Clear();
+        originalHP.Clear();
+    }
+    */
 
     protected override void LateUpdate()
     {
@@ -137,7 +227,6 @@ public class Player_Active : Player
             Debug.Log("에피소드 시작");
             GameManager.instance.playerData.kill = 0;
             preKill = 0;
-            endCheckPoint = 1;
             increaseWeight = 2f;
             SceneManager.LoadScene("Stage1");
         }
@@ -173,5 +262,35 @@ public class Player_Active : Player
             }
             coolTimer = 0f;
         }
+    }
+
+    void EndEpisode()
+    {
+        isEndEpisode = true;
+
+        GameManager.instance.player.expCount = CalculateExp(); // Placeholder
+        GameManager.instance.playerData.kill = CalculateKills(); // Placeholder
+
+        // Log the episode data
+        Debug.Log("에피소드 종료됐는 지 확인용 : " + GameManager.instance.player.isEndEpisode);
+        Debug.Log("Kill 수: " + GameManager.instance.playerData.kill);
+        Debug.Log("Exp 획득량: " +  GameManager.instance.player.expCount);
+
+        csvTest.WriteData();
+        base.EndEpisode();
+
+        isEndEpisode = false;
+    }
+
+    int CalculateExp()
+    {
+        // Placeholder for actual EXP calculation logic
+        return GameManager.instance.player.expCount;
+    }
+
+    int CalculateKills()
+    {
+        // Placeholder for actual Kill calculation logic
+        return GameManager.instance.playerData.kill;
     }
 }

@@ -4,7 +4,6 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 
-
 public class CsvFileWriter : CsvFileCommon, IDisposable
 {
     // Private members
@@ -30,7 +29,7 @@ public class CsvFileWriter : CsvFileCommon, IDisposable
     /// <param name="path">The name of the CSV file to write to</param>
     public CsvFileWriter(string path)
     {
-        Writer1 = new StreamWriter(path);
+        Writer1 = new StreamWriter(path, true); // append mode
     }
 
     /// <summary>
@@ -66,9 +65,17 @@ public class CsvFileWriter : CsvFileCommon, IDisposable
         Writer1.WriteLine();
     }
 
+    // Close the writer
+    public void Close()
+    {
+        Writer1.Flush();
+        Writer1.Close();
+    }
+
     // Propagate Dispose to StreamWriter
     public void Dispose()
     {
+        Close();
         Writer1.Dispose();
     }
 }
