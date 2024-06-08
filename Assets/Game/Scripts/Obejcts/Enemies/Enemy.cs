@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
-using static Enemy;
+using UnityEngine.AI;
+using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 using static Unity.Barracuda.TextureAsTensorData;
+using static UnityEngine.GraphicsBuffer;
 
 public class Enemy : Object, IDamageable, IPoolingObject
 {
@@ -12,7 +15,7 @@ public class Enemy : Object, IDamageable, IPoolingObject
     public Player player;
 
     // Enemy들 체력
-    int[] enemy_HP = { 1500, 50, 80, 15, 50, 70, 15, 50, 80, 150 };
+    int[] enemy_HP = { 15, 50, 80, 15, 50, 70, 15, 50, 80, 150 };
 
     // enemy 정보
     public int hp;
@@ -26,7 +29,7 @@ public class Enemy : Object, IDamageable, IPoolingObject
     protected bool isDead;
     private bool isTimeOver;
 
-    private float damageDelay = 1f;
+    private float damageDelay = 2f;
     private float damageDelayTimer = 0;
 
     private float degree = 0;
@@ -34,6 +37,9 @@ public class Enemy : Object, IDamageable, IPoolingObject
     public int index; // Enemy 종류
 
     string sceneName;
+
+    float agentToplayerDistance; // 적과 플레이어 사이의 거리
+
 
     // enemy가 죽었을 때 EnemyManager에게 알려주기 위한 delegate
     public delegate void OnEnemyWasKilled(Enemy killedEnemy, bool isKilledByPlayer);
@@ -50,6 +56,10 @@ public class Enemy : Object, IDamageable, IPoolingObject
     protected Animator animator; // 애니메이션 관리를 위한 변수
 
     public CapsuleCollider2D capsuleCollider; // Collider의 offset을 변경하기 위한 변수
+
+    public NavMeshAgent agent; //Nav Mesh Agent 사용할 변수
+    public bool isAgentDelay = false;
+
 
     public virtual void Init()
     {
@@ -70,8 +80,8 @@ public class Enemy : Object, IDamageable, IPoolingObject
                 float radius = UnityEngine.Random.Range(20, 30);
                 degree = UnityEngine.Random.Range(0f, 360f);
 
-                float tmpX = (float)Math.Cos(degree) * radius;
-                float tmpY = (float)Math.Sin(degree) * radius;
+                float tmpX = (float)Math.Cos(degree * Mathf.Deg2Rad) * radius;
+                float tmpY = (float)Math.Sin(degree * Mathf.Deg2Rad) * radius;
 
                 X = tmpX + playerX;
                 Y = tmpY + playerY;
@@ -96,20 +106,28 @@ public class Enemy : Object, IDamageable, IPoolingObject
                 break;
             case "Stage3": // Stage3는 정해진 범위 안에 소환 (플레이어와 겹치지 않게)
                 bool isPositionSameWithPlayer;
+                int breakNum = 0; // while문 탈출을 위한 num
 
                 do
                 {
                     radius = UnityEngine.Random.Range(20, 25);
                     degree = UnityEngine.Random.Range(0f, 360f);
 
-                    tmpX = (float)Math.Cos(degree) * radius;
-                    tmpY = (float)Math.Sin(degree) * radius;
+                    tmpX = (float)Math.Cos(degree * Mathf.Deg2Rad) * radius;
+                    tmpY = (float)Math.Sin(degree * Mathf.Deg2Rad) * radius;
 
                     Vector2 playerPos = player.transform.position;
                     Vector2 myPos = new Vector2(tmpX, tmpY);
-                    isPositionSameWithPlayer = Vector2.Distance(playerPos, myPos) < 5;
+                    isPositionSameWithPlayer = Vector2.Distance(playerPos, myPos) < 5; 
+                    
+                    breakNum++;
+                    if (breakNum >= 1000)// 1000회 반복 내에 마땅한 위치를 찾지 못했다면 그냥 break;
+                    {
+                        Debug.Log("1000번 내에 찾지 못함");
+                        break;
+                    }
                 }
-                while (!isPositionSameWithPlayer);
+                while (isPositionSameWithPlayer);
 
                 X = tmpX;
                 Y = tmpY;
@@ -121,9 +139,14 @@ public class Enemy : Object, IDamageable, IPoolingObject
                 break;
         }
 
+
+
+
         rigid.constraints = RigidbodyConstraints2D.None;
         rigid.constraints = RigidbodyConstraints2D.FreezeRotation;
         GetComponent<CapsuleCollider2D>().enabled = true;
+        agent.enabled = true;
+
     }
 
     protected virtual void Awake()
@@ -132,6 +155,12 @@ public class Enemy : Object, IDamageable, IPoolingObject
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
         capsuleCollider = GetComponent<CapsuleCollider2D>();
+        agent = GetComponent<NavMeshAgent>();
+
+        agent.updateRotation = false;
+        agent.updateUpAxis = false;
+        agent.velocity = Vector3.zero;
+        rigid.velocity = Vector3.zero;
 
         colliderOffsetX = capsuleCollider.offset.x; // offset 초기값을 저장
         colliderOffsetY = capsuleCollider.offset.y;
@@ -140,13 +169,17 @@ public class Enemy : Object, IDamageable, IPoolingObject
     protected virtual void FixedUpdate()
     {
         isTimeOver = GameManager.instance.gameTime >= GameManager.instance.maxGameTime;
+
+
         if (isTimeOver && !isDead)
         {
             StartCoroutine(Dead());
         }
 
+
         DestryIfToFar(); // 플레이어와의 거리가 너무 멀면 죽음
         damageDelayTimer += Time.fixedDeltaTime;
+        /*   agent.enabled = true;*/
     }
 
     // 플레이어 방향으로 이동하는 함수
@@ -202,16 +235,40 @@ public class Enemy : Object, IDamageable, IPoolingObject
     // 플레이어 방향으로 이동하는 함수
     protected void MoveToPlayer()
     {
-        Vector2 playerPosition = player.transform.position;
-        Vector2 myPosition = transform.position;
+        agentToplayerDistance = Vector3.Distance(player.transform.position, transform.position);
 
-        Vector2 direction = playerPosition - myPosition;
+        if (agentToplayerDistance > 20f && sceneName == "Stage3")
+        {
+            agent.enabled = false;
+            Vector2 playerPosition = player.transform.position;
+            Vector2 myPosition = transform.position;
 
-        direction = direction.normalized;
-        rigid.MovePosition(rigid.position + direction * speed * Time.fixedDeltaTime); // 플레이어 방향으로 위치 변경
+            Vector2 direction = playerPosition - myPosition;
 
-        X = transform.position.x;
-        Y = transform.position.y;
+            direction = direction.normalized;
+            rigid.MovePosition(rigid.position + direction * speed * Time.fixedDeltaTime);
+        }
+        else
+        {
+            if (!agent.enabled)
+            {
+                Vector2 playerPosition = player.transform.position;
+                Vector2 myPosition = transform.position;
+
+                Vector2 direction = playerPosition - myPosition;
+
+                direction = direction.normalized;
+                rigid.MovePosition(rigid.position + direction * speed * Time.fixedDeltaTime);
+                agent.enabled = true;
+
+            }
+            else
+            {
+                agent.enabled = true;
+                agent.SetDestination(player.transform.position);
+            }
+        }
+
     }
 
     // 플레이어와의 거리가 너무 멀면 죽는 함수
@@ -226,6 +283,7 @@ public class Enemy : Object, IDamageable, IPoolingObject
 
         if (isToFar)
         {
+            agent.enabled = false;
             switch (sceneName)
             {
                 case "Stage1": // 플레이어가 너무 멀리 가면 enemy를 플레이어를 중심으로 점 대칭 이동
@@ -253,6 +311,7 @@ public class Enemy : Object, IDamageable, IPoolingObject
                     break;
             }
 
+
         }
 
     }
@@ -277,8 +336,54 @@ public class Enemy : Object, IDamageable, IPoolingObject
                 damageDelayTimer = 0;
             }
         }
+
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (agent.enabled)
+        {
+            agent.velocity = Vector3.zero;
+            rigid.velocity = Vector3.zero;
+        }
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            agent.isStopped = true;
+            agent.velocity = Vector3.zero;
+            rigid.velocity = Vector3.zero;
+
+        }
+
+        if (collision.gameObject.tag == "Obstacle" && agent.enabled)
+        {
+            agent.SetDestination(transform.position + new Vector3(-1, 3, 0));
+            rigid.mass = 3.5f;
+            isAgentDelay = true;
+        }
+
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (agent.enabled)
+        {
+            agent.isStopped = false;
+            agent.velocity = Vector3.zero;
+            rigid.velocity = Vector3.zero;
+        }
+
+
+        if (collision.gameObject.tag == "Obstacle" && agent.enabled)
+        {
+            rigid.mass = 1.0f;
+            isAgentDelay = false;
+        }
+    }
+    
     IEnumerator Dead()
     {
         isDead = true;
@@ -297,6 +402,7 @@ public class Enemy : Object, IDamageable, IPoolingObject
 
         GameManager.instance.poolManager.ReturnEnemy(this, index);
     }
+
 
     // damageText 출력
     void ShowDamageText(float damage, string skillTag)

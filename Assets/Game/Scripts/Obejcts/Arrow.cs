@@ -1,14 +1,17 @@
 using UnityEngine;
 
-public class Arrow : Object, IPoolingObject
+public class Arrow : Object, IPoolingObject, IDamageableSkill
 {
     public Player player;
 
     // Arrow 정보
     [SerializeField] float speed;
     [SerializeField] float damage;
+    [SerializeField] float hp;
+    [SerializeField] float maxhp;
 
-    private float aliveTime; // 스킬 생존 시간을 체크할 변수
+    private float aliveTimer; // 스킬 생존 시간을 체크할 변수
+    private float aliveTime = 5f;
     int returnIndex; // 풀링 시 리턴 인덱스
 
     Rigidbody2D rigid; // 물리 입력을 받기위한 변수
@@ -19,7 +22,8 @@ public class Arrow : Object, IPoolingObject
 
     public void Init()
     {
-        aliveTime = 0;
+        hp = maxhp;
+        aliveTimer = 0;
 
         SetPlayerPosition();
         SetArrowDirection();
@@ -35,7 +39,7 @@ public class Arrow : Object, IPoolingObject
 
     private void FixedUpdate()
     {
-        bool destroyArrow = aliveTime > 5f;
+        bool destroyArrow = aliveTimer > aliveTime;
 
         if (destroyArrow)
         {
@@ -47,7 +51,7 @@ public class Arrow : Object, IPoolingObject
             MoveToPlayer();
         }
 
-        aliveTime += Time.fixedDeltaTime;
+        aliveTimer += Time.fixedDeltaTime;
     }
 
     // 화살이 날아갈 플레이어 방향(Direction) 설정
@@ -90,5 +94,15 @@ public class Arrow : Object, IPoolingObject
 
         iPlayer.TakeDamage(damage);
         GameManager.instance.poolManager.ReturnArrow(this);
+    }
+
+    public void TakeDamage(float damage)
+    {
+        hp -= damage;
+
+        if (hp <= 0)
+        {
+            GameManager.instance.poolManager.ReturnArrow(this);
+        }
     }
 }

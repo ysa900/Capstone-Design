@@ -14,7 +14,8 @@ GameObject:
   - component: {fileID: 185251017419095182}
   - component: {fileID: 2878646979041324979}
   - component: {fileID: -3337024891017436492}
-  m_Layer: 0
+  - component: {fileID: -3204275273619302721}
+  m_Layer: 6
   m_Name: Summoner
   m_TagString: Summoner
   m_Icon: {fileID: 0}
@@ -76,7 +77,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 5
   m_Sprite: {fileID: -3070832648162847404, guid: 468bc6ba239eac7479b34bf39262b8fc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -186,10 +187,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01158a9771a40af48a12e17ec3008e10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  player: {fileID: 8857619680574137846, guid: daf2389240168c24ea3446fee54b4f80, type: 3}
   hp: 0
   speed: 1.5
   isEnemyLookLeft: 0
   index: 0
   rigid: {fileID: 0}
   capsuleCollider: {fileID: 0}
+  agent: {fileID: 0}
+  isAgentDelay: 0
+--- !u!195 &-3204275273619302721
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7578585661868168571}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.18
+  m_Speed: 1.3
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 0.74
+  m_BaseOffset: 0.37
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 0

@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class ObstacleVisble : MonoBehaviour
 {
     [SerializeField] private float alphaSpeed;
+    [SerializeField] private float thickness;
 
     SpriteRenderer sr;
     TilemapRenderer tr;
@@ -23,7 +25,7 @@ public class ObstacleVisble : MonoBehaviour
 
         switch (name)
         {
-            case "opaque_wall":
+            case "opaque_wall": 
                 tr = GetComponent<TilemapRenderer>();
                 tile = GetComponent<Tilemap>();
                 tileAlphaColor = tile.color;
@@ -50,7 +52,7 @@ public class ObstacleVisble : MonoBehaviour
         {
             playerYpostion = player.transform.position.y + 1.9f;
 
-            if (playerYpostion - this.transform.position.y > 0)
+            if (playerYpostion - this.transform.position.y > thickness)
             {
                 transform.Find("Under Clear wall").gameObject.SetActive(true);
                 transform.Find("Upper Clear wall").gameObject.SetActive(false);

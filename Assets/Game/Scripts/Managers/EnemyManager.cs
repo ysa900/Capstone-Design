@@ -84,7 +84,6 @@ public class EnemyManager : MonoBehaviour
 
     void OnEnemyHit()
     {
-
         bool isDelayOver = hitDelatTimer >= hitDelayTime;
         if (isDelayOver)
         {

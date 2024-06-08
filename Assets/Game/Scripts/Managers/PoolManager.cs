@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PoolManager : MonoBehaviour
 {
@@ -68,6 +69,7 @@ public class PoolManager : MonoBehaviour
             {
                 // 발견하면 select 변수에 할당
                 select = item;
+                select.agent.enabled = false;
                 if (select.GetComponent<IPoolingObject>() != null)
                 {
                     enemyManager.SetEnemyInfo(select, player, index);
@@ -87,6 +89,7 @@ public class PoolManager : MonoBehaviour
 
             enemyManager.SetEnemyInfo(select, player, index);
 
+            select.agent.enabled = false;
             select.Init(); // 얘는 Init 해줘야됨
 
             select.transform.SetParent(this.gameObject.transform.GetChild(0));

@@ -46,6 +46,7 @@ public class ArrangeEnemy : Enemy
         
         if (!isInAttackRange)
         {
+            agent.enabled = true;
             LookAtPlayer();
             MoveToPlayer();
         }
@@ -53,11 +54,13 @@ public class ArrangeEnemy : Enemy
         {
             Arrange_Attack();
             attackCoolTimer = 0;
+            agent.enabled = false;
         }
         else
         {
             rigid.constraints = RigidbodyConstraints2D.FreezeAll;
             LookAtPlayer();
+            agent.enabled = false;
         }
 
         attackCoolTimer += Time.fixedDeltaTime;

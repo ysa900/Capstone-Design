@@ -28,7 +28,9 @@ public class InputManager : MonoBehaviour
     public UnityEngine.UI.Button GoToNextSceneButtonObject;
 
     // Option 관련 버튼
-    public UnityEngine.UI.Button OptionButtonObject; // 프레이 화면의 Option 버튼
+    public UnityEngine.UI.Button OptionButtonObject; // 플레이 화면의 Option 버튼
+
+    public UnityEngine.UI.Button OptionBackButtonObject; // Setting 창 뒤로가기 버튼
 
 
     // GameManager에게 정보 전달을 하기 위한 Delegate들
@@ -76,6 +78,9 @@ public class InputManager : MonoBehaviour
         UnityEngine.UI.Button OptionButton = OptionButtonObject.GetComponent<UnityEngine.UI.Button>();
         OptionButton.onClick.AddListener(OptionButtonClicked);
 
+        // Setting 창 뒤로가기 버튼
+        UnityEngine.UI.Button OptionBackButton = OptionBackButtonObject.GetComponent<UnityEngine.UI.Button>();
+        OptionBackButton.onClick.AddListener(OptionBackButtonClicked);
     }
 
     // RestartButton이 눌렀을 때
@@ -128,7 +133,26 @@ public class InputManager : MonoBehaviour
                 Time.timeScale = 0; // 화면 멈추기
                 GameManager.instance.SettingPageObject.SetActive(true);
             }
-            else // 나머지 상황: Pause, 레벨업, 클리어, 게임 오버
+            // 클리어
+            else if (GameManager.instance.isDeadPageOn || GameManager.instance.isClearPageOn && !GameManager.instance.isPausePageOn && !GameManager.instance.isSkillSelectPageOn)
+            {
+                GameManager.instance.isSettingPageOn = true;
+                GameManager.instance.SettingPageObject.SetActive(true);
+            }
+            // 게임 오버
+            else if (GameManager.instance.isGameOver || GameManager.instance.isDeadPageOn && !GameManager.instance.isClearPageOn && !GameManager.instance.isPausePageOn && !GameManager.instance.isSkillSelectPageOn)
+            {
+                GameManager.instance.isSettingPageOn = true;
+                GameManager.instance.SettingPageObject.SetActive(true);
+            }
+            // Pause
+            else if(GameManager.instance.isPausePageOn && !GameManager.instance.isDeadPageOn && !GameManager.instance.isClearPageOn &&  !GameManager.instance.isSkillSelectPageOn)
+            {
+                GameManager.instance.isSettingPageOn = true;
+                GameManager.instance.SettingPageObject.SetActive(true);
+            }
+            // 레벨업
+            else if (GameManager.instance.isSkillSelectPageOn && !GameManager.instance.isDeadPageOn && !GameManager.instance.isClearPageOn && !GameManager.instance.isPausePageOn || GameManager.instance.isSkillSelectPageOn)
             {
                 GameManager.instance.isSettingPageOn = true;
                 GameManager.instance.SettingPageObject.SetActive(true);
@@ -141,27 +165,55 @@ public class InputManager : MonoBehaviour
             {
                 Time.timeScale = 1; // 화면 풀기
                 GameManager.instance.isSettingPageOn = false;
-                PauseButtonObject.interactable = true;
             }
             else if (GameManager.instance.isPausePageOn && GameManager.instance.isSettingPageOn) // Pause 화면
             {
                 GameManager.instance.isSettingPageOn = false;
-                PauseButtonObject.interactable = true;
             }
             else if (GameManager.instance.isClearPageOn && GameManager.instance.isSettingPageOn) // Clear 화면
             {
                 GameManager.instance.isSettingPageOn = false;
-                PauseButtonObject.interactable = false;
             }
             else if (GameManager.instance.isDeadPageOn && GameManager.instance.isSettingPageOn) // 게임 오버
             {
                 GameManager.instance.isSettingPageOn = false;
-                PauseButtonObject.interactable = false;
+            }
+            else if (GameManager.instance.isSkillSelectPageOn) // Skill 선택화면
+            {
+                GameManager.instance.isSettingPageOn = false;
             }
 
             GameManager.instance.SettingPageObject.SetActive(false);
         }
+    }
 
+    private void OptionBackButtonClicked()
+    {
+        // 인게임 중 Setting Page 켜져있을 떄
+        if (!GameManager.instance.isPausePageOn && !GameManager.instance.isClearPageOn && !GameManager.instance.isSkillSelectPageOn && !GameManager.instance.isDeadPageOn)
+        {
+            Time.timeScale = 1; // 화면 풀기
+            PauseButtonObject.interactable = true;
+        }
+        // 기존 화면정지(Pause, SkillSelect, Clear, Dead) 돼있을 때 Setting Page 켜져있을 때
+        // Pause 화면, SkillSelect
+        else if (GameManager.instance.isPausePageOn && !GameManager.instance.isSkillSelectPageOn && !GameManager.instance.isClearPageOn  && !GameManager.instance.isDeadPageOn)
+        {
+            PauseButtonObject.interactable = true;
+        }
+        // SkillSelect
+        else if ((GameManager.instance.isSkillSelectPageOn && !GameManager.instance.isPausePageOn && !GameManager.instance.isClearPageOn  && !GameManager.instance.isDeadPageOn))
+        {
+            PauseButtonObject.interactable = false;
+        }
+        // Clear, Dead
+        else if (GameManager.instance.isClearPageOn || GameManager.instance.isDeadPageOn && !GameManager.instance.isPausePageOn && !GameManager.instance.isSkillSelectPageOn)
+        {
+            PauseButtonObject.interactable = false;
+        }
+
+        GameManager.instance.isSettingPageOn = false;
+        GameManager.instance.SettingPageObject.SetActive(false);
     }
 
     private void goToNextSceneButtonClicked()

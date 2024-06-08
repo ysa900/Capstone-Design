@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class HydroFlame: PlayerAttachSkill
 {
-    private float delay = 0.25f;
+    private float delay = 0.4f;
     private float delayTimer = 0f;
 
     float radius = 23f;
