@@ -26,7 +26,7 @@ public class FollowCam : MonoBehaviour
 
         if (sceneName == "Stage2")
         {
-            isClearWallDetected = (transform.position.x - cameraHalfWidth >= clearWall_RightEndX) &&
+            isClearWallDetected = (transform.position.x - cameraHalfWidth <= clearWall_RightEndX) &&
                 (clearWall_RightEndX > player.transform.position.x - cameraHalfWidth);
         }
 

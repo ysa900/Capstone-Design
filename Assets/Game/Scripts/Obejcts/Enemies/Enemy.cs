@@ -66,7 +66,6 @@ public class Enemy : Object, IDamageable, IPoolingObject
         hp = enemy_HP[index];
         isDead = false;
 
-
         damageDelayTimer = 0;
 
         float playerX = player.transform.position.x;
@@ -81,8 +80,8 @@ public class Enemy : Object, IDamageable, IPoolingObject
                 float radius = UnityEngine.Random.Range(20, 30);
                 degree = UnityEngine.Random.Range(0f, 360f);
 
-                float tmpX = (float)Math.Cos(degree) * radius;
-                float tmpY = (float)Math.Sin(degree) * radius;
+                float tmpX = (float)Math.Cos(degree * Mathf.Deg2Rad) * radius;
+                float tmpY = (float)Math.Sin(degree * Mathf.Deg2Rad) * radius;
 
                 X = tmpX + playerX;
                 Y = tmpY + playerY;
@@ -107,20 +106,28 @@ public class Enemy : Object, IDamageable, IPoolingObject
                 break;
             case "Stage3": // Stage3는 정해진 범위 안에 소환 (플레이어와 겹치지 않게)
                 bool isPositionSameWithPlayer;
+                int breakNum = 0; // while문 탈출을 위한 num
 
                 do
                 {
                     radius = UnityEngine.Random.Range(20, 25);
                     degree = UnityEngine.Random.Range(0f, 360f);
 
-                    tmpX = (float)Math.Cos(degree) * radius;
-                    tmpY = (float)Math.Sin(degree) * radius;
+                    tmpX = (float)Math.Cos(degree * Mathf.Deg2Rad) * radius;
+                    tmpY = (float)Math.Sin(degree * Mathf.Deg2Rad) * radius;
 
                     Vector2 playerPos = player.transform.position;
                     Vector2 myPos = new Vector2(tmpX, tmpY);
-                    isPositionSameWithPlayer = Vector2.Distance(playerPos, myPos) < 5;
+                    isPositionSameWithPlayer = Vector2.Distance(playerPos, myPos) < 5; 
+                    
+                    breakNum++;
+                    if (breakNum >= 1000)// 1000회 반복 내에 마땅한 위치를 찾지 못했다면 그냥 break;
+                    {
+                        Debug.Log("1000번 내에 찾지 못함");
+                        break;
+                    }
                 }
-                while (!isPositionSameWithPlayer);
+                while (isPositionSameWithPlayer);
 
                 X = tmpX;
                 Y = tmpY;
@@ -259,7 +266,6 @@ public class Enemy : Object, IDamageable, IPoolingObject
             {
                 agent.enabled = true;
                 agent.SetDestination(player.transform.position);
-
             }
         }
 

@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 public class SkillSelectManager : MonoBehaviour
 {
+    // 싱글톤 패턴을 사용하기 위한 인스턴스 변수
+    private static SkillSelectManager _instance;
+
     // 개발용 테스트 플래그 및 테스트 스킬 인덱스
     [SerializeField] private bool isSkillTest = false;
     [SerializeField] private int testSkillIndex = 12;
@@ -115,6 +118,18 @@ public class SkillSelectManager : MonoBehaviour
     // Awake: 초기 UI 설정
     private void Awake()
     {
+        if (_instance == null)
+        {
+            _instance = this;
+        }
+        // 인스턴스가 존재하는 경우 새로생기는 인스턴스를 삭제한다.
+        else if (_instance != this)
+        {
+            Destroy(gameObject);
+        }
+        // 씬이 전환되더라도 선언되었던 인스턴스가 파괴되지 않게 함
+        DontDestroyOnLoad(gameObject);
+
         skillSelectObject.SetActive(false);
         closedSkillObject1.SetActive(false);
         closedSkillObject2.SetActive(false);
@@ -268,8 +283,8 @@ public class SkillSelectManager : MonoBehaviour
         int playerLevel = playerData.level;
         skillCount = playerLevel switch
         {
-            <= 15 => 6,
-            <= 120 => 9,
+            <= 5 => 6,
+            <= 10 => 9,
             _ => 12
         };
         passiveSkillCount = playerLevel switch

@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static GameAudioManager;
@@ -10,19 +12,41 @@ using static GameAudioManager;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance; // GameManager를 instance화
+    // 싱글톤 패턴을 사용하기 위한 인스턴스 변수
+    private static GameManager _instance;
+
+    // 인스턴스에 접근하기 위한 프로퍼티
+    public static GameManager instance
+    {
+        get
+        {
+            // 인스턴스가 없는 경우에 접근하려 하면 인스턴스를 할당해준다.
+            if (!_instance)
+            {
+                _instance = FindAnyObjectByType(typeof(GameManager)) as GameManager;
+
+                if (_instance == null)
+                    Debug.Log("no Singleton obj");
+            }
+            return _instance;
+        }
+    }
 
     // 게임 시간
     public float gameTime;
-    public float maxGameTime = 5 * 60f; // 보스 스폰 시간
+    float sceneGameTime;
+    public float maxGameTime = 5 * 60f; // 초기(Stage1) maxGameTime
 
     // 씬 번호
     // 0: splash, 1: Lobby, 2: Game, 3: Stage2
     public string sceneName;
 
     // 적 스폰 쿨타임
-    private float CoolTime = 2f;
-    private float CoolTimer = 0f;
+    private float coolTime = 2f;
+    private float coolTimer = 0f;
+
+    // player Area Size
+    public int playerAreaSize;
 
     // GameOver가 됐는지 판별하는 변수
     public bool isGameOver;
@@ -91,7 +115,20 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        instance = this; // GameManager를 인스턴스화
+        if (_instance == null)
+        {
+            _instance = this;
+        }
+
+        // 인스턴스가 존재하는 경우 새로생기는 인스턴스를 삭제한다.
+        else if (_instance != this)
+        {
+            Destroy(gameObject);
+        }
+
+        // 씬이 전환되더라도 선언되었던 인스턴스가 파괴되지 않게 함
+        DontDestroyOnLoad(gameObject);
+
         sceneName = SceneManager.GetActiveScene().name;
         // 시작 시 비활성화
         gameOverObject.SetActive(false);
@@ -102,29 +139,21 @@ public class GameManager : MonoBehaviour
         SettingPageObject.SetActive(false);
 
         inputManager = FindAnyObjectByType<InputManager>();
-        followCam = FindAnyObjectByType<FollowCam>();
         skillManager = FindAnyObjectByType<SkillManager>();
         skillSelectManager = FindAnyObjectByType<SkillSelectManager>();
-        bossManager = FindAnyObjectByType<BossManager>();
-        poolManager = FindAnyObjectByType<PoolManager>();
-        tilemapManager = FindAnyObjectByType<TilemapManager>();
-        navMeshControl = FindAnyObjectByType<NavMeshControl>();
 
+        player = Instantiate(playerPrefab);
+        player.playerData = playerData; // player에 playerData 할당
 
         // 클래스 객체들 초기화
         if (sceneName == "Stage1")
         {
             PlayerInit();
         }
-        player = Instantiate(playerPrefab);
-        SetPlayerInfo();
 
         // inputManger Delegate 할당
         inputManager.onPauseButtonClicked = OnPauseButtonClicked;
         inputManager.onPlayButtonClicked = onPlayButtonClicked;
-
-        // followCam 플레이어 객체 할당
-        followCam.player = player;
 
         // skillManager에 객체 할당
         skillManager.player = player;
@@ -133,43 +162,93 @@ public class GameManager : MonoBehaviour
         skillManager.onShiledSkillActivated = OnShieldSkillActivated;
         skillManager.onShiledSkillUnActivated = OnShieldSkillUnActivated;
 
-        // PoolManager Player 할당
-        poolManager.player = player;
-
-        // EnemyManager delegate 할당
-        poolManager.enemyManager.onEnemiesChanged = OnEnemiesChanged;
-        poolManager.enemyManager.onEnemyKilled = OnEnemyKilled;
-
         // SkillSelectManager delegate 할당
         skillSelectManager.onSkillSelectObjectDisplayed = OnSkillSelectObjectDisplayed;
         skillSelectManager.onSkillSelectObjectHided = OnSkillSelectObjectHided;
         skillSelectManager.onPlayerHealed = OnPlayerHealed;
         skillSelectManager.onPassiveSkillSelected = OnPassiveSkillSelected;
         skillSelectManager.onSkillSelected = OnSkillSelected;
-
-        // BossManager delegate 할당
-        bossManager.onBossHasKilled = OnBossHasKilled;
+        skillSelectManager.playerData = playerData;// skillSelectManager에 playerData 할당
 
         //gameTime = maxGameTime - 2f;
         //player.isPlayerShielded = true;
         //player.level = 20;
-
-        player.playerData = playerData; // player에 playerData 할당
-        skillSelectManager.playerData = playerData;// skillSelectManager에 playerData 할당
+    }
+    void OnEnable()
+    {
+        // 씬 매니저의 sceneLoaded에 체인을 건다.
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    void Start()
+    // 체인을 걸어서 이 함수는 매 씬마다 호출된다.
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        navMeshControl.BakeNavMeshArea();
+        coolTimer = 0;
+        coolTime = 2f;
+        sceneGameTime = gameTime;
 
-        if (SceneManager.GetActiveScene().name == "Stage1")
-            skillSelectManager.ChooseStartSkill(); // 시작 스킬 선택
+        sceneName = scene.name;
 
-        // Stage1 배경음 플레이
-        GameAudioManager.instance.bgmPlayer.clip = GameAudioManager.instance.bgmClips[(int)Bgm.Stage1];
-        GameAudioManager.instance.bgmPlayer.Play();
+        enemies.Clear();
 
-        SpawnStartEnemies();
+        SetPlayerInfo(); // player 위치 설정
+
+        switch (sceneName)
+        {
+            case "Stage1":
+                tilemapManager = FindAnyObjectByType<TilemapManager>();
+                StageSetting();
+                skillSelectManager.ChooseStartSkill(); // 시작 스킬 선택
+
+                // Stage1 배경음 플레이
+                GameAudioManager.instance.bgmPlayer.clip = GameAudioManager.instance.bgmClips[(int)Bgm.Stage1];
+                GameAudioManager.instance.bgmPlayer.Play();
+
+                SpawnStartEnemies();
+                break;
+
+            case "Stage2":
+                maxGameTime += gameTime;
+                tilemapManager = FindAnyObjectByType<TilemapManager>();
+                StageSetting();
+                // Stage2 배경음 플레이
+                GameAudioManager.instance.bgmPlayer.clip = GameAudioManager.instance.bgmClips[(int)Bgm.Stage2];
+                GameAudioManager.instance.bgmPlayer.Play();
+
+                SpawnStartEnemies();
+                break;
+            case "Stage3":
+                maxGameTime += gameTime;
+                StageSetting();
+                bossManager = FindAnyObjectByType<BossManager>();
+
+                // BossManager delegate 할당
+                bossManager.onBossHasKilled = OnBossHasKilled;
+
+                // Stage3 배경음 플레이
+                //GameAudioManager.instance.bgmPlayer.clip = GameAudioManager.instance.bgmClips[(int)Bgm.Stage3];
+                //GameAudioManager.instance.bgmPlayer.Play();
+
+                SpawnStartEnemies();
+                break;
+        }
+    }
+
+    void StageSetting()
+    {
+        followCam = FindAnyObjectByType<FollowCam>();
+        poolManager = FindAnyObjectByType<PoolManager>();
+        navMeshControl = FindAnyObjectByType<NavMeshControl>();
+
+        // followCam 플레이어 객체 할당
+        followCam.player = player;
+
+        // PoolManager Player 할당
+        poolManager.player = player;
+
+        // EnemyManager delegate 할당
+        poolManager.enemyManager.onEnemiesChanged = OnEnemiesChanged;
+        poolManager.enemyManager.onEnemyKilled = OnEnemyKilled;
     }
 
     // Update is called once per frame
@@ -178,15 +257,16 @@ public class GameManager : MonoBehaviour
         if (!isGameOver)
         {
             gameTime += Time.deltaTime; // 게임 시간 증가
-            CoolTimer += Time.deltaTime;
-
+            coolTimer += Time.deltaTime;
 
             if (!isBossSpawned)
             {
                 isEnemiesTooMany = enemies.Count > 300;
-                SpawnBoss();
-                if (!isEnemiesTooMany)
+                SpawnBoss(); 
+                if (!isEnemiesTooMany && coolTimer >= coolTime) {
                     CalculateEnemySpawnTimeNSpawn(); // 소환할 적을 지정하고 스폰
+                    coolTimer = 0;
+                }
             }
         }
 
@@ -204,7 +284,7 @@ public class GameManager : MonoBehaviour
                 SpawnEnemies(3, 50); // 시작 적 소환
                 break;
             case "Stage3":
-                SpawnEnemies(6, 50); // 시작 적 소환
+                //SpawnEnemies(6, 50); // 시작 적 소환
                 break;
 
         }
@@ -225,25 +305,26 @@ public class GameManager : MonoBehaviour
         switch (sceneName)
         {
             case "Stage1":
-                Vector2 PlayerPos = new Vector2(40, 40);
+                playerAreaSize = 140;
+                Vector2 PlayerPos = new Vector2(0, 0);
                 player.transform.position = PlayerPos;
 
-                Vector2 AreaSize = new Vector2(120, 120);
+                Vector2 AreaSize = new Vector2(playerAreaSize, playerAreaSize);
                 player.gameObject.GetComponentInChildren<BoxCollider2D>().size = AreaSize;
 
                 break;
             case "Stage2":
+                playerAreaSize = 40;
                 PlayerPos = new Vector2(0, 0);
                 player.transform.position = PlayerPos;
 
-                AreaSize = new Vector2(40, 40);
+                AreaSize = new Vector2(playerAreaSize, playerAreaSize);
                 player.gameObject.GetComponentInChildren<BoxCollider2D>().size = AreaSize;
                 break;
             case "Stage3":
                 PlayerPos = new Vector2(0, 0);
                 player.transform.position = PlayerPos;
                 break;
-
         }
 
         player.onPlayerWasKilled = OnPlayerHasKilled;
@@ -269,123 +350,107 @@ public class GameManager : MonoBehaviour
 
     void Stage1Spawn()
     {
-        if (gameTime <= 60 * 1 && CoolTimer >= CoolTime)
+        if (gameTime <= 60 * 1)
         {
             SpawnEnemies(0, 10); // EvilTree 몬스터 소환
-            CoolTimer = 0f;
         }
-        else if (gameTime <= 60 * 2 && CoolTimer >= CoolTime)
+        else if (gameTime <= 60 * 2)
         {
             SpawnEnemies(0, 5); // EvilTree 몬스터 소환
             SpawnEnemies(1, 10); // Pumpkin 몬스터 소환
-            CoolTimer = 0f;
         }
-        else if (gameTime <= 60 * 3 && CoolTimer >= CoolTime)
+        else if (gameTime <= 60 * 3)
         {
             SpawnEnemies(0, 2); // EvilTree 몬스터 소환
             SpawnEnemies(1, 5); // Pumpkin 몬스터 소환
             SpawnEnemies(2, 10); // Warlock 몬스터 소환
-            CoolTime = 1.5f;
-            CoolTimer = 0f;
+            coolTime = 1.5f;
         }
-        else if (gameTime < 60 * 4 && CoolTimer >= CoolTime)
+        else if (gameTime < 60 * 4)
         {
             SpawnEnemies(0, 2); // EvilTree 몬스터 소환
             SpawnEnemies(1, 5); // Pumpkin 몬스터 소환
             SpawnEnemies(1, 8); // Pumpkin 몬스터 소환
             SpawnEnemies(2, 15); // Warlock 몬스터 소환
-            CoolTime = 1f;
-            CoolTimer = 0f;
+            coolTime = 1f;
         }
-        else if (gameTime < 60 * 5 && CoolTimer >= CoolTime)
+        else if (gameTime < 60 * 5)
         {
             SpawnEnemies(0, 2); // EvilTree 몬스터 소환
             SpawnEnemies(1, 4); // Pumpkin 몬스터 소환
             SpawnEnemies(2, 6); // Warlock 몬스터 소환
             SpawnEnemies(2, 20); // Warlock 몬스터 소환
-            CoolTime = 0.5f;
-            CoolTimer = 0f;
+            coolTime = 0.5f;
         }
     }
     void Stage2Spawn()
     {
-        if (gameTime <= 60 * 1 && CoolTimer >= CoolTime)
+        if (gameTime <= sceneGameTime + 60 * 1)
         {
             SpawnEnemies(3, 10); // Skeleton_Sword 몬스터 소환
-            CoolTimer = 0f;
         }
-        else if (gameTime <= 60 * 2 && CoolTimer >= CoolTime)
+        else if (gameTime <= sceneGameTime + 60 * 2)
         {
             SpawnEnemies(3, 5); // Skeleton_Sword 몬스터 소환
             SpawnEnemies(4, 10); // Skeleton_Archor 몬스터 소환
-            CoolTimer = 0f;
         }
-        else if (gameTime <= 60 * 3 && CoolTimer >= CoolTime)
+        else if (gameTime <= sceneGameTime + 60 * 3)
         {
             SpawnEnemies(3, 2); // Skeleton_Sword 몬스터 소환
             SpawnEnemies(4, 5); // Skeleton_Archor 몬스터 소환
             SpawnEnemies(5, 10); // Skeleton_Horse 몬스터 소환
-            CoolTime = 1.5f;
-            CoolTimer = 0f;
+            coolTime = 1.5f;
         }
-        else if (gameTime < 60 * 4 && CoolTimer >= CoolTime)
+        else if (gameTime < sceneGameTime + 60 * 4)
         {
             SpawnEnemies(3, 4); // Skeleton_Sword 몬스터 소환
             SpawnEnemies(4, 8); // Skeleton_Archor 몬스터 소환
             SpawnEnemies(5, 15); // Skeleton_Horse 몬스터 소환
-            CoolTime = 1f;
-            CoolTimer = 0f;
+            coolTime = 1f;
         }
-        else if (gameTime < 60 * 5 && CoolTimer >= CoolTime)
+        else if (gameTime < sceneGameTime + 60 * 5)
         {
             SpawnEnemies(3, 4); // Skeleton_Sword 몬스터 소환
             SpawnEnemies(4, 12); // Skeleton_Archor 몬스터 소환
             SpawnEnemies(5, 20); // Skeleton_Horse 몬스터 소환
-            CoolTime = 0.5f;
-            CoolTimer = 0f;
+            coolTime = 0.5f;
         }
     }
 
     void Stage3Spawn()
     {
-        if (gameTime <= 60 * 1 && CoolTimer >= CoolTime)
+        if (gameTime <= sceneGameTime + 60 * 1)
         {
             SpawnEnemies(6, 10); // Ghoul 몬스터 소환
-            CoolTimer = 0f;
         }
-        else if (gameTime <= 60 * 2 && CoolTimer >= CoolTime)
+        else if (gameTime <= sceneGameTime + 60 * 2)
         {
             SpawnEnemies(6, 5); // Ghoul 몬스터 소환
             SpawnEnemies(7, 10); // Spitter 몬스터 소환
-            CoolTimer = 0f;
         }
-        else if (gameTime <= 60 * 3 && CoolTimer >= CoolTime)
+        else if (gameTime <= sceneGameTime + 60 * 3)
         {
             SpawnEnemies(6, 2); // Ghoul 몬스터 소환
             SpawnEnemies(7, 5); // Spitter 몬스터 소환
             SpawnEnemies(8, 10); // Summoner 몬스터 소환
-            CoolTime = 1.5f;
-            CoolTimer = 0f;
+            coolTime = 1.5f;
         }
-        else if (gameTime < 60 * 4 && CoolTimer >= CoolTime)
+        else if (gameTime < sceneGameTime + 60 * 4)
         {
             SpawnEnemies(6, 2); // Ghoul 몬스터 소환
             SpawnEnemies(7, 5); // Spitter 몬스터 소환
             SpawnEnemies(8, 8); // Summoner 몬스터 소환
             SpawnEnemies(9, 15); // BloodKing 몬스터 소환
-            CoolTime = 1f;
-            CoolTimer = 0f;
+            coolTime = 1f;
         }
-        else if (gameTime < 60 * 5 && CoolTimer >= CoolTime)
+        else if (gameTime < sceneGameTime + 60 * 5)
         {
             SpawnEnemies(6, 2); // Ghoul 몬스터 소환
             SpawnEnemies(7, 4); // Spitter 몬스터 소환
             SpawnEnemies(8, 6); // Summoner 몬스터 소환
             SpawnEnemies(9, 20); // BloodKing 몬스터 소환
-            CoolTime = 0.5f;
-            CoolTimer = 0f;
+            coolTime = 0.5f;
         }
-
     }
 
     // Enemy 소환 함수
@@ -520,34 +585,34 @@ public class GameManager : MonoBehaviour
             switch (killedEnemy.tag)
             {
                 case "EvilTree":
-                    ExpSpawn(0, 1, killedEnemy);
+                    ExpSpawn(0, 100, killedEnemy);
                     break;
                 case "Pumpkin":
-                    ExpSpawn(1, 2, killedEnemy);
+                    ExpSpawn(0, 2, killedEnemy);
                     break;
                 case "WarLock":
                     ExpSpawn(1, 3, killedEnemy);
                     break;
                 case "Skeleton_Sword":
-                    ExpSpawn(2, 4, killedEnemy);
+                    ExpSpawn(0, 2, killedEnemy);
                     break;
                 case "Skeleton_Archer":
-                    ExpSpawn(0, 1, killedEnemy);
+                    ExpSpawn(0, 2, killedEnemy);
                     break;
                 case "Skeleton_Horse":
-                    ExpSpawn(1, 2, killedEnemy);
+                    ExpSpawn(1, 4, killedEnemy);
                     break;
                 case "Ghoul":
-                    ExpSpawn(0, 1, killedEnemy);
+                    ExpSpawn(0, 3, killedEnemy);
                     break;
                 case "Spitter":
-                    ExpSpawn(1, 2, killedEnemy);
-                    break;
-                case "Summoner":
                     ExpSpawn(1, 3, killedEnemy);
                     break;
-                case "BloodKing":
+                case "Summoner":
                     ExpSpawn(2, 4, killedEnemy);
+                    break;
+                case "BloodKing":
+                    ExpSpawn(2, 6, killedEnemy);
                     break;
             }
 

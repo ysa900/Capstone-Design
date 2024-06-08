@@ -6,7 +6,24 @@ using System.Collections.Generic;
 
 public class GameAudioManager : MonoBehaviour
 {
-    public static GameAudioManager instance; // 정적 메모리에 담기 위한 instance 변수 선언
+    public static GameAudioManager _instance; // 정적 메모리에 담기 위한 instance 변수 선언
+
+    // 인스턴스에 접근하기 위한 프로퍼티
+    public static GameAudioManager instance
+    {
+        get
+        {
+            // 인스턴스가 없는 경우에 접근하려 하면 인스턴스를 할당해준다.
+            if (!_instance)
+            {
+                _instance = FindAnyObjectByType(typeof(GameAudioManager)) as GameAudioManager;
+
+                if (_instance == null)
+                    Debug.Log("no Singleton obj");
+            }
+            return _instance;
+        }
+    }
 
     // BGM
     [Header("#BGM")]
@@ -37,11 +54,22 @@ public class GameAudioManager : MonoBehaviour
     private bool isHitPlaying;
 
     public enum Sfx { Dead, Hit, LevelUp = 3, Lose, Melee, Range = 7, Select, Win }
-    public enum Bgm { Stage1, Stage2, Boss1, Boss2, Clear } // 필요 Bgm Clip들
+    public enum Bgm { Stage1, Stage2, Stage3, Boss1, Boss2, Clear } // 필요 Bgm Clip들
 
     private void Awake()
     {
-        instance = this;
+        if (_instance == null)
+        {
+            _instance = this;
+        }
+
+        // 인스턴스가 존재하는 경우 새로생기는 인스턴스를 삭제한다.
+        else if (_instance != this)
+        {
+            Destroy(gameObject);
+        }
+        // 아래의 함수를 사용하여 씬이 전환되더라도 선언되었던 인스턴스가 파괴되지 않는다.
+        DontDestroyOnLoad(gameObject);
 
         string OutputMixer = "Master";
 

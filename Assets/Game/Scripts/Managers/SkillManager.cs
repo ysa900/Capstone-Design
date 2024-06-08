@@ -4,10 +4,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.ComTypes;
 using Unity.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SkillManager : MonoBehaviour
 {
+    // 싱글톤 패턴을 사용하기 위한 인스턴스 변수
+    private static SkillManager _instance;
+
     public Player player;
 
     private float attackRange = 17.5f; // 플레이어 공격 사거리
@@ -36,13 +41,13 @@ public class SkillManager : MonoBehaviour
     // 스킬 관련 배열들 공통 사항
     // 스킬들 index: 불 - 3n, 전기 - 3n + 1, 물 - 3n + 2
     // 불 - 0, 3, 6, 9 / 전기 - 1, 4, 7, 10 / 물 - 2, 5, 8 ,11
-    float[] attackDelayTimer = new float[19];
+    [SerializeField] float[] attackDelayTimer = new float[18];
 
     /* 
      * 0번 스킬(fire ball), 1번 스킬(lightning), 8번 스킬(ice spike), 16번 스킬(Sky Fall)
      * 들은 스킬 시전 중에 시전 가능, 따라서 스킬 시전 할 때 isSkillsCasted[index] = true로 안함
     */
-    bool[] isSkillsCasted = new bool[19];
+    [SerializeField] bool[] isSkillsCasted = new bool[18];
 
     // delegate들
     public delegate void OnShiledSkillActivated(); // 쉴드 스킬이 켜 질때
@@ -53,12 +58,47 @@ public class SkillManager : MonoBehaviour
 
     private void Awake()
     {
+        if (_instance == null)
+        {
+            _instance = this;
+        }
+        // 인스턴스가 존재하는 경우 새로생기는 인스턴스를 삭제한다.
+        else if (_instance != this)
+        {
+            Destroy(gameObject);
+        }
+        // 아래의 함수를 사용하여 씬이 전환되더라도 선언되었던 인스턴스가 파괴되지 않는다.
+        DontDestroyOnLoad(gameObject);
+
         Init(); // skillData 초기화
+    }
+    void OnEnable()
+    {
+        // 씬 매니저의 sceneLoaded에 체인을 건다.
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    // 체인을 걸어서 이 함수는 매 씬마다 호출된다.
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // 쿨타임 초기화
+        for (int i = 0; i < isSkillsCasted.Length; i++) 
+        {
+            isSkillsCasted[i] = false;
+            attackDelayTimer[i] = skillData.Delay[i];
+        }
     }
 
     private void Update()
     {
-        for(int i = 0; i < skillData.Damage.Length; i++)
+        bool isSplashScene = 
+            SceneManager.GetActiveScene().name == "Splash1" || 
+            SceneManager.GetActiveScene().name == "Splash2" ||
+            SceneManager.GetActiveScene().name == "Splash3";
+
+        if (isSplashScene) return;
+
+        for (int i = 0; i < skillData.Damage.Length; i++)
         {
             if (skillData.skillSelected[i]) // 활성화(선택)된 스킬만 실행
             {
@@ -66,7 +106,7 @@ public class SkillManager : MonoBehaviour
                 if (shouldBeAttack)
                 {
                     attackDelayTimer[i] = skillData.Delay[i];
-
+                        
                     if(i == 0 || i == 1)
                         TryAttack(i); // 스킬 쿨타임이 다 됐으면 공격을 시도한다
                     else
@@ -213,8 +253,11 @@ public class SkillManager : MonoBehaviour
                             }
 
                             breakNum++;
-                            if (breakNum >= 1000) // 1000회 반복 내에 마땅한 적을 찾지 못했다면 그냥 break;
+                            if (breakNum >= 1000)// 1000회 반복 내에 마땅한 위치를 찾지 못했다면 그냥 break;
+                            {
+                                Debug.Log("1000번 내에 찾지 못함");
                                 break;
+                            }
                         }
                         if (enemy == null) return; // 적이 없으면 공격 X
 
@@ -242,8 +285,11 @@ public class SkillManager : MonoBehaviour
                                 }
 
                                 breakNum++;
-                                if (breakNum >= 1000) // 1000회 반복 내에 마땅한 적을 찾지 못했다면 그냥 break;
+                                if (breakNum >= 1000)// 1000회 반복 내에 마땅한 위치를 찾지 못했다면 그냥 break;
+                                {
+                                    Debug.Log("1000번 내에 찾지 못함");
                                     break;
+                                }
                             }
                         }
 
@@ -988,9 +1034,17 @@ public class SkillManager : MonoBehaviour
                     // 스킬이 플레이어 기준 1 ~ 4분면 중 어디에 시전될 까
                     // 이전에 떨어졌던 사분면에는 떨어지지 않음
                     int quadrantNum;
+                    int breakNum = 0;
                     do
                     {
                         quadrantNum = UnityEngine.Random.Range(1, 5);
+                        
+                        breakNum++;
+                        if (breakNum >= 1000)// 1000회 반복 내에 마땅한 위치를 찾지 못했다면 그냥 break;
+                        {
+                            Debug.Log("1000번 내에 찾지 못함");
+                            break;
+                        }
                     }
                     while (skyFallQuadrantNum == quadrantNum);
 

@@ -13,8 +13,6 @@ public class SplashManager : MonoBehaviour
     [SerializeField] Image backgroundImage = null; // 뒷배경
     [SerializeField] GameObject GuideTextObject;
     [SerializeField] GameObject[] imageObjects = null;
-    [SerializeField] GameObject GuidePanel;
-    [SerializeField] UnityEngine.UI.Button goNextStageButtonObject;
     int currentPoint = 0;
 
     private void Awake()
@@ -23,7 +21,6 @@ public class SplashManager : MonoBehaviour
         koreanTyper[currentPoint].gameObject.SetActive(true);
         for (int index = 1; index < koreanTyper.Length; index++)
         {
-
             koreanTyper[index].gameObject.SetActive(false);
         }
 
@@ -34,14 +31,10 @@ public class SplashManager : MonoBehaviour
         }
 
         GuideTextObject.SetActive(false);
-        GuidePanel.SetActive(false);
     }
 
     void Start()
     {
-        UnityEngine.UI.Button goNextStageButton = goNextStageButtonObject.GetComponent<UnityEngine.UI.Button>();
-        goNextStageButton.onClick.AddListener(OnSelectNextStage);
-
         for (int index=0; index<koreanTyper.Length; index++)
         {
             koreanTyper[index].onTextTypeFinish = OnTextTypeFinish;
@@ -61,15 +54,7 @@ public class SplashManager : MonoBehaviour
 
             GuideTextObject.SetActive(true);
 
-            switch(SceneManager.GetActiveScene().name)
-            {
-                case "Splash0": case "Splash1": // 시작화면 및 Stage1 시작 전
-                    StartCoroutine(WaitForNextScene());
-                    break;
-                default: // 나머지 (Stage2, 3 ...)
-                    StartCoroutine(WaitForGuidePanel());
-                    break;
-            }
+            StartCoroutine(WaitForNextScene());
 
             return;
         }
@@ -102,18 +87,18 @@ public class SplashManager : MonoBehaviour
                 SceneManager.LoadScene("Lobby");
                 break;
             case "Splash1":
-                //SceneManager.LoadScene("Stage1");
                 SceneManager.LoadScene("Stage1");
                 break;
             case "Splash2":
-                //SceneManager.LoadScene("Stage2");
                 SceneManager.LoadScene("Stage2");
                 break;
-
+            case "Splash3":
+                SceneManager.LoadScene("Stage3");
+                break;
         }
     }
 
-    IEnumerator WaitForGuidePanel()
+    /*IEnumerator WaitForGuidePanel()
     {
         yield return new WaitUntil(() => Input.anyKeyDown);
 
@@ -123,7 +108,7 @@ public class SplashManager : MonoBehaviour
                 GuidePanel.SetActive(true);
                 break;
         }
-    }
+    }*/
 
     IEnumerator TypingInterruptedInput()
     {
