@@ -15,7 +15,7 @@ public class Enemy : Object, IDamageable, IPoolingObject
     public Player player;
 
     // Enemy들 체력
-    public float[] enemy_HP = { 10, 50, 80, 15, 50, 70, 15, 50, 80, 150 };
+    public float[] enemy_HP = { 22, 65, 100, 15, 50, 70, 15, 50, 80, 150 };
 
     // enemy 정보
     public float hp;
@@ -157,6 +157,10 @@ public class Enemy : Object, IDamageable, IPoolingObject
 
         colliderOffsetX = capsuleCollider.offset.x; // offset 초기값을 저장
         colliderOffsetY = capsuleCollider.offset.y;
+    }
+
+    private void Update() {
+        
     }
 
     protected virtual void FixedUpdate()
@@ -396,6 +400,39 @@ public class Enemy : Object, IDamageable, IPoolingObject
         yield return new WaitForSeconds(0.5f); // 지정한 초 만큼 쉬기
 
         GameManager.instance.poolManager.ReturnEnemy(this, index);
+    }
+    
+    public IEnumerator makeEnemyHardPattern()
+    {
+        transform.GetChild(0).gameObject.SetActive(true);
+        hp *= 1.5f;
+         
+        yield return new WaitForSeconds(10f); // 지정한 초 뒤에 패턴 끄기
+
+        transform.GetChild(0).gameObject.SetActive(false);
+
+        // Enemy Hp 보정
+        if(tag == "EvilTree")
+        {
+            if(hp >= 10f)
+            {
+                hp = 10f;
+            }
+        }
+        else if (tag == "Pumpkin")
+        {
+            if(hp >= 50f)
+            {
+                hp = 50f;
+            }
+        }
+        else if (tag == "Warlock")
+        {
+            if(hp >= 80f)
+            {
+                hp = 80f;
+            }
+        }
     }
 
     public void Dead_ML()

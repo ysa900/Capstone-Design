@@ -62,37 +62,14 @@ public class GameDataClient : MonoBehaviour
             Debug.Log("Cluster index received from server: " + clusterIndex);
 
             // 게임 기믹 추가 로직
-            ApplyGameGimmick(clusterIndex);
+            // ObstacleManager.cs의 게임 기믹 추가 함수 불러오기
+            // ApplyGameGimmick(clusterIndex);
         }
         catch (Exception e)
         {
             Debug.LogError("Error during data transmission: " + e.Message);
         }
     }
-
-    void ApplyGameGimmick(int clusterIndex)
-    {
-        // 군집 인덱스에 따라 게임 기믹 추가 로직 구현
-        switch (clusterIndex)
-        {
-            case 0:
-                Debug.Log("Applying gimmick for Exp preference.");
-                break;
-            case 1:
-                Debug.Log("Applying gimmick for Kill preference.");
-                break;
-            case 2:
-                Debug.Log("Applying gimmick for Avoidance preference.");
-                break;
-            case 3:
-                Debug.Log("Applying gimmick for Very Aggressive preference.");
-                break;
-            default:
-                Debug.LogError("Invalid cluster index received.");
-                break;
-        }
-    }
-
     void OnApplicationQuit()
     {
         stream?.Close();

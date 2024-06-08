@@ -53,9 +53,7 @@ public class Player : Agent, IPlayer
     // 리워드 가중치 쿨타임용
     protected float delayTime;
     protected float delayTimer;
-    // 패턴 쿨타임용
-    protected float patternTime;
-    protected float patternTimer;
+
 
     protected float increaseWeight; // 변하는 리워드 가중치
     public bool isEndEpisode; // 에피소드 종료됐는지 확인
@@ -82,9 +80,6 @@ public class Player : Agent, IPlayer
         // 시간 체크 쿨타임 계산용
         delayTime = 20f;
         delayTimer = 0f;
-        // 패턴 쿨타임 계산용
-        patternTime = 5f;
-        patternTimer = 0f;
 
         speed = 6f; // ML 플레이어 이동 속도
         increaseWeight = 0.5f;
@@ -98,7 +93,6 @@ public class Player : Agent, IPlayer
         hitDelayTimer += Time.fixedDeltaTime;
         coolTimer += Time.fixedDeltaTime;
         delayTimer += Time.fixedDeltaTime;
-        patternTimer += Time.fixedDeltaTime;
     }
 
     // 프레임이 끝나기 직전에 실행되는 함수

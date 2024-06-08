@@ -30,9 +30,14 @@ public class EnemyManager : MonoBehaviour
     public delegate void OnEnemyKilled(Enemy killedEnemy);
     public OnEnemyKilled onEnemyKilled;
 
+    // 적이 피격될 때 쿨타임용
     float hitDelayTime = 0.1f;
     float hitDelatTimer = 0f;
 
+    // 패턴 재사용 쿨타임용
+    protected float patternReTime;
+    protected float patternReTimer;
+    
     private void Awake()
     {
         gameAudioManager = FindAnyObjectByType<GameAudioManager>();

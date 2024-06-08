@@ -32,7 +32,7 @@ public class Player_Passive : Player
         else if (GameManager.instance.gameTime > 80f)
         {
             GameManager.instance.skillManager.skillData.skillSelected[3] = true;
-            GameManager.instance.skillManager.skillData.Damage[0] = 40f;
+            GameManager.instance.skillManager.skillData.Damage[0] = 30f;
         }
         else if (GameManager.instance.gameTime >= 40f)
         {
@@ -57,7 +57,7 @@ public class Player_Passive : Player
             SetReward(+2);
         }
 
-        if (GameManager.instance.playerData.hp < 93f) // Hp 90%
+        if (GameManager.instance.playerData.hp < 50f) // Hp 90%
         {
             SetReward(-3);
             Debug.Log("Hp 깎여서 마이너스");

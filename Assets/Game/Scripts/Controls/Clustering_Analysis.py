@@ -6,10 +6,12 @@ import matplotlib.pyplot as plt
 from joblib import dump
 
 # CSV 파일 경로
-csv_file_path = "path_to_your_csv_file/playerInfo.csv"
+csv_file_path = "/Users/mylaptop/Documents/Study/Programming/Unity/Vamm_ML/Assets/Resources/RefinedMLplayerInfo_Final.csv"
 
 # CSV 파일 읽기
-data = pd.read_csv(csv_file_path)
+data = pd.read_csv(csv_file_path, na_values=['#DIV/0!'])
+# NaN 값을 포함한 행 삭제
+data = data.dropna(subset=['Exp Count', 'Kill'])
 
 # 'Exp Count'와 'Kill' 데이터 추출
 exp_counts = data['Exp Count'].values
@@ -20,15 +22,15 @@ scaler = StandardScaler()
 scaled_data = scaler.fit_transform(np.column_stack((exp_counts, kill_counts)))
 
 # K-Means Clustering
-kmeans = KMeans(n_clusters=4, random_state=0)
+kmeans = KMeans(n_clusters=3, random_state=0)
 labels = kmeans.fit_predict(scaled_data)
 
 # 클러스터링 결과를 데이터프레임에 추가
 data['Cluster'] = labels
 
 # 모델 저장
-model_file_path = "kmeans_model.pkl"
-scaler_file_path = "scaler.pkl"
+model_file_path = "/Users/mylaptop/Documents/Study/Programming/Unity/Vamm_ML/Assets/Resources/My_K_Means_Model.pkl"
+scaler_file_path = "/Users/mylaptop/Documents/Study/Programming/Unity/Vamm_ML/Assets/Resources/My_Scaler.pkl"
 dump(kmeans, model_file_path)
 dump(scaler, scaler_file_path)
 print(f"Model and scaler saved to {model_file_path} and {scaler_file_path}")
@@ -47,7 +49,7 @@ print("Cluster Centers:")
 print(scaler.inverse_transform(kmeans.cluster_centers_))
 
 # 결과 CSV 파일 저장 (원본 데이터에 클러스터 라벨 추가)
-output_csv_file_path = "path_to_your_csv_file/playerInfo_with_clusters.csv"
+output_csv_file_path = "/Users/mylaptop/Documents/Study/Programming/Unity/Vamm_ML/Assets/Resources/playerInfo_with_clusters.csv"
 data.to_csv(output_csv_file_path, index=False)
 
 # 각 군집의 데이터 개수 출력
