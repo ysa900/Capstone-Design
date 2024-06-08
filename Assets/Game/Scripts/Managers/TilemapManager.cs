@@ -35,6 +35,8 @@ public class TilemapManager : MonoBehaviour
 
         if (isStage2End && !isBossRoomAlreadyMoved)
         {
+            GameManager.instance.PlayerSpeedUp(); // 플레이어 속도 증가
+
             GameObject RightCorridor = Corridor1.transform.position.x > Corridor2.transform.position.x ? Corridor1 : Corridor2;
 
             Vector2 newPos = new Vector2(RightCorridor.transform.position.x, RightCorridor.transform.position.y);

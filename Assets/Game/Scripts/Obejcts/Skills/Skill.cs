@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Skill : Object, IPoolingObject
 {
-    protected float aliveTimer; // 스킬 생존 시간을 체크할 변수
+    public float aliveTimer; // 스킬 생존 시간을 체크할 변수
     public float aliveTime; // 스킬 생존 시간
 
     // 도트 데미지 관련 변수

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,8 +11,8 @@ public class SkillSelectManager : MonoBehaviour
     private static SkillSelectManager _instance;
 
     // 개발용 테스트 플래그 및 테스트 스킬 인덱스
-    [SerializeField] private bool isSkillTest = false;
-    [SerializeField] private int testSkillIndex = 12;
+    [SerializeField] private bool isSkillTest;
+    [SerializeField] private int testSkillIndex;
 
     // 최대 스킬 및 패시브 스킬 수 상수 정의
     private const int MAX_SKILL_NUM = 18;
@@ -71,6 +72,9 @@ public class SkillSelectManager : MonoBehaviour
     private bool[] isSkillMaxLevel;
     private bool[] isPassiveSkillMaxLevel;
 
+    // 도트 데미지 스킬들
+    private int[] dotDamageSkills = { 2, 7, 8, 11, 12, 13, 14, 15, 16 };
+
     // 선택된 스킬 및 패시브 스킬 리스트
     [SerializeField] private List<int> selectedSkills = new List<int>() { -1, -1, -1, -1, -1, -1 };
     private int selectedSkillsPointer = 0;
@@ -98,6 +102,7 @@ public class SkillSelectManager : MonoBehaviour
     private float damageReductionSkillStartValue = 0.9f;
     private float speedUpSkillStartValue = 1.15f;
     private float magnetSkillStartValue = 0.5f;
+
     private float masterySkillIncrementValue = 0.2f;
     private float damageReductionSkillIncrementValue = 0.1f;
     private float speedUpSkillIncrementValue = 0.15f;
@@ -154,7 +159,7 @@ public class SkillSelectManager : MonoBehaviour
         onSkillSelectObjectDisplayed?.Invoke();
         skillSelectObject.SetActive(true);
         isChoosingStartSkill = true;
-        levelUpTextObject.GetComponent<TextMeshProUGUI>().text = "Choose Start Skill";
+        levelUpTextObject.GetComponent<TextMeshProUGUI>().text = "시작 스킬을 선택하세요";
         if (isSkillTest)
         {
             SetSkillPanelForTest();
@@ -173,7 +178,18 @@ public class SkillSelectManager : MonoBehaviour
             textName = skillTextName[i].GetComponent<TextMeshProUGUI>();
             textName.text = $"<color={color}>{skillData.skillName[i]}</color>";
             textDescription = skillTextDescription[i].GetComponent<TextMeshProUGUI>();
-            textDescription.text = $"<color={color}>{skillData.skillDescription[i]}</color>";
+
+            String description = "";
+
+            if (Array.IndexOf(dotDamageSkills, i) != -1)
+                description = "도트 데미지: ";
+            else description = "데미지: ";
+
+            description += skillData.Damage[i];
+
+            description += "\n쿨타임: " + skillData.Delay[i] + "초";
+
+            textDescription.text = $"<color={color}>{description}</color>";
             SetLevelObjectAlpha(i, skillData.level[i]);
         }
     }
@@ -203,7 +219,19 @@ public class SkillSelectManager : MonoBehaviour
         textName = skillTextName[panelIndex].GetComponent<TextMeshProUGUI>();
         textName.text = $"<color={color}>{skillData.skillName[skillIndex]}</color>";
         textDescription = skillTextDescription[panelIndex].GetComponent<TextMeshProUGUI>();
-        textDescription.text = $"<color={color}>{skillData.skillDescription[skillIndex]}</color>";
+
+        String description = "";
+
+        if (Array.IndexOf(dotDamageSkills, skillIndex) != -1)
+            description = "도트 데미지: ";
+        else description = "데미지: ";
+
+        if (skillIndex == 12) description += 200;
+        else description += skillData.Damage[skillIndex];
+
+        description += "\n쿨타임: " + skillData.Delay[skillIndex] + "초";
+        
+        textDescription.text = $"<color={color}>{description}</color>";
         Image[] img = levelObject[panelIndex].GetComponentsInChildren<Image>();
         for (int num = 4 - skillData.level[skillIndex]; num >= 0; num--)
         {
@@ -408,7 +436,7 @@ public class SkillSelectManager : MonoBehaviour
             1 => "#D2F7FF",
             _ => "#0000FF"
         };
-        levelUpTextObject.GetComponent<TextMeshProUGUI>().text = $"<color={color}>{"Two Skills are Resonating!"}</color>";
+        levelUpTextObject.GetComponent<TextMeshProUGUI>().text = $"<color={color}>{"두 스킬이 공명하고 있습니다!"}</color>";
         openSkillObject1.SetActive(false);
         openSkillObject2.SetActive(false);
         closedSkillObject1.SetActive(false);
@@ -445,7 +473,35 @@ public class SkillSelectManager : MonoBehaviour
         textName = skillTextName[i].GetComponent<TextMeshProUGUI>();
         textName.text = $"<color={color}>{skillData.skillName[ranNum[i]]}</color>";
         textDescription = skillTextDescription[i].GetComponent<TextMeshProUGUI>();
-        textDescription.text = $"<color={color}>{skillData.skillDescription[ranNum[i]]}</color>";
+
+        String description = "";
+
+        if (Array.IndexOf(dotDamageSkills, ranNum[i]) != -1)
+            description = "도트 데미지: ";
+        else description = "데미지: ";
+
+        if (skillData.skillSelected[ranNum[i]])
+        {
+            description += skillData.Damage[ranNum[i]] + " + " + Mathf.FloorToInt(skillData.Damage[ranNum[i]] * normalDamageCoefficient - skillData.Damage[ranNum[i]]);
+
+            description += "\n쿨타임: " + skillData.Delay[ranNum[i]] + " - " + (Mathf.Floor((skillData.Delay[ranNum[i]] - skillData.Delay[ranNum[i]] * normalDelayCoefficient) * 100) / 100) + "초";
+        } 
+        else
+        {
+            description += skillData.Damage[ranNum[i]];
+
+            description += "\n쿨타임: " + skillData.Delay[ranNum[i]] + "초";
+        }
+
+        if(ranNum[i] != 5)
+        {
+            if (skillData.level[ranNum[i]] == 2)
+                description += "\n스킬 크기 증가: " + (normalScaleCoefficient * 100 - 100) +"%";
+            else if (skillData.level[ranNum[i]] == 4)
+                description += "\n스킬 크기 증가: " + (maxScaleCoefficient * 100 - 100) + "%";
+        }
+        
+        textDescription.text = $"<color={color}>{description}</color>";
         SetLevelObjectAlpha(i, skillData.level[ranNum[i]]);
     }
     
@@ -464,7 +520,53 @@ public class SkillSelectManager : MonoBehaviour
         textName = skillTextName[i].GetComponent<TextMeshProUGUI>();
         textName.text = $"<color={color}>{passiveSkillData.skillName[ranNum[i] - passiveSkillNum]}</color>";
         textDescription = skillTextDescription[i].GetComponent<TextMeshProUGUI>();
-        textDescription.text = $"<color={color}>{passiveSkillData.skillDescription[ranNum[i] - passiveSkillNum]}</color>";
+        
+        String description = "";
+
+        if(passiveSkillData.skillSelected[ranNum[i] - passiveSkillNum])
+        {
+            switch (ranNum[i])
+            {
+                case 100:
+                case 101:
+                case 102:
+                    description = "속성 데미지 계수: +" + ((passiveSkillData.Damage[ranNum[i] - passiveSkillNum] + masterySkillIncrementValue) * 100 - 100) + "%";
+                    break;
+
+                case 103:
+                    description = "데미지 감소: " + ((1 - (passiveSkillData.Damage[ranNum[i] - passiveSkillNum] - damageReductionSkillIncrementValue)) * 100 - 100) + "%";
+                    break;
+                case 104:
+                    description = "이동 속도 증가: +" + ((passiveSkillData.Damage[ranNum[i] - passiveSkillNum] + speedUpSkillIncrementValue) * 100 - 100) + "%";
+                    break;
+                case 105:
+                    description = "자석 범위 증가: " + ((passiveSkillData.Damage[ranNum[i] - passiveSkillNum] + magnetSkillIncrementValue) * 100 - 100) + "%";
+                    break;
+            }
+        }
+        else
+        {
+            switch (ranNum[i])
+            {
+                case 100:
+                case 101:
+                case 102:
+                    description = "속성 데미지 계수: +" + (masterySkillStartValue * 100 - 100) + "%";
+                    break;
+
+                case 103:
+                    description = "데미지 감소: " + ((1 - damageReductionSkillStartValue) * 100 - 100) + "%";
+                    break;
+                case 104:
+                    description = "이동 속도 증가: +" + (speedUpSkillStartValue * 100 - 100) + "%";
+                    break;
+                case 105:
+                    description = "자석 범위 증가: " + (magnetSkillStartValue * 100 - 100) + "%";
+                    break;
+            }
+        }
+        
+        textDescription.text = $"<color={color}>{description}</color>";
         SetPassiveSkillLevelObjectAlpha(i, passiveSkillData.level[ranNum[i] - passiveSkillNum]);
     }
     
@@ -536,7 +638,19 @@ public class SkillSelectManager : MonoBehaviour
         textName = skillTextName[1].GetComponent<TextMeshProUGUI>();
         textName.text = $"<color={color}>{skillData.skillName[resonanceSkillIndex]}</color>";
         textDescription = skillTextDescription[1].GetComponent<TextMeshProUGUI>();
-        textDescription.text = $"<color={color}>{skillData.skillDescription[resonanceSkillIndex]}</color>";
+
+        String description = "";
+
+        if (Array.IndexOf(dotDamageSkills, ranNum[resonanceSkillIndex]) != -1)
+            description = "도트 데미지: ";
+        else description = "데미지: ";
+
+        if (ranNum[resonanceSkillIndex] == 12) description += 200;
+        else description += skillData.Damage[ranNum[resonanceSkillIndex]];
+
+        description += "\n쿨타임: " + skillData.Delay[ranNum[resonanceSkillIndex]] + "초";
+
+        textDescription.text = $"<color={color}>{description}</color>";
         SetLevelObjectAlpha(1, 5, true);
     }
     
@@ -663,7 +777,9 @@ public class SkillSelectManager : MonoBehaviour
             passiveSkillData.level[passiveSkillIndex] = 1;
             SetPanelPassiveSkillIcon(selectedPassiveSkillsPointer, passiveSkillIndex);
             selectedPassiveSkills[selectedPassiveSkillsPointer++] = passiveSkillIndex;
-            onPassiveSkillSelected?.Invoke(passiveSkillIndex, GetPassiveSkillStartValue(passiveSkillIndex));
+            if(passiveSkillIndex < 3)
+                passiveSkillData.Damage[passiveSkillIndex] = GetPassiveSkillStartValue(passiveSkillIndex);
+            else onPassiveSkillSelected?.Invoke(passiveSkillIndex, GetPassiveSkillStartValue(passiveSkillIndex));
         }
         else
         {
@@ -683,7 +799,7 @@ public class SkillSelectManager : MonoBehaviour
         onPassiveSkillSelected?.Invoke(passiveSkillIndex, passiveSkillData.Damage[passiveSkillIndex]);
     }
     
-    // 패시브 스킬 통계 업데이트
+    // 패시브 스킬 수치 업데이트
     private void UpdatePassiveSkillStats(int passiveSkillIndex)
     {
         switch (passiveSkillIndex)
@@ -725,7 +841,7 @@ public class SkillSelectManager : MonoBehaviour
         SetPanelSkillIcon(listResIndex1, resonanceSkillIndex);
 
         textName = panelSkillLevelText[listResIndex1].GetComponent<TextMeshProUGUI>();
-        textName.text = $"Lv Maxddd";
+        textName.text = $"Lv Max";
         panelSkillLevelText[listResIndex1].SetActive(true);
 
         RectTransform skillPanelRect = skillPanelObject.GetComponent<RectTransform>();

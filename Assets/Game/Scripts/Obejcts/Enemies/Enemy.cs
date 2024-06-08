@@ -15,7 +15,7 @@ public class Enemy : Object, IDamageable, IPoolingObject
     public Player player;
 
     // Enemy들 체력
-    int[] enemy_HP = { 15, 50, 80, 15, 50, 70, 15, 50, 80, 150 };
+    int[] enemy_HP = { 15, 50, 80, 60, 60, 120, 150, 200, 250, 400 };
 
     // enemy 정보
     public int hp;
@@ -39,6 +39,8 @@ public class Enemy : Object, IDamageable, IPoolingObject
     string sceneName;
 
     float agentToplayerDistance; // 적과 플레이어 사이의 거리
+
+    bool isAgentShouldBeDisabled;
 
 
     // enemy가 죽었을 때 EnemyManager에게 알려주기 위한 delegate
@@ -67,6 +69,8 @@ public class Enemy : Object, IDamageable, IPoolingObject
         isDead = false;
 
         damageDelayTimer = 0;
+
+        agent.enabled = true;
 
         float playerX = player.transform.position.x;
         float playerY = player.transform.position.y;
@@ -139,14 +143,9 @@ public class Enemy : Object, IDamageable, IPoolingObject
                 break;
         }
 
-
-
-
         rigid.constraints = RigidbodyConstraints2D.None;
         rigid.constraints = RigidbodyConstraints2D.FreezeRotation;
         GetComponent<CapsuleCollider2D>().enabled = true;
-        agent.enabled = true;
-
     }
 
     protected virtual void Awake()
@@ -259,12 +258,13 @@ public class Enemy : Object, IDamageable, IPoolingObject
 
                 direction = direction.normalized;
                 rigid.MovePosition(rigid.position + direction * speed * Time.fixedDeltaTime);
-                agent.enabled = true;
+                
+                if(!isAgentShouldBeDisabled)
+                    agent.enabled = true;
 
             }
             else
             {
-                agent.enabled = true;
                 agent.SetDestination(player.transform.position);
             }
         }
@@ -310,10 +310,7 @@ public class Enemy : Object, IDamageable, IPoolingObject
 
                     break;
             }
-
-
         }
-
     }
 
     // IDamageable의 함수 TakeDamage
@@ -339,6 +336,21 @@ public class Enemy : Object, IDamageable, IPoolingObject
 
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        bool shield_Flame = collision.GetComponent<PointEffector2D>() != null;
+        if (shield_Flame)
+        {
+            float time = collision.gameObject.GetComponentInParent<Shield_Flame>().aliveTime;
+            float timer = collision.gameObject.GetComponentInParent<Shield_Flame>().aliveTimer;
+
+            isAgentShouldBeDisabled = true;
+            agent.enabled = false;
+
+            StartCoroutine(EnableAgent(time - timer + 0.2f));
+        }
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (agent.enabled)
@@ -352,10 +364,12 @@ public class Enemy : Object, IDamageable, IPoolingObject
     {
         if (collision.gameObject.tag == "Player")
         {
-            agent.isStopped = true;
-            agent.velocity = Vector3.zero;
-            rigid.velocity = Vector3.zero;
-
+            if (agent.enabled)
+            {
+                agent.isStopped = true;
+                agent.velocity = Vector3.zero;
+                rigid.velocity = Vector3.zero;
+            }
         }
 
         if (collision.gameObject.tag == "Obstacle" && agent.enabled)
@@ -364,7 +378,6 @@ public class Enemy : Object, IDamageable, IPoolingObject
             rigid.mass = 3.5f;
             isAgentDelay = true;
         }
-
     }
 
     private void OnCollisionExit2D(Collision2D collision)
@@ -388,7 +401,11 @@ public class Enemy : Object, IDamageable, IPoolingObject
     {
         isDead = true;
 
+        agent.enabled = false;
+
         animator.SetTrigger("Dead");
+
+        StopCoroutine(StartCoroutine(EnableAgent(2f)));
 
         if (!isTimeOver)
         {
@@ -414,6 +431,14 @@ public class Enemy : Object, IDamageable, IPoolingObject
 
         Vector3 vector3 = new Vector3(transform.position.x + ranNumX, transform.position.y + ranNumY, 0);
         hudText.transform.position = vector3;
+    }
+
+    IEnumerator EnableAgent(float time)
+    {
+        yield return new WaitForSeconds(time);
+
+        isAgentShouldBeDisabled = false;
+        agent.enabled = true;
     }
 
 }

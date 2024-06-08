@@ -8,7 +8,7 @@ public class Boss : Object, IDamageable
 
     [SerializeField]
     public float hp;
-    public float maxHp = 20000;
+    public float maxHp = 50000;
 
     [SerializeField]
     float degreeSpeed;

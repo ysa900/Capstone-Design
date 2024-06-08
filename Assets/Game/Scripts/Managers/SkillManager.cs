@@ -133,17 +133,17 @@ public class SkillManager : MonoBehaviour
         skillData.Damage[4] = 15f;
         skillData.Damage[5] = 0f;
         skillData.Damage[6] = 35f;
-        skillData.Damage[7] = 20.0f; // dot damage skill
-        skillData.Damage[8] = 10.0f; // dot damage skill
+        skillData.Damage[7] = 20.0f;  // dot damage skill
+        skillData.Damage[8] = 10.0f;  // dot damage skill
         skillData.Damage[9] = 200f;
         skillData.Damage[10] = 40f;
         skillData.Damage[11] = 10.0f; // dot damage skill
         // 여기부터 공명 스킬
-        skillData.Damage[12] = 5f;
-        skillData.Damage[13] = 150f;
-        skillData.Damage[14] = 100f;
-        skillData.Damage[15] = 75f;
-        skillData.Damage[16] = 100f;
+        skillData.Damage[12] = 5f;    // dot damage skill
+        skillData.Damage[13] = 150f;  // dot damage skill
+        skillData.Damage[14] = 100f;  // dot damage skill
+        skillData.Damage[15] = 75f;   // dot damage skill
+        skillData.Damage[16] = 100f;  // dot damage skill
         skillData.Damage[17] = 750f;
 
         skillData.Delay[0] = 1f;

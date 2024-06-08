@@ -13,24 +13,24 @@ MonoBehaviour:
   m_Name: Skills2
   m_EditorClassIdentifier: 
   skillName:
-  - Fire Ball
-  - Lightning
-  - Water Shot
-  - Explosion
-  - Electric Ball
-  - Water Shield
-  - Meteor
-  - Energy Blast
-  - Ice Spike
-  - Twin Flame
-  - Judgement
-  - Ice Blast
-  - Heavens Eclipse
-  - Beam Laser
-  - Hydro Flame
-  - Shield Flame
-  - Sky Fall
-  - Frozen Spike
+  - "\uD30C\uC774\uC5B4 \uBCFC"
+  - "\uBC88\uAC1C"
+  - "\uBB3C\uBCF4\uB77C"
+  - "\uD654\uC5FC \uD3ED\uBC1C"
+  - "\uC804\uB958 \uBC29\uCD9C"
+  - "\uC218\uD638\uC758 \uBC29\uD328"
+  - "\uBA54\uD14C\uC624"
+  - "\uC5D0\uB108\uC9C0\uD30C"
+  - "\uC5BC\uC74C \uC1A1\uACF3"
+  - "\uC30D\uB465\uC774 \uBD88\uAF43"
+  - "\uCC9C\uBC8C"
+  - "\uB0C9\uAE30\uC758 \uC190\uAE38"
+  - "\uC774\uD074\uB9BD\uC2A4"
+  - "\uC5D0\uB108\uC9C0 \uC2A4\uB9E4\uC154"
+  - "\uD574\uC77C\uC758 \uAD8C\uB2A5"
+  - "\uD63C\uB3C8\uC758 \uB04C\uB9BC"
+  - "\uC2E0\uC758 \uC2EC\uD310"
+  - "\uC11C\uB9AC\uC758 \uBD84\uB178"
   skillDescription:
   - Cast FireBall to Nearest Enemy
   - Cast Lightning on Random Enemy
@@ -69,7 +69,7 @@ MonoBehaviour:
   - 100
   - 75
   - 100
-  - 2
+  - 750
   Delay:
   - 1
   - 0.75
@@ -83,12 +83,12 @@ MonoBehaviour:
   - 3
   - 7.5
   - 8
-  - 3
+  - 6
   - 3.5
   - 3
   - 6
   - 1
-  - 8
+  - 0.25
   scale:
   - 1.5
   - 1

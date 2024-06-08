@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour
 
     // player Area Size
     public int playerAreaSize;
+    float playerSpeedSave;
 
     // GameOver가 됐는지 판별하는 변수
     public bool isGameOver;
@@ -218,6 +219,7 @@ public class GameManager : MonoBehaviour
                 SpawnStartEnemies();
                 break;
             case "Stage3":
+
                 maxGameTime += gameTime;
                 StageSetting();
                 bossManager = FindAnyObjectByType<BossManager>();
@@ -284,7 +286,7 @@ public class GameManager : MonoBehaviour
                 SpawnEnemies(3, 50); // 시작 적 소환
                 break;
             case "Stage3":
-                //SpawnEnemies(6, 50); // 시작 적 소환
+                SpawnEnemies(6, 50); // 시작 적 소환
                 break;
 
         }
@@ -322,6 +324,7 @@ public class GameManager : MonoBehaviour
                 player.gameObject.GetComponentInChildren<BoxCollider2D>().size = AreaSize;
                 break;
             case "Stage3":
+                playerData.speed = playerSpeedSave; // 플레이어 속도 원래대로
                 PlayerPos = new Vector2(0, 0);
                 player.transform.position = PlayerPos;
                 break;
@@ -585,7 +588,7 @@ public class GameManager : MonoBehaviour
             switch (killedEnemy.tag)
             {
                 case "EvilTree":
-                    ExpSpawn(0, 100, killedEnemy);
+                    ExpSpawn(0, 1, killedEnemy);
                     break;
                 case "Pumpkin":
                     ExpSpawn(0, 2, killedEnemy);
@@ -691,10 +694,13 @@ public class GameManager : MonoBehaviour
     {
         navMeshControl.DirectionX = DirectionX;
         navMeshControl.DirectionY = DirectionY;
-
-
     }
 
+    public void PlayerSpeedUp()
+    {
+        playerSpeedSave = playerData.speed;
+        playerData.speed = 20;
+    }
 
     void PlayerInit()
     {
