@@ -90,25 +90,15 @@ public class SplashManager : MonoBehaviour
                 SceneManager.LoadScene("Stage1");
                 break;
             case "Splash2":
+                GameManager.instance.isStageClear = false;
                 SceneManager.LoadScene("Stage2");
                 break;
             case "Splash3":
+                GameManager.instance.isStageClear = false;
                 SceneManager.LoadScene("Stage3");
                 break;
         }
     }
-
-    /*IEnumerator WaitForGuidePanel()
-    {
-        yield return new WaitUntil(() => Input.anyKeyDown);
-
-        switch(SceneManager.GetActiveScene().name)
-        {
-            case "Splash2":
-                GuidePanel.SetActive(true);
-                break;
-        }
-    }*/
 
     IEnumerator TypingInterruptedInput()
     {

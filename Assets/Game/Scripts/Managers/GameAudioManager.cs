@@ -54,7 +54,7 @@ public class GameAudioManager : MonoBehaviour
     private bool isHitPlaying;
 
     public enum Sfx { Dead, Hit, LevelUp = 3, Lose, Melee, Range = 7, Select, Win }
-    public enum Bgm { Stage1, Stage2, Stage3, Boss1, Boss2, Clear } // 필요 Bgm Clip들
+    public enum Bgm { Stage1, Stage2, Stage3, Boss, Clear } // 필요 Bgm Clip들
 
     private void Awake()
     {

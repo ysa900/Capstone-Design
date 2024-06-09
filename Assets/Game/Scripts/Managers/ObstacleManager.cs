@@ -78,24 +78,26 @@ public class ObstacleManager : MonoBehaviour
             CoolTimer = 0f;
         }
 
-        if(ObstacleCoolTimer1 >= ObstacleCoolTime1)
+        if (!GameManager.instance.isStageClear)
         {
- 
-           for (int i = 0; i < 20; i++)
-           {
-             CreateObstacle(Direction, 0);
+            if(ObstacleCoolTimer1 >= ObstacleCoolTime1)
+            {
+            
+               for (int i = 0; i < 20; i++)
+               {
+                 CreateObstacle(Direction, 0);
 
-           }
-              ObstacleCoolTimer1 = 0f;
+               }
+                  ObstacleCoolTimer1 = 0f;
+            }
+
+            if (ObstacleCoolTimer2 >= ObstacleCoolTime2)
+            {
+                CreateObstacle(Direction, 2);
+
+                ObstacleCoolTimer2 = 0f;
+            }
         }
-
-        if (ObstacleCoolTimer2 >= ObstacleCoolTime2)
-        {
-            CreateObstacle(Direction, 2);
-
-            ObstacleCoolTimer2 = 0f;
-        }
-
     }
 
 
@@ -113,28 +115,28 @@ public class ObstacleManager : MonoBehaviour
 
         angleDegree = Quaternion.FromToRotation(Vector3.right, cumulativeVector).eulerAngles.z;
 
-        //XÃà ¿À¸¥ÂÊ
+        //Xï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if (angleDegree >= 337.5f || angleDegree < 22.5f)
             Direction = 0;
-        //Á¦1»çºÐ¸é ´ë°¢¼±
+        //ï¿½ï¿½1ï¿½ï¿½Ð¸ï¿½ ï¿½ë°¢ï¿½ï¿½
         else if(angleDegree >= 22.5f && angleDegree < 67.5f)
             Direction = 1;
-        //YÃà À§ÂÊ
+        //Yï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         else if(angleDegree >= 67.5f && angleDegree < 112.5)
             Direction = 2;
-        //Á¦2»çºÐ¸é ´ë°¢¼±
+        //ï¿½ï¿½2ï¿½ï¿½Ð¸ï¿½ ï¿½ë°¢ï¿½ï¿½
         else if (angleDegree >= 112.5 && angleDegree < 157.5)
             Direction = 3;
-        //XÃà ¿ÞÂÊ
+        //Xï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         else if (angleDegree >= 157.5f && angleDegree <202.5)
             Direction = 4;
-        //Á¦3»çºÐ¸é ´ë°¢¼±
+        //ï¿½ï¿½3ï¿½ï¿½Ð¸ï¿½ ï¿½ë°¢ï¿½ï¿½
         else if (angleDegree >= 202.5f && angleDegree < 247.5f)
             Direction = 5;
-        //YÃà ¾Æ·¡ÂÊ
+        //Yï¿½ï¿½ ï¿½Æ·ï¿½ï¿½ï¿½
         else if (angleDegree >= 247.5f && angleDegree < 292.5f)
             Direction = 6;
-        //Á¦4»çºÐ¸é ´ë°¢¼±
+        //ï¿½ï¿½4ï¿½ï¿½Ð¸ï¿½ ï¿½ë°¢ï¿½ï¿½
         else if (angleDegree >= 292.5f && angleDegree < 337.5f)
             Direction = 7;
 
@@ -171,13 +173,13 @@ public class ObstacleManager : MonoBehaviour
 
     public int PlayerTendFun()
     {
-        //K-means ¾Ë°í¸®ÁòÀ» ÅëÇÑ ±ºÁýÈ­ ºÐ·ù ³ªÁß¿¡ ±¸Çö
+        //K-means ï¿½Ë°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½È­ ï¿½Ð·ï¿½ ï¿½ï¿½ï¿½ß¿ï¿½ ï¿½ï¿½ï¿½ï¿½
         /* 
        (Exp, Enemy)  
-        0,0 -> ¼Ò½É(0)
-        1,0 -> EXP ¼±È£(1)
-        0,1 -> Àû±Ø(2)
-        1,1 -> ¸Å¿ì Àû±Ø(3)
+        0,0 -> ï¿½Ò½ï¿½(0)
+        1,0 -> EXP ï¿½ï¿½È£(1)
+        0,1 -> ï¿½ï¿½ï¿½ï¿½(2)
+        1,1 -> ï¿½Å¿ï¿½ ï¿½ï¿½ï¿½ï¿½(3)
         */
 
         if(countIndex == 4)
@@ -188,7 +190,7 @@ public class ObstacleManager : MonoBehaviour
         int playerTend = countIndex;
         countIndex++;
 
-        //ÆÄÀÌ½ã ML ¼ÒÄÏ Åë½Å
+        //ï¿½ï¿½ï¿½Ì½ï¿½ ML ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 
 
         return playerTend;
@@ -197,14 +199,14 @@ public class ObstacleManager : MonoBehaviour
 
     public void VoidPlayerObstacile(int Direction)
     {
-        //ÀÌµ¿°æ·Î Â÷´Ü ÆÐÅÏ
+        //ï¿½Ìµï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
         float radius = UnityEngine.Random.Range(15f,30f);
         float ranDegree = UnityEngine.Random.Range(angleDegree - 22.5f, angleDegree + 22.5f);
         float X_Range = 0f;
         float Y_Range = 0f;
         float height = 30f;
-        Debug.Log("¼³Ä¡");
+        Debug.Log("ï¿½ï¿½Ä¡");
         X_Range = curPlayerPosition.x + (float)Mathf.Cos(ranDegree * Mathf.Deg2Rad) * radius;
         Y_Range = curPlayerPosition.y + (float)Mathf.Sin(ranDegree * Mathf.Deg2Rad) * radius;
         obstacle = Instantiate(statuePrefab);
@@ -218,15 +220,15 @@ public class ObstacleManager : MonoBehaviour
 
     public void ExpPlayerObstacle(int Direction)
     {
-        //ÀÌµ¿°æ·Î Â÷´Ü ÆÐÅÏ
-        //EXP ¸ø ¸Ô°Ô À¯µµ ÆÐÅÏ ±¸Çö
+        //ï¿½Ìµï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        //EXP ï¿½ï¿½ ï¿½Ô°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
        
     }
 
     public void KillPlayerObstacle()
     {
-        //¸ó½ºÅÍ hp °­È­ ¹× ÀÌÆåÆ®»ý¼º
+        //ï¿½ï¿½ï¿½ï¿½ hp ï¿½ï¿½È­ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½
         for (int i = 0; i < GameManager.instance.enemies.Count; i++)
         {
             StartCoroutine(GameManager.instance.enemies[i].makeEnemyHardPattern());
@@ -237,7 +239,7 @@ public class ObstacleManager : MonoBehaviour
 
     public void Exp_killPlayerObstacle(int Direction)
     {
-        // ÀÌµ¿°æ·Î Â÷´Ü, ¸ó½ºÅÍ °­È­
+        // ï¿½Ìµï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È­
 
     }
 

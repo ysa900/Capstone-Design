@@ -95,8 +95,10 @@ public class GameManager : MonoBehaviour
     public GameObject HpStatusObject;
     // HpStatusLettering
     public GameObject HpStatusLetteringObject;
-    // SkillPenel
-    public GameObject SkillPanelObject;
+    // Active SkillPenel
+    public GameObject ActiveSkillPanelObject;
+    // Passive SkillPanel
+    public GameObject PassiveSkillPanelObject;
     // CharacterProfile
     public GameObject CharacterProfileObject;
     // Boss HP
@@ -110,9 +112,13 @@ public class GameManager : MonoBehaviour
 
     public bool isSettingPageOn = false;
     public bool isPausePageOn = false;
-    public bool isClearPageOn = false;
-    public bool isDeadPageOn = false;
+    public bool isClearPageOn = false; // 게임 All 클리어
+    public bool isDeadPageOn = false; // 플레이어 패배
     public bool isSkillSelectPageOn = false;
+    public bool isStageClear = false; // 마지막 Stage 이전 Stage들 클리어
+    // Pause 버튼 재활성화 위한 bool 변수
+    public bool isPauseReClicked = false;
+    bool isWantPauseButtonActive = false;
 
     private void Awake()
     {
@@ -121,7 +127,7 @@ public class GameManager : MonoBehaviour
             _instance = this;
         }
 
-        // 인스턴스가 존재하는 경우 새로생기는 인스턴스를 삭제한다.
+        // 인스턴스가 존재하는 경우 새로 생기는 인스턴스를 삭제한다.
         else if (_instance != this)
         {
             Destroy(gameObject);
@@ -175,6 +181,7 @@ public class GameManager : MonoBehaviour
         //player.isPlayerShielded = true;
         //player.level = 20;
     }
+    
     void OnEnable()
     {
         // 씬 매니저의 sceneLoaded에 체인을 건다.
@@ -182,7 +189,7 @@ public class GameManager : MonoBehaviour
     }
 
     // 체인을 걸어서 이 함수는 매 씬마다 호출된다.
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         coolTimer = 0;
         coolTime = 2f;
@@ -228,8 +235,8 @@ public class GameManager : MonoBehaviour
                 bossManager.onBossHasKilled = OnBossHasKilled;
 
                 // Stage3 배경음 플레이
-                //GameAudioManager.instance.bgmPlayer.clip = GameAudioManager.instance.bgmClips[(int)Bgm.Stage3];
-                //GameAudioManager.instance.bgmPlayer.Play();
+                GameAudioManager.instance.bgmPlayer.clip = GameAudioManager.instance.bgmClips[(int)Bgm.Stage3];
+                GameAudioManager.instance.bgmPlayer.Play();
 
                 SpawnStartEnemies();
                 break;
@@ -251,6 +258,9 @@ public class GameManager : MonoBehaviour
         // EnemyManager delegate 할당
         poolManager.enemyManager.onEnemiesChanged = OnEnemiesChanged;
         poolManager.enemyManager.onEnemyKilled = OnEnemyKilled;
+
+        if(sceneName == "Stage1")
+            isSkillSelectPageOn = true;
     }
 
     // Update is called once per frame
@@ -258,7 +268,11 @@ public class GameManager : MonoBehaviour
     {
         if (!isGameOver)
         {
-            gameTime += Time.deltaTime; // 게임 시간 증가
+            // Stage Clear가 안되면(5분 경과 안되면) 시간 흐르게
+            if (!isStageClear)
+            {
+                gameTime += Time.deltaTime; // 게임 시간 증가
+            }
             coolTimer += Time.deltaTime;
 
             if (!isBossSpawned)
@@ -273,6 +287,24 @@ public class GameManager : MonoBehaviour
         }
 
         skillManager.enemies = enemies;
+
+        // Stage1, 2 Clear하면 게임시간 안가게 하기
+        switch(sceneName)
+        {
+            case "Stage1":
+                if (gameTime >= 300f) // 5분
+                {   
+                    isStageClear = true;
+                }
+                break;
+
+            case "Stage2":
+                if (gameTime >= 600f) // 10분
+                {   
+                    isStageClear = true;
+                }
+                break;
+        }
     }
 
     private void SpawnStartEnemies()
@@ -483,7 +515,7 @@ public class GameManager : MonoBehaviour
             BossHPObject.SetActive(true);
 
             // Stage2 BGM 종료 후 보스 BGM ON
-            SwitchBGM((int)Bgm.Boss1);
+            SwitchBGM((int)Bgm.Boss);
 
             isBossSpawned = true;
         }
@@ -498,6 +530,7 @@ public class GameManager : MonoBehaviour
     {
         isGameOver = true;
         isDeadPageOn = true;
+
         gameOverObject.SetActive(true);
 
         yield return new WaitForSeconds(0.5f); // 0.5초 이후 시간 차 두기
@@ -517,9 +550,17 @@ public class GameManager : MonoBehaviour
     {
         player.isPlayerShielded = true;
         isGameOver = true;
+        isStageClear = true;
         isClearPageOn = true;
+
         gameClearObject.SetActive(true);
-        //HpBarObject.SetActive(false);
+        // UI 비활성화
+        BossHPObject.SetActive(false);
+        HpStatusLetteringObject.SetActive(false);
+        HpStatusObject.SetActive(false);
+        ActiveSkillPanelObject.SetActive(false);
+        PassiveSkillPanelObject.SetActive(false);
+        CharacterProfileObject.SetActive(false);
 
         yield return new WaitForSeconds(0.5f); // 0.5초 이후 시간 차 두기
         GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Win); // 승리시 효과음
@@ -531,15 +572,70 @@ public class GameManager : MonoBehaviour
     // Pause 버튼이 클릭됐을 시 실행됨
     private void OnPauseButtonClicked()
     {
-        pauseObject.SetActive(true);
-        isPausePageOn = true;
+        if (!isPauseReClicked)
+        {
+            // 인게임 중에만 작동
+            if(!isDeadPageOn && !isPauseReClicked && !isWantPauseButtonActive)
+            {
+                Debug.Log("첫번째이자 Pause 화면 나오게");
+                Time.timeScale = 0;
+                pauseObject.SetActive(true);
+                isPausePageOn = true;
 
-        // UI 비활성화
-        //HpBarObject.SetActive(false);
-        HpStatusLetteringObject.SetActive(false);
-        HpStatusObject.SetActive(false);
-        SkillPanelObject.SetActive(false);
-        CharacterProfileObject.SetActive(false);
+                // UI 비활성화
+                HpStatusLetteringObject.SetActive(false);
+                HpStatusObject.SetActive(false);
+                ActiveSkillPanelObject.SetActive(false);
+                PassiveSkillPanelObject.SetActive(false);
+                CharacterProfileObject.SetActive(false);               
+            }
+
+            if(!isDeadPageOn && !isPauseReClicked && isWantPauseButtonActive)
+            {
+                Debug.Log("N번째이자 Pause 화면 나오게");
+                Time.timeScale = 0;
+                pauseObject.SetActive(true);
+                isPausePageOn = true;
+
+                // UI 비활성화
+                HpStatusLetteringObject.SetActive(false);
+                HpStatusObject.SetActive(false);
+                ActiveSkillPanelObject.SetActive(false);
+                PassiveSkillPanelObject.SetActive(false);
+                CharacterProfileObject.SetActive(false);
+            }
+
+            if (pauseObject.activeSelf)
+            {
+                isPausePageOn = false;
+                isPauseReClicked = true;
+            }
+        }
+        else // 두번째 클릭이면
+        {
+            // 다시 게임 진행
+            if(!isDeadPageOn && isPauseReClicked)
+            {
+                Time.timeScale = 1;
+                pauseObject.SetActive(false);
+                isPausePageOn = false;
+
+                // UI 활성화
+                HpStatusLetteringObject.SetActive(true);
+                HpStatusObject.SetActive(true);
+                ActiveSkillPanelObject.SetActive(true);
+                PassiveSkillPanelObject.SetActive(true);
+                CharacterProfileObject.SetActive(true);
+                
+                if (!pauseObject.activeSelf)
+                {
+                    isWantPauseButtonActive = true;
+                    Debug.Log("Pause 화면 안나오게");
+                }
+                isPauseReClicked = false;
+            }
+
+        }
     }
 
     // Play 버튼이 클릭됐을 시 실행됨
@@ -547,12 +643,13 @@ public class GameManager : MonoBehaviour
     {
         pauseObject.SetActive(false);
         isPausePageOn = false;
+        Time.timeScale = 1;
 
         // UI 활성화
-        //HpBarObject.SetActive(true);
         HpStatusLetteringObject.SetActive(true);
         HpStatusObject.SetActive(true);
-        SkillPanelObject.SetActive(true);
+        ActiveSkillPanelObject.SetActive(true);
+        PassiveSkillPanelObject.SetActive(true);
         CharacterProfileObject.SetActive(true);
     }
 
