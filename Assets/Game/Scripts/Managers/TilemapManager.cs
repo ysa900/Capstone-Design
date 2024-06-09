@@ -20,7 +20,7 @@ public class TilemapManager : MonoBehaviour
    
     private void Update()
     {
-        isStage1End = SceneManager.GetActiveScene().name == "Stage1" && GameManager.instance.gameTime >= 5 * 60f;
+        isStage1End = SceneManager.GetActiveScene().name == "Stage1" && GameManager.instance.gameTime >= GameManager.instance.maxGameTime;
 
         if (isStage1End && !isTeleportHoleAlreadySpawned)
         {
@@ -30,11 +30,13 @@ public class TilemapManager : MonoBehaviour
             teleport_hole.SetActive(true);
             isTeleportHoleAlreadySpawned = true;
         }
-
-        isStage2End = SceneManager.GetActiveScene().name == "Stage2" && GameManager.instance.gameTime >= 5 * 60f;
+            
+        isStage2End = SceneManager.GetActiveScene().name == "Stage2" && GameManager.instance.gameTime >= GameManager.instance.maxGameTime;
 
         if (isStage2End && !isBossRoomAlreadyMoved)
         {
+            GameManager.instance.PlayerSpeedUp(); // 플레이어 속도 증가
+
             GameObject RightCorridor = Corridor1.transform.position.x > Corridor2.transform.position.x ? Corridor1 : Corridor2;
 
             Vector2 newPos = new Vector2(RightCorridor.transform.position.x, RightCorridor.transform.position.y);

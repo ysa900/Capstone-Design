@@ -15,10 +15,10 @@ public class Enemy : Object, IDamageable, IPoolingObject
     public Player player;
 
     // Enemy들 체력
-    int[] enemy_HP = { 1500, 50, 80, 15, 50, 70, 15, 50, 80, 150 };
+    float[] enemy_HP = { 15, 50, 80, 60, 60, 120, 150, 200, 250, 400 };
 
     // enemy 정보
-    public int hp;
+    public float hp;
     public float speed;
     private float colliderOffsetX; // collider의 offset x좌표
     private float colliderOffsetY; // collider의 offset y좌표
@@ -39,6 +39,8 @@ public class Enemy : Object, IDamageable, IPoolingObject
     string sceneName;
 
     float agentToplayerDistance; // 적과 플레이어 사이의 거리
+
+    bool isAgentShouldBeDisabled;
 
 
     // enemy가 죽었을 때 EnemyManager에게 알려주기 위한 delegate
@@ -66,8 +68,9 @@ public class Enemy : Object, IDamageable, IPoolingObject
         hp = enemy_HP[index];
         isDead = false;
 
-
         damageDelayTimer = 0;
+
+        agent.enabled = true;
 
         float playerX = player.transform.position.x;
         float playerY = player.transform.position.y;
@@ -81,8 +84,8 @@ public class Enemy : Object, IDamageable, IPoolingObject
                 float radius = UnityEngine.Random.Range(20, 30);
                 degree = UnityEngine.Random.Range(0f, 360f);
 
-                float tmpX = (float)Math.Cos(degree) * radius;
-                float tmpY = (float)Math.Sin(degree) * radius;
+                float tmpX = (float)Math.Cos(degree * Mathf.Deg2Rad) * radius;
+                float tmpY = (float)Math.Sin(degree * Mathf.Deg2Rad) * radius;
 
                 X = tmpX + playerX;
                 Y = tmpY + playerY;
@@ -107,20 +110,28 @@ public class Enemy : Object, IDamageable, IPoolingObject
                 break;
             case "Stage3": // Stage3는 정해진 범위 안에 소환 (플레이어와 겹치지 않게)
                 bool isPositionSameWithPlayer;
+                int breakNum = 0; // while문 탈출을 위한 num
 
                 do
                 {
                     radius = UnityEngine.Random.Range(20, 25);
                     degree = UnityEngine.Random.Range(0f, 360f);
 
-                    tmpX = (float)Math.Cos(degree) * radius;
-                    tmpY = (float)Math.Sin(degree) * radius;
+                    tmpX = (float)Math.Cos(degree * Mathf.Deg2Rad) * radius;
+                    tmpY = (float)Math.Sin(degree * Mathf.Deg2Rad) * radius;
 
                     Vector2 playerPos = player.transform.position;
                     Vector2 myPos = new Vector2(tmpX, tmpY);
-                    isPositionSameWithPlayer = Vector2.Distance(playerPos, myPos) < 5;
+                    isPositionSameWithPlayer = Vector2.Distance(playerPos, myPos) < 5; 
+                    
+                    breakNum++;
+                    if (breakNum >= 1000)// 1000회 반복 내에 마땅한 위치를 찾지 못했다면 그냥 break;
+                    {
+                        Debug.Log("1000번 내에 찾지 못함");
+                        break;
+                    }
                 }
-                while (!isPositionSameWithPlayer);
+                while (isPositionSameWithPlayer);
 
                 X = tmpX;
                 Y = tmpY;
@@ -132,14 +143,9 @@ public class Enemy : Object, IDamageable, IPoolingObject
                 break;
         }
 
-
-
-
         rigid.constraints = RigidbodyConstraints2D.None;
         rigid.constraints = RigidbodyConstraints2D.FreezeRotation;
         GetComponent<CapsuleCollider2D>().enabled = true;
-        agent.enabled = true;
-
     }
 
     protected virtual void Awake()
@@ -252,14 +258,14 @@ public class Enemy : Object, IDamageable, IPoolingObject
 
                 direction = direction.normalized;
                 rigid.MovePosition(rigid.position + direction * speed * Time.fixedDeltaTime);
-                agent.enabled = true;
+                
+                if(!isAgentShouldBeDisabled)
+                    agent.enabled = true;
 
             }
             else
             {
-                agent.enabled = true;
                 agent.SetDestination(player.transform.position);
-
             }
         }
 
@@ -304,10 +310,7 @@ public class Enemy : Object, IDamageable, IPoolingObject
 
                     break;
             }
-
-
         }
-
     }
 
     // IDamageable의 함수 TakeDamage
@@ -333,6 +336,21 @@ public class Enemy : Object, IDamageable, IPoolingObject
 
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        bool shield_Flame = collision.GetComponent<PointEffector2D>() != null;
+        if (shield_Flame)
+        {
+            float time = collision.gameObject.GetComponentInParent<Shield_Flame>().aliveTime;
+            float timer = collision.gameObject.GetComponentInParent<Shield_Flame>().aliveTimer;
+
+            isAgentShouldBeDisabled = true;
+            agent.enabled = false;
+
+            StartCoroutine(EnableAgent(time - timer + 0.2f));
+        }
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (agent.enabled)
@@ -346,10 +364,12 @@ public class Enemy : Object, IDamageable, IPoolingObject
     {
         if (collision.gameObject.tag == "Player")
         {
-            agent.isStopped = true;
-            agent.velocity = Vector3.zero;
-            rigid.velocity = Vector3.zero;
-
+            if (agent.enabled)
+            {
+                agent.isStopped = true;
+                agent.velocity = Vector3.zero;
+                rigid.velocity = Vector3.zero;
+            }
         }
 
         if (collision.gameObject.tag == "Obstacle" && agent.enabled)
@@ -358,7 +378,6 @@ public class Enemy : Object, IDamageable, IPoolingObject
             rigid.mass = 3.5f;
             isAgentDelay = true;
         }
-
     }
 
     private void OnCollisionExit2D(Collision2D collision)
@@ -382,7 +401,11 @@ public class Enemy : Object, IDamageable, IPoolingObject
     {
         isDead = true;
 
+        agent.enabled = false;
+
         animator.SetTrigger("Dead");
+
+        StopCoroutine(StartCoroutine(EnableAgent(2f)));
 
         if (!isTimeOver)
         {
@@ -397,7 +420,38 @@ public class Enemy : Object, IDamageable, IPoolingObject
         GameManager.instance.poolManager.ReturnEnemy(this, index);
     }
 
+    public IEnumerator makeEnemyHardPattern()
+    {
+        transform.GetChild(0).gameObject.SetActive(true);
+        hp *= 1.5f;
 
+        yield return new WaitForSeconds(30f); // 지정한 초 뒤에 패턴 끄기
+
+        transform.GetChild(0).gameObject.SetActive(false);
+
+        // Enemy Hp 보정
+        if (tag == "EvilTree")
+        {
+            if (hp >= 10f)
+            {
+                hp = 10f;
+            }
+        }
+        else if (tag == "Pumpkin")
+        {
+            if (hp >= 50f)
+            {
+                hp = 50f;
+            }
+        }
+        else if (tag == "Warlock")
+        {
+            if (hp >= 80f)
+            {
+                hp = 80f;
+            }
+        }
+    }
     // damageText 출력
     void ShowDamageText(float damage, string skillTag)
     {
@@ -408,6 +462,14 @@ public class Enemy : Object, IDamageable, IPoolingObject
 
         Vector3 vector3 = new Vector3(transform.position.x + ranNumX, transform.position.y + ranNumY, 0);
         hudText.transform.position = vector3;
+    }
+
+    IEnumerator EnableAgent(float time)
+    {
+        yield return new WaitForSeconds(time);
+
+        isAgentShouldBeDisabled = false;
+        agent.enabled = true;
     }
 
 }

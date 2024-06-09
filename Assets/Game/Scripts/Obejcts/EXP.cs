@@ -21,6 +21,9 @@ public class EXP : Object, IPoolingObject
 
     void FixedUpdate()
     {
+        if(GameManager.instance.gameTime >= GameManager.instance.maxGameTime)
+            GameManager.instance.poolManager.ReturnExp(this, index); // 일단은 그냥 없어지게
+
         Vector2 playerPosition = player.transform.position;
         Vector2 myPosition = transform.position;
 
@@ -43,7 +46,7 @@ public class EXP : Object, IPoolingObject
         {
             return;
         }
-
+        
         iPlayer.GetExp(expAmount);
 
         GameManager.instance.poolManager.ReturnExp(this, index);

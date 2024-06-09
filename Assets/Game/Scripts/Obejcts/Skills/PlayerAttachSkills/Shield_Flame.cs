@@ -88,7 +88,7 @@ public class Shield_Flame : PlayerAttachSkill
     {
         absorberTransform.GetComponent<CircleCollider2D>().enabled = true;
         absorberTransform.GetComponent<PolygonCollider2D>().enabled = false;
-        absorberTransform.GetComponent<PointEffector2D>().forceMagnitude = 150f;
+        absorberTransform.GetComponent<PointEffector2D>().forceMagnitude = 1500f;
 
         yield return new WaitForSeconds(0.1f);
 

@@ -186,6 +186,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 845543c963fa38b419ff5a90baa038b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  aliveTime: 0
   isDotDamageSkill: 0
   enemy: {fileID: 0}
   boss: {fileID: 0}
@@ -199,4 +200,3 @@ MonoBehaviour:
   isAttachSkill: 0
   isFlipped: 0
   isYFlipped: 0
-  aliveTime: 0

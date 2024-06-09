@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 5354398621021156387}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 40, y: 40, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 4, y: 4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -170,6 +170,7 @@ MonoBehaviour:
   isPlayerDead: 0
   isPlayerLookLeft: 0
   isPlayerShielded: 0
+  isSkillSelectComplete: 1
   playerData: {fileID: 11400000, guid: 47e058fb0d3ee424a84b9ee6737e6685, type: 2}
 --- !u!95 &-6388075190265237586
 Animator:
