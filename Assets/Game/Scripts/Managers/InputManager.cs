@@ -27,9 +27,6 @@ public class InputManager : MonoBehaviour
     // Play 버튼
     public UnityEngine.UI.Button PlayButtonObject;
 
-    // GotoNextScene 버튼
-    public UnityEngine.UI.Button GoToNextSceneButtonObject;
-
     // Option 관련 버튼
     public UnityEngine.UI.Button OptionButtonObject; // 플레이 화면의 Option 버튼
     // Option Back Button 관련 버튼
@@ -83,10 +80,6 @@ public class InputManager : MonoBehaviour
         // Pause_GoTOLobby 버튼 눌렀을 때
         UnityEngine.UI.Button PGoToLobbyButton = PGoToLobbyButtonObject.GetComponent<UnityEngine.UI.Button>();
         PGoToLobbyButton.onClick.AddListener(goToLobbyButtonClicked);
-
-        // GoToNextScene 버튼 눌렀을 때
-        UnityEngine.UI.Button GoToNextSceneButton = GoToNextSceneButtonObject.GetComponent<UnityEngine.UI.Button>();
-        GoToNextSceneButton.onClick.AddListener(goToNextSceneButtonClicked);
 
         // Play 버튼 눌렀을 때
         UnityEngine.UI.Button PlayButton = PlayButtonObject.GetComponent<UnityEngine.UI.Button>();
@@ -160,7 +153,8 @@ public class InputManager : MonoBehaviour
             if(!GameManager.instance.isDeadPageOn && !GameManager.instance.isSkillSelectPageOn)
             {
                 if (!GameManager.instance.pauseObject.activeSelf || !GameManager.instance.gameClearObject.activeSelf)
-                    Time.timeScale = 1;
+                    if (!GameManager.instance.pauseObject.activeSelf)
+                        Time.timeScale = 1;
                 PauseButtonObject.interactable = true;  // 인게임 플레이 중에만 Pause 버튼 비활성화
             }
 
