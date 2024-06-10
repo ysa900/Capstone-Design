@@ -2,13 +2,12 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
 using TMPro;
-using System.Collections.Generic;
 
 public class GameAudioManager : MonoBehaviour
 {
-    public static GameAudioManager _instance; // 정적 메모리에 담기 위한 instance 변수 선언
+    public static GameAudioManager instance; // 정적 메모리에 담기 위한 instance 변수 선언
 
-    // 인스턴스에 접근하기 위한 프로퍼티
+    /*// 인스턴스에 접근하기 위한 프로퍼티
     public static GameAudioManager instance
     {
         get
@@ -23,7 +22,7 @@ public class GameAudioManager : MonoBehaviour
             }
             return _instance;
         }
-    }
+    }*/
 
     // BGM
     [Header("#BGM")]
@@ -54,11 +53,15 @@ public class GameAudioManager : MonoBehaviour
     private bool isHitPlaying;
 
     public enum Sfx { Dead, Hit, LevelUp = 3, Lose, Melee, Range = 7, Select, Win }
-    public enum Bgm { Stage1, Stage2, Stage3, Boss1, Boss2, Clear } // 필요 Bgm Clip들
+    public enum Bgm { Stage1, Stage2, Stage3, Boss, Clear } // 필요 Bgm Clip들
 
     private void Awake()
     {
-        if (_instance == null)
+        if (instance == null)
+        {
+            instance = this;
+        }
+        /*if (_instance == null)
         {
             _instance = this;
         }
@@ -69,7 +72,14 @@ public class GameAudioManager : MonoBehaviour
             Destroy(gameObject);
         }
         // 아래의 함수를 사용하여 씬이 전환되더라도 선언되었던 인스턴스가 파괴되지 않는다.
-        DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(gameObject);*/
+
+        channelIndex = 0; // 채널 인덱스
+        masterVolume = 0;
+        bgmVolume = 0;
+        sfxVolume = 0;
+
+        isHitPlaying = false;
 
         string OutputMixer = "Master";
 

@@ -50,7 +50,7 @@ public class ObstacleManager : MonoBehaviour
 
         CoolTime = 2f;
         CoolTimer = 0f;
-        ObstacleCoolTime1 = 10f;
+        ObstacleCoolTime1 = 120f;
         ObstacleCoolTimer1 = 0f;
         ObstacleCoolTime2 = 120f;
         ObstacleCoolTimer2 = 0f;
@@ -88,7 +88,8 @@ public class ObstacleManager : MonoBehaviour
                  CreateObstacle(Direction, 0);
 
                }
-                  ObstacleCoolTimer1 = 0f;
+               ObstacleCoolTimer1 = 0f;
+               ObstacleCoolTime1 = 10f;
             }
 
             if (ObstacleCoolTimer2 >= ObstacleCoolTime2)
@@ -201,12 +202,12 @@ public class ObstacleManager : MonoBehaviour
     {
         //�̵���� ���� ����
 
-        float radius = UnityEngine.Random.Range(15f,30f);
-        float ranDegree = UnityEngine.Random.Range(angleDegree - 22.5f, angleDegree + 22.5f);
+        float radius = UnityEngine.Random.Range(5f,20f);
+        float ranDegree = UnityEngine.Random.Range(angleDegree - 45f, angleDegree + 45f);
         float X_Range = 0f;
         float Y_Range = 0f;
         float height = 30f;
-        Debug.Log("��ġ");
+
         X_Range = curPlayerPosition.x + (float)Mathf.Cos(ranDegree * Mathf.Deg2Rad) * radius;
         Y_Range = curPlayerPosition.y + (float)Mathf.Sin(ranDegree * Mathf.Deg2Rad) * radius;
         obstacle = Instantiate(statuePrefab);

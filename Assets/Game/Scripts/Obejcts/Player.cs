@@ -83,6 +83,17 @@ public class Player : MonoBehaviour, IPlayer
         absorberCollider = gameObject.GetComponentInChildren<CircleCollider2D>();
     }
 
+    public void Init()
+    {
+        isPlayerDead = false;
+        isPlayerLookLeft = false;
+        isPlayerShielded = false;
+        hitDelayTimer = 0.1f;
+
+        isSkillSelectComplete = true;
+        Debug.Log("player 클래스의 Init, isSkillSelectComplete: " + isSkillSelectComplete);
+}
+
     // Update is called once per frame
     void Update()
     {
@@ -140,7 +151,7 @@ public class Player : MonoBehaviour, IPlayer
     {
         playerData.Exp += expAmount;
 
-        if(playerData.Exp >= playerData.nextExp[playerData.level])
+        if (playerData.Exp >= playerData.nextExp[playerData.level])
             StartCoroutine(LevelUP()); // 레벨 업 함수 실행
     }
 
@@ -215,11 +226,18 @@ public class Player : MonoBehaviour, IPlayer
 
     IEnumerator LevelUP()
     {
+        Debug.Log("레벨 업 기다리는 중");
+        if (Time.timeScale != 0)
+        {
+            isSkillSelectComplete = true; // 오류 방지를 위한 코드
+            Debug.Log("timeScale != 0, isSkillSelectComplete: " + isSkillSelectComplete);
+        }
         yield return new WaitUntil(() => isSkillSelectComplete);
-        
+
         onPlayerLevelUP(); // delegate 호출
 
         isSkillSelectComplete = false;
+        Debug.Log("기다리기 끝, isSkillSelectComplete: "+ isSkillSelectComplete);
 
         playerData.Exp -= playerData.nextExp[playerData.level];
         playerData.level++;

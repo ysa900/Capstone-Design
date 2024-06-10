@@ -7,6 +7,7 @@ public class Teleport:MonoBehaviour
     {
         bool isPlayer = collision.gameObject.tag == "Player";
 
+
         if (isPlayer)
         {
             switch(SceneManager.GetActiveScene().name)
@@ -23,3 +24,4 @@ public class Teleport:MonoBehaviour
         }
     }
 }
+
