@@ -42,7 +42,9 @@ public class ObstacleVisble : MonoBehaviour
             case "Right Pillar":
             case "Tree":
             case "Pillar":
-                isTwowayObstacle=true;
+            case "StatueObstacle1(Clone)":
+            case "Statue":
+                isTwowayObstacle =true;
                 break;
         }
     }
