@@ -10,6 +10,8 @@ public class SplashManager : MonoBehaviour
     public KoreanTyperSimple[] koreanTyper;
     [SerializeField] private AudioMixer m_AudioMixer;
 
+    public UnityEngine.UI.Button skipButtonObject;
+
     [SerializeField] Image backgroundImage = null; // 뒷배경
     [SerializeField] GameObject GuideTextObject;
     [SerializeField] GameObject[] imageObjects = null;
@@ -17,6 +19,9 @@ public class SplashManager : MonoBehaviour
 
     private void Awake()
     {
+        UnityEngine.UI.Button skipButton = skipButtonObject.GetComponent<UnityEngine.UI.Button>();
+        skipButton.onClick.AddListener(OnClickToSkipStroy);
+
         // Text 단락 초기화
         koreanTyper[currentPoint].gameObject.SetActive(true);
         for (int index = 1; index < koreanTyper.Length; index++)
@@ -69,6 +74,27 @@ public class SplashManager : MonoBehaviour
         }
     }
 
+    private void OnClickToSkipStroy()
+    {
+        switch (SceneManager.GetActiveScene().name)
+        {
+            case "Splash0":
+                SceneManager.LoadScene("Lobby");
+                break;
+            case "Splash1":
+                SceneManager.LoadScene("Stage1");
+                break;
+            case "Splash2":
+                GameManager.instance.isStageClear = false;
+                SceneManager.LoadScene("Stage2");
+                break;
+            case "Splash3":
+                GameManager.instance.isStageClear = false;
+                SceneManager.LoadScene("Stage3");
+                break;
+        }
+    }
+
     IEnumerator WaitForNextInput()
     {
         yield return new WaitUntil(() => Input.anyKeyDown);
@@ -83,6 +109,9 @@ public class SplashManager : MonoBehaviour
 
         switch (SceneManager.GetActiveScene().name)
         {
+            case "Splash0":
+                SceneManager.LoadScene("Lobby");
+                break;
             case "Splash1":
                 SceneManager.LoadScene("Stage1");
                 break;

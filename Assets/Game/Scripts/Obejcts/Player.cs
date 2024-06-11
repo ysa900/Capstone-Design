@@ -68,10 +68,7 @@ public class Player : MonoBehaviour, IPlayer
         }
         // 아래의 함수를 사용하여 씬이 전환되더라도 선언되었던 인스턴스가 파괴되지 않는다.
         DontDestroyOnLoad(gameObject);
-    }
 
-    void Start()
-    {
         // 변수 초기화
         rigid = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -87,8 +84,9 @@ public class Player : MonoBehaviour, IPlayer
         hitDelayTimer = 0.1f;
 
         isSkillSelectComplete = true;
-        Debug.Log("player 클래스의 Init, isSkillSelectComplete: " + isSkillSelectComplete);
-}
+
+        rigid.constraints = RigidbodyConstraints2D.FreezeRotation;
+    }
 
     // Update is called once per frame
     void Update()
@@ -189,8 +187,6 @@ public class Player : MonoBehaviour, IPlayer
                 onPlayerWasKilled(this);
 
                 rigid.constraints = RigidbodyConstraints2D.FreezeAll;
-
-                transform.localScale = new Vector3(1.0f, 1.0f, 1.0f); // 죽었을 때 나오는 묘비 크기 때문에 크기 조정 해준 것
             }
         }
     }
@@ -209,13 +205,11 @@ public class Player : MonoBehaviour, IPlayer
             {
                 isPlayerDead = true;
 
-                animator.SetBool("Dead", true);
+                animator.SetTrigger("Dead");
 
                 onPlayerWasKilled(this);
 
                 rigid.constraints = RigidbodyConstraints2D.FreezeAll;
-
-                transform.localScale = new Vector3(1.0f, 1.0f, 1.0f); // 죽었을 때 나오는 묘비 크기 때문에 크기 조정 해준 것
             }
         }
     }
@@ -241,6 +235,12 @@ public class Player : MonoBehaviour, IPlayer
         // 경험치를 경험치 통보다 많이 갖고있으면 재귀적으로 반복
         bool isAgain = playerData.Exp >= playerData.nextExp[playerData.level];
         if (isAgain) StartCoroutine(LevelUP());
+    }
+
+    public void RestoreHP(float restoreAmount)
+    {
+        playerData.hp += restoreAmount;
+        playerData.hp = playerData.hp > 100 ? 100 : playerData.hp;
     }
 
     public void OnPlayerBlinded()

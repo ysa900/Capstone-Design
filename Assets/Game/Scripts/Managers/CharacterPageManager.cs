@@ -15,7 +15,6 @@ public class CharacterPageManager : MonoBehaviour
     void Start()
     {
 
-
         // 현재 클래스 구현 1개 - Mage
         // 캐릭터(Mage) 선택 시
         UnityEngine.UI.Button SelectMageButton = lobbyManager.SelectMageButtonObject.GetComponent<UnityEngine.UI.Button>();
@@ -85,35 +84,68 @@ public class CharacterPageManager : MonoBehaviour
 
     private void CharacterPage_OptionButtonClicked()
     {
-        lobbyManager.SettingPage.SetActive(true);
-        lobbyManager.CharacterPageBackButtonObject.enabled = false; // CharacterPage의 뒤로가기 버튼 무효화
-
-        // 캐릭터 선택 버튼들 무효화
-        lobbyManager.SelectAssassinButtonObject.enabled = false;
-        lobbyManager.SelectWarriorButtonObject.enabled = false;
-        lobbyManager.SelectMageButtonObject.enabled = false;
-
-        // Character Page에서
-        // 캐릭터 선택하지 않은 상황에서 Option 버튼 누르기
-        if (!lobbyManager.isCharacterSelect && lobbyManager.isCharacterPageOn)
+        // 옵션창 안켜진 상황에서 누르기
+        if (!lobbyManager.SettingPage.activeSelf)
         {
-            lobbyManager.isSettingPageOn = true;
-            lobbyManager.gameStartButtonObject.interactable = false;
-            lobbyManager.CharacterPageOptionButtonObject.enabled = false;
+            lobbyManager.SettingPage.SetActive(true);
+            lobbyManager.CharacterPageBackButtonObject.enabled = false; // CharacterPage의 뒤로가기 버튼 무효화
+
+            // 캐릭터 선택 버튼들 무효화
+            lobbyManager.SelectAssassinButtonObject.enabled = false;
+            lobbyManager.SelectWarriorButtonObject.enabled = false;
+            lobbyManager.SelectMageButtonObject.enabled = false;
+
+            // Character Page에서
+            // 캐릭터 선택하지 않은 상황에서 Option 버튼 누르기
+            if (!lobbyManager.isCharacterSelect && lobbyManager.isCharacterPageOn)
+            {
+                lobbyManager.isSettingPageOn = true;
+                lobbyManager.gameStartButtonObject.interactable = false;
+                //lobbyManager.CharacterPageOptionButtonObject.enabled = false;
+            }
+            // 캐릭터 선택한 상황에서 Option 버튼 누르기
+            else if (lobbyManager.isCharacterSelect && lobbyManager.isCharacterPageOn)
+            {
+                lobbyManager.isSettingPageOn = true;
+                //lobbyManager.gameStartButtonObject.interactable = false;
+            }
         }
-        // 캐릭터 선택한 상황에서 Option 버튼 누르기
-        else if (lobbyManager.isCharacterSelect && lobbyManager.isCharacterPageOn)
+        // 옵션창에서 켜진 상황에서 또 누르기
+        else
         {
-            lobbyManager.CharacterPageOptionButtonObject.enabled = false;
-            lobbyManager.isSettingPageOn = true;
-            lobbyManager.gameStartButtonObject.interactable = false;
+            lobbyManager.isSettingPageOn = false;
+            lobbyManager.SettingPage.SetActive(false);
+            lobbyManager.CharacterPageBackButtonObject.enabled = true;
+            // 캐릭터 선택하지 않은 상황
+            if (!lobbyManager.isCharacterSelect && lobbyManager.isCharacterPageOn)
+            {
+                lobbyManager.gameStartButtonObject.interactable = false;
+
+                // 캐릭터 선택 버튼들 활성화
+                lobbyManager.SelectAssassinButtonObject.enabled = true;
+                lobbyManager.SelectWarriorButtonObject.enabled = true;
+                lobbyManager.SelectMageButtonObject.enabled = true;
+
+            }
+            // 캐릭터 선택한 상황
+            else if (lobbyManager.CharacterExplainGroup.activeSelf || lobbyManager.isCharacterSelect && lobbyManager.isCharacterPageOn)
+            {
+                lobbyManager.CharacterPageOptionButtonObject.enabled = true;
+
+                lobbyManager.SelectAssassinButtonObject.enabled = false;
+                lobbyManager.SelectWarriorButtonObject.enabled = false;
+                lobbyManager.SelectMageButtonObject.enabled = false;
+
+                lobbyManager.gameStartButtonObject.interactable = true;
+            }
         }
+
+
     }
 
     // GameStart 버튼 클릭 시
     private void GameStartButtonClicked()
     {
-        Debug.Log(LobbyAudioManager.instance.soundData);
         if (!LobbyAudioManager.instance.soundData.isFirstLobby)
             SceneManager.LoadScene("Splash1"); // 1회차: Lobby -> Splash1
         else

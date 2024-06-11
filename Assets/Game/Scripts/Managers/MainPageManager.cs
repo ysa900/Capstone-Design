@@ -34,7 +34,7 @@ public class MainPageManager : MonoBehaviour
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else // 실제 빌드 후 게임 플레이 후 종료 할 때 #else 문 사용
-                Application.Quit(); // 게임 종료
+                        Application.Quit(); // 게임 종료
 #endif
     }
 
@@ -53,11 +53,23 @@ public class MainPageManager : MonoBehaviour
     // Main Page의 Option 버튼 클릭 시
     private void Main_OptionButtonClicked()
     {
-        lobbyManager.SettingPage.SetActive(true);
+        if (!lobbyManager.SettingPage.activeSelf)
+        {
+            Debug.Log("SettingPage꺼짐");
+            lobbyManager.SettingPage.SetActive(true);
 
-        // 다른 버튼들 비활성화
-        lobbyManager.CharacterButtonObject.enabled = false; // Character 버튼 비활성화
-        lobbyManager.ExitButtonObject.enabled = false; // Exit 버튼 비활성화
+            // 다른 버튼들 비활성화
+            lobbyManager.CharacterButtonObject.enabled = false; // Character 버튼 비활성화
+            lobbyManager.ExitButtonObject.enabled = false; // Exit 버튼 비활성화
+        }
+        else
+        {
+            Debug.Log("SettingPage켜짐");
+            lobbyManager.SettingPage.SetActive(false);
+            // 버튼 재활성화시키기
+            lobbyManager.CharacterButtonObject.enabled = true;
+            lobbyManager.ExitButtonObject.enabled = true;
+        }
 
     }
 

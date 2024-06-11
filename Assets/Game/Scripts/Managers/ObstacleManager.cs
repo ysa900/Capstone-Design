@@ -25,9 +25,9 @@ public class ObstacleManager : MonoBehaviour
     float CoolTime;
     float CoolTimer;
     float ObstacleCoolTime1;
-    float ObstacleCoolTimer1;
+    [SerializeField]float ObstacleCoolTimer1;
     float ObstacleCoolTime2;
-    float ObstacleCoolTimer2;
+    [SerializeField] float ObstacleCoolTimer2;
 
     public Obstacle statuePrefab;
     public Obstacle obstacle;

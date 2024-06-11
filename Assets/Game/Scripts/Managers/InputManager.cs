@@ -118,7 +118,7 @@ public class InputManager : MonoBehaviour
         }
     }
 
-    public void AAA()
+    public void DebugFunction()
     {
 
 
@@ -132,6 +132,7 @@ public class InputManager : MonoBehaviour
         Debug.Log(PlayButtonObject);
         Debug.Log(OptionButtonObject);*/
     }
+
     void Start()
     {
         // GameOver_Restart 버튼 눌렀을 때
@@ -175,7 +176,7 @@ public class InputManager : MonoBehaviour
     private void RestartButtonClicked()
     {
         GameAudioManager.instance.bgmPlayer.Stop(); // 현재 BGM 종료
-
+        
         SceneManager.LoadScene("Stage1"); // Stage1 으로 돌아가기
     }
 
@@ -183,7 +184,7 @@ public class InputManager : MonoBehaviour
     private void goToLobbyButtonClicked()
     {
         GameAudioManager.instance.bgmPlayer.Stop(); // 현재 BGM 종료
-
+        GameAudioManager.instance.soundData.isFirstLobby = true;
         SceneManager.LoadScene("Lobby");
         Time.timeScale = 1;
     }
@@ -206,7 +207,7 @@ public class InputManager : MonoBehaviour
         // Setting창 안켜져있을 때 누르면
         if (!GameManager.instance.isSettingPageOn)
         {
-            if (!GameManager.instance.isGameOver && !GameManager.instance.isDeadPageOn && !GameManager.instance.isSkillSelectPageOn)
+            if (!GameManager.SettingPageObject.activeSelf || !GameManager.instance.isGameOver && !GameManager.instance.isDeadPageOn && !GameManager.instance.isSkillSelectPageOn)
             {
                 Time.timeScale = 0; // 인게임 플레이 중에만 멈추기
                 PauseButtonObject.interactable = false;  // 인게임 플레이 중에만 Pause 버튼 비활성화
@@ -249,19 +250,6 @@ public class InputManager : MonoBehaviour
             GameManager.SettingPageObject.SetActive(false);
         }
 
-    }
-
-    private void goToNextSceneButtonClicked()
-    {
-        switch (SceneManager.GetActiveScene().name)
-        {
-            case "Stage1":
-                SceneManager.LoadScene("Splash2");
-                break;
-            case "Stage2":
-                SceneManager.LoadScene("Splash3");
-                break;
-        }
     }
 
     // 버튼이 클릭되었을 때 호출되는 메서드

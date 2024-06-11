@@ -612,7 +612,7 @@ public class SkillSelectManager : MonoBehaviour
         }
 
         // Skill size increase
-        if (skillIndex != 5)
+        if (skillIndex != 4 || skillIndex != 5)
         {
             if (skillLevel == 2)
             {
@@ -622,6 +622,10 @@ public class SkillSelectManager : MonoBehaviour
             {
                 description += $"\n스킬 크기 증가: {(maxScaleCoefficient * 100 - 100):F0}%";
             }
+        }
+        else if (skillLevel == 4) 
+        {
+            description += "\n스킬 개수 증가";
         }
 
         return description ;
@@ -699,11 +703,21 @@ public class SkillSelectManager : MonoBehaviour
                 break;
         }
 
-        float calculatedValue = skillNum == 103
-            ? Mathf.FloorToInt((1 - damage + incrementValue) * 100) - 100
-            : Mathf.FloorToInt((damage + incrementValue) * 100) - 100;
+        string calculatedValue = "";
+        switch (skillNum)
+        {
+            case 103:
+                calculatedValue = "" + Mathf.FloorToInt((1 - damage) * 100) + " + " + Mathf.FloorToInt(incrementValue * 100);
+                break;
+            case 105:
+                calculatedValue = "" + Mathf.FloorToInt(damage * 100) + " + " + Mathf.FloorToInt(incrementValue * 100);
+                break;
+            default:
+                calculatedValue = "" + (Mathf.FloorToInt(damage * 100) - 100) + " + " + Mathf.FloorToInt(incrementValue * 100);
+                break;
+        }
 
-        return $"{attributeType}: +{calculatedValue}%";
+        return $"{attributeType}: {calculatedValue}%";
     }
 
     string GetUnselectedSkillDescription(int skillNum)
@@ -736,7 +750,20 @@ public class SkillSelectManager : MonoBehaviour
                 break;
         }
 
-        float calculatedValue = Mathf.FloorToInt(startValue * 100) - 100;
+        string calculatedValue = "";
+        switch (skillNum)
+        {
+            case 103:
+                calculatedValue = "" + Mathf.FloorToInt((1 - startValue) * 100);
+                break;
+            case 105:
+                calculatedValue = "" + Mathf.FloorToInt((startValue - 0.25f) * 100); // 플레이어 Asborber radius 기본 값 바뀌면 수정 해줘야 함
+                break;
+            default:
+                calculatedValue = "" + (Mathf.FloorToInt(startValue * 100) - 100);
+                break;
+        }
+
         return $"{attributeType}: +{calculatedValue}%";
     }
 
@@ -811,14 +838,14 @@ public class SkillSelectManager : MonoBehaviour
 
         String description = "";
 
-        if (Array.IndexOf(dotDamageSkills, ranNum[resonanceSkillIndex]) != -1)
+        if (Array.IndexOf(dotDamageSkills, resonanceSkillIndex) != -1)
             description = "도트 데미지: ";
         else description = "데미지: ";
 
-        if (ranNum[resonanceSkillIndex] == 12) description += 200;
-        else description += skillData.Damage[ranNum[resonanceSkillIndex]];
+        if (resonanceSkillIndex == 12) description += 200;
+        else description += skillData.Damage[resonanceSkillIndex];
 
-        description += "\n쿨타임: " + skillData.Delay[ranNum[resonanceSkillIndex]] + "초";
+        description += "\n쿨타임: " + skillData.Delay[resonanceSkillIndex] + "초";
 
         textDescription.text = $"<color={color}>{description}</color>";
         SetLevelObjectAlpha(1, 5, true);

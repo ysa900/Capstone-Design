@@ -39,8 +39,9 @@ public class Obstacle : MonoBehaviour
             GetComponentInChildren<BoxCollider2D>().enabled = true;
             rigid.constraints = RigidbodyConstraints2D.FreezeAll;
         }
-            
 
+        if (GameManager.instance.isStageClear)
+            Destroy(gameObject);
 
     }
 

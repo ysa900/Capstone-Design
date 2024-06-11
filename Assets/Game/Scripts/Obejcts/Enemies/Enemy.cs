@@ -15,7 +15,7 @@ public class Enemy : Object, IDamageable, IPoolingObject
     public Player player;
 
     // Enemy들 체력
-    float[] enemy_HP = { 10, 30, 50, 50, 40, 100, 100, 150, 200, 500 };
+    float[] enemy_HP = { 10, 30, 70, 100, 80, 150, 200, 300, 400, 500 };
 
     // enemy 정보
     public float hp;
@@ -175,8 +175,7 @@ public class Enemy : Object, IDamageable, IPoolingObject
             StartCoroutine(Dead());
         }
 
-
-        DestryIfToFar(); // 플레이어와의 거리가 너무 멀면 죽음
+        MoveIfToFar(); // 플레이어와의 거리가 너무 멀면 위치 이동
         damageDelayTimer += Time.fixedDeltaTime;
         /*   agent.enabled = true;*/
     }
@@ -272,8 +271,8 @@ public class Enemy : Object, IDamageable, IPoolingObject
 
     }
 
-    // 플레이어와의 거리가 너무 멀면 죽는 함수
-    private void DestryIfToFar()
+    // 플레이어와의 거리가 너무 멀면 이동시키는 함수
+    private void MoveIfToFar()
     {
         Vector2 playerPosition = player.transform.position;
         Vector2 myPosition = transform.position;

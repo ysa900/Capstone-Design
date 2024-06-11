@@ -56,7 +56,7 @@ public class LobbyAudioManager : MonoBehaviour
         if (soundData.masterSound == 0.001f)
             m_AudioMixer.SetFloat("Master", -80);
         else
-            m_AudioMixer.SetFloat("Master", Mathf.Log10(volume) * 20 - 15);
+            m_AudioMixer.SetFloat("Master", Mathf.Log10(volume) * 20);
 
         masterFillImage.fillAmount = m_MusicMasterSlider.value;
         masterSoundLabel.text = (volume * 100).ToString("F0");
@@ -71,7 +71,7 @@ public class LobbyAudioManager : MonoBehaviour
         if (soundData.bgmSound == 0.001f)
             m_AudioMixer.SetFloat("BGM", -80);
         else
-            m_AudioMixer.SetFloat("BGM", Mathf.Log10(volume) * 20 - 15);
+            m_AudioMixer.SetFloat("BGM", Mathf.Log10(volume) * 20);
         bgmFillImage.fillAmount = m_MusicBGMSlider.value;
         BGMSoundLabel.text = (volume * 100).ToString("F0");
     }
@@ -135,7 +135,5 @@ public class LobbyAudioManager : MonoBehaviour
         soundData.bgmSound = 1f;
         soundData.sfxSound = 1f;
         soundData.isMute = false;
-
-        soundData.isFirstLobby = true;
     }
 }

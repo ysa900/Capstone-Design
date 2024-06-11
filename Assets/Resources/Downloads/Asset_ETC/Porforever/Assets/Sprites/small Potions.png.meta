@@ -5,7 +5,8 @@ AssetOrigin:
   productId: 118801
   packageName: Pixel Potions (with Animation)
   packageVersion: 1.0
-  assetPath: Assets/Porforever/Assets/Sprites/small Potions.png
+  assetPath: Assets/Resources/Downloads/Asset_ETC/Porforever/Assets/Sprites/small
+    Potions.png
   uploadId: 246294
 TextureImporter:
   internalIDToNameTable:

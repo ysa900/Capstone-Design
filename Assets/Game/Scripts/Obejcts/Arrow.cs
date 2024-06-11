@@ -66,7 +66,7 @@ public class Arrow : Object, IPoolingObject, IDamageableSkill
     // 화살 방향(rotation) 보정 (플레이어 바라보게)
     private void SetArrowDirection()
     {
-        Vector2 direction = new Vector2(playerPosition.x - myPosition.x, playerPosition.y - myPosition.y);
+        Vector2 direction = new Vector2(myPosition.x - playerPosition.x, myPosition.y - playerPosition.y);
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
         Quaternion angleAxis = Quaternion.AngleAxis(angle + 180f, Vector3.forward);

@@ -14,11 +14,25 @@ public class Teleport:MonoBehaviour
             {
                 case "Stage1":
                     GameAudioManager.instance.bgmPlayer.Stop();
-                    SceneManager.LoadScene("Splash2"); // Stage1 -> Splash2
+
+                    if (!GameAudioManager.instance.soundData.isFirstLobby)
+                        SceneManager.LoadScene("Splash2"); // 1회차: Stage1 -> Splash2
+                    else
+                    {
+                        GameManager.instance.isStageClear = false;
+                        SceneManager.LoadScene("Stage2"); // n회: Stage1 -> Stage2
+                    }
                     break;
                 case "Stage2":
                     GameAudioManager.instance.bgmPlayer.Stop();
-                    SceneManager.LoadScene("Splash3"); // Stage2 -> Splash3
+
+                    if (!GameAudioManager.instance.soundData.isFirstLobby)
+                        SceneManager.LoadScene("Splash3"); // 1회차: Stage2 -> Splash3
+                    else
+                    {
+                        GameManager.instance.isStageClear = false;
+                        SceneManager.LoadScene("Stage3"); // n회: Stage2 -> Stage3
+                    }
                     break;
             } 
         }

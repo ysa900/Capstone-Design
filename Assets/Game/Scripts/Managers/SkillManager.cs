@@ -146,7 +146,7 @@ public class SkillManager : MonoBehaviour
         skillData.Damage[1] = 5f;
         skillData.Damage[2] = 3f; // dot damage skill
         skillData.Damage[3] = 20f;
-        skillData.Damage[4] = 20f;
+        skillData.Damage[4] = 10f;
         skillData.Damage[5] = 0f;
         skillData.Damage[6] = 40f;
         skillData.Damage[7] = 12f;  // dot damage skill

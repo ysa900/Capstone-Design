@@ -70,9 +70,12 @@ public class GameManager : MonoBehaviour
     private BossManager bossManager;
     public PoolManager poolManager;
     private TilemapManager tilemapManager;
+    private HP_Potion hp_Potion;
 
     // GameObject에서 프리팹을 넣어주기 위해 public으로 설정
     public Player playerPrefab;
+
+    public HP_Potion hp_PotionPrefab;
 
     // EXP 프리팹
     public EXP expPrefab1;
@@ -343,9 +346,12 @@ public class GameManager : MonoBehaviour
     {
         if (!isGameOver)
         {
-            gameTime += Time.deltaTime; // 게임 시간 증가
-            coolTimer += Time.deltaTime;
-
+            if (!isStageClear)
+            {
+                gameTime += Time.deltaTime; // 게임 시간 증가
+                coolTimer += Time.deltaTime;
+            }
+            
             if (!isBossSpawned)
             {
                 isEnemiesTooMany = enemies.Count > 300;
@@ -358,6 +364,24 @@ public class GameManager : MonoBehaviour
         }
 
         skillManager.enemies = enemies;
+
+        // Stage1, 2 Clear하면 게임시간 안가게 하기
+        switch (sceneName)
+        {
+            case "Stage1":
+                if (gameTime >= 300f) // 5분
+                {
+                    isStageClear = true;
+                }
+                break;
+
+            case "Stage2":
+                if (gameTime >= 600f) // 10분
+                {
+                    isStageClear = true;
+                }
+                break;
+        }
     }
 
     private void SpawnStartEnemies()
@@ -822,7 +846,12 @@ public class GameManager : MonoBehaviour
                     ExpSpawn(2, 20, killedEnemy);
                     break;
             }
+        }
 
+        ranNum = UnityEngine.Random.Range(1, 101);
+        if(ranNum == 100)
+        {
+            HP_PotionSpawn(10, killedEnemy);
         }
     }
 
@@ -836,6 +865,16 @@ public class GameManager : MonoBehaviour
 
         exp.X = killedEnemy.transform.position.x;
         exp.Y = killedEnemy.transform.position.y + 0.5f;
+    }
+
+    private void HP_PotionSpawn(float hpAmount, Enemy killedEnemy)
+    {
+        hp_Potion = Instantiate(hp_PotionPrefab);
+
+        hp_Potion.hpAmount = hpAmount;
+
+        hp_Potion.X = killedEnemy.transform.position.x;
+        hp_Potion.Y = killedEnemy.transform.position.y + 0.5f;
     }
 
     // 플레이어가 레벨 업 했을 시 실행
