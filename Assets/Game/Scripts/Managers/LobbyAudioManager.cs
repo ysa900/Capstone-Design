@@ -24,46 +24,39 @@ public class LobbyAudioManager : MonoBehaviour
     public Image sfxFillImage;
     public Image bgmFillImage;
 
-    public float masterSound;
-    public float bgmSound;
-    public float sfxSound;
-    public bool isSoundMute;
+    public int count;
 
     private void Awake()
     {
-        SoundInit();
+        if (instance == null)
+        {
+            instance = this;
+        }
 
-        masterSound = soundData.masterSound;
-        bgmSound = soundData.bgmSound;
-        sfxSound = soundData.sfxSound;
-        isSoundMute = soundData.isMute;
+        if (!soundData.isFirstLobby)
+            SoundInitialInit();
 
-    
+        SetMasterVolume(soundData.masterSound);
+        SetBGMVolume(soundData.bgmSound);
+        SetSFXVolume(soundData.sfxSound);
+        SetMuteSetting(soundData.isMute);
+
         m_MusicMasterSlider.onValueChanged.AddListener(delegate { SetMasterVolume(m_MusicMasterSlider.value); });
         m_MusicBGMSlider.onValueChanged.AddListener(delegate { SetBGMVolume(m_MusicBGMSlider.value); });
         m_MusicSFXSlider.onValueChanged.AddListener(delegate { SetSFXVolume(m_MusicSFXSlider.value); });
         soundMuteToggle.onValueChanged.AddListener(delegate { ToggleAudioVolume(soundMuteToggle.isOn); });
     }
 
-    private void Update()
-    {
-
-        soundData.masterSound = masterSound;
-        soundData.bgmSound = bgmSound;
-        soundData.sfxSound = sfxSound;
-        soundData.isMute = isSoundMute;
-    }
-
     public void SetMasterVolume(float volume)
     {
-        masterSound = volume;
-        m_MusicMasterSlider.value = masterSound;
+        soundData.masterSound = volume;
+        m_MusicMasterSlider.value = soundData.masterSound;
 
-        Debug.Log(masterSound);
-        if (masterSound == 0.001f)
+        Debug.Log(soundData.masterSound);
+        if (soundData.masterSound == 0.001f)
             m_AudioMixer.SetFloat("Master", -80);
         else
-            m_AudioMixer.SetFloat("Master", Mathf.Log10(volume) * 20);
+            m_AudioMixer.SetFloat("Master", Mathf.Log10(volume) * 20 - 15);
 
         masterFillImage.fillAmount = m_MusicMasterSlider.value;
         masterSoundLabel.text = (volume * 100).ToString("F0");
@@ -71,35 +64,35 @@ public class LobbyAudioManager : MonoBehaviour
 
     public void SetBGMVolume(float volume)
     {
-        bgmSound = volume;
-        m_MusicBGMSlider.value = bgmSound;
+        soundData.bgmSound = volume;
+        m_MusicBGMSlider.value = soundData.bgmSound;
 
-        Debug.Log(bgmSound);
-        if (bgmSound == 0.001f)
+        Debug.Log(soundData.bgmSound);
+        if (soundData.bgmSound == 0.001f)
             m_AudioMixer.SetFloat("BGM", -80);
         else
-            m_AudioMixer.SetFloat("BGM", Mathf.Log10(volume) * 20);
+            m_AudioMixer.SetFloat("BGM", Mathf.Log10(volume) * 20 - 15);
         bgmFillImage.fillAmount = m_MusicBGMSlider.value;
         BGMSoundLabel.text = (volume * 100).ToString("F0");
     }
 
     public void SetSFXVolume(float volume)
     {
-        sfxSound = volume;
-        m_MusicSFXSlider.value = sfxSound;
+        soundData.sfxSound = volume;
+        m_MusicSFXSlider.value = soundData.sfxSound;
 
-        Debug.Log(sfxSound);
-        if (sfxSound == 0.001f)
+        Debug.Log(soundData.sfxSound);
+        if (soundData.sfxSound == 0.001f)
             m_AudioMixer.SetFloat("SFX", -80);
         else
-            m_AudioMixer.SetFloat("SFX", Mathf.Log10(volume) * 20);
+            m_AudioMixer.SetFloat("SFX", Mathf.Log10(volume) * 20 - 15);
         sfxFillImage.fillAmount = m_MusicSFXSlider.value;
         SFXSoundLabel.text = (volume * 100).ToString("F0");
     }
 
     public void SetMuteSetting(bool isOn)
     {
-        if (isSoundMute)
+        if (soundData.isMute)
         {
             if (AudioListener.volume == 0)
             {
@@ -118,9 +111,9 @@ public class LobbyAudioManager : MonoBehaviour
     public void ToggleAudioVolume(bool isOn)
     {
         // AudioListener.volume = AudioListener.volume == 0 ? 1 : 0;
-        isSoundMute = isOn;
+        soundData.isMute = isOn;
 
-        if (!isSoundMute)
+        if (!soundData.isMute)
         {
             soundData.isMute = false;
             AudioListener.volume = 1; // 켜기
@@ -136,12 +129,13 @@ public class LobbyAudioManager : MonoBehaviour
         }
     }
 
-    void SoundInit()
+    void SoundInitialInit()
     {
         soundData.masterSound = 1f;
         soundData.bgmSound = 1f;
         soundData.sfxSound = 1f;
-
         soundData.isMute = false;
+
+        soundData.isFirstLobby = true;
     }
 }

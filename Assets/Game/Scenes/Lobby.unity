@@ -8048,10 +8048,7 @@ MonoBehaviour:
   masterFillImage: {fileID: 1150188440}
   sfxFillImage: {fileID: 1701684297}
   bgmFillImage: {fileID: 508371625}
-  masterSound: 0
-  bgmSound: 0
-  sfxSound: 0
-  isSoundMute: 0
+  count: 0
 --- !u!4 &1863497826
 Transform:
   m_ObjectHideFlags: 0
@@ -8710,7 +8707,6 @@ MonoBehaviour:
   ExitButtonObject: {fileID: 2075031570}
   MainPageOptionButtonObject: {fileID: 637307110}
   CharacterPageOptionButtonObject: {fileID: 1500764449}
-  SaveButtonObject: {fileID: 0}
   CharacterExplainGroup: {fileID: 196585982}
   SelectAssassinButtonObject: {fileID: 1574768206}
   SelectMageButtonObject: {fileID: 1557197879}

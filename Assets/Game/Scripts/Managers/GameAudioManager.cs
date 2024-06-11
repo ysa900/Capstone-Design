@@ -52,11 +52,6 @@ public class GameAudioManager : MonoBehaviour
     static Image sfxFillImage;
     static Image bgmFillImage;
 
-    private float masterSound;
-    private float bgmSound;
-    private float sfxSound;
-    private bool isSoundMute;
-
     static Toggle soundMuteToggle;
 
     private bool isHitPlaying;
@@ -84,13 +79,6 @@ public class GameAudioManager : MonoBehaviour
         // 아래의 함수를 사용하여 씬이 전환되더라도 선언되었던 인스턴스가 파괴되지 않는다.
         DontDestroyOnLoad(gameObject);*/
 
-        SoundInit();
-
-
-        //masterSound = soundData.masterSound;
-        //bgmSound = soundData.bgmSound;
-        //sfxSound = soundData.sfxSound;
-        //isSoundMute = soundData.isMute;
 
         soundMuteToggle = GameObject.Find("Canvas").transform.Find("Setting Page/Sound Setting/Master Sound/Sound Mute Toggle").GetComponent<Toggle>();
         m_MusicMasterSlider = GameObject.Find("Canvas").transform.Find("Setting Page/Sound Setting/Master Sound/Master Sound Slider").GetComponent<Slider>();
@@ -105,19 +93,10 @@ public class GameAudioManager : MonoBehaviour
         bgmFillImage = GameObject.Find("Canvas").transform.Find("Setting Page/Sound Setting/BGM Sound/BGM Slider/Fill Area/Fill").GetComponent<Image>();
         sfxFillImage = GameObject.Find("Canvas").transform.Find("Setting Page/Sound Setting/SFX Sound/SFX Slider/Fill Area/Fill").GetComponent<Image>();
 
-        SetMasterVolume(masterSound);
-        SetBGMVolume(bgmSound);
-        SetSFXVolume(sfxSound);
-        SetMuteSetting(isSoundMute);
-
         Debug.Log("넘어온 masterSound: " + soundData.masterSound);
         Debug.Log("넘어온 bgmSound: " + soundData.bgmSound);
         Debug.Log("넘어온 sfxSound: " + soundData.sfxSound);
         Debug.Log("받아온 isSoundMute: " + soundData.isMute);
-        Debug.Log("받아온 masterSound: " + masterSound);
-        Debug.Log("받아온 bgmSound: " + bgmSound);
-        Debug.Log("받아온 sfxSound: " + sfxSound);
-        Debug.Log("받아온 isSoundMute: " + isSoundMute);
 
         isHitPlaying = false;
 
@@ -131,8 +110,13 @@ public class GameAudioManager : MonoBehaviour
         m_MusicBGMSlider.interactable = true;
         m_MusicSFXSlider.interactable = true;
 
-       // 배경음 플레이어 초기화
-       GameObject bgmObject = new GameObject("BgmPlayer");
+        SetMasterVolume(soundData.masterSound);
+        SetBGMVolume(soundData.bgmSound);
+        SetSFXVolume(soundData.sfxSound);
+        SetMuteSetting(soundData.isMute);
+
+        // 배경음 플레이어 초기화
+        GameObject bgmObject = new GameObject("BgmPlayer");
         bgmObject.transform.parent = transform; // 배경음을 담당하는 자식 오브젝트 생성
         bgmPlayer = bgmObject.AddComponent<AudioSource>();
         bgmPlayer.outputAudioMixerGroup = m_AudioMixer.FindMatchingGroups(OutputMixer)[1];
@@ -146,18 +130,9 @@ public class GameAudioManager : MonoBehaviour
         for (int index = 0; index < sfxPlayers.Length; index++)
         {
             sfxPlayers[index] = sfxObject.AddComponent<AudioSource>();
-
             sfxPlayers[index].outputAudioMixerGroup = m_AudioMixer.FindMatchingGroups(OutputMixer)[2];
             sfxPlayers[index].playOnAwake = false;
         }
-    }
-
-    private void Update()
-    {
-        soundData.masterSound = masterSound;
-        soundData.bgmSound = bgmSound;
-        soundData.sfxSound = sfxSound;
-        soundData.isMute = isSoundMute;
     }
 
     public void PlaySfx(Sfx sfx)
@@ -167,21 +142,19 @@ public class GameAudioManager : MonoBehaviour
         {
             int loopIndex = (index + channelIndex) % sfxPlayers.Length;
 
+            // 이미 재생하고 있는 효과음이 있는가
             if (sfxPlayers[loopIndex].isPlaying)
-            {
-                if (sfx == Sfx.Hit)
-                {
-                    if (sfxPlayers[loopIndex].clip == sfxClips[(int)Sfx.Hit])
-                        break;
-                }
-
                 continue;
+
+            int randIndex = 0;
+            if (sfx == Sfx.Hit || sfx == Sfx.Melee)
+            {
+                randIndex = Random.Range(0, 2);
             }
+
             channelIndex = loopIndex;
-
-            sfxPlayers[loopIndex].clip = sfxClips[(int)sfx];
+            sfxPlayers[loopIndex].clip = sfxClips[(int)sfx + randIndex];
             sfxPlayers[loopIndex].Play();
-
 
             break;
         }
@@ -189,14 +162,14 @@ public class GameAudioManager : MonoBehaviour
 
     public void SetMasterVolume(float volume)
     {
-        masterSound = volume;
-        m_MusicMasterSlider.value = masterSound;
+        soundData.masterSound = volume;
+        m_MusicMasterSlider.value = soundData.masterSound;
 
-        Debug.Log(masterSound);
-        if (masterSound == 0.001f)
+        Debug.Log(soundData.masterSound);
+        if (soundData.masterSound == 0.001f)
             m_AudioMixer.SetFloat("Master", -80);
         else
-            m_AudioMixer.SetFloat("Master", Mathf.Log10(volume) * 20);
+            m_AudioMixer.SetFloat("Master", Mathf.Log10(volume) * 20 - 15);
 
         masterFillImage.fillAmount = m_MusicMasterSlider.value;
         masterSoundLabel.text = (volume * 100).ToString("F0");
@@ -204,36 +177,35 @@ public class GameAudioManager : MonoBehaviour
 
     public void SetBGMVolume(float volume)
     {
-        bgmSound = volume;
-        m_MusicBGMSlider.value = bgmSound;
+        soundData.bgmSound = volume;
+        m_MusicBGMSlider.value = soundData.bgmSound;
 
-        Debug.Log(bgmSound);
-        if (bgmSound == 0.001f)
+        Debug.Log(soundData.bgmSound);
+        if (soundData.bgmSound == 0.001f)
             m_AudioMixer.SetFloat("BGM", -80);
         else
-            m_AudioMixer.SetFloat("BGM", Mathf.Log10(volume) * 20);
+            m_AudioMixer.SetFloat("BGM", Mathf.Log10(volume) * 20 - 15);
         bgmFillImage.fillAmount = m_MusicBGMSlider.value;
         BGMSoundLabel.text = (volume * 100).ToString("F0");
     }
 
     public void SetSFXVolume(float volume)
     {
-        sfxSound = volume;
-        m_MusicSFXSlider.value = sfxSound;
+        soundData.sfxSound = volume;
+        m_MusicSFXSlider.value = soundData.sfxSound;
 
-        Debug.Log(sfxSound);
-        if (sfxSound == 0.001f)
+        Debug.Log(soundData.sfxSound);
+        if (soundData.sfxSound == 0.001f)
             m_AudioMixer.SetFloat("SFX", -80);
         else
-            m_AudioMixer.SetFloat("SFX", Mathf.Log10(volume) * 20);
+            m_AudioMixer.SetFloat("SFX", Mathf.Log10(volume) * 20 - 15);
         sfxFillImage.fillAmount = m_MusicSFXSlider.value;
         SFXSoundLabel.text = (volume * 100).ToString("F0");
     }
 
-
     public void SetMuteSetting(bool isOn)
     {
-        if (isSoundMute)
+        if (soundData.isMute)
         {
             if (AudioListener.volume == 0)
             {
@@ -249,34 +221,25 @@ public class GameAudioManager : MonoBehaviour
         }
     }
 
+
     public void ToggleAudioVolume(bool isOn)
     {
         // AudioListener.volume = AudioListener.volume == 0 ? 1 : 0;
-        isSoundMute = isOn;
+        soundData.isMute = isOn;
 
-        if (!isSoundMute)
+        if (!soundData.isMute)
         {
-            soundData.isMute = false;
+            //soundData.isMute = false;
             AudioListener.volume = 1; // 켜기
             Debug.Log("soundData.isMute: " + soundData.isMute);
             Debug.Log("Toggle.isOn: " + soundMuteToggle.isOn);
         }
         else // 음소거 
         {
-            soundData.isMute = true;
+            //soundData.isMute = true;
             AudioListener.volume = 0; // 끄기
             Debug.Log("soundData.isMute: " + soundData.isMute);
             Debug.Log("Toggle.isOn: " + soundMuteToggle.isOn);
         }
-    }
-
-    void SoundInit()
-    {
-        Debug.Log("제발 돼라"+soundData.masterSound);
-        masterSound = soundData.masterSound;
-        bgmSound = soundData.bgmSound;
-        sfxSound = soundData.sfxSound;
-
-        isSoundMute = soundData.isMute;
     }
 }

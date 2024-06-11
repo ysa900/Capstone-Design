@@ -9,6 +9,7 @@ public class SoundData : ScriptableObject
     public float masterSound;
     public float bgmSound;
     public float sfxSound;
-    
     public bool isMute;
+
+    public bool isFirstLobby;
 }
