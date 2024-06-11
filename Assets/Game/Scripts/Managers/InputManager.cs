@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using static InputManager;
 
 public class InputManager : MonoBehaviour
 {

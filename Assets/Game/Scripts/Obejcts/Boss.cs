@@ -421,6 +421,8 @@ public class Boss : Object, IDamageable
     {
         hp = hp - (int)damage;
 
+        ShowDamageText(damage, causer.tag); // damageText 출력
+
         if (hp <= 0)
         {
             StartCoroutine(Dead());
@@ -437,6 +439,18 @@ public class Boss : Object, IDamageable
                 damageDelayTimer = 0;
             }
         }
+    }
+
+    // damageText 출력
+    void ShowDamageText(float damage, string skillTag)
+    {
+        GameObject hudText = GameManager.instance.poolManager.GetText((int)damage, skillTag);
+
+        float ranNumX = UnityEngine.Random.Range(-0.5f, 0.5f);
+        float ranNumY = UnityEngine.Random.Range(1.0f, 2.0f);
+
+        Vector3 vector3 = new Vector3(transform.position.x + ranNumX, transform.position.y + ranNumY, 0);
+        hudText.transform.position = vector3;
     }
 
     IEnumerator Dead()

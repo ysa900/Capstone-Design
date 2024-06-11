@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,7 +30,7 @@ public class GameManager : MonoBehaviour
 
     // 게임 시간
     public float gameTime;
-    float sceneGameTime;
+    [SerializeField]float sceneGameTime;
     public float maxGameTime = 5 * 60f; // 초기(Stage1) maxGameTime
 
     // 씬 번호
@@ -224,7 +223,7 @@ public class GameManager : MonoBehaviour
                 break;
 
             case "Stage2":
-                maxGameTime += gameTime;
+                maxGameTime = gameTime + 5 * 60f;
                 tilemapManager = FindAnyObjectByType<TilemapManager>();
                 StageSetting();
                 // Stage2 배경음 플레이
@@ -235,7 +234,7 @@ public class GameManager : MonoBehaviour
                 break;
 
             case "Stage3":
-                maxGameTime += gameTime;
+                maxGameTime = gameTime + 5 * 60f;
                 StageSetting();
                 bossManager = FindAnyObjectByType<BossManager>();
 
@@ -369,14 +368,14 @@ public class GameManager : MonoBehaviour
         switch (sceneName)
         {
             case "Stage1":
-                if (gameTime >= 300f) // 5분
+                if (gameTime >= maxGameTime) // 5분
                 {
                     isStageClear = true;
                 }
                 break;
 
             case "Stage2":
-                if (gameTime >= 600f) // 10분
+                if (gameTime >= maxGameTime) // 10분
                 {
                     isStageClear = true;
                 }
@@ -848,7 +847,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        ranNum = UnityEngine.Random.Range(1, 101);
+        ranNum = UnityEngine.Random.Range(1, 301);
         if(ranNum == 100)
         {
             HP_PotionSpawn(10, killedEnemy);

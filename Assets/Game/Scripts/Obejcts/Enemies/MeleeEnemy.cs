@@ -1,6 +1,4 @@
-﻿using System;
-using UnityEngine;
-
+﻿
 public class MeleeEnemy : Enemy
 {
     protected override void Awake()

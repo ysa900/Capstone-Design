@@ -1,4 +1,3 @@
-using System.Data.Common;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -146,9 +145,6 @@ public class CharacterPageManager : MonoBehaviour
     // GameStart 버튼 클릭 시
     private void GameStartButtonClicked()
     {
-        if (!LobbyAudioManager.instance.soundData.isFirstLobby)
-            SceneManager.LoadScene("Splash1"); // 1회차: Lobby -> Splash1
-        else
-            SceneManager.LoadScene("Stage1"); // n회: Lobby -> Stage1
+        SceneManager.LoadScene("Splash1"); // 1회차: Lobby -> Splash1
     }
 }

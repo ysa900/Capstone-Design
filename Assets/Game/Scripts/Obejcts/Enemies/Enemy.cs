@@ -2,10 +2,6 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.SceneManagement;
-using UnityEngine.UIElements;
-using static Unity.Barracuda.TextureAsTensorData;
-using static UnityEngine.GraphicsBuffer;
 
 public class Enemy : Object, IDamageable, IPoolingObject
 {
@@ -70,7 +66,7 @@ public class Enemy : Object, IDamageable, IPoolingObject
 
         damageDelayTimer = 0;
 
-        agent.enabled = true;
+        agent.enabled = false;
 
         float playerX = player.transform.position.x;
         float playerY = player.transform.position.y;
@@ -362,6 +358,8 @@ public class Enemy : Object, IDamageable, IPoolingObject
 
     private void OnCollisionStay2D(Collision2D collision)
     {
+        Vector2 normal = collision.contacts[0].normal;
+
         if (collision.gameObject.tag == "Player")
         {
             if (agent.enabled)
@@ -374,9 +372,43 @@ public class Enemy : Object, IDamageable, IPoolingObject
 
         if (collision.gameObject.tag == "Obstacle" && agent.enabled)
         {
+
+            if (normal.y > 0)
+            {
+                agent.SetDestination(transform.position + new Vector3(0, -1, 0));
+
+                //"충돌 방향: 아래에서 위로 (Up)"
+            }
+            else if (normal.y < 0)
+            {
+                agent.SetDestination(transform.position + new Vector3(0, 1, 0));
+                //"충돌 방향: 위에서 아래로 (Down)"
+            }
+
+            if (normal.x > 0)
+            {
+
+                agent.SetDestination(transform.position + new Vector3(-1, -1, 0));
+                //"충돌 방향: 왼쪽에서 오른쪽으로 (Right)"
+            }
+            else if (normal.x < 0)
+            {
+                agent.SetDestination(transform.position + new Vector3(1, 1, 0));
+                //"충돌 방향: 오른쪽에서 왼쪽으로 (Left)"
+            }
+
             agent.SetDestination(transform.position + new Vector3(-1, 3, 0));
             rigid.mass = 3.5f;
             isAgentDelay = true;
+        }
+        else if (collision.gameObject.tag == "Upper_Wall" && agent.enabled)
+        {
+            agent.SetDestination(transform.position + new Vector3(0, -1, 0));
+
+        }
+        else if (collision.gameObject.tag == "Under_Wall" && agent.enabled)
+        {
+            agent.SetDestination(transform.position + new Vector3(0, 1, 0));
         }
     }
 

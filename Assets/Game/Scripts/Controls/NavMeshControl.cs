@@ -1,14 +1,5 @@
-using NavMeshPlus.Components;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics.Tracing;
-using Unity.AI.Navigation;
-using Unity.MLAgents;
-using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.AI;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class NavMeshControl : MonoBehaviour
 {
