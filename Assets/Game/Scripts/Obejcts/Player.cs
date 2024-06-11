@@ -52,8 +52,6 @@ public class Player : MonoBehaviour, IPlayer
     public delegate void OnPlayerLevelUP();
     public OnPlayerLevelUP onPlayerLevelUP;
 
-    private GameAudioManager gameAudioManager;
-
     public PlayerData playerData; // 플레이어 데이터
 
 
@@ -70,8 +68,6 @@ public class Player : MonoBehaviour, IPlayer
         }
         // 아래의 함수를 사용하여 씬이 전환되더라도 선언되었던 인스턴스가 파괴되지 않는다.
         DontDestroyOnLoad(gameObject);
-
-        gameAudioManager = FindAnyObjectByType<GameAudioManager>();
     }
 
     void Start()
@@ -179,7 +175,7 @@ public class Player : MonoBehaviour, IPlayer
                 bool isHitDelayOK = hitDelayTimer >= hitDelayTime;
                 if (isHitDelayOK)
                 {
-                    gameAudioManager.PlaySfx(GameAudioManager.Sfx.Melee); // 피격  효과음
+                    GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Melee); // 피격  효과음
                     hitDelayTimer = 0;
                 }
             }
@@ -206,7 +202,7 @@ public class Player : MonoBehaviour, IPlayer
             if (!isPlayerShielded)
             {
                 playerData.hp -= damage * playerData.damageReductionValue;
-                gameAudioManager.PlaySfx(GameAudioManager.Sfx.Melee); // 피격  효과음
+                GameAudioManager.instance.PlaySfx(GameAudioManager.Sfx.Melee); // 피격  효과음
             }
 
             if (playerData.hp <= 0)

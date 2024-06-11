@@ -1,3 +1,4 @@
+using System.Data.Common;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,6 +14,8 @@ public class CharacterPageManager : MonoBehaviour
 
     void Start()
     {
+
+
         // 현재 클래스 구현 1개 - Mage
         // 캐릭터(Mage) 선택 시
         UnityEngine.UI.Button SelectMageButton = lobbyManager.SelectMageButtonObject.GetComponent<UnityEngine.UI.Button>();
@@ -110,6 +113,10 @@ public class CharacterPageManager : MonoBehaviour
     // GameStart 버튼 클릭 시
     private void GameStartButtonClicked()
     {
-        SceneManager.LoadScene("Splash1"); // Splash1 씬 불러오기
+        Debug.Log(LobbyAudioManager.instance.soundData);
+        if (!LobbyAudioManager.instance.soundData.isFirstLobby)
+            SceneManager.LoadScene("Splash1"); // 1회차: Lobby -> Splash1
+        else
+            SceneManager.LoadScene("Stage1"); // n회: Lobby -> Stage1
     }
 }

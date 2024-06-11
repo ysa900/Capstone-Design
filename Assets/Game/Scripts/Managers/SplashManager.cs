@@ -83,9 +83,6 @@ public class SplashManager : MonoBehaviour
 
         switch (SceneManager.GetActiveScene().name)
         {
-            case "Splash0":
-                SceneManager.LoadScene("Lobby");
-                break;
             case "Splash1":
                 SceneManager.LoadScene("Stage1");
                 break;

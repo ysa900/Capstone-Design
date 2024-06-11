@@ -3004,31 +3004,7 @@ MonoBehaviour:
   m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1863497825}
-        m_TargetAssemblyTypeName: LobbyAudioManager, Assembly-CSharp
-        m_MethodName: SetSFXVolume
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1863497827}
-        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
-        m_MethodName: PlayOneShot
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 8300000, guid: c259a932c707444f3843d6b7d0c8190d, type: 3}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &696582759
 GameObject:
   m_ObjectHideFlags: 0
@@ -4441,7 +4417,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1100613645
@@ -5128,19 +5104,7 @@ MonoBehaviour:
   m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1863497825}
-        m_TargetAssemblyTypeName: LobbyAudioManager, Assembly-CSharp
-        m_MethodName: SetMasterVolume
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &1203101166
 GameObject:
   m_ObjectHideFlags: 0
@@ -6111,19 +6075,7 @@ MonoBehaviour:
   m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1863497825}
-        m_TargetAssemblyTypeName: LobbyAudioManager, Assembly-CSharp
-        m_MethodName: SetBGMVolume
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &1417882351
 GameObject:
   m_ObjectHideFlags: 0
@@ -6628,19 +6580,7 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1863497825}
-        m_TargetAssemblyTypeName: LobbyAudioManager, Assembly-CSharp
-        m_MethodName: ToggleAudioVolume
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_IsOn: 0
 --- !u!1 &1499826234
 GameObject:
@@ -8096,6 +8036,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 885df13d0cd2e8c4c8057ff53873720d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  soundData: {fileID: 11400000, guid: c4f6abeb768b644ceb664fcd7d51ee21, type: 2}
   m_AudioMixer: {fileID: 24100000, guid: aa96f8f207f754a51b2dc7abff1d0dc1, type: 2}
   m_MusicMasterSlider: {fileID: 1191478332}
   m_MusicBGMSlider: {fileID: 1416792702}
@@ -8103,6 +8044,11 @@ MonoBehaviour:
   masterSoundLabel: {fileID: 1400168950}
   BGMSoundLabel: {fileID: 1811048638}
   SFXSoundLabel: {fileID: 437138969}
+  soundMuteToggle: {fileID: 1499499538}
+  masterFillImage: {fileID: 1150188440}
+  sfxFillImage: {fileID: 1701684297}
+  bgmFillImage: {fileID: 508371625}
+  count: 0
 --- !u!4 &1863497826
 Transform:
   m_ObjectHideFlags: 0
@@ -8761,7 +8707,6 @@ MonoBehaviour:
   ExitButtonObject: {fileID: 2075031570}
   MainPageOptionButtonObject: {fileID: 637307110}
   CharacterPageOptionButtonObject: {fileID: 1500764449}
-  SaveButtonObject: {fileID: 0}
   CharacterExplainGroup: {fileID: 196585982}
   SelectAssassinButtonObject: {fileID: 1574768206}
   SelectMageButtonObject: {fileID: 1557197879}
