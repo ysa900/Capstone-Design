@@ -189,7 +189,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 8857619680574137846, guid: daf2389240168c24ea3446fee54b4f80, type: 3}
   hp: 0
-  speed: 2
+  speed: 4
   isEnemyLookLeft: 0
   index: 0
   rigid: {fileID: 0}

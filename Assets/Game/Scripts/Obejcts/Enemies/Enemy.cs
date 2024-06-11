@@ -15,7 +15,7 @@ public class Enemy : Object, IDamageable, IPoolingObject
     public Player player;
 
     // Enemy들 체력
-    float[] enemy_HP = { 15, 50, 80, 60, 60, 120, 150, 200, 250, 400 };
+    float[] enemy_HP = { 10, 30, 50, 50, 40, 100, 100, 150, 200, 500 };
 
     // enemy 정보
     public float hp;
@@ -265,6 +265,7 @@ public class Enemy : Object, IDamageable, IPoolingObject
             }
             else
             {
+                agent.enabled = true;
                 agent.SetDestination(player.transform.position);
             }
         }
@@ -423,7 +424,7 @@ public class Enemy : Object, IDamageable, IPoolingObject
     public IEnumerator makeEnemyHardPattern()
     {
         transform.GetChild(0).gameObject.SetActive(true);
-        hp *= 1.5f;
+        hp *= 2f;
 
         yield return new WaitForSeconds(30f); // 지정한 초 뒤에 패턴 끄기
 
@@ -432,26 +433,27 @@ public class Enemy : Object, IDamageable, IPoolingObject
         // Enemy Hp 보정
         if (tag == "EvilTree")
         {
-            if (hp >= 10f)
+            if (hp >= enemy_HP[0])
             {
-                hp = 10f;
+                hp = enemy_HP[0];
             }
         }
         else if (tag == "Pumpkin")
         {
-            if (hp >= 50f)
+            if (hp >= enemy_HP[1])
             {
-                hp = 50f;
+                hp = enemy_HP[1];
             }
         }
         else if (tag == "Warlock")
         {
-            if (hp >= 80f)
+            if (hp >= enemy_HP[2])
             {
-                hp = 80f;
+                hp = enemy_HP[2];
             }
         }
     }
+
     // damageText 출력
     void ShowDamageText(float damage, string skillTag)
     {

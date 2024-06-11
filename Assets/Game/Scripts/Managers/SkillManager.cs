@@ -1,10 +1,7 @@
-﻿using Google.Protobuf.WellKnownTypes;
-using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.ComTypes;
+using System.Linq;
 using Unity.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,10 +10,27 @@ public class SkillManager : MonoBehaviour
     // 싱글톤 패턴을 사용하기 위한 인스턴스 변수
     private static SkillManager _instance;
 
+    // 인스턴스에 접근하기 위한 프로퍼티
+    public static SkillManager instance
+    {
+        get
+        {
+            // 인스턴스가 없는 경우에 접근하려 하면 인스턴스를 할당해준다.
+            if (!_instance)
+            {
+                _instance = FindAnyObjectByType(typeof(SkillManager)) as SkillManager;
+
+                if (_instance == null)
+                    Debug.Log("no Singleton obj");
+            }
+            return _instance;
+        }
+    }
+
     public Player player;
 
-    private float attackRange = 17.5f; // 플레이어 공격 사거리
-    private float nearAttackRange = 7.5f; // 플레이어 근접 우선 공격 사거리
+    private float attackRange = 15f; // 플레이어 공격 사거리
+    private float nearAttackRange = 10f; // 플레이어 근접 우선 공격 사거리
 
     public bool isBossAppear; // 보스가 소환됐는지를 판단하는 변수
 
@@ -44,7 +58,7 @@ public class SkillManager : MonoBehaviour
     [SerializeField] float[] attackDelayTimer = new float[18];
 
     /* 
-     * 0번 스킬(fire ball), 1번 스킬(lightning), 8번 스킬(ice spike), 16번 스킬(Sky Fall)
+     * 0번 스킬(fire ball), 1번 스킬(lightning), 8번 스킬(ice spike), 16번 스킬(Sky Fall), 16번 스킬(Frozen Spike)
      * 들은 스킬 시전 중에 시전 가능, 따라서 스킬 시전 할 때 isSkillsCasted[index] = true로 안함
     */
     [SerializeField] bool[] isSkillsCasted = new bool[18];
@@ -91,7 +105,8 @@ public class SkillManager : MonoBehaviour
 
     private void Update()
     {
-        bool isSplashScene = 
+        bool isSplashScene =
+            SceneManager.GetActiveScene().name == "Lobby" ||
             SceneManager.GetActiveScene().name == "Splash1" || 
             SceneManager.GetActiveScene().name == "Splash2" ||
             SceneManager.GetActiveScene().name == "Splash3";
@@ -114,57 +129,58 @@ public class SkillManager : MonoBehaviour
                 }
                 else
                 {
-                    attackDelayTimer[i] -= Time.deltaTime;
+                    if(!isSkillsCasted[i])
+                        attackDelayTimer[i] -= Time.deltaTime;
                 }
             }
         }
     }
 
     // skilldata를 초기화
-    private void Init()
+    public void Init()
     {
         // Skill Data 초기화
         for (int i = 0; i < skillData.level.Length; i++) { skillData.level[i] = 0; }
 
-        skillData.Damage[0] = 23f;
-        skillData.Damage[1] = 10f; // 번개 두 번 침
-        skillData.Damage[2] = 5.0f; // dot damage skill
+        skillData.Damage[0] = 10f;
+        skillData.Damage[1] = 5f;
+        skillData.Damage[2] = 3f; // dot damage skill
         skillData.Damage[3] = 20f;
-        skillData.Damage[4] = 15f;
+        skillData.Damage[4] = 20f;
         skillData.Damage[5] = 0f;
-        skillData.Damage[6] = 35f;
-        skillData.Damage[7] = 20.0f;  // dot damage skill
-        skillData.Damage[8] = 10.0f;  // dot damage skill
-        skillData.Damage[9] = 200f;
-        skillData.Damage[10] = 40f;
-        skillData.Damage[11] = 10.0f; // dot damage skill
+        skillData.Damage[6] = 40f;
+        skillData.Damage[7] = 12f;  // dot damage skill
+        skillData.Damage[8] = 12f;  // dot damage skill
+        skillData.Damage[9] = 80f;
+        skillData.Damage[10] = 80f;
+        skillData.Damage[11] = 24f; // dot damage skill
         // 여기부터 공명 스킬
         skillData.Damage[12] = 5f;    // dot damage skill
-        skillData.Damage[13] = 150f;  // dot damage skill
-        skillData.Damage[14] = 100f;  // dot damage skill
-        skillData.Damage[15] = 75f;   // dot damage skill
-        skillData.Damage[16] = 100f;  // dot damage skill
-        skillData.Damage[17] = 750f;
+        skillData.Damage[13] = 60f;  // dot damage skill
+        skillData.Damage[14] = 40f;  // dot damage skill
+        skillData.Damage[15] = 12f;   // dot damage skill
+        skillData.Damage[16] = 40f;  // dot damage skill
+        skillData.Damage[17] = 200f;
 
-        skillData.Delay[0] = 1f;
-        skillData.Delay[1] = 0.75f;
-        skillData.Delay[2] = 1.5f;
-        skillData.Delay[3] = 3;
-        skillData.Delay[4] = 14;
-        skillData.Delay[5] = 10;
-        skillData.Delay[6] = 1f;
-        skillData.Delay[7] = 4;
-        skillData.Delay[8] = 2;
+        skillData.Delay[0] = 2f;
+        skillData.Delay[1] = 1.5f;
+        skillData.Delay[2] = 2f;
+        skillData.Delay[3] = 2f;
+        skillData.Delay[4] = 5f;
+        skillData.Delay[5] = 6f;
+        skillData.Delay[6] = 2f;
+        skillData.Delay[7] = 3f;
+        skillData.Delay[8] = 2f;
         skillData.Delay[9] = 3;
-        skillData.Delay[10] = 7.5f;
-        skillData.Delay[11] = 8f;
+        skillData.Delay[10] = 3f;
+        skillData.Delay[11] = 3f;
         // 여기부터 공명 스킬
-        skillData.Delay[12] = 6f;
-        skillData.Delay[13] = 3.5f;
-        skillData.Delay[14] = 3f;
-        skillData.Delay[15] = 6f;
-        skillData.Delay[16] = 1f;
-        skillData.Delay[17] = 0.25f;
+        skillData.Delay[12] = 2.6f;
+        skillData.Delay[13] = 2.5f;
+        skillData.Delay[14] = 4f;
+        skillData.Delay[15] = 4f;
+        skillData.Delay[16] = 2.55f;
+        skillData.Delay[17] = 0.4f;
 
         skillData.scale[0] = 1.5f;
         skillData.scale[1] = 1f;
@@ -191,7 +207,11 @@ public class SkillManager : MonoBehaviour
         passiveSkillData.Damage[4] = 1f;
         passiveSkillData.Damage[5] = 0.25f;
         for (int i = 0; i < passiveSkillData.skillSelected.Length; i++) { passiveSkillData.skillSelected[i] = false; }
-    }
+
+        isBossAppear = false;
+        isFire3SkillLeftRight = false;
+        skyFallQuadrantNum = -1;
+}
 
     // 시작 스킬을 선택하는 함수 (개발용)
     // num : 스킬 번호 (불 - 0 , 전기 - 1, 물 - 2)
@@ -231,16 +251,16 @@ public class SkillManager : MonoBehaviour
                 case 1:
                     {
                         // 전기 공격은 사거리 내 랜덤한 적에게 시전된다
-                        Enemy enemy;
+                        Enemy enemy = new Enemy();
 
-                        int breakNum = 0; // while문 탈출을 위한 num
                         bool isInAttackRange = false;
 
-                        while (true)
+                        List<Enemy> findEnemies = enemies.ToList();
+                        while (findEnemies.Count > 0)
                         {
-                            int ranNum = UnityEngine.Random.Range(0, enemies.Count);
+                            int ranNum = UnityEngine.Random.Range(0, findEnemies.Count);
                             
-                            enemy = enemies[ranNum];
+                            enemy = findEnemies[ranNum];
                             
                             if (!(enemy == null))
                             {
@@ -251,28 +271,23 @@ public class SkillManager : MonoBehaviour
                                 if (isInAttackRange)
                                     break;
                             }
-
-                            breakNum++;
-                            if (breakNum >= 1000)// 1000회 반복 내에 마땅한 위치를 찾지 못했다면 그냥 break;
-                            {
-                                Debug.Log("1000번 내에 찾지 못함");
-                                break;
-                            }
+                            findEnemies.Remove(enemy);
                         }
-                        if (enemy == null) return; // 적이 없으면 공격 X
+                        if (enemies.IndexOf(enemy) == -1) return; // 적이 없으면 공격 X
 
                         if (isInAttackRange) { 
                             CastSkill(enemy, index);
                         } else { // 근접 우선 사거리 내에 적이 없으면 원거리 범위 적을 찾는다
 
-                            breakNum = 0; // while문 탈출을 위한 num
+                            findEnemies = enemies.ToList();
+
                             isInAttackRange = false;
 
-                            while (true)
+                            while (findEnemies.Count > 0)
                             {
-                                int ranNum = UnityEngine.Random.Range(0, enemies.Count);
-
-                                enemy = enemies[ranNum];
+                                int ranNum = UnityEngine.Random.Range(0, findEnemies.Count);
+                                
+                                enemy = findEnemies[ranNum];
 
                                 if (!(enemy == null))
                                 {
@@ -283,17 +298,11 @@ public class SkillManager : MonoBehaviour
                                     if (isInAttackRange)
                                         break;
                                 }
-
-                                breakNum++;
-                                if (breakNum >= 1000)// 1000회 반복 내에 마땅한 위치를 찾지 못했다면 그냥 break;
-                                {
-                                    Debug.Log("1000번 내에 찾지 못함");
-                                    break;
-                                }
+                                findEnemies.Remove(enemy);
                             }
                         }
 
-                        if (enemy == null) return; // 적이 없으면 공격 X
+                        if (enemies.IndexOf(enemy) == -1) return; // 적이 없으면 공격 X
 
                         if (isInAttackRange)
                             CastSkill(enemy, index);
@@ -458,7 +467,7 @@ public class SkillManager : MonoBehaviour
                     enemyOnSkill = GameManager.instance.poolManager.GetSkill(7, boss) as Lightning;
                     
 
-                    enemyOnSkill.aliveTime = 1.5f;
+                    enemyOnSkill.aliveTime = 0.5f;
 
                     enemyOnSkill.isBossAppear = true;
                     enemyOnSkill.boss = boss;
@@ -874,7 +883,7 @@ public class SkillManager : MonoBehaviour
                     skill.isDotDamageSkill = true;
 
                     skill.damage = skillData.Damage[index] * passiveSkillData.Damage[0] * passiveSkillData.Damage[2];
-                    ((HeavensEclipse)skill).burstDamage = 200f * passiveSkillData.Damage[0] * passiveSkillData.Damage[2];
+                    ((HeavensEclipse)skill).burstDamage = 60f * passiveSkillData.Damage[0] * passiveSkillData.Damage[2];
 
                     skill.skillIndex = index;
 
@@ -1033,22 +1042,21 @@ public class SkillManager : MonoBehaviour
 
                     // 스킬이 플레이어 기준 1 ~ 4분면 중 어디에 시전될 까
                     // 이전에 떨어졌던 사분면에는 떨어지지 않음
-                    int quadrantNum;
-                    int breakNum = 0;
-                    do
+                    int quadrantNum = -1;
+
+                    List<int> qudrantNums = new List<int> { 1, 2, 3, 4 };
+
+                    for(int i = 0; i < qudrantNums.Count; i++)
                     {
                         quadrantNum = UnityEngine.Random.Range(1, 5);
-                        
-                        breakNum++;
-                        if (breakNum >= 1000)// 1000회 반복 내에 마땅한 위치를 찾지 못했다면 그냥 break;
+                        if (skyFallQuadrantNum == quadrantNum)
+                            qudrantNums.Remove(quadrantNum);
+                        else
                         {
-                            Debug.Log("1000번 내에 찾지 못함");
+                            skyFallQuadrantNum = quadrantNum;
                             break;
                         }
                     }
-                    while (skyFallQuadrantNum == quadrantNum);
-
-                    skyFallQuadrantNum = quadrantNum;
 
                     float ranNumX = 0;
                     float ranNumY = 0;
@@ -1072,6 +1080,9 @@ public class SkillManager : MonoBehaviour
                         case 4:
                             ranNumX = UnityEngine.Random.Range(0, 16f);
                             ranNumY = UnityEngine.Random.Range(-7.5f, 0);
+                            break;
+                        default:
+                            Debug.Log("사분면을 찾지 못했습니다.");
                             break;
                     }
 

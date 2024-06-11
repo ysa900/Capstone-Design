@@ -190,7 +190,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   hp: 0
-  speed: 1.5
+  speed: 3
   isEnemyLookLeft: 0
   index: 0
   rigid: {fileID: 0}

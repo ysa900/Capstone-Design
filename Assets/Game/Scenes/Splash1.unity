@@ -416,7 +416,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &533840508
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1107,8 +1107,6 @@ MonoBehaviour:
   GuideTextObject: {fileID: 843128293}
   imageObjects:
   - {fileID: 1283064078}
-  GuidePanel: {fileID: 70217153}
-  goNextStageButtonObject: {fileID: 533840508}
 --- !u!82 &1286232368
 AudioSource:
   m_ObjectHideFlags: 0

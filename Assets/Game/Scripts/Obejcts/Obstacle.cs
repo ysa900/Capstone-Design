@@ -6,7 +6,7 @@ using UnityEngine;
 public class Obstacle : MonoBehaviour
 {
     Rigidbody2D rigid;
-    int speed = 30;
+    int speed = 60;
     public float height;
     float cooltime;
     float cooltimer = 0f;
