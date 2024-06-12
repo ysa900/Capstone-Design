@@ -250,10 +250,6 @@ public class GameManager : MonoBehaviour
         }
 
         SetPlayerInfo(); // player 위치 설정
-
-
-        Invoke("EEE", 2);
-        
     }
 
     void Init()
@@ -299,25 +295,6 @@ public class GameManager : MonoBehaviour
         skillManager.player = player;
 
         Time.timeScale = 1;
-    }
-
-    void EEE()
-    {
-        /*Debug.Log("GameManager Canvas 객체들 검사");
-        Debug.Log(gameOverObject);
-        Debug.Log(gameClearObject);
-        Debug.Log(pauseObject);
-        Debug.Log(optionObject);
-        Debug.Log(HpStatusObject);
-        Debug.Log(HpStatusLetteringObject);
-        Debug.Log(ActiveSkillPanelObject);
-        Debug.Log(PassiveSkillPanelObject);
-        Debug.Log(CharacterProfileObject);
-        Debug.Log(BossHPObject);
-        Debug.Log(SettingPageObject);
-        inputManager.AAA();
-        Debug.Log("SkillManager Player 객체 검사");
-        Debug.Log(skillManager.player);*/
     }
 
     void StageSetting()
@@ -707,7 +684,6 @@ public class GameManager : MonoBehaviour
             // 인게임 중에만 작동
             if (!isDeadPageOn && !isPauseReClicked && !isWantPauseButtonActive)
             {
-                //Debug.Log("첫번째이자 Pause 화면 나오게");
                 Time.timeScale = 0;
                 pauseObject.SetActive(true);
                 isPausePageOn = true;
@@ -722,7 +698,6 @@ public class GameManager : MonoBehaviour
 
             if (!isDeadPageOn && !isPauseReClicked && isWantPauseButtonActive)
             {
-                //Debug.Log("N번째이자 Pause 화면 나오게");
                 Time.timeScale = 0;
                 pauseObject.SetActive(true);
                 isPausePageOn = true;
@@ -760,7 +735,6 @@ public class GameManager : MonoBehaviour
                 if (!pauseObject.activeSelf)
                 {
                     isWantPauseButtonActive = true;
-                    //Debug.Log("Pause 화면 안나오게");
                 }
                 isPauseReClicked = false;
             }
@@ -895,7 +869,6 @@ public class GameManager : MonoBehaviour
         InputManager.PauseButtonObject.interactable = true;
 
         player.isSkillSelectComplete = true;
-        Debug.Log("스킬 선택 완료, isSkillSelectComplete: "+ player.isSkillSelectComplete);
     }
 
     private void OnPlayerHealed()

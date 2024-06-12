@@ -93,11 +93,6 @@ public class GameAudioManager : MonoBehaviour
         bgmFillImage = GameObject.Find("Canvas").transform.Find("Setting Page/Sound Setting/BGM Sound/BGM Slider/Fill Area/Fill").GetComponent<Image>();
         sfxFillImage = GameObject.Find("Canvas").transform.Find("Setting Page/Sound Setting/SFX Sound/SFX Slider/Fill Area/Fill").GetComponent<Image>();
 
-        Debug.Log("넘어온 masterSound: " + soundData.masterSound);
-        Debug.Log("넘어온 bgmSound: " + soundData.bgmSound);
-        Debug.Log("넘어온 sfxSound: " + soundData.sfxSound);
-        Debug.Log("받아온 isSoundMute: " + soundData.isMute);
-
         isHitPlaying = false;
 
         string OutputMixer = "Master";
@@ -166,7 +161,6 @@ public class GameAudioManager : MonoBehaviour
         soundData.masterSound = volume;
         m_MusicMasterSlider.value = soundData.masterSound;
 
-        Debug.Log(soundData.masterSound);
         if (soundData.masterSound == 0.001f)
             m_AudioMixer.SetFloat("Master", -80);
         else
@@ -181,7 +175,6 @@ public class GameAudioManager : MonoBehaviour
         soundData.bgmSound = volume;
         m_MusicBGMSlider.value = soundData.bgmSound;
 
-        Debug.Log(soundData.bgmSound);
         if (soundData.bgmSound == 0.001f)
             m_AudioMixer.SetFloat("BGM", -80);
         else
@@ -195,7 +188,6 @@ public class GameAudioManager : MonoBehaviour
         soundData.sfxSound = volume;
         m_MusicSFXSlider.value = soundData.sfxSound;
 
-        Debug.Log(soundData.sfxSound);
         if (soundData.sfxSound == 0.001f)
             m_AudioMixer.SetFloat("SFX", -80);
         else
@@ -232,15 +224,11 @@ public class GameAudioManager : MonoBehaviour
         {
             //soundData.isMute = false;
             AudioListener.volume = 1; // 켜기
-            Debug.Log("soundData.isMute: " + soundData.isMute);
-            Debug.Log("Toggle.isOn: " + soundMuteToggle.isOn);
         }
         else // 음소거 
         {
             //soundData.isMute = true;
             AudioListener.volume = 0; // 끄기
-            Debug.Log("soundData.isMute: " + soundData.isMute);
-            Debug.Log("Toggle.isOn: " + soundMuteToggle.isOn);
         }
     }
 }

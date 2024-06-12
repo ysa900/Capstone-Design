@@ -215,18 +215,15 @@ public class Player : MonoBehaviour, IPlayer
 
     IEnumerator LevelUP()
     {
-        Debug.Log("레벨 업 기다리는 중");
         if (Time.timeScale != 0)
         {
             isSkillSelectComplete = true; // 오류 방지를 위한 코드
-            Debug.Log("timeScale != 0, isSkillSelectComplete: " + isSkillSelectComplete);
         }
         yield return new WaitUntil(() => isSkillSelectComplete);
 
         onPlayerLevelUP(); // delegate 호출
 
         isSkillSelectComplete = false;
-        Debug.Log("기다리기 끝, isSkillSelectComplete: "+ isSkillSelectComplete);
 
         playerData.Exp -= playerData.nextExp[playerData.level];
         playerData.level++;

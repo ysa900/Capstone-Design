@@ -204,9 +204,10 @@ public class InputManager : MonoBehaviour
     private void OptionButtonClicked()
     {
         // Setting창 안켜져있을 때 누르면
-        if (!GameManager.instance.isSettingPageOn)
+        if (!GameManager.SettingPageObject.activeSelf)
         {
-            if (!GameManager.SettingPageObject.activeSelf || !GameManager.instance.isGameOver && !GameManager.instance.isDeadPageOn && !GameManager.instance.isSkillSelectPageOn)
+            // Pause버튼 비활성화인 경우(GameOver, Game Clear, 스킬 선택)
+            if (!GameManager.instance.isGameOver && !GameManager.instance.isDeadPageOn && !GameManager.instance.isSkillSelectPageOn)
             {
                 Time.timeScale = 0; // 인게임 플레이 중에만 멈추기
                 PauseButtonObject.interactable = false;  // 인게임 플레이 중에만 Pause 버튼 비활성화
@@ -218,8 +219,8 @@ public class InputManager : MonoBehaviour
         // Setting창 켜져있을 때 누른다면
         else
         {
-            // Pause버튼이 비활성화돼있는 상황인 경우
-            if (!GameManager.instance.isDeadPageOn && !GameManager.instance.isSkillSelectPageOn)
+            // Pause버튼이 비활성화돼있는데 풀어야하는 경우
+            if (!GameManager.instance.isGameOver && !GameManager.instance.isDeadPageOn && !GameManager.instance.isSkillSelectPageOn)
             {
                 if (!GameManager.pauseObject.activeSelf || !GameManager.gameClearObject.activeSelf)
                     if (!GameManager.pauseObject.activeSelf)
@@ -229,7 +230,6 @@ public class InputManager : MonoBehaviour
 
             GameManager.instance.isSettingPageOn = false;
             GameManager.SettingPageObject.SetActive(false);
-
         }
     }
 
@@ -237,8 +237,8 @@ public class InputManager : MonoBehaviour
     {
         if (GameManager.instance.isSettingPageOn)
         {
-            // Pause버튼이 비활성화돼있는 상황인 경우
-            if (!GameManager.instance.isDeadPageOn && !GameManager.instance.isSkillSelectPageOn)
+            // Pause버튼이 비활성화돼있는데 풀어야하는 경우
+            if (!GameManager.instance.isGameOver && !GameManager.instance.isDeadPageOn && !GameManager.instance.isSkillSelectPageOn)
             {
                 if (!GameManager.pauseObject.activeSelf)
                     Time.timeScale = 1;
@@ -248,7 +248,6 @@ public class InputManager : MonoBehaviour
             GameManager.instance.isSettingPageOn = false;
             GameManager.SettingPageObject.SetActive(false);
         }
-
     }
 
     // 버튼이 클릭되었을 때 호출되는 메서드

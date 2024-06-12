@@ -52,7 +52,6 @@ public class LobbyAudioManager : MonoBehaviour
         soundData.masterSound = volume;
         m_MusicMasterSlider.value = soundData.masterSound;
 
-        Debug.Log(soundData.masterSound);
         if (soundData.masterSound == 0.001f)
             m_AudioMixer.SetFloat("Master", -80);
         else
@@ -67,7 +66,6 @@ public class LobbyAudioManager : MonoBehaviour
         soundData.bgmSound = volume;
         m_MusicBGMSlider.value = soundData.bgmSound;
 
-        Debug.Log(soundData.bgmSound);
         if (soundData.bgmSound == 0.001f)
             m_AudioMixer.SetFloat("BGM", -80);
         else
@@ -81,7 +79,6 @@ public class LobbyAudioManager : MonoBehaviour
         soundData.sfxSound = volume;
         m_MusicSFXSlider.value = soundData.sfxSound;
 
-        Debug.Log(soundData.sfxSound);
         if (soundData.sfxSound == 0.001f)
             m_AudioMixer.SetFloat("SFX", -80);
         else
@@ -117,15 +114,11 @@ public class LobbyAudioManager : MonoBehaviour
         {
             soundData.isMute = false;
             AudioListener.volume = 1; // 켜기
-            Debug.Log("soundData.isMute: " + soundData.isMute);
-            Debug.Log("Toggle.isOn: " + soundMuteToggle.isOn);
         }
         else // 음소거 
         {
             soundData.isMute = true;
             AudioListener.volume = 0; // 끄기
-            Debug.Log("soundData.isMute: " + soundData.isMute);
-            Debug.Log("Toggle.isOn: " + soundMuteToggle.isOn);
         }
     }
 

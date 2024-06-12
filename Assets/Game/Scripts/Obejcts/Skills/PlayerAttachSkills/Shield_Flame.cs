@@ -20,6 +20,7 @@ public class Shield_Flame : PlayerAttachSkill
         absorberTransform.GetComponent<CircleCollider2D>().enabled = true;
         absorberTransform.GetComponent<PolygonCollider2D>().enabled = false;
         absorberTransform.GetComponent<PointEffector2D>().forceMagnitude = -150f;
+        absorberTransform.GetComponent<PointEffector2D>().forceMode = EffectorForceMode2D.Constant;
         absorbTimer = 0;
         isAbsorberOn = false;
 
@@ -33,11 +34,11 @@ public class Shield_Flame : PlayerAttachSkill
 
     protected override void FixedUpdate()
     {
-        bool destroySkill = aliveTimer > aliveTime - 0.11f; // 끝나기 0.1초 전에 실행 (0.11로 한 이유는 버그 방지)
+        bool destroySkill = aliveTimer > aliveTime - 0.21f; // 끝나기 0.2초 전에 실행 (0.21로 한 이유는 버그 방지)
 
         if (destroySkill)
         {
-            StartCoroutine(Destroy()); // 끝나기 0.1초 전에 magnitude +150으로 변경해서 적들 밀치게 함
+            StartCoroutine(Destroy()); // 끝나기 0.2초 전에 magnitude + 3000 변경해서 적들 밀치게 함
 
             return;
         }
@@ -87,9 +88,9 @@ public class Shield_Flame : PlayerAttachSkill
     {
         absorberTransform.GetComponent<CircleCollider2D>().enabled = true;
         absorberTransform.GetComponent<PolygonCollider2D>().enabled = false;
-        absorberTransform.GetComponent<PointEffector2D>().forceMagnitude = 1500f;
+        absorberTransform.GetComponent<PointEffector2D>().forceMagnitude = 3000;
 
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.2f);
 
         if (onSkillFinished != null)
             onSkillFinished(skillIndex); // skillManager에게 delegate로 알려줌

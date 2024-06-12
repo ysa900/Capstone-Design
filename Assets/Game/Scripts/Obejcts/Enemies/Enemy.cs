@@ -432,6 +432,7 @@ public class Enemy : Object, IDamageable, IPoolingObject
     IEnumerator Dead()
     {
         isDead = true;
+        isAgentShouldBeDisabled = false;
 
         agent.enabled = false;
 

@@ -55,7 +55,6 @@ public class MainPageManager : MonoBehaviour
     {
         if (!lobbyManager.SettingPage.activeSelf)
         {
-            Debug.Log("SettingPage꺼짐");
             lobbyManager.SettingPage.SetActive(true);
 
             // 다른 버튼들 비활성화
@@ -64,7 +63,6 @@ public class MainPageManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("SettingPage켜짐");
             lobbyManager.SettingPage.SetActive(false);
             // 버튼 재활성화시키기
             lobbyManager.CharacterButtonObject.enabled = true;
