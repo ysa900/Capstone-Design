@@ -13,7 +13,7 @@ public class Teleport:MonoBehaviour
             switch(SceneManager.GetActiveScene().name)
             {
                 case "Stage1":
-                    SceneManager.LoadScene("Splash2"); // Stage1 -> Splash2
+                    SceneManager.LoadScene("Stage3"); // Stage1 -> Splash2
                     break;
                 case "Stage2":
                     SceneManager.LoadScene("Splash3"); // Stage2 -> Splash3

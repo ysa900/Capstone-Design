@@ -25,9 +25,17 @@ public class ObstacleManager : MonoBehaviour
     float ObstacleCoolTime;
     float ObstacleCoolTimer;
 
+    // 딴딴이 기믹용
+    private bool gimmickExecuted = false;
+    private bool hardModeActivated = false;
+    // 패턴 쿨타임용
+    protected float patternTime;
+    protected float patternTimer;
+
+    bool isPatternTimerOn = false;
+
     public GameObject statue;
 
-    // Start is called before the first frame update
     void Start()
     {
         weight = 1f;
@@ -46,7 +54,10 @@ public class ObstacleManager : MonoBehaviour
         CoolTimer = 0f;
         ObstacleCoolTime = 1f;
         ObstacleCoolTimer = 0f;
-
+        
+        // 패턴 쿨타임 계산용
+        patternTime = 5f;
+        patternTimer = 0f;
     }
 
     // Update is called once per frame
@@ -60,12 +71,9 @@ public class ObstacleManager : MonoBehaviour
 
         playerVector = curPlayerPosition  - prePlayerPosition;
 
-
-
         
         CalculateVector(playerVector);
         weight += 0.1f;
-      
 
         if (CoolTimer >= CoolTime)
         {
@@ -78,7 +86,10 @@ public class ObstacleManager : MonoBehaviour
             ObstacleCoolTimer = 0f;
         }
 
-
+        if(isPatternTimerOn)
+        {
+            patternTimer += Time.deltaTime;
+        }
     }
 
 
@@ -140,15 +151,12 @@ public class ObstacleManager : MonoBehaviour
                 ExpPlayerObstacle(Direction, statue);
                 break;
             case 2:
-                KillPlayerObstacle(Direction);
+                KillPlayerObstacle();
                 break;
             case 3:
                 Exp_killPlayerObstacle(Direction, statue);
                 break;
-
-
         }
-
 
     }
 
@@ -245,17 +253,19 @@ public class ObstacleManager : MonoBehaviour
     }
 
 
-
-
     public void ExpPlayerObstacle(int Direction, GameObject ObstacleType)
     {
       // 이동경로 차단
     }
 
-    public void KillPlayerObstacle(int Direction)
+    // 몬스터 강화
+    public void KillPlayerObstacle()
     {
-       // 몬스터 강화
-
+        for(int i = 0; i < GameManager.instance.enemies.Count; i++)
+        {
+            StartCoroutine(GameManager.instance.enemies[i].makeEnemyHardPattern());
+        }
+        isPatternTimerOn = true;
     }
 
     public void Exp_killPlayerObstacle(int Direction, GameObject ObstacleType)

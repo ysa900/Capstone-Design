@@ -12,7 +12,7 @@ public class CsvTest : MonoBehaviour
     void Start()
     {
         index = 1;
-        filePath = Application.dataPath + "/Resources/playerInfo.csv"; // 절대 경로 설정
+        filePath = Application.dataPath + "/Resources/ActiveplayerInfo.csv"; // 절대 경로 설정
         Debug.Log("File Path: " + filePath); // 파일 경로 디버그 출력
         using (var writer = new CsvFileWriter(filePath))
         {

@@ -4,8 +4,8 @@ import numpy as np
 from sklearn.externals import joblib
 
 # 모델 파일 경로
-model_file_path = "kmeans_model.pkl"
-scaler_file_path = "scaler.pkl"
+model_file_path = "/Users/mylaptop/Documents/Study/Programming/Unity/Vamm_ML/Assets/Resources/My_K_Means_Model.pkl"
+scaler_file_path = "/Users/mylaptop/Documents/Study/Programming/Unity/Vamm_ML/Assets/Resources/My_Scaler.pkl"
 
 # 학습된 모델 로드
 kmeans = joblib.load(model_file_path)
